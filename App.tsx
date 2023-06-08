@@ -7,11 +7,14 @@ import { Provider } from "react-native-paper";
 import { RootSiblingParent } from "react-native-root-siblings";
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+import { registerRootComponent } from "expo";
 import { colors } from "@theme";
+import { AuthInit, AuthProvider } from "@context";
+import { App } from "@";
 
 SplashScreen.preventAutoHideAsync();
 
-export default function App() {
+export default function RootApp() {
   const [isAppReady, setIsAppReady] = React.useState(false);
   const [isAuthLoaded, setIsAuthLoaded] = React.useState<boolean>(false);
 
@@ -56,7 +59,7 @@ export default function App() {
             <Provider>
               <AuthProvider>
                 <AuthInit setIsAuthLoaded={setIsAuthLoaded}>
-                  <MainApp />
+                  <App />
                 </AuthInit>
               </AuthProvider>
             </Provider>
@@ -67,11 +70,4 @@ export default function App() {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+registerRootComponent(RootApp);

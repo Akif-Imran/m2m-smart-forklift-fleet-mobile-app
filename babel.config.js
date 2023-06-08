@@ -19,7 +19,7 @@ module.exports = function (api) {
             "@hooks": "./src/hooks/index.ts",
             "@navigation": "./src/navigation/index.ts",
             "@navigation-types": "./src/navigation/types.ts",
-            "@screen": "./src/screens/index.ts",
+            "@screens": "./src/screens/index.ts",
             "@services": "./src/services/index.ts",
             "@theme": "./src/theme/index.ts",
             "@types": "./src/types",

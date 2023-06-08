@@ -1,7 +1,6 @@
 import React, { createContext, useContext, Dispatch, useState } from "react";
-import axios from "@api";
-import Toast from "react-native-root-toast";
 import * as authHelpers from "./AuthHelpers";
+import axios from "axios";
 
 interface AuthContextType {
   isAuthorized: boolean;
