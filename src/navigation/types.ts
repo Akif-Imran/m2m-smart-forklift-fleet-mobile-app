@@ -1,6 +1,7 @@
 import { NavigatorScreenParams } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 
+//--------------------------------------
 export type AuthStackParamsList = {
   RootTabs: NavigatorScreenParams<MainTabsParamsList>;
   Login: undefined;
@@ -11,6 +12,17 @@ export type AuthStackScreenProps<T extends keyof AuthStackParamsList> = StackScr
   AuthStackParamsList,
   T
 >;
+//--------------------------------------
 export type MainTabsParamsList = {
-  customers: undefined;
+  CustomerStack: NavigatorScreenParams<CustomerStackParamsList>;
 };
+
+//--------------------------------------
+export type CustomerStackParamsList = {
+  CustomerList: undefined;
+};
+
+export type CustomerStackScreenProps<T extends keyof CustomerStackParamsList> = StackScreenProps<
+  CustomerStackParamsList,
+  T
+>;

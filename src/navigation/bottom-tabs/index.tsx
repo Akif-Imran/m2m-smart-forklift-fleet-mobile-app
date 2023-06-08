@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 
 import { colors } from "@theme";
+import { CustomerStack } from "@navigation";
 import { MainTabsParamsList } from "@navigation-types";
 
 const Tab = createBottomTabNavigator<MainTabsParamsList>();
@@ -21,11 +22,11 @@ const RootTabs: React.FC<OwnProps> = ({}) => {
         tabBarShowLabel: true,
         unmountOnBlur: true,
       })}
-      initialRouteName="customers"
+      initialRouteName="CustomerStack"
     >
       <Tab.Screen
-        name="customers"
-        component={ScreensStack}
+        name="CustomerStack"
+        component={CustomerStack}
         options={{
           tabBarIcon: ({ focused }) => (
             <Image
@@ -85,7 +86,8 @@ const RootTabs: React.FC<OwnProps> = ({}) => {
           title: isAdmin ? "Users" : "Operators",
         }}
       /> */}
-      <Tab.Screen
+      TODO - simply add profile stack here.
+      {/* <Tab.Screen
         name="settings"
         component={ProfileSettingsStack}
         options={{
@@ -98,7 +100,7 @@ const RootTabs: React.FC<OwnProps> = ({}) => {
             />
           ),
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };
