@@ -49,12 +49,13 @@ const AuthProvider: React.FC<React.PropsWithChildren<OwnProps>> = ({ children })
       email,
       password,
     });
-
+    const u = { email, name: "John Doe", token: "secure-token" };
     setIsLoading(true);
     authHelpers
-      .setAuth({ email, name: "John Doe", token: "secure-token" })
+      .setAuth(u)
       .then(() => {
         authHelpers.setupAxios(axios);
+        giveAccess(true, u.token, u);
       })
       .catch((err) => {
         console.log("Auth Provider (login) =>", err);
@@ -108,14 +109,15 @@ export const AuthInit: React.FC<React.PropsWithChildren<AuthInitProps>> = ({
         giveAccess(true, user.token, user);
       }
     };
+
     requestAuth()
       .catch((err) => {
+        console.log(err.message);
         console.log("Auth Init Error");
       })
       .finally(() => {
         setIsAuthLoaded(true);
       });
   }, []);
-
   return <>{children}</>;
 };

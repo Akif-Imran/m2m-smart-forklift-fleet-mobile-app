@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { colors, gStyles } from "@theme";
 import { CustomerStackParamsList } from "@navigation-types";
+import { CustomerList } from "@screens";
 
 const Stack = createStackNavigator<CustomerStackParamsList>();
 
@@ -22,11 +22,7 @@ const CustomerStack: React.FC = () => {
     >
       <Stack.Screen
         name="CustomerList"
-        component={() => (
-          <>
-            <Text>Customer List</Text>
-          </>
-        )}
+        component={CustomerList}
         options={{
           headerShown: true,
           title: "",

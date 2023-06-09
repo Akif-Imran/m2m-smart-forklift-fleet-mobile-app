@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator, StackNavigationOptions } from "@react-navigation/stack";
 import { Login, ForgetPassword, Register } from "@screens";
-import { RootTabs } from "@navigation";
+import { RootTabs } from "../bottom-tabs";
 import { AuthStackParamsList } from "@navigation-types";
 import { colors } from "@theme";
 import { useAuthContext } from "@context";

@@ -4,7 +4,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 
 import { colors } from "@theme";
-import { CustomerStack, ProfileSettingsStack } from "@navigation";
+import { ProfileSettingsStack } from "../profile-settings-stack"; //not imported from @navigation to avoid cycle
+import { CustomerStack } from "../customers-stack"; //not imported from @navigation to avoid cycle
 import { MainTabsParamsList } from "@navigation-types";
 import { styles } from "./styles";
 
@@ -87,7 +88,6 @@ const RootTabs: React.FC<OwnProps> = ({}) => {
           title: isAdmin ? "Users" : "Operators",
         }}
       /> */}
-      TODO - simply add profile stack here.
       <Tab.Screen
         name="ProfileSettingsStack"
         component={ProfileSettingsStack}
