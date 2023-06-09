@@ -49,4 +49,4 @@ const CustomerStack: React.FC = () => {
   );
 };
 
-export default CustomerStack;
+export { CustomerStack };

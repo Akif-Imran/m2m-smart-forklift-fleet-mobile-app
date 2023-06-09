@@ -4,8 +4,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 
 import { colors } from "@theme";
-import { CustomerStack } from "@navigation";
+import { CustomerStack, ProfileSettingsStack } from "@navigation";
 import { MainTabsParamsList } from "@navigation-types";
+import { styles } from "./styles";
 
 const Tab = createBottomTabNavigator<MainTabsParamsList>();
 
@@ -87,8 +88,8 @@ const RootTabs: React.FC<OwnProps> = ({}) => {
         }}
       /> */}
       TODO - simply add profile stack here.
-      {/* <Tab.Screen
-        name="settings"
+      <Tab.Screen
+        name="ProfileSettingsStack"
         component={ProfileSettingsStack}
         options={{
           title: "Settings",
@@ -100,17 +101,9 @@ const RootTabs: React.FC<OwnProps> = ({}) => {
             />
           ),
         }}
-      /> */}
+      />
     </Tab.Navigator>
   );
 };
 
-export default RootTabs;
-
-const styles = StyleSheet.create({
-  labelStyle: {
-    fontFamily: "Visby-Bold",
-    fontSize: 12,
-    color: colors.titleText,
-  },
-});
+export { RootTabs };

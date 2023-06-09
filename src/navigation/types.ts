@@ -15,6 +15,7 @@ export type AuthStackScreenProps<T extends keyof AuthStackParamsList> = StackScr
 //--------------------------------------
 export type MainTabsParamsList = {
   CustomerStack: NavigatorScreenParams<CustomerStackParamsList>;
+  ProfileSettingsStack: NavigatorScreenParams<ProfileSettingsStackParamsList>;
 };
 
 //--------------------------------------
@@ -26,3 +27,13 @@ export type CustomerStackScreenProps<T extends keyof CustomerStackParamsList> = 
   CustomerStackParamsList,
   T
 >;
+
+export type ProfileSettingsStackParamsList = {
+  Settings: undefined;
+  ChangePassword: undefined;
+  About: undefined;
+  Help: undefined;
+};
+
+export type ProfileSettingsStackScreenProps<T extends keyof ProfileSettingsStackParamsList> =
+  StackScreenProps<ProfileSettingsStackParamsList, T>;

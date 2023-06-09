@@ -1,3 +1,4 @@
-export { default as RootTabs } from "./bottom-tabs";
-export { default as AuthStack } from "./auth-stack";
-export { default as CustomerStack } from "./customers-stack";
+export { RootTabs } from "./bottom-tabs";
+export { AuthStack } from "./auth-stack";
+export { CustomerStack } from "./customers-stack";
+export { ProfileSettingsStack } from "./profile-settings-stack";

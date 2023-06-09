@@ -50,4 +50,4 @@ const AuthStack = () => {
   );
 };
 
-export default AuthStack;
+export { AuthStack };
