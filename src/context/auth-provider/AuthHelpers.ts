@@ -1,7 +1,6 @@
 import { AuthModel } from "./types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Axios, InternalAxiosRequestConfig } from "axios";
-import axios from "axios";
+import { AxiosStatic } from "axios";
 
 const AUTH_LOCAL_STORAGE_KEY = "m2m-sales-tracking-auth";
 const getAuth = async (): Promise<AuthModel | undefined> => {
@@ -51,7 +50,7 @@ const removeAuth = async () => {
   }
 };
 
-export function setupAxios(axios: Axios) {
+export function setupAxios(axios: AxiosStatic) {
   axios.defaults.headers.common.Accept = "application/json";
   axios.defaults.headers.common["Content-Type"] = "application/json";
   //request interceptor
