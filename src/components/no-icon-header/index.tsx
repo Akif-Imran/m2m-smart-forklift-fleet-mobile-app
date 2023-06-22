@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: theme.header.height,
     // paddingTop: 15,
-    borderWidth: 1,
+    borderWidth: 0,
   },
   multiButtonContainer: {
     flex: 1,
