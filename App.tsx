@@ -44,7 +44,7 @@ export default function RootApp() {
     }
   }, [isAppReady, isAuthLoaded]);
 
-  if (!isAppReady) {
+  if (!isAppReady && !isAuthLoaded) {
     return null;
   } else {
     return (

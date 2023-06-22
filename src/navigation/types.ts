@@ -14,20 +14,30 @@ export type AuthStackScreenProps<T extends keyof AuthStackParamsList> = StackScr
 >;
 //--------------------------------------
 export type MainTabsParamsList = {
-  CustomerStack: NavigatorScreenParams<CustomerStackParamsList>;
+  DashboardStack: NavigatorScreenParams<DashboardStackParamsList>;
+  ForkliftStack: NavigatorScreenParams<ForkliftStackParamsList>;
   ProfileSettingsStack: NavigatorScreenParams<ProfileSettingsStackParamsList>;
 };
 
 //--------------------------------------
-export type CustomerStackParamsList = {
-  CustomerList: undefined;
+export type DashboardStackParamsList = {
+  Dashboard: undefined;
 };
 
-export type CustomerStackScreenProps<T extends keyof CustomerStackParamsList> = StackScreenProps<
-  CustomerStackParamsList,
+export type DashboardStackScreenProps<T extends keyof DashboardStackParamsList> = StackScreenProps<
+  DashboardStackParamsList,
   T
 >;
+//--------------------------------------
+export type ForkliftStackParamsList = {
+  Forklift: undefined;
+};
 
+export type ForkliftStackScreenProps<T extends keyof ForkliftStackParamsList> = StackScreenProps<
+  ForkliftStackParamsList,
+  T
+>;
+//--------------------------------------
 export type ProfileSettingsStackParamsList = {
   Settings: undefined;
   ChangePassword: undefined;

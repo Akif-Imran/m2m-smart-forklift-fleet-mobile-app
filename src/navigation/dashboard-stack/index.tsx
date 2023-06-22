@@ -1,12 +1,12 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { colors, gStyles } from "@theme";
-import { CustomerStackParamsList } from "@navigation-types";
-import { CustomerList } from "@screens";
+import { DashboardStackParamsList } from "@navigation-types";
+import { Dashboard } from "@screens";
 
-const Stack = createStackNavigator<CustomerStackParamsList>();
+const Stack = createStackNavigator<DashboardStackParamsList>();
 
-const CustomerStack: React.FC = () => {
+const DashboardStack: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -18,11 +18,11 @@ const CustomerStack: React.FC = () => {
         headerTintColor: colors.titleText,
         headerTitleAlign: "center",
       }}
-      initialRouteName="CustomerList"
+      initialRouteName="Dashboard"
     >
       <Stack.Screen
-        name="CustomerList"
-        component={CustomerList}
+        name="Dashboard"
+        component={Dashboard}
         options={{
           headerShown: true,
           title: "",
@@ -45,4 +45,4 @@ const CustomerStack: React.FC = () => {
   );
 };
 
-export { CustomerStack };
+export { DashboardStack };

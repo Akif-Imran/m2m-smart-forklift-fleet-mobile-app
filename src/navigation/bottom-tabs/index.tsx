@@ -5,7 +5,8 @@ import { FontAwesome, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 
 import { colors } from "@theme";
 import { ProfileSettingsStack } from "../profile-settings-stack"; //not imported from @navigation to avoid cycle
-import { CustomerStack } from "../customers-stack"; //not imported from @navigation to avoid cycle
+import { DashboardStack } from "../dashboard-stack"; //not imported from @navigation to avoid cycle
+import { ForkliftStack } from "../forklift-stack";
 import { MainTabsParamsList } from "@navigation-types";
 import { styles } from "./styles";
 
@@ -24,12 +25,32 @@ const RootTabs: React.FC<OwnProps> = ({}) => {
         tabBarShowLabel: true,
         unmountOnBlur: true,
       })}
-      initialRouteName="CustomerStack"
+      initialRouteName="DashboardStack"
     >
       <Tab.Screen
-        name="CustomerStack"
-        component={CustomerStack}
+        name="DashboardStack"
+        component={DashboardStack}
         options={{
+          title: "Dashboard",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("../../assets/images/dashboard.png")}
+              style={{
+                height: 18,
+                width: 18,
+                tintColor: focused ? colors.primary : colors.titleText,
+              }}
+              resizeMode="contain"
+            />
+            // <SimpleLineIcons name="screen-smartphone" color={focused ? colors.primary : colors.titleText} size={20} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="ForkliftStack"
+        component={ForkliftStack}
+        options={{
+          title: "Dashboard",
           tabBarIcon: ({ focused }) => (
             <Image
               source={require("../../assets/images/dashboard.png")}
