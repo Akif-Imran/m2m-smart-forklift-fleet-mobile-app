@@ -17,6 +17,7 @@ import { FAB, Searchbar } from "react-native-paper";
 import { ToastService } from "@utility";
 import { _ForkliftListCard } from "../components";
 import { faker } from "@faker-js/faker";
+import { ForkliftStatusColor } from "@constants";
 
 interface OwnProps {}
 
@@ -98,24 +99,48 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation, 
         <View style={screenStyles.countRow}>
           <View style={screenStyles.countRowItem}>
             <Text style={gStyles.headerText}>10</Text>
-            <Text style={screenStyles.countInfoText}>Moving</Text>
+            <Text
+              style={StyleSheet.compose(screenStyles.countInfoText, {
+                color: ForkliftStatusColor["moving"],
+              })}
+            >
+              Moving
+            </Text>
           </View>
           <View
             style={StyleSheet.compose(screenStyles.countRowItem, screenStyles.countRowMiddleItem)}
           >
             <Text style={gStyles.headerText}>12</Text>
-            <Text style={screenStyles.countInfoText}>Parked</Text>
+            <Text
+              style={StyleSheet.compose(screenStyles.countInfoText, {
+                color: ForkliftStatusColor["parked"],
+              })}
+            >
+              Parked
+            </Text>
           </View>
           <View style={screenStyles.countRowItem}>
             <Text style={gStyles.headerText}>12</Text>
-            <Text style={screenStyles.countInfoText}>Offline</Text>
+            <Text
+              style={StyleSheet.compose(screenStyles.countInfoText, {
+                color: ForkliftStatusColor["offline"],
+              })}
+            >
+              Offline
+            </Text>
           </View>
         </View>
         <_Divider />
         <View style={screenStyles.countRow}>
           <View style={screenStyles.countRowItem}>
             <Text style={gStyles.headerText}>10</Text>
-            <Text style={screenStyles.countInfoText}>Total</Text>
+            <Text
+              style={StyleSheet.compose(screenStyles.countInfoText, {
+                color: ForkliftStatusColor["total"],
+              })}
+            >
+              Total
+            </Text>
           </View>
           <View
             style={StyleSheet.compose(screenStyles.countRowItem, screenStyles.countRowMiddleItem)}
@@ -125,7 +150,13 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation, 
           </View>
           <View style={screenStyles.countRowItem}>
             <Text style={gStyles.headerText}>12</Text>
-            <Text style={screenStyles.countInfoText}>Faulty</Text>
+            <Text
+              style={StyleSheet.compose(screenStyles.countInfoText, {
+                color: ForkliftStatusColor["faulty"],
+              })}
+            >
+              Faulty
+            </Text>
           </View>
         </View>
       </_DefaultCard>
