@@ -37,7 +37,10 @@ const SignUp: FC<AuthStackScreenProps<"Register">> = ({ navigation, route }) => 
   const [secureEntry, setSecureEntry] = useState<boolean>(true);
   const [icon, setIcon] = useState<string>("eye");
   const [spinnerLoading, setSpinnerLoading] = useState(false);
-  const { login, isLoading } = useAuthContext();
+  const {
+    login,
+    state: { isLoading },
+  } = useAuthContext();
   const [requestId, setRequestId] = React.useState("");
 
   const initialValues: IForm = {

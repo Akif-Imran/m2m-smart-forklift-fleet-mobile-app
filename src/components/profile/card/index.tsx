@@ -1,11 +1,11 @@
 import { ImageRequireSource, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { FC, Requireable } from "react";
-import { PaperTheme, colors } from "../../../theme";
+import { PaperTheme, colors, gStyles } from "../../../theme";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Avatar } from "react-native-paper";
-import Toast from "react-native-root-toast";
 import { useAuthContext } from "@context";
 import { styles } from "./styles";
+import { ToastService } from "@utility";
 
 interface CardProps {
   size: "small" | "large";
@@ -18,12 +18,14 @@ interface Item {
   subtitle?: string;
 }
 const Card: FC<CardProps> = ({ data, size }) => {
-  const { user } = useAuthContext();
+  const {
+    state: { user },
+  } = useAuthContext();
   return (
     <TouchableOpacity
       style={styles.largeCard}
       activeOpacity={0.8}
-      onPress={() => Toast.show("Profile Info!", { duration: 3000, animation: true })}
+      onPress={() => ToastService.show("Profile Info!")}
     >
       <View style={styles.iconContainer}>
         <Avatar.Image
@@ -34,9 +36,9 @@ const Card: FC<CardProps> = ({ data, size }) => {
         />
       </View>
       <View style={styles.dataContainer}>
-        <Text style={styles.largeHeaderText}>{user?.name}</Text>
-        <Text style={styles.subTitleText}>{user?.email}</Text>
-        <Text style={styles.subTitleText}>(Salesman)</Text>
+        <Text style={gStyles.cardInfoTitleText}>{user?.name}</Text>
+        <Text style={gStyles.tblDescText}>{user?.email || "example.user@gmail.com"}</Text>
+        <Text style={gStyles.tblDescText}>(Salesman)</Text>
       </View>
       <View style={styles.forwardContainer}>
         <MaterialIcons name="keyboard-arrow-right" color={colors.textGray} size={20} />

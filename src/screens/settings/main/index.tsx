@@ -22,7 +22,10 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
   route,
 }) => {
   const appVersion = appConfig.expo.version;
-  const { user, token, logout } = useAuthContext();
+  const {
+    state: { token, user },
+    logout,
+  } = useAuthContext();
 
   const multiData1: Array<MultiCardItem> = [
     {

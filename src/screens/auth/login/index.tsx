@@ -16,7 +16,10 @@ const Login: React.FC<AuthStackScreenProps<"Login">> = ({ navigation, route }) =
   const [password, setPassword] = React.useState<string>("");
   const [secureEntry, setSecureEntry] = React.useState<boolean>(true);
   const [icon, setIcon] = React.useState<string>("eye");
-  const { login, isLoading } = useAuthContext();
+  const {
+    login,
+    state: { isLoading },
+  } = useAuthContext();
 
   const goToRegister = () => {
     navigation.navigate("Register");

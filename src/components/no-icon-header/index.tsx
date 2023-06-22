@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
-import { colors, gStyles } from "../../theme";
+import { colors, gStyles, theme } from "@theme";
 import { useAuthContext } from "@context";
 
 interface OwnProps {
@@ -12,7 +12,7 @@ const NoIconHeader: React.FC<OwnProps> = ({ title }) => {
   const { logout } = useAuthContext();
   return (
     <View style={styles.mainContainer}>
-      <View style={{ width: 25, height: 25, borderWidth: 0 }}>
+      <View style={{ width: 25, height: theme.header.height, borderWidth: 0 }}>
         {/* <MaterialCommunityIcons name="bell" size={25} color={colors.primary} /> */}
       </View>
       <View style={{ flex: 1, borderWidth: 0 }}>
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     // height: 40,
-    paddingTop: 15,
+    // paddingTop: 15,
     // borderWidth: 1,
   },
 });

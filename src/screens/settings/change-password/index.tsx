@@ -39,7 +39,9 @@ const ChangePassword: React.FC<ProfileSettingsStackScreenProps<"ChangePassword">
   const [secureEntry1, setSecureEntry1] = React.useState<boolean>(true);
   const [secureEntry2, setSecureEntry2] = React.useState<boolean>(true);
   const [secureEntry3, setSecureEntry3] = React.useState<boolean>(true);
-  const { user, token } = useAuthContext();
+  const {
+    state: { token, user },
+  } = useAuthContext();
 
   const changePass = (values: IForm, helpers: FormikHelpers<IForm>) => {
     setIsLoading(true);

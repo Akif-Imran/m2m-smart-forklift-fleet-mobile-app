@@ -1,10 +1,7 @@
-import { colors } from "@theme";
+import { colors, gStyles, theme } from "@theme";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-  },
   iconContainer: {
     flex: 2,
     justifyContent: "center",
@@ -28,21 +25,8 @@ export const styles = StyleSheet.create({
     // borderWidth: 1,
   },
   largeCard: {
+    ...gStyles.card,
     backgroundColor: colors.white,
     flexDirection: "row",
-    padding: 10,
-    borderRadius: 15,
-    marginTop: 8,
-    marginBottom: 2,
-  },
-  largeHeaderText: {
-    fontFamily: "Visby-Bold",
-    fontSize: 20,
-    color: colors.titleText,
-  },
-  subTitleText: {
-    fontFamily: "Visby-Medium",
-    fontSize: 14,
-    color: colors.textGray,
   },
 });
