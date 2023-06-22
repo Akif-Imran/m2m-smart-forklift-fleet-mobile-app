@@ -10,6 +10,7 @@ import { ProfileSettingsStackScreenProps } from "@navigation-types";
 import { useAuthContext } from "@context";
 import { ToastService } from "@utility";
 import { styles } from "./styles";
+import { screenStyles } from "src/screens/styles";
 
 const group1 = {
   icon: require("../../../assets/images/user.png"),
@@ -121,9 +122,9 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
   };
 
   return (
-    <SafeAreaView style={styles.mainContainer}>
+    <SafeAreaView style={screenStyles.mainContainer}>
       <ScrollView
-        style={styles.scrollContainer}
+        // style={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
         bounces={false}
       >
