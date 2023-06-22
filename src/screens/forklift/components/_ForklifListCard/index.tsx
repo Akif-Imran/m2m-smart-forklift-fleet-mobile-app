@@ -2,7 +2,7 @@ import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from "react
 import React from "react";
 
 import { _DefaultCard } from "@components";
-import { PaperTheme, colors, gStyles } from "@theme";
+import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { list_card_styles, screenStyles } from "src/screens/styles";
 import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
@@ -44,13 +44,11 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
         <View style={list_card_styles.infoWithForward}>
           <View style={list_card_styles.infoContainer}>
             <Text style={gStyles.cardInfoTitleText}>{item.name}</Text>
-            <View style={[list_card_styles.fieldContainer, { marginTop: 6 }]}>
-              {/* <Text style={gStyles.tblHeaderText}>Name: </Text> */}
-              <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={1}>
-                {item.name}
-              </Text>
-            </View>
-            <View style={list_card_styles.fieldContainer}>
+            <View
+              style={StyleSheet.compose(list_card_styles.fieldContainer, {
+                marginTop: theme.spacing.sm,
+              })}
+            >
               {/* <Text style={gStyles.tblHeaderText}>Phone: </Text> */}
               <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={1}>
                 {item.driver}
