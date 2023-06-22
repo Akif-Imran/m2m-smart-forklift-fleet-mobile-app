@@ -31,10 +31,10 @@ const ForkliftStack: React.FC = () => {
       <Stack.Screen
         name="AddForklift"
         component={AddForklift}
-        options={{
+        options={({ route }) => ({
           headerShown: true,
-          title: "Add Forklift",
-        }}
+          title: route.params.mode === "add" ? "Add Forklift" : "Update Forklift",
+        })}
       />
       <Stack.Screen
         name="ForkLiftDetails"
@@ -49,7 +49,7 @@ const ForkliftStack: React.FC = () => {
         component={RequestService}
         options={{
           headerShown: true,
-          title: "",
+          title: "Request Service",
         }}
       />
       {/* <Stack.Screen
