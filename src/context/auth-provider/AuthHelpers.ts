@@ -1,4 +1,4 @@
-import { AuthModel } from "./types";
+import { AuthModel } from "@context-types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosStatic } from "axios";
 

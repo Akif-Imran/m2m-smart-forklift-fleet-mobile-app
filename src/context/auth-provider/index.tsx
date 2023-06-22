@@ -1,96 +1,117 @@
-import React, { createContext, useContext, Dispatch, useState } from "react";
+import React from "react";
 import * as authHelpers from "./AuthHelpers";
 import axios from "axios";
 
 interface AuthContextType {
+  state: AuthState;
+  login: (email: string, password: string, save: boolean) => void;
+  logout: () => void;
+}
+
+interface UserData {
+  name: string;
+  email: string;
+}
+
+interface AuthState {
   isAuthorized: boolean;
   isLoading: boolean;
   token: string;
   user: UserData | null;
-  logout: () => void;
-  login: (email: string, password: string, save: boolean) => void;
-  giveAccess: (isAuthorized: boolean, token: string, user: UserData) => void;
 }
-const initAuthContext: AuthContextType = {
+
+type AuthAction =
+  | { type: "LOGOUT" }
+  | { type: "LOGIN"; payload: { email: string; password: string; save: boolean } }
+  | { type: "GIVE_ACCESS"; payload: { isAuthorized: boolean; token: string; user: UserData } };
+
+const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
+
+const authReducer = (state: AuthState, action: AuthAction): AuthState => {
+  switch (action.type) {
+    case "LOGOUT":
+      authHelpers.removeAuth().then();
+      return { ...state, token: "", user: null, isAuthorized: false, isLoading: false };
+    case "LOGIN":
+      const u = { email: action.payload.email, name: "John Doe", token: "secure-token" };
+      return {
+        ...state,
+        token: u.token,
+        user: { name: u.name, email: u.email },
+        isAuthorized: true,
+        isLoading: false,
+      };
+    case "GIVE_ACCESS":
+      return { ...state, ...action.payload, isLoading: false, isAuthorized: true };
+    default:
+      return state;
+  }
+};
+
+const initAuthState: AuthState = {
   isAuthorized: false,
-  isLoading: false,
+  isLoading: true, // note that this is now true
   token: "",
   user: null,
-  logout: () => {},
-  login: (email: string, password: string, save: boolean) => {},
-  giveAccess: (isAuthorized: boolean, token: string, user: UserData) => {},
 };
 
-const AuthContext = createContext<AuthContextType>(initAuthContext);
+const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const [state, dispatch] = React.useReducer(authReducer, initAuthState);
 
-export type UserData = {
-  name: string;
-  email: string;
-};
+  React.useEffect(() => {
+    (async () => {
+      try {
+        const auth = await authHelpers.getAuth();
 
-interface OwnProps {}
+        if (!auth) {
+          dispatch({ type: "LOGOUT" });
+          return;
+        } else {
+          dispatch({
+            type: "GIVE_ACCESS",
+            payload: {
+              isAuthorized: true,
+              user: { name: auth.name, email: auth.email },
+              token: auth.token,
+            },
+          });
+        }
+      } catch (error) {
+        console.error(error);
+        dispatch({ type: "LOGOUT" });
+      }
+    })();
 
-const AuthProvider: React.FC<React.PropsWithChildren<OwnProps>> = ({ children }) => {
-  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
-  const [token, setToken] = useState<string>("");
-  const [user, setUser] = useState<UserData | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+    return () => {};
+  }, []);
 
-  const logout = (): void => {
-    authHelpers.removeAuth().then(() => {
-      setToken("");
-      setUser(null);
-      setIsAuthorized(false);
-    });
-  };
+  React.useEffect(() => {
+    if (state.isAuthorized) {
+      authHelpers.setupAxios(axios);
+    }
+  }, [state.isAuthorized]);
 
-  const login = (email: string, password: string, save: boolean) => {
-    var data = JSON.stringify({
-      email,
-      password,
-    });
-    const u = { email, name: "John Doe", token: "secure-token" };
-    setIsLoading(true);
-    authHelpers
-      .setAuth(u)
-      .then(() => {
-        authHelpers.setupAxios(axios);
-        giveAccess(true, u.token, u);
-      })
-      .catch((err) => {
-        console.log("Auth Provider (login) =>", err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-
-  const giveAccess = (isAuthorized: boolean, token: string, user: UserData) => {
-    setIsAuthorized((prev) => isAuthorized);
-    setToken((prev) => token);
-    setUser((prev) => user);
-  };
-
-  return (
-    <AuthContext.Provider
-      value={{
-        isAuthorized,
-        isLoading,
-        token,
-        user,
-        logout,
-        login,
-        giveAccess,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const logout = React.useCallback(() => dispatch({ type: "LOGOUT" }), []);
+  const login = React.useCallback(
+    (email: string, password: string, save: boolean) =>
+      dispatch({ type: "LOGIN", payload: { email, password, save } }),
+    []
   );
+
+  const value = React.useMemo(() => ({ state, login, logout }), [state, login, logout]);
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export default AuthProvider;
+export { AuthProvider };
 
-export const useAuthContext = () => useContext(AuthContext);
+export const useAuthContext = () => {
+  const context = React.useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuthContext must be used within an AuthProvider");
+  }
+  return context;
+};
 
 interface AuthInitProps {
   setIsAuthLoaded: React.Dispatch<React.SetStateAction<boolean>>;
@@ -99,25 +120,33 @@ export const AuthInit: React.FC<React.PropsWithChildren<AuthInitProps>> = ({
   children,
   setIsAuthLoaded,
 }) => {
-  const { giveAccess } = useAuthContext();
+  const { state } = useAuthContext();
 
   React.useEffect(() => {
-    const requestAuth = async () => {
-      const user = await authHelpers.getAuth();
-      if (user) {
-        //TODO - remove this and used useReducer Approach for auth context, then convert to Redux
-        giveAccess(true, user.token, user);
-      }
-    };
-
-    requestAuth()
-      .catch((err) => {
-        console.log(err.message);
-        console.log("Auth Init Error");
-      })
-      .finally(() => {
-        setIsAuthLoaded(true);
-      });
-  }, []);
+    if (!state.isLoading) {
+      setIsAuthLoaded((prev) => true);
+    }
+  }, [state.isLoading, setIsAuthLoaded]);
   return <>{children}</>;
 };
+//async initializers not supported by useReducer yet
+/* async function initializeAuthState() {
+  try {
+    const storedUser = await AsyncStorage.getItem("user");
+    const storedToken = await AsyncStorage.getItem("token");
+
+    if (storedUser !== null && storedToken !== null) {
+      return {
+        ...initAuthState,
+        user: JSON.parse(storedUser),
+        token: storedToken,
+        isAuthorized: true,
+      };
+    } else {
+      return initAuthState;
+    }
+  } catch (error) {
+    console.error(error);
+    return initAuthState;
+  }
+} */

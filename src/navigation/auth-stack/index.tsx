@@ -8,7 +8,9 @@ import { useAuthContext } from "@context";
 
 const Stack = createStackNavigator<AuthStackParamsList>();
 const AuthStack = () => {
-  const { isAuthorized, user } = useAuthContext();
+  const {
+    state: { user, isAuthorized },
+  } = useAuthContext();
   console.log("email issued", user?.email);
   const options: StackNavigationOptions = {
     headerShown: false,

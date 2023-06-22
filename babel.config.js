@@ -15,6 +15,7 @@ module.exports = function (api) {
             "@assets": "./src/assets",
             "@components": "./src/components/index.ts",
             "@context": "./src/context/index.ts",
+            "@context-types": "./src/context/types.ts",
             "@helpers": "./src/helpers/index.ts",
             "@hooks": "./src/hooks/index.ts",
             "@navigation": "./src/navigation/index.ts",
