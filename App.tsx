@@ -2,7 +2,7 @@ import "react-native-gesture-handler";
 import React from "react";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { Platform, View } from "react-native";
 import { Provider } from "react-native-paper";
 import { RootSiblingParent } from "react-native-root-siblings";
 import * as Font from "expo-font";
@@ -69,5 +69,4 @@ export default function RootApp() {
     );
   }
 }
-
 registerRootComponent(RootApp);
