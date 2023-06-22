@@ -116,7 +116,13 @@ const ForkLiftDetails: React.FC<ForkliftStackScreenProps<"ForkLiftDetails">> = (
         icon="pencil"
         style={gStyles.fab}
         color={colors.white}
-        onPress={() => navigation.navigate("AddForklift")}
+        onPress={() =>
+          navigation.navigate("AddForklift", {
+            mode: "edit",
+            item: item,
+            _id: item._id,
+          })
+        }
       />
     </SafeAreaView>
   );

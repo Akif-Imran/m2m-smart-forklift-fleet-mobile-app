@@ -116,20 +116,20 @@ export const screenStyles = StyleSheet.create({
     color: colors.info,
   },
   //take picture from camera or gallery button style
-  addImageBtnStyle: {
+  addedImageBtnStyle: {
     borderWidth: 1,
     borderRadius: theme.radius.xs,
     borderColor: colors.borderColor,
     overflow: "hidden",
   },
   addedImgStyle: {
-    height: 75,
-    width: 75,
+    height: 80,
+    width: 80,
     overflow: "hidden",
   },
   addImageButton: {
-    height: 75,
-    width: 75,
+    height: 80,
+    width: 80,
     borderColor: colors.titleText,
     borderStyle: "dashed",
     justifyContent: "center",

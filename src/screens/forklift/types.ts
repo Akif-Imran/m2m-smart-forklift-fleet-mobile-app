@@ -2,6 +2,8 @@ interface IForklift {
   _id: string;
   regNo: string;
   color: string;
+  imei: string;
+  simNo: string;
   make: string;
   model: string; //list
   manufactureYear: string;

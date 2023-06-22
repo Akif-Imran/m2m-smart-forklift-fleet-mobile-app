@@ -32,6 +32,8 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation, 
   const addInfo = () => {
     const record: IForklift = {
       _id: faker.database.mongodbObjectId(),
+      imei: faker.string.alphanumeric({ casing: "upper", length: { min: 12, max: 15 } }),
+      simNo: faker.string.numeric({ length: 12, allowLeadingZeros: false }),
       age: faker.helpers.arrayElement([10, 11, 12, 13, 14, 15, 16]).toString(),
       batterySerialNo: faker.vehicle.vin(),
       color: faker.vehicle.color(),
@@ -211,7 +213,11 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation, 
         style={gStyles.fab}
         color={colors.white}
         onLongPress={() => addInfo()}
-        onPress={() => navigation.navigate("AddForklift")}
+        onPress={() =>
+          navigation.navigate("AddForklift", {
+            mode: "add",
+          })
+        }
       />
     </SafeAreaView>
   );

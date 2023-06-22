@@ -8,7 +8,7 @@ interface OwnProps {}
 const RequestService: React.FC<OwnProps> = ({}) => {
   return (
     <View>
-      <Text>_Component</Text>
+      <Text>_Components</Text>
     </View>
   );
 };

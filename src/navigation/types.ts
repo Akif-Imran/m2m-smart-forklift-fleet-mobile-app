@@ -6,6 +6,16 @@ type DetailsType<T> = {
   _id: string;
 };
 
+type AddUpdateType<T> =
+  | {
+      mode: "add";
+    }
+  | {
+      mode: "edit";
+      item: T;
+      _id: string;
+    };
+
 //--------------------------------------
 export type AuthStackParamsList = {
   RootTabs: NavigatorScreenParams<MainTabsParamsList>;
@@ -36,7 +46,7 @@ export type DashboardStackScreenProps<T extends keyof DashboardStackParamsList> 
 //--------------------------------------
 export type ForkliftStackParamsList = {
   Forklift: undefined;
-  AddForklift: undefined;
+  AddForklift: AddUpdateType<IForklift>
   ForkLiftDetails: DetailsType<IForklift>;
   ReqService: undefined;
 };
