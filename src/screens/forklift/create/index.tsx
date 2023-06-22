@@ -181,7 +181,9 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
   }, [route.params]);
 
   return (
-    <SafeAreaView style={screenStyles.mainContainer}>
+    <SafeAreaView
+      style={StyleSheet.compose(screenStyles.mainContainer, { rowGap: theme.spacing.none })}
+    >
       <Spinner visible={isLoading} cancelable={false} animation="fade" size="large" />
       <_DatePicker
         show={showPurchaseDatePicker}
@@ -205,7 +207,7 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
         setDate={setRentEndDate}
       />
       <_ScrollFormLayout>
-        <View style={{ rowGap: theme.spacing.xs }}>
+        <View style={{ rowGap: theme.spacing.xs, borderWidth: 1 }}>
           <_Divider title="Forklift Image" />
           <FlatList
             horizontal
