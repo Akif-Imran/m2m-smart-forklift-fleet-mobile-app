@@ -16,11 +16,13 @@ import * as yup from "yup";
 import { AuthStackScreenProps } from "@navigation-types";
 import { useAuthContext } from "@context";
 import { ToastService } from "@utility";
+import { _TextInput } from "@components";
 
 interface IForm {
   email: string;
   name: string;
   password: string;
+  mobile: string;
 }
 
 const schema: yup.ObjectSchema<IForm> = yup.object().shape({
@@ -31,6 +33,7 @@ const schema: yup.ObjectSchema<IForm> = yup.object().shape({
     .max(80, "Name is too long.")
     .required("Name is required."),
   password: yup.string().min(3, "Password too Short!").required("Password is required."),
+  mobile: yup.string().min(11).max(18).required("Mobile is required."),
 });
 
 const SignUp: FC<AuthStackScreenProps<"Register">> = ({ navigation, route }) => {
@@ -47,13 +50,10 @@ const SignUp: FC<AuthStackScreenProps<"Register">> = ({ navigation, route }) => 
     email: "",
     name: "",
     password: "",
+    mobile: "",
   };
   const { errors, values, handleBlur, handleChange, handleSubmit, touched } = useFormik<IForm>({
-    initialValues: {
-      email: "",
-      name: "",
-      password: "",
-    },
+    initialValues: initialValues,
     onSubmit: (values, helpers) => {
       console.log(values);
       ToastService.show("Demo sign up...");
@@ -207,6 +207,19 @@ const SignUp: FC<AuthStackScreenProps<"Register">> = ({ navigation, route }) => 
                   {errors.password}
                 </HelperText>
               ) : null}
+            </View>
+            <View style={styles.textFieldContainer}>
+              <_TextInput
+                placeholder="+XX XXX XXXXXXX"
+                label="Mobile No."
+                errorText={errors.mobile}
+                error={!!errors.mobile && touched.mobile}
+                value={values.mobile}
+                onChangeText={handleChange("mobile")}
+                onBlur={handleBlur("mobile")}
+                keyboardType="phone-pad"
+                left={<TextInput.Icon icon="phone" color={colors.iconGray} />}
+              />
             </View>
           </View>
           {/* login button container */}
