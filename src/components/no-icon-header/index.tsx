@@ -7,21 +7,54 @@ import { useAuthContext } from "@context";
 
 interface OwnProps {
   title: string;
+  right?: { icon: React.ReactNode; onPress: () => void }[];
+  left?: { icon: React.ReactNode; onPress: () => void }[];
 }
-const NoIconHeader: React.FC<OwnProps> = ({ title }) => {
+const NoIconHeader: React.FC<OwnProps> = ({ title, right, left }) => {
   const { logout } = useAuthContext();
   return (
     <View style={styles.mainContainer}>
-      <View style={{ width: 25, height: theme.header.height, borderWidth: 0 }}>
-        {/* <MaterialCommunityIcons name="bell" size={25} color={colors.primary} /> */}
+      <View style={styles.multiButtonContainer}>
+        {left ? (
+          <>
+            {left.map((item, index) => (
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={item.onPress}
+                style={styles.button}
+                key={index}
+              >
+                {/* <Ionicons name="exit" size={25} color={colors.primary} /> */}
+                {item.icon}
+              </TouchableOpacity>
+            ))}
+          </>
+        ) : null}
       </View>
-      <View style={{ flex: 1, borderWidth: 0 }}>
+      <View style={styles.titleContainer}>
         <Text style={gStyles.headerText}>{title}</Text>
       </View>
-      <TouchableOpacity activeOpacity={0.8} onPress={() => logout()} style={{ borderWidth: 0 }}>
-        <Ionicons name="exit" size={25} color={colors.primary} />
-      </TouchableOpacity>
-      {/* <Text>Header</Text> */}
+      <View style={styles.multiButtonContainer}>
+        {right ? (
+          <>
+            {right.map((item, index) => (
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={item.onPress}
+                style={styles.button}
+                key={index}
+              >
+                {/* <Ionicons name="exit" size={25} color={colors.primary} /> */}
+                {item.icon}
+              </TouchableOpacity>
+            ))}
+          </>
+        ) : (
+          <TouchableOpacity activeOpacity={0.8} onPress={() => logout()} style={styles.button}>
+            <Ionicons name="exit" size={25} color={colors.primary} />
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 };
@@ -35,8 +68,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    // height: 40,
+    height: theme.header.height,
     // paddingTop: 15,
-    // borderWidth: 1,
+    borderWidth: 1,
+  },
+  multiButtonContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    height: theme.header.height,
+    columnGap: theme.spacing.xs,
+    borderWidth: 0,
+  },
+  titleContainer: {
+    flex: 4,
+    borderWidth: 0,
+  },
+  button: {
+    borderWidth: 0,
   },
 });

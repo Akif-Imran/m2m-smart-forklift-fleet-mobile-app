@@ -18,6 +18,7 @@ import { ToastService } from "@utility";
 import { _ForkliftListCard } from "../components";
 import { faker } from "@faker-js/faker";
 import { ForkliftStatusColor } from "@constants";
+import { MaterialIcons } from "@expo/vector-icons";
 
 interface OwnProps {}
 
@@ -100,7 +101,19 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation, 
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
-      <NoIconHeader title="Forklifts" />
+      <NoIconHeader
+        title="Forklifts"
+        right={[
+          {
+            icon: <MaterialIcons name="add" size={24} color={colors.primary} />,
+            onPress: () => addInfo(),
+          },
+          {
+            icon: <MaterialIcons name="10k" size={24} color={colors.primary} />,
+            onPress: () => addInfo(),
+          },
+        ]}
+      />
       <_ConfirmModal
         visible={confirmDeleteVisible}
         question="Are you sure you want to delete this customer ?"
