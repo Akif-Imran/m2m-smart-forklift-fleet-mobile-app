@@ -1,6 +1,11 @@
 import { NavigatorScreenParams } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 
+type DetailsType<T> = {
+  item: T;
+  _id: string;
+};
+
 //--------------------------------------
 export type AuthStackParamsList = {
   RootTabs: NavigatorScreenParams<MainTabsParamsList>;
@@ -32,7 +37,7 @@ export type DashboardStackScreenProps<T extends keyof DashboardStackParamsList> 
 export type ForkliftStackParamsList = {
   Forklift: undefined;
   AddForklift: undefined;
-  ForkLiftDetails: undefined;
+  ForkLiftDetails: DetailsType<IForklift>;
   ReqService: undefined;
 };
 

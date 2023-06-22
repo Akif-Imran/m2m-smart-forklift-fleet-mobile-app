@@ -23,7 +23,12 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
       <TouchableOpacity
         style={list_card_styles.contentContainer}
         activeOpacity={0.7}
-        onPress={() => navigation.navigate("ForkLiftDetails")}
+        onPress={() =>
+          navigation.navigate("ForkLiftDetails", {
+            item: item,
+            _id: item._id,
+          })
+        }
         onLongPress={() => handleDelete(item._id)}
       >
         <View>

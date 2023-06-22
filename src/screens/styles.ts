@@ -7,6 +7,11 @@ export const screenStyles = StyleSheet.create({
     rowGap: theme.spacing.sm,
     // borderWidth: 1,
   },
+  detailsCardHeadingText: {
+    ...gStyles.cardInfoTitleText,
+    paddingBottom: theme.spacing.md,
+    textAlign: "center",
+  },
   countRow: {
     flexDirection: "row",
     gap: theme.spacing.sm,
@@ -79,6 +84,7 @@ export const screenStyles = StyleSheet.create({
     alignItems: "center",
   },
   badgeText: {
+    ...gStyles.tblHeaderText,
     overflow: "hidden",
     borderRadius: theme.radius.xs,
     color: colors.white,
