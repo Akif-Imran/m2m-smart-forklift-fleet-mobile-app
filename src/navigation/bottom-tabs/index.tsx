@@ -50,7 +50,7 @@ const RootTabs: React.FC<OwnProps> = ({}) => {
         name="ForkliftStack"
         component={ForkliftStack}
         options={{
-          title: "Dashboard",
+          title: "Forklifts",
           tabBarIcon: ({ focused }) => (
             <Image
               source={require("../../assets/images/dashboard.png")}

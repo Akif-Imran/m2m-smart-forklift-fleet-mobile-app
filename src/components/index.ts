@@ -9,3 +9,4 @@ export { default as _Dropdown } from "./_Dropdown/DropDown";
 export { _ConfirmModal } from "./_ConfirmModal";
 export { _BarChart } from "./_BarChart";
 export { _PieChart } from "./_PieChart";
+export { _DefaultCard } from "./_DefaultCard";

@@ -31,6 +31,9 @@ export type DashboardStackScreenProps<T extends keyof DashboardStackParamsList> 
 //--------------------------------------
 export type ForkliftStackParamsList = {
   Forklift: undefined;
+  AddForklift: undefined;
+  ForkLiftDetails: undefined;
+  ReqService: undefined;
 };
 
 export type ForkliftStackScreenProps<T extends keyof ForkliftStackParamsList> = StackScreenProps<

@@ -14,6 +14,7 @@ module.exports = function (api) {
             "@api-types": "./src/api/types.ts",
             "@assets": "./src/assets",
             "@components": "./src/components/index.ts",
+            "@constants": "./src/constants/index.ts",
             "@context": "./src/context/index.ts",
             "@context-types": "./src/context/types.ts",
             "@helpers": "./src/helpers/index.ts",
