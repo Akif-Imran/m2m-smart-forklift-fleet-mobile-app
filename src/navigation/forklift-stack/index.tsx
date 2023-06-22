@@ -33,7 +33,7 @@ const ForkliftStack: React.FC = () => {
         component={AddForklift}
         options={{
           headerShown: true,
-          title: "",
+          title: "Add Forklift",
         }}
       />
       <Stack.Screen

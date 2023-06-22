@@ -207,7 +207,7 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
         setDate={setRentEndDate}
       />
       <_ScrollFormLayout>
-        <View style={{ rowGap: theme.spacing.xs, borderWidth: 1 }}>
+        <View style={{ rowGap: theme.spacing.xs }}>
           <_Divider title="Forklift Image" />
           <FlatList
             horizontal
