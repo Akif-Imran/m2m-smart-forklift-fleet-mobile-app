@@ -4,3 +4,4 @@ export * from "./dashboard";
 export * from "./forklift";
 export * from "./services";
 export * from "./drivers";
+export * from "./reports";

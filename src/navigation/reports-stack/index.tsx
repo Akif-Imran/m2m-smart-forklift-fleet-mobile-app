@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { colors, gStyles } from "@theme";
-import { ServiceStackParamsList } from "@navigation-types";
+import { ReportsStackParamsList, ServiceStackParamsList } from "@navigation-types";
 import {
   Forklift,
   AddForklift,
@@ -10,11 +10,12 @@ import {
   BirdEyeView,
   ForkliftNotification,
   ForkliftNotificationDetails,
+  Reports,
 } from "@screens";
 
-const Stack = createStackNavigator<ServiceStackParamsList>();
+const Stack = createStackNavigator<ReportsStackParamsList>();
 
-const ForkliftStack: React.FC = () => {
+const ReportsStack: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -26,17 +27,17 @@ const ForkliftStack: React.FC = () => {
         headerTintColor: colors.titleText,
         headerTitleAlign: "center",
       }}
-      initialRouteName="Forklift"
+      initialRouteName="Reports"
     >
       <Stack.Screen
-        name="Forklift"
-        component={Forklift}
+        name="Reports"
+        component={Reports}
         options={{
           headerShown: true,
           title: "",
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="AddForklift"
         component={AddForklift}
         options={({ route }) => ({
@@ -67,7 +68,7 @@ const ForkliftStack: React.FC = () => {
           headerShown: true,
           title: "Bird's Eye View",
         }}
-      />
+      /> */}
       <Stack.Screen
         name="Notification"
         component={ForkliftNotification}
@@ -101,4 +102,4 @@ const ForkliftStack: React.FC = () => {
   );
 };
 
-export { ForkliftStack };
+export { ReportsStack };

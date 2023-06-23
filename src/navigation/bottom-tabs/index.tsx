@@ -14,6 +14,7 @@ import { DashboardStack } from "../dashboard-stack"; //not imported from @naviga
 import { ForkliftStack } from "../forklift-stack";
 import { ServicesStack } from "../services-stack";
 import { DriverStack } from "../drivers-stack";
+import { ReportsStack } from "../reports-stack";
 import { MainTabsParamsList } from "@navigation-types";
 import { styles } from "./styles";
 
@@ -89,6 +90,20 @@ const RootTabs: React.FC<OwnProps> = ({}) => {
           tabBarIcon: ({ focused }) => (
             <FontAwesome
               name="users"
+              color={focused ? colors.primary : colors.titleText}
+              size={20}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="ReportsStack"
+        component={ReportsStack}
+        options={{
+          title: "Reports",
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="file-multiple"
               color={focused ? colors.primary : colors.titleText}
               size={20}
             />

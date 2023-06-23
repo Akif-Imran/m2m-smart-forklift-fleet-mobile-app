@@ -33,6 +33,7 @@ export type MainTabsParamsList = {
   ForkliftStack: NavigatorScreenParams<ForkliftStackParamsList>;
   ServicesStack: NavigatorScreenParams<ServiceStackParamsList>;
   DriversStack: NavigatorScreenParams<DriversStackParamsList>;
+  ReportsStack: NavigatorScreenParams<ReportsStackParamsList>;
   ProfileSettingsStack: NavigatorScreenParams<ProfileSettingsStackParamsList>;
 };
 
@@ -85,6 +86,17 @@ export type DriversStackParamsList = {
 
 export type DriverStackScreenProps<T extends keyof DriversStackParamsList> = StackScreenProps<
   DriversStackParamsList,
+  T
+>;
+//--------------------------------------
+export type ReportsStackParamsList = {
+  Reports: undefined;
+  Notification: undefined;
+  NotificationDetails: DetailsType<INotification>;
+};
+
+export type ReportStackScreenProps<T extends keyof ReportsStackParamsList> = StackScreenProps<
+  ReportsStackParamsList,
   T
 >;
 //--------------------------------------
