@@ -14,7 +14,9 @@ const NoIconHeader: React.FC<OwnProps> = ({ title, right, left }) => {
   const { logout } = useAuthContext();
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.multiButtonContainer}>
+      <View
+        style={StyleSheet.compose(styles.multiButtonContainer, { justifyContent: "flex-start" })}
+      >
         {left ? (
           <>
             {left.map((item, index) => (
@@ -75,7 +77,7 @@ const styles = StyleSheet.create({
   multiButtonContainer: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "flex-end",
     alignItems: "center",
     height: theme.header.height,
     gap: theme.spacing.md,
