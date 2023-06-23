@@ -24,3 +24,8 @@ export enum ForkliftNotificationsFilters {
 export enum DriversFilters {
   "ALL" = 1,
 }
+export enum AssignForkliftFilters {
+  "ALL" = 1,
+  "NAME",
+  "ID",
+}

@@ -106,6 +106,15 @@ const DriverDetails: React.FC<DriverStackScreenProps<"DriverDetails">> = ({
               </Text>
             </View>
           </_DefaultCard>
+          <_DefaultCard>
+            <View>
+              <Text style={screenStyles.detailsCardHeadingText}>Assigned Forklifts</Text>
+            </View>
+            <View style={screenStyles.fieldContainer}>
+              <Text style={screenStyles.tblHeaderText}></Text>
+              <Text style={screenStyles.tblDescText}></Text>
+            </View>
+          </_DefaultCard>
         </>
       </_ScrollFormLayout>
     </SafeAreaView>

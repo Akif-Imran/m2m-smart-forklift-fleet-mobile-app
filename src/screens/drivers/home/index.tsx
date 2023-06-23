@@ -11,7 +11,7 @@ import { DriverStackScreenProps } from "@navigation-types";
 import { ToastService } from "@utility";
 import { faker } from "@faker-js/faker";
 import { _DriverListCard } from "../components";
-import { Feather, FontAwesome5 } from "@expo/vector-icons";
+import { Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { DriversFilters } from "@constants";
 
 interface OwnProps {}
@@ -117,6 +117,12 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({ route, navigatio
             onPress: () => navigation.navigate("Activity"),
           },
         ]}
+        right={[
+          {
+            icon: <Ionicons name="notifications" size={24} color={colors.primary} />,
+            onPress: () => navigation.navigate("Notification"),
+          },
+        ]}
       />
       <_ConfirmModal
         visible={confirmDeleteVisible}
@@ -146,7 +152,7 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({ route, navigatio
           onDismiss={hideModal}
           contentContainerStyle={screenStyles.filterModalStyle}
         >
-          <Text style={gStyles.headerText}>Project Status</Text>
+          <Text style={gStyles.headerText}>Drivers Filter</Text>
           <>
             <RadioButton.Group
               onValueChange={(newValue) => {
