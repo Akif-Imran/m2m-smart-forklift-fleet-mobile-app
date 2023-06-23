@@ -185,8 +185,8 @@ export const list_card_styles = StyleSheet.create({
     // borderWidth: 1,
   },
   imgStyle: {
-    width: 75,
-    height: 75,
+    width: 80,
+    height: 80,
     borderRadius: theme.radius.sm,
   },
   infoWithForward: {

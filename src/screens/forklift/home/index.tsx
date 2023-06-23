@@ -103,11 +103,13 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation, 
     <SafeAreaView style={screenStyles.mainContainer}>
       <NoIconHeader
         title="Forklifts"
-        right={[
+        left={[
           {
             icon: <FontAwesome5 name="map-marked-alt" size={24} color={colors.primary} />,
             onPress: () => navigation.navigate("BirdEyeView"),
           },
+        ]}
+        right={[
           {
             icon: <Ionicons name="notifications" size={24} color={colors.primary} />,
             onPress: () => navigation.navigate("Notification"),

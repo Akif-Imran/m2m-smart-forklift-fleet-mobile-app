@@ -50,3 +50,12 @@ interface IDriver {
   department: string;
   ic_number: string;
 }
+interface IDriverActivity {
+  _id: string;
+  image: string;
+  name: string;
+  email: string;
+  eventType: string;
+  description: string;
+  date: string;
+}

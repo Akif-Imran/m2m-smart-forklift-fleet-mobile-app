@@ -29,3 +29,6 @@ export enum AssignForkliftFilters {
   "NAME",
   "ID",
 }
+export enum ActivityFilters {
+  "ALL" = 1,
+}
