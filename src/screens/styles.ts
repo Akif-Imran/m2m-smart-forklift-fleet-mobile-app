@@ -76,6 +76,21 @@ export const screenStyles = StyleSheet.create({
     overflow: "hidden",
     // borderWidth: 1,
   },
+  singleImgContainer: {
+    // borderWidth: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 6,
+  },
+  imgStyle: {
+    width: 125,
+    height: 125,
+    overflow: "hidden",
+    borderRadius: theme.radius.md,
+    marginVertical: theme.spacing.xs,
+    // borderWidth: 1,
+  },
   badgeView: {
     overflow: "hidden",
     borderRadius: theme.radius.xs,

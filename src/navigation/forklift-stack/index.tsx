@@ -49,7 +49,7 @@ const ForkliftStack: React.FC = () => {
         component={ForkLiftDetails}
         options={{
           headerShown: true,
-          title: "",
+          title: "Details",
         }}
       />
       <Stack.Screen

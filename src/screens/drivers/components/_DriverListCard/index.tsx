@@ -10,6 +10,7 @@ import { list_card_styles, screenStyles } from "src/screens/styles";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { truncateText } from "@utility";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
+import { AirbnbRating } from "react-native-ratings";
 
 interface OwnProps {
   item: IDriver;
@@ -53,16 +54,29 @@ const _DriverListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
             <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={1}>
               {item.email}
             </Text>
-            <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={0.5}>
-              {truncateText(item.rating.toString(), 22)}
-            </Text>
-            <Text
-              style={StyleSheet.compose(gStyles.tblHeaderText, screenStyles.badgeText)}
-              ellipsizeMode="tail"
-              numberOfLines={0.5}
-            >
-              {truncateText(item.department, 35).toUpperCase()}
-            </Text>
+            <AirbnbRating
+              count={5}
+              starContainerStyle={{
+                alignSelf: "flex-start",
+              }}
+              defaultRating={item.rating}
+              size={12}
+              selectedColor={colors.warning}
+              showRating={false}
+              onFinishRating={(rating) => console.log(rating)}
+            />
+            <View>
+              <Text
+                style={StyleSheet.compose(screenStyles.badgeText, {
+                  textAlign: "left",
+                  alignSelf: "flex-start",
+                })}
+                ellipsizeMode="tail"
+                numberOfLines={0.5}
+              >
+                {truncateText(item.department, 35).toUpperCase()}
+              </Text>
+            </View>
           </View>
 
           <View style={list_card_styles.forwardContainer}>

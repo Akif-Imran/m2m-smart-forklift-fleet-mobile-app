@@ -29,8 +29,8 @@ const ServiceDetails: React.FC<ServiceStackScreenProps<"ServiceDetails">> = ({
             alwaysBounceVertical={false}
             contentContainerStyle={{ gap: 6 }}
           >
-            <Image source={{ uri: faker.image.url() }} style={styles.imgStyle} />
-            <Image source={{ uri: faker.image.url() }} style={styles.imgStyle} />
+            <Image source={{ uri: faker.image.url() }} style={screenStyles.imgStyle} />
+            <Image source={{ uri: faker.image.url() }} style={screenStyles.imgStyle} />
           </ScrollView>
           <_DefaultCard>
             <View>

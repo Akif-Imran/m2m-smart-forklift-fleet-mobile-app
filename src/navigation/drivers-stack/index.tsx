@@ -54,7 +54,7 @@ const DriverStack: React.FC = () => {
         component={DriverDetails}
         options={{
           headerShown: true,
-          title: "",
+          title: "Details",
         }}
       />
       <Stack.Screen
@@ -62,7 +62,7 @@ const DriverStack: React.FC = () => {
         component={Activity}
         options={{
           headerShown: true,
-          title: "",
+          title: "Activity",
         }}
       />
       <Stack.Screen

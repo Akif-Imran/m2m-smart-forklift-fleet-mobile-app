@@ -49,46 +49,33 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
         <View style={list_card_styles.infoWithForward}>
           <View style={list_card_styles.infoContainer}>
             <Text style={gStyles.cardInfoTitleText}>{item.name}</Text>
+            <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={1}>
+              {item.driver}
+            </Text>
             <View
-              style={StyleSheet.compose(list_card_styles.fieldContainer, {
-                marginTop: theme.spacing.sm,
-              })}
+              style={{
+                flexDirection: "row",
+                flexWrap: "nowrap",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
             >
-              {/* <Text style={gStyles.tblHeaderText}>Phone: </Text> */}
-              <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={1}>
-                {item.driver}
+              <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={0.5}>
+                {truncateText(item.model, 22)}
               </Text>
-            </View>
-            <View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  flexWrap: "nowrap",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <View style={list_card_styles.fieldContainer}>
-                  {/* <Text style={gStyles.tblHeaderText}>Company: </Text> */}
-                  <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={0.5}>
-                    {truncateText(item.model, 22)}
-                  </Text>
-                </View>
-                <Text
-                  style={StyleSheet.compose(
-                    StyleSheet.compose(gStyles.tblHeaderText, screenStyles.badgeText),
-                    {
-                      backgroundColor: ForkliftStatusColor[item.status],
-                    }
-                  )}
-                >
-                  {truncateText(item.status, 35).toUpperCase()}
-                </Text>
-              </View>
             </View>
           </View>
 
-          <View style={list_card_styles.forwardContainer}>
+          <View
+            style={StyleSheet.compose(list_card_styles.forwardContainer, { flexDirection: "row" })}
+          >
+            <Text
+              style={StyleSheet.compose(screenStyles.badgeText, {
+                backgroundColor: ForkliftStatusColor[item.status],
+              })}
+            >
+              {truncateText(item.status, 35).toUpperCase()}
+            </Text>
             <FontAwesome5 name="caret-right" size={20} color={colors.iconGray} />
           </View>
         </View>
