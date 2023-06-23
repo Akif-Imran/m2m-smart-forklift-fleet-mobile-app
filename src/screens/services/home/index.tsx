@@ -17,10 +17,12 @@ import { Searchbar } from "react-native-paper";
 import { _ServiceListCard } from "../components";
 import { faker } from "@faker-js/faker";
 import { ToastService } from "@utility";
+import { Ionicons } from "@expo/vector-icons";
+import { ServiceStackScreenProps } from "@navigation-types";
 
 interface OwnProps {}
 
-const Services: React.FC<OwnProps> = ({}) => {
+const Services: React.FC<ServiceStackScreenProps<"Services">> = ({ navigation, route }) => {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [services, setServices] = React.useState<IService[]>([]);
   const [searchedServices, setSearchedServices] = React.useState<IService[]>([]);
@@ -32,7 +34,7 @@ const Services: React.FC<OwnProps> = ({}) => {
     const record1: IService = {
       _id: faker.database.mongodbObjectId(),
       date: faker.date.past().toJSON(),
-      regNo: faker.vehicle.vin(),
+      regNo: faker.vehicle.vrm(),
       status: faker.helpers.arrayElement(["completed", "inprocess", "pending"]),
       type: faker.helpers.arrayElement(["body", "breakdown", "warranty", "scheduled"]),
       description: faker.lorem.sentence({ min: 5, max: 8 }),
@@ -40,7 +42,7 @@ const Services: React.FC<OwnProps> = ({}) => {
     const record2: IService = {
       _id: faker.database.mongodbObjectId(),
       date: faker.date.past().toJSON(),
-      regNo: faker.vehicle.vin(),
+      regNo: faker.vehicle.vrm(),
       status: faker.helpers.arrayElement(["completed", "inprocess", "pending"]),
       type: faker.helpers.arrayElement(["body", "breakdown", "warranty", "scheduled"]),
       description: faker.lorem.sentence({ min: 5, max: 8 }),
@@ -100,7 +102,15 @@ const Services: React.FC<OwnProps> = ({}) => {
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
-      <NoIconHeader title="Services" />
+      <NoIconHeader
+        title="Services"
+        right={[
+          {
+            icon: <Ionicons name="notifications" size={24} color={colors.primary} />,
+            onPress: () => navigation.navigate("Notification"),
+          },
+        ]}
+      />
       <_ConfirmModal
         visible={confirmDeleteVisible}
         question="Are you sure you want to delete this service ?"
