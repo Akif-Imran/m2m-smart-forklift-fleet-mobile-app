@@ -10,3 +10,4 @@ export { _ConfirmModal } from "./_ConfirmModal";
 export { _BarChart } from "./_BarChart";
 export { _PieChart } from "./_PieChart";
 export { _DefaultCard } from "./_DefaultCard";
+export { _ReportCard } from "./_ReportCard";

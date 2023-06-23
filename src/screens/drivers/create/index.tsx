@@ -103,7 +103,7 @@ const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({ navigation, 
       />
       <_ScrollFormLayout>
         <View style={{ rowGap: theme.spacing.xs }}>
-          <_Divider title="Forklift Image" />
+          <_Divider title="Driver Photo" />
           <FlatList
             horizontal
             data={images}
@@ -133,7 +133,7 @@ const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({ navigation, 
             )}
             keyExtractor={(_, index) => index.toString()}
           />
-          <_Divider title="Forklift Info" />
+          <_Divider title="Driver Info" />
           <_TextInput
             value={form.values.name}
             label={"Name"}

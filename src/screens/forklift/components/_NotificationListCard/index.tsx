@@ -45,9 +45,7 @@ const _NotificationListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
           <Ionicons name="notifications" size={45} color={colors.titleText} />
         </View>
         <View style={list_card_styles.infoWithForward}>
-          <View
-            style={StyleSheet.compose(list_card_styles.infoContainer, { rowGap: theme.spacing.xs })}
-          >
+          <View style={list_card_styles.infoContainer}>
             <Text style={gStyles.cardInfoTitleText}>{item.regNo}</Text>
             <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={1}>
               {item.event}
