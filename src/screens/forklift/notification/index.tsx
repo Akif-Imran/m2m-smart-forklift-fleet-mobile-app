@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { NoIconHeader, _ConfirmModal, _ListEmptyComponent } from "@components";
 import { screenStyles } from "src/screens/styles";
 import { Modal, Portal, RadioButton, Searchbar } from "react-native-paper";
-import { PaperTheme, colors, gStyles } from "@theme";
+import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { _NotificationListCard } from "../components/_NotificationListCard";
 import { ForkliftStackScreenProps } from "@navigation-types";
 import { ToastService } from "@utility";
@@ -127,7 +127,7 @@ const ForkliftNotification: React.FC<ForkliftStackScreenProps<"Notification">> =
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
-      <NoIconHeader title="" />
+      <View style={{ marginTop: theme.header.height }} />
       <_ConfirmModal
         visible={confirmDeleteVisible}
         question="Are you sure you want to delete this notifications ?"
@@ -145,10 +145,7 @@ const ForkliftNotification: React.FC<ForkliftStackScreenProps<"Notification">> =
           onChangeText={(query) => handleSearch(query)}
           style={screenStyles.searchStyle}
         />
-        <TouchableOpacity
-          style={screenStyles.filterButtonStyle}
-          onPress={() => ToastService.show("Under development")}
-        >
+        <TouchableOpacity style={screenStyles.filterButtonStyle} onPress={() => showModal()}>
           <FontAwesome5 name="filter" size={20} color={colors.iconGray} />
         </TouchableOpacity>
       </View>
