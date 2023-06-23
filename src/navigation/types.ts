@@ -49,6 +49,9 @@ export type ForkliftStackParamsList = {
   AddForklift: AddUpdateType<IForklift>
   ForkLiftDetails: DetailsType<IForklift>;
   ReqService: undefined;
+  BirdEyeView:undefined;
+  Notification:undefined;
+  NotificationDetails:DetailsType<INotification>;
 };
 
 export type ForkliftStackScreenProps<T extends keyof ForkliftStackParamsList> = StackScreenProps<

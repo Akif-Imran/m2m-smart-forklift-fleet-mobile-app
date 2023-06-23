@@ -2,7 +2,15 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { colors, gStyles } from "@theme";
 import { ForkliftStackParamsList } from "@navigation-types";
-import { Forklift, AddForklift, ForkLiftDetails, RequestService } from "@screens";
+import {
+  Forklift,
+  AddForklift,
+  ForkLiftDetails,
+  RequestService,
+  BirdEyeView,
+  ForkliftNotification,
+  ForkliftNotificationDetails,
+} from "@screens";
 
 const Stack = createStackNavigator<ForkliftStackParamsList>();
 
@@ -50,6 +58,30 @@ const ForkliftStack: React.FC = () => {
         options={{
           headerShown: true,
           title: "Request Service",
+        }}
+      />
+      <Stack.Screen
+        name="BirdEyeView"
+        component={BirdEyeView}
+        options={{
+          headerShown: true,
+          title: "Bird's Eye View",
+        }}
+      />
+      <Stack.Screen
+        name="Notification"
+        component={ForkliftNotification}
+        options={{
+          headerShown: true,
+          title: "Notifications",
+        }}
+      />
+      <Stack.Screen
+        name="NotificationDetails"
+        component={ForkliftNotificationDetails}
+        options={{
+          headerShown: true,
+          title: "Details",
         }}
       />
       {/* <Stack.Screen

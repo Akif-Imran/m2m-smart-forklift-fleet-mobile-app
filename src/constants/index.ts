@@ -7,3 +7,10 @@ export const ForkliftStatusColor: Record<string, string> = {
   moving: colors.primary,
   total: colors.titleText,
 };
+export const ForkliftNotificationStatusColor: Record<string, string> = {};
+
+export enum ForkliftNotificationsFilters {
+  "ALL" = 1,
+  "ON" = 2,
+  "OFF" = 3,
+}

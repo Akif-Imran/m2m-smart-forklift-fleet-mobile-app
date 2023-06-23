@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: theme.header.height,
-    columnGap: theme.spacing.xs,
+    gap: theme.spacing.md,
     borderWidth: 0,
   },
   titleContainer: {

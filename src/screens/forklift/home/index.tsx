@@ -18,7 +18,7 @@ import { ToastService } from "@utility";
 import { _ForkliftListCard } from "../components";
 import { faker } from "@faker-js/faker";
 import { ForkliftStatusColor } from "@constants";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, FontAwesome5, Ionicons } from "@expo/vector-icons";
 
 interface OwnProps {}
 
@@ -105,12 +105,12 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation, 
         title="Forklifts"
         right={[
           {
-            icon: <MaterialIcons name="add" size={24} color={colors.primary} />,
-            onPress: () => addInfo(),
+            icon: <FontAwesome5 name="map-marked-alt" size={24} color={colors.primary} />,
+            onPress: () => navigation.navigate("BirdEyeView"),
           },
           {
-            icon: <MaterialIcons name="10k" size={24} color={colors.primary} />,
-            onPress: () => addInfo(),
+            icon: <Ionicons name="notifications" size={24} color={colors.primary} />,
+            onPress: () => navigation.navigate("Notification"),
           },
         ]}
       />

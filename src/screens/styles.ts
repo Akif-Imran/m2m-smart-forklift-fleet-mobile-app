@@ -141,6 +141,21 @@ export const screenStyles = StyleSheet.create({
     flexDirection: "row",
     columnGap: theme.spacing.md,
   },
+  filterModalStyle: {
+    backgroundColor: colors.white,
+    paddingHorizontal: theme.spacing.xl,
+    paddingVertical: theme.spacing.xxxl,
+    margin: theme.spacing.xxl,
+    borderRadius: theme.radius.lg,
+    // borderWidth: 1,
+  },
+  radioItemStyle: {
+    borderRadius: theme.spacing.md,
+    marginVertical: theme.spacing.sm,
+    overflow: "hidden",
+    borderColor: colors.borderColor,
+    borderWidth: 1,
+  },
 });
 
 export const list_card_styles = StyleSheet.create({

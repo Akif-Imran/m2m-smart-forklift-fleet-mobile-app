@@ -20,3 +20,13 @@ interface IForklift {
   batterySerialNo: string;
   year: string;
 }
+
+interface INotification {
+  _id: string;
+  regNo: string;
+  model: string;
+  date: string;
+  driver: string;
+  event: string;
+  description: string;
+}

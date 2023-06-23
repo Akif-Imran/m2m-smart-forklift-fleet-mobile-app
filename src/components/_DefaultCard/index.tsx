@@ -1,12 +1,23 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { Card } from "react-native-paper";
+import { Card, CardProps } from "react-native-paper";
 import { PaperTheme, gStyles } from "@theme";
 
-interface OwnProps {}
-const _DefaultCard: React.FC<React.PropsWithChildren<OwnProps>> = ({ children }) => {
+interface OwnProps extends Pick<CardProps, "onPress" | "onLongPress"> {}
+const _DefaultCard: React.FC<React.PropsWithChildren<OwnProps>> = ({
+  children,
+  onPress,
+  onLongPress,
+}) => {
   return (
-    <Card elevation={0} mode="elevated" theme={PaperTheme} style={gStyles.card}>
+    <Card
+      elevation={0}
+      mode="elevated"
+      theme={PaperTheme}
+      style={gStyles.card}
+      onPress={onPress}
+      onLongPress={onLongPress}
+    >
       {children}
     </Card>
   );
