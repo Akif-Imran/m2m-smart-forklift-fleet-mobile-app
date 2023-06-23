@@ -92,6 +92,7 @@ export const screenStyles = StyleSheet.create({
     paddingVertical: theme.spacing.xs,
     marginHorizontal: theme.spacing.xs,
     textAlignVertical: "center",
+    backgroundColor: colors.primary,
     textAlign: "center",
   },
   //same text as globals but with left right alignment

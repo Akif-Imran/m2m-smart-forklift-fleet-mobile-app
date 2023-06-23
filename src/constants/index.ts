@@ -21,3 +21,6 @@ export enum ForkliftNotificationsFilters {
   "ON" = 2,
   "OFF" = 3,
 }
+export enum DriversFilters {
+  "ALL" = 1,
+}

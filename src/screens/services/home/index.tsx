@@ -12,7 +12,7 @@ import {
   _ListEmptyComponent,
 } from "@components";
 import { PaperTheme, colors, gStyles } from "@theme";
-import { ForkliftStatusColor, ServiceStatusColor } from "@constants";
+import { ForkliftNotificationsFilters, ForkliftStatusColor, ServiceStatusColor } from "@constants";
 import { Searchbar } from "react-native-paper";
 import { _ServiceListCard } from "../components";
 import { faker } from "@faker-js/faker";
@@ -174,7 +174,7 @@ const Services: React.FC<ServiceStackScreenProps<"Services">> = ({ navigation, r
         style={screenStyles.flatListStyle}
         // contentContainerStyle={{ padding: 2 }}
         keyExtractor={(item) => item._id}
-        ListEmptyComponent={<_ListEmptyComponent label="No Forklifts..." />}
+        ListEmptyComponent={<_ListEmptyComponent label="No Services..." />}
         renderItem={({ item }) => (
           <_ServiceListCard key={item._id} item={item} handleDelete={handleDelete} />
         )}

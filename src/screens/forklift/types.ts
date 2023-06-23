@@ -42,5 +42,11 @@ interface IService {
 
 interface IDriver {
   _id: string;
+  image: string;
   name: string;
+  email: string;
+  rating: number;
+  touchId: string;
+  department: string;
+  ic_number: string;
 }

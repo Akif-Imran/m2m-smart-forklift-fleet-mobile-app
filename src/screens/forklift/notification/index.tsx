@@ -207,7 +207,7 @@ const ForkliftNotification: React.FC<ForkliftStackScreenProps<"Notification">> =
         style={screenStyles.flatListStyle}
         // contentContainerStyle={{ padding: 2 }}
         keyExtractor={(item) => item._id}
-        ListEmptyComponent={<_ListEmptyComponent label="No Forklifts..." />}
+        ListEmptyComponent={<_ListEmptyComponent label="No Notifications..." />}
         renderItem={({ item }) => (
           <_NotificationListCard key={item._id} item={item} handleDelete={handleDelete} />
         )}
