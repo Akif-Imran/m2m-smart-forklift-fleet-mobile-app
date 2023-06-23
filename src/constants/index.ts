@@ -7,6 +7,13 @@ export const ForkliftStatusColor: Record<string, string> = {
   moving: colors.primary,
   total: colors.titleText,
 };
+
+export const ServiceStatusColor: Record<string, string> = {
+  pending: colors.error,
+  completed: colors.primary,
+  inprocess: colors.titleText,
+};
+
 export const ForkliftNotificationStatusColor: Record<string, string> = {};
 
 export enum ForkliftNotificationsFilters {

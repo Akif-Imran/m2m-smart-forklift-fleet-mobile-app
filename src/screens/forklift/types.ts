@@ -30,3 +30,17 @@ interface INotification {
   event: string;
   description: string;
 }
+
+interface IService {
+  _id: string;
+  regNo: string;
+  date: string;
+  type: string;
+  description: string;
+  status: string;
+}
+
+interface IDriver {
+  _id: string;
+  name: string;
+}
