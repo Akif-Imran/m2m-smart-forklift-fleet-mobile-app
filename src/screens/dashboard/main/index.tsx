@@ -14,8 +14,8 @@ const Dashboard: React.FC<DashboardStackScreenProps<"Dashboard">> = ({ navigatio
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
-      <NoIconHeader title="Dashboard" />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <NoIconHeader title="Dashboard" />
         <_DefaultCard>
           <View>
             <View>
