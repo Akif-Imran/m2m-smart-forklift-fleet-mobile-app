@@ -3,18 +3,19 @@ import React from "react";
 import { Card, CardProps } from "react-native-paper";
 import { PaperTheme, gStyles } from "@theme";
 
-interface OwnProps extends Pick<CardProps, "onPress" | "onLongPress"> {}
+interface OwnProps extends Pick<CardProps, "onPress" | "onLongPress" | "style"> {}
 const _DefaultCard: React.FC<React.PropsWithChildren<OwnProps>> = ({
   children,
   onPress,
   onLongPress,
+  style = gStyles.card,
 }) => {
   return (
     <Card
       elevation={0}
       mode="elevated"
       theme={PaperTheme}
-      style={gStyles.card}
+      style={style}
       onPress={onPress}
       onLongPress={onLongPress}
     >
