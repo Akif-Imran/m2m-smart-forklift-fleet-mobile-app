@@ -1,5 +1,5 @@
-import { colors } from "@theme";
-import Toast, { ToastOptions, Durations } from "react-native-root-toast";
+import Toast from "react-native-root-toast";
+import type { ToastOptions } from "react-native-root-toast";
 
 export class ToastService {
   private static config: ToastOptions = {

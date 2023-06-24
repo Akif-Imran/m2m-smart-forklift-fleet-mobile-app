@@ -1,4 +1,4 @@
-export const truncateText = (text: string, limit: number = 22) => {
+export const truncateText = (text: string, limit = 22) => {
   if (text.length <= limit) {
     return text;
   } else {
