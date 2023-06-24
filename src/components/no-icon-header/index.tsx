@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { colors, gStyles, theme } from "@theme";
 import { useAuthContext } from "@context";
 
@@ -15,7 +15,9 @@ const NoIconHeader: React.FC<OwnProps> = ({ title, right, left }) => {
   return (
     <View style={styles.mainContainer}>
       <View
-        style={StyleSheet.compose(styles.multiButtonContainer, { justifyContent: "flex-start" })}
+        style={StyleSheet.compose(styles.multiButtonContainer, {
+          justifyContent: "flex-start",
+        })}
       >
         {left ? (
           <>
@@ -52,7 +54,11 @@ const NoIconHeader: React.FC<OwnProps> = ({ title, right, left }) => {
             ))}
           </>
         ) : (
-          <TouchableOpacity activeOpacity={0.8} onPress={() => logout()} style={styles.button}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => logout()}
+            style={styles.button}
+          >
             <Ionicons name="exit" size={25} color={colors.primary} />
           </TouchableOpacity>
         )}

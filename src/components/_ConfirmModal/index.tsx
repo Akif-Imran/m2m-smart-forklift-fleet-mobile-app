@@ -1,10 +1,10 @@
-import { StatusBar, StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import { StyleSheet, Text, View, useWindowDimensions } from "react-native";
 import React from "react";
 
 import { styles } from "./styles";
 import { Button, Modal, Portal } from "react-native-paper";
 import LottieView from "lottie-react-native";
-import { PaperTheme, colors, gStyles, theme } from "@theme";
+import { PaperTheme, colors, gStyles } from "@theme";
 
 interface OwnProps {
   question: string;

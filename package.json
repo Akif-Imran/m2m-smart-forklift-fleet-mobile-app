@@ -40,7 +40,8 @@
     "react-native-svg": "13.4.0",
     "victory-native": "^36.6.11",
     "yup": "^1.2.0",
-    "zod": "^3.21.4"
+    "zod": "^3.21.4",
+    "@expo/vector-icons": "^13.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

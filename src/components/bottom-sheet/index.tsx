@@ -5,7 +5,7 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
-const { height: SCREEN_HEIGHT, width } = Dimensions.get("window");
+const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 export const MAX_TRANSLATE_Y = -SCREEN_HEIGHT / 2;
 export const MIN_TRANSLATE_Y = SCREEN_HEIGHT;
 

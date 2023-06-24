@@ -1,10 +1,9 @@
-import { Dimensions, StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import { Dimensions, StyleSheet, View, useWindowDimensions } from "react-native";
 import React from "react";
 import {
   VictoryAxis,
   VictoryChart,
   VictoryContainer,
-  VictoryLabel,
   VictoryLegend,
   VictoryPie,
   VictoryTheme,
@@ -54,7 +53,7 @@ export const _PieChart: React.FC<OwnProps> = ({
         "#BE4BDB",
         "#12B886",
       ];
-  const { width: SCREEN_WIDTH } = useWindowDimensions();
+  // const { width: SCREEN_WIDTH } = useWindowDimensions();
   return (
     <View style={[styles.mainContainer, direction === "row" ? styles.row : styles.column]}>
       <VictoryPie

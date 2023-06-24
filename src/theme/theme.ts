@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import colors from "./colors";
+import { colors } from "./colors";
 
 export const theme = {
   header: {
@@ -40,6 +40,7 @@ export const theme = {
     xxxl: 25,
   },
   colors: {
+    transparent: "transparent",
     dark: [
       "#C1C2C5",
       "#A6A7AB",

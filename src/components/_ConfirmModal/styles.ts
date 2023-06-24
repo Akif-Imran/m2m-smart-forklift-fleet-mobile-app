@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
   lottieView: {
     width: 200,
     height: 200,
-    backgroundColor: "transparent",
+    backgroundColor: theme.colors.transparent,
     ...Platform.select({
       ios: {
         shadowRadius: 0,
@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
       ios: {
         shadowRadius: 0,
         shadowOpacity: 0,
-        shadowColor: "transparent",
+        shadowColor: theme.colors.transparent,
       },
       android: {
         elevation: 0,

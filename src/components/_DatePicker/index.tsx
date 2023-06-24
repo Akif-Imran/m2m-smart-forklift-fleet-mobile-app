@@ -1,8 +1,9 @@
-import { Modal, Platform, StyleSheet, Text, View } from "react-native";
+import { Modal, Platform, View } from "react-native";
 import React from "react";
 import { Button } from "react-native-paper";
-import { PaperTheme } from "../../theme";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import { PaperTheme } from "@theme";
+import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
+import { styles } from "./styles";
 
 interface OwnProps {
   show: boolean;
@@ -15,10 +16,13 @@ interface OwnProps {
 const _DatePicker: React.FC<OwnProps> = ({ show, setShow, mode, date, setDate }) => {
   //   const [show, setShow] = React.useState(false);
 
-  const onChange = (event: any, selectedDate: any) => {
-    if (Platform.OS !== "ios") setShow(false);
+  const onChange = (_event: DateTimePickerEvent, selectedDate: Date | undefined) => {
+    if (Platform.OS !== "ios") {
+      setShow(false);
+    }
     const currentDate = selectedDate;
-    setDate((prev) => currentDate);
+    if (!currentDate) return;
+    setDate(currentDate);
   };
   return (
     <View>
@@ -26,17 +30,10 @@ const _DatePicker: React.FC<OwnProps> = ({ show, setShow, mode, date, setDate })
         <Modal
           visible={show}
           animationType="slide"
-          style={{ marginHorizontal: 10, marginVertical: 15 }}
+          style={styles.modalStyle}
           presentationStyle="overFullScreen"
         >
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "flex-end",
-              paddingVertical: 8,
-              borderWidth: 0,
-            }}
-          >
+          <View style={styles.contentStyle}>
             <Button theme={PaperTheme} mode="contained" onPress={() => setShow(false)}>
               Done
             </Button>
@@ -45,7 +42,6 @@ const _DatePicker: React.FC<OwnProps> = ({ show, setShow, mode, date, setDate })
               value={date}
               mode={mode}
               display="spinner"
-              //   is24Hour={true}
               onChange={onChange}
             />
           </View>
@@ -58,7 +54,6 @@ const _DatePicker: React.FC<OwnProps> = ({ show, setShow, mode, date, setDate })
               value={date}
               mode={mode}
               display="spinner"
-              //   is24Hour={true}
               onChange={onChange}
             />
           )}
@@ -69,5 +64,3 @@ const _DatePicker: React.FC<OwnProps> = ({ show, setShow, mode, date, setDate })
 };
 
 export { _DatePicker };
-
-const styles = StyleSheet.create({});

@@ -1,21 +1,12 @@
-import { colors } from "@theme";
+import { colors, theme } from "@theme";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   mainContainer: {
     // flex: 1,
-    paddingLeft: 10,
+    paddingLeft: theme.spacing.md,
     backgroundColor: colors.white,
-    borderRadius: 15,
-    // largeCard: {
-    //   backgroundColor: colors.white,
-    //   flexDirection: "row",
-    //   padding: 10,
-    //   borderRadius: 15,
-    //   marginTop: 8,
-    //   marginBottom: 2,
-    // },
-    // marginBottom: 50,
+    borderRadius: theme.radius.md,
     overflow: "hidden",
   },
   iconContainer: {

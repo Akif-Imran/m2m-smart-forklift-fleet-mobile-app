@@ -1,7 +1,15 @@
-import { ScrollView, View, Dimensions } from "react-native";
-import { Checkbox, Divider, Menu, TextInput, TouchableRipple, useTheme } from "react-native-paper";
-import React, { forwardRef, useEffect, useState, useCallback, Fragment } from "react";
-const DropDown = forwardRef((props, ref) => {
+import { ScrollView, View, Dimensions, StyleSheet } from "react-native";
+import {
+  Checkbox,
+  Divider,
+  Menu,
+  TextInput,
+  TouchableRipple,
+  useTheme,
+} from "react-native-paper";
+import React from "react";
+
+const DropDown = React.forwardRef((props, ref) => {
   const activeTheme = useTheme();
   const {
     multiSelect = false,
@@ -26,17 +34,20 @@ const DropDown = forwardRef((props, ref) => {
     dropDownItemSelectedTextStyle,
     accessibilityLabel,
   } = props;
-  const [displayValue, setDisplayValue] = useState("");
-  const [inputLayout, setInputLayout] = useState({
+
+  const [displayValue, setDisplayValue] = React.useState("");
+  const [inputLayout, setInputLayout] = React.useState({
     height: 0,
     width: 0,
     x: 0,
     y: 0,
   });
+
   const onLayout = (event) => {
     setInputLayout(event.nativeEvent.layout);
   };
-  useEffect(() => {
+
+  React.useEffect(() => {
     if (multiSelect) {
       const _labels = list
         .filter((_) => value.indexOf(_.value) !== -1)
@@ -50,7 +61,8 @@ const DropDown = forwardRef((props, ref) => {
       }
     }
   }, [list, value]);
-  const isActive = useCallback(
+
+  const isActive = React.useCallback(
     (currentValue) => {
       if (multiSelect) {
         return value.indexOf(currentValue) !== -1;
@@ -60,7 +72,8 @@ const DropDown = forwardRef((props, ref) => {
     },
     [value]
   );
-  const setActive = useCallback(
+
+  const setActive = React.useCallback(
     (currentValue) => {
       if (multiSelect) {
         const valueIndex = value.indexOf(currentValue);
@@ -68,7 +81,7 @@ const DropDown = forwardRef((props, ref) => {
         if (valueIndex === -1) {
           setValue([...values, currentValue].join(","));
         } else {
-          setValue([...values].filter((value) => value !== currentValue).join(","));
+          setValue([...values].filter((val) => val !== currentValue).join(","));
         }
       } else {
         setValue(currentValue);
@@ -76,13 +89,19 @@ const DropDown = forwardRef((props, ref) => {
     },
     [value]
   );
+
   return (
     <Menu
       visible={visible}
       onDismiss={onDismiss}
       theme={theme}
       anchor={
-        <TouchableRipple ref={ref} onPress={showDropDown} onLayout={onLayout} accessibilityLabel={accessibilityLabel}>
+        <TouchableRipple
+          ref={ref}
+          onPress={showDropDown}
+          onLayout={onLayout}
+          accessibilityLabel={accessibilityLabel}
+        >
           <View pointerEvents={"none"}>
             <TextInput
               dense
@@ -92,7 +111,12 @@ const DropDown = forwardRef((props, ref) => {
               placeholder={placeholder}
               pointerEvents={"none"}
               theme={theme}
-              right={<TextInput.Icon name={visible ? "menu-up" : "menu-down"} color={"#adb6be"} />}
+              right={
+                <TextInput.Icon
+                  name={visible ? "menu-up" : "menu-down"}
+                  color={"#adb6be"}
+                />
+              }
               {...inputProps}
               style={{ minWidth: Dimensions.get("window").width - 30 }}
               outlineColor={"#cfcfcf"}
@@ -122,12 +146,9 @@ const DropDown = forwardRef((props, ref) => {
         }}
       >
         {list.map((_item, _index) => (
-          <Fragment key={_item.value}>
+          <React.Fragment key={_item.value}>
             <TouchableRipple
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-              }}
+              style={styles.touchableRipple}
               onPress={() => {
                 setActive(_item.value);
                 if (onDismiss) {
@@ -135,18 +156,23 @@ const DropDown = forwardRef((props, ref) => {
                 }
               }}
             >
-              <Fragment>
+              <React.Fragment>
                 <Menu.Item
                   titleStyle={{
-                    color: isActive(_item.value) ? activeColor || (theme || activeTheme).colors.primary : (theme || activeTheme).colors.text,
-                    ...(isActive(_item.value) ? dropDownItemSelectedTextStyle : dropDownItemTextStyle),
+                    color: isActive(_item.value)
+                      ? activeColor || (theme || activeTheme).colors.primary
+                      : (theme || activeTheme).colors.text,
+                    ...(isActive(_item.value)
+                      ? dropDownItemSelectedTextStyle
+                      : dropDownItemTextStyle),
                   }}
                   title={_item.custom || _item.label}
-                  style={{
-                    flex: 1,
+                  style={StyleSheet.compose(styles.menuItem, {
                     maxWidth: inputLayout?.width,
-                    ...(isActive(_item.value) ? dropDownItemSelectedStyle : dropDownItemStyle),
-                  }}
+                    ...(isActive(_item.value)
+                      ? dropDownItemSelectedStyle
+                      : dropDownItemStyle),
+                  })}
                 />
                 {multiSelect && (
                   <Checkbox.Android
@@ -157,13 +183,23 @@ const DropDown = forwardRef((props, ref) => {
                     onPress={() => setActive(_item.value)}
                   />
                 )}
-              </Fragment>
+              </React.Fragment>
             </TouchableRipple>
             <Divider />
-          </Fragment>
+          </React.Fragment>
         ))}
       </ScrollView>
     </Menu>
   );
 });
-export default DropDown;
+
+const styles = StyleSheet.create({
+  touchableRipple: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  menuItem: {
+    flex: 1,
+  },
+});
+export { DropDown };

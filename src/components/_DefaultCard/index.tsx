@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { Card, CardProps } from "react-native-paper";
+import type { CardProps } from "react-native-paper";
+import { Card } from "react-native-paper";
 import { PaperTheme, gStyles } from "@theme";
 
-interface OwnProps extends Pick<CardProps, "onPress" | "onLongPress" | "style"> {}
+type OwnProps = Pick<CardProps, "onPress" | "onLongPress" | "style">;
+
 const _DefaultCard: React.FC<React.PropsWithChildren<OwnProps>> = ({
   children,
   onPress,
@@ -25,5 +26,3 @@ const _DefaultCard: React.FC<React.PropsWithChildren<OwnProps>> = ({
 };
 
 export { _DefaultCard };
-
-const styles = StyleSheet.create({});

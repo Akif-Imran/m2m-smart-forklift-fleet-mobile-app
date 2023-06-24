@@ -1,4 +1,3 @@
-import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import {
   VictoryAxis,
@@ -42,21 +41,15 @@ export const _BarChart: React.FC<OwnProps> = ({
     containerComponent={
       <VictoryVoronoiContainer
         responsive={true}
-        labels={({ datum }) =>
-          `Date: ${datum.x},\r\nProduction: ${datum.y.toFixed(1)}`
-        }
-        labelComponent={
-          <VictoryTooltip style={{ fontSize: 10 }} orientation={"bottom"} />
-        }
+        labels={({ datum }) => `Date: ${datum.x},\r\nProduction: ${datum.y.toFixed(1)}`}
+        labelComponent={<VictoryTooltip style={{ fontSize: 10 }} orientation={"bottom"} />}
       />
     }
   >
     <VictoryAxis
       tickValues={x_axis_tick_values}
       tickFormat={x_axis_tick_format}
-      tickLabelComponent={
-        <VictoryLabel angle={-30} textAnchor={"end"} style={{ fontSize: 8 }} />
-      }
+      tickLabelComponent={<VictoryLabel angle={-30} textAnchor={"end"} style={{ fontSize: 8 }} />}
       style={{
         axis: {
           stroke: colors.iconGray,
@@ -98,5 +91,3 @@ export const _BarChart: React.FC<OwnProps> = ({
     <VictoryBar data={data} x={x} y={y} style={{ data: { fill: color } }} />
   </VictoryChart>
 );
-
-const styles = StyleSheet.create({});

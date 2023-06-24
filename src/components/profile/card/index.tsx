@@ -1,5 +1,5 @@
-import { ImageRequireSource, StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React, { FC, Requireable } from "react";
+import { ImageRequireSource, Text, View, TouchableOpacity } from "react-native";
+import React, { FC } from "react";
 import { PaperTheme, colors, gStyles } from "../../../theme";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Avatar } from "react-native-paper";
@@ -17,7 +17,7 @@ interface Item {
   title: string;
   subtitle?: string;
 }
-const Card: FC<CardProps> = ({ data, size }) => {
+const Card: FC<CardProps> = ({ data }) => {
   const {
     state: { user },
   } = useAuthContext();
