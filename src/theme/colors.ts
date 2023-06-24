@@ -1,4 +1,4 @@
-export default {
+const colors = {
   teal: "#009688",
   primary: "#00c853",
   primaryTransparent100: "rgba(0, 200, 83, 1)",
@@ -53,3 +53,5 @@ export default {
   orange: "#c56200",
   darkOrange: "#ff6b47",
 };
+
+export { colors };
