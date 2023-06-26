@@ -1,7 +1,6 @@
 import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-import { styles } from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "src/screens/styles";
 import {
@@ -12,7 +11,7 @@ import {
   _ListEmptyComponent,
 } from "@components";
 import { PaperTheme, colors, gStyles } from "@theme";
-import { ForkliftNotificationsFilters, ForkliftStatusColor, ServiceStatusColor } from "@constants";
+import { ServiceStatusColor } from "@constants";
 import { Searchbar } from "react-native-paper";
 import { _ServiceListCard } from "../components";
 import { faker } from "@faker-js/faker";
@@ -20,9 +19,8 @@ import { ToastService } from "@utility";
 import { Ionicons } from "@expo/vector-icons";
 import { ServiceStackScreenProps } from "@navigation-types";
 
-interface OwnProps {}
 
-const Services: React.FC<ServiceStackScreenProps<"Services">> = ({ navigation, route }) => {
+const Services: React.FC<ServiceStackScreenProps<"Services">> = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [services, setServices] = React.useState<IService[]>([]);
   const [searchedServices, setSearchedServices] = React.useState<IService[]>([]);
@@ -73,7 +71,7 @@ const Services: React.FC<ServiceStackScreenProps<"Services">> = ({ navigation, r
     setSearchedServices(filtered);
   };
 
-  const handleDelete = React.useCallback((customerId: string) => {
+  const handleDelete = React.useCallback(() => {
     setConfirmDeleteVisible(true);
     console.log("handle delete");
   }, []);

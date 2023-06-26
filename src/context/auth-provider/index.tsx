@@ -124,7 +124,7 @@ export const AuthInit: React.FC<React.PropsWithChildren<AuthInitProps>> = ({
 
   React.useEffect(() => {
     if (!state.isLoading) {
-      setIsAuthLoaded((prev) => true);
+      setIsAuthLoaded((_prev) => true);
     }
   }, [state.isLoading, setIsAuthLoaded]);
   return <>{children}</>;

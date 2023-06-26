@@ -1,11 +1,9 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { FontAwesome5 } from "@expo/vector-icons";
 
 import { styles } from "./styles";
 import { _DefaultCard, _Divider } from "@components";
-import { list_card_styles, screenStyles } from "src/screens/styles";
-import { truncateText } from "@utility";
+import { listCardStyles, screenStyles } from "src/screens/styles";
 import { colors, gStyles } from "@theme";
 import { faker } from "@faker-js/faker";
 import moment from "moment";
@@ -19,7 +17,7 @@ const _DriverActivityCard: React.FC<OwnProps> = ({ item }) => {
   return (
     <_DefaultCard>
       <View
-        style={StyleSheet.compose(list_card_styles.contentContainer, {
+        style={StyleSheet.compose(listCardStyles.contentContainer, {
           backgroundColor: colors.white,
         })}
       >
@@ -28,18 +26,18 @@ const _DriverActivityCard: React.FC<OwnProps> = ({ item }) => {
             <Image
               source={{ uri: item.image }}
               resizeMode="cover"
-              style={list_card_styles.imgStyle}
+              style={listCardStyles.imgStyle}
             />
           ) : (
             <Image
               source={require("../../../../assets/images/user.png")}
               resizeMode="contain"
-              style={list_card_styles.imgStyle}
+              style={listCardStyles.imgStyle}
             />
           )}
         </View>
-        <View style={list_card_styles.infoWithForward}>
-          <View style={list_card_styles.infoContainer}>
+        <View style={listCardStyles.infoWithForward}>
+          <View style={listCardStyles.infoContainer}>
             <Text style={gStyles.cardInfoTitleText}>{item.name}</Text>
             {/* <Text style={gStyles.tblHeaderText}>Phone: </Text> */}
             <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={1}>
@@ -64,7 +62,7 @@ const _DriverActivityCard: React.FC<OwnProps> = ({ item }) => {
             </View>
           </View>
 
-          <View style={list_card_styles.forwardContainer}>
+          <View style={listCardStyles.forwardContainer}>
             {/* <FontAwesome5 name="caret-right" size={20} color={colors.iconGray} /> */}
           </View>
         </View>

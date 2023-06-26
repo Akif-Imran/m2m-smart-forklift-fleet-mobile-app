@@ -1,22 +1,20 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "src/screens/styles";
-import { NoIconHeader, _DefaultCard, _ScrollFormLayout } from "@components";
-import { ServiceStackScreenProps } from "@navigation-types";
+import { _DefaultCard, _ScrollFormLayout } from "@components";
+import type { ServiceStackScreenProps } from "@navigation-types";
 import { ScrollView } from "react-native-gesture-handler";
 import { faker } from "@faker-js/faker";
 import moment from "moment";
-
-interface OwnProps {}
+import { FAB } from "react-native-paper";
+import { colors, gStyles, theme } from "@theme";
 
 const ServiceDetails: React.FC<ServiceStackScreenProps<"ServiceDetails">> = ({
   navigation,
   route,
 }) => {
-  const { _id, item } = route.params;
+  const { item } = route.params;
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
@@ -27,14 +25,22 @@ const ServiceDetails: React.FC<ServiceStackScreenProps<"ServiceDetails">> = ({
             horizontal={true}
             showsVerticalScrollIndicator={false}
             alwaysBounceVertical={false}
-            contentContainerStyle={{ gap: 6 }}
+            contentContainerStyle={{ gap: theme.spacing.sm }}
           >
-            <Image source={{ uri: faker.image.url() }} style={screenStyles.imgStyle} />
-            <Image source={{ uri: faker.image.url() }} style={screenStyles.imgStyle} />
+            <Image
+              source={{ uri: faker.image.url() }}
+              style={screenStyles.imgStyle}
+            />
+            <Image
+              source={{ uri: faker.image.url() }}
+              style={screenStyles.imgStyle}
+            />
           </ScrollView>
           <_DefaultCard>
             <View>
-              <Text style={screenStyles.detailsCardHeadingText}>Service Info</Text>
+              <Text style={screenStyles.detailsCardHeadingText}>
+                Service Info
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Registration No.</Text>
@@ -52,7 +58,9 @@ const ServiceDetails: React.FC<ServiceStackScreenProps<"ServiceDetails">> = ({
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Service Type</Text>
-              <Text style={screenStyles.tblDescText}>{item.type.toUpperCase()}</Text>
+              <Text style={screenStyles.tblDescText}>
+                {item.type.toUpperCase()}
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Description</Text>
@@ -61,6 +69,12 @@ const ServiceDetails: React.FC<ServiceStackScreenProps<"ServiceDetails">> = ({
           </_DefaultCard>
         </>
       </_ScrollFormLayout>
+      <FAB
+        icon="plus"
+        style={gStyles.fab}
+        color={colors.white}
+        onPress={() => navigation.navigate("")}
+      />
     </SafeAreaView>
   );
 };

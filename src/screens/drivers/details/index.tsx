@@ -1,18 +1,15 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
 import { EvilIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "src/screens/styles";
 import { _DefaultCard, _ScrollFormLayout } from "@components";
 import { faker } from "@faker-js/faker";
-import { DriverStackScreenProps } from "@navigation-types";
-import { colors } from "@theme";
+import type { DriverStackScreenProps } from "@navigation-types";
+import { colors, gStyles } from "@theme";
 import { handleOpenWebsite } from "@utility";
 import moment from "moment";
-
-interface OwnProps {}
+import { FAB } from "react-native-paper";
 
 const DriverDetails: React.FC<DriverStackScreenProps<"DriverDetails">> = ({
   navigation,
@@ -29,7 +26,9 @@ const DriverDetails: React.FC<DriverStackScreenProps<"DriverDetails">> = ({
           </View>
           <_DefaultCard>
             <View>
-              <Text style={screenStyles.detailsCardHeadingText}>Identification Info</Text>
+              <Text style={screenStyles.detailsCardHeadingText}>
+                Identification Info
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Name</Text>
@@ -46,7 +45,9 @@ const DriverDetails: React.FC<DriverStackScreenProps<"DriverDetails">> = ({
           </_DefaultCard>
           <_DefaultCard>
             <View>
-              <Text style={screenStyles.detailsCardHeadingText}>Driver Info</Text>
+              <Text style={screenStyles.detailsCardHeadingText}>
+                Driver Info
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Email</Text>
@@ -55,7 +56,9 @@ const DriverDetails: React.FC<DriverStackScreenProps<"DriverDetails">> = ({
                 onPress={() => handleOpenWebsite(`mailto:${item.email}`)}
                 activeOpacity={0.7}
               >
-                <Text style={[screenStyles.tblDescText, screenStyles.linkText]}>{item.email}</Text>
+                <Text style={[screenStyles.tblDescText, screenStyles.linkText]}>
+                  {item.email}
+                </Text>
                 <EvilIcons name="external-link" size={16} color={colors.info} />
               </TouchableOpacity>
             </View>
@@ -69,7 +72,9 @@ const DriverDetails: React.FC<DriverStackScreenProps<"DriverDetails">> = ({
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Mobile No.</Text>
-              <Text style={screenStyles.tblDescText}>{faker.phone.number("+60 ### ### ####")}</Text>
+              <Text style={screenStyles.tblDescText}>
+                {faker.phone.number("+60 ### ### ####")}
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Joining Date</Text>
@@ -79,12 +84,16 @@ const DriverDetails: React.FC<DriverStackScreenProps<"DriverDetails">> = ({
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Experience</Text>
-              <Text style={screenStyles.tblDescText}>{faker.number.int({ min: 3, max: 8 })}</Text>
+              <Text style={screenStyles.tblDescText}>
+                {faker.number.int({ min: 3, max: 8 })}
+              </Text>
             </View>
           </_DefaultCard>
           <_DefaultCard>
             <View>
-              <Text style={screenStyles.detailsCardHeadingText}>License Info</Text>
+              <Text style={screenStyles.detailsCardHeadingText}>
+                License Info
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Type</Text>
@@ -108,15 +117,29 @@ const DriverDetails: React.FC<DriverStackScreenProps<"DriverDetails">> = ({
           </_DefaultCard>
           <_DefaultCard>
             <View>
-              <Text style={screenStyles.detailsCardHeadingText}>Assigned Forklifts</Text>
+              <Text style={screenStyles.detailsCardHeadingText}>
+                Assigned Forklifts
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
-              <Text style={screenStyles.tblHeaderText}></Text>
-              <Text style={screenStyles.tblDescText}></Text>
+              <Text style={screenStyles.tblHeaderText} />
+              <Text style={screenStyles.tblDescText} />
             </View>
           </_DefaultCard>
         </>
       </_ScrollFormLayout>
+      <FAB
+        icon="pencil"
+        style={gStyles.fab}
+        color={colors.white}
+        onPress={() =>
+          navigation.navigate("AddDriver", {
+            mode: "edit",
+            _id: _id,
+            item: item,
+          })
+        }
+      />
     </SafeAreaView>
   );
 };

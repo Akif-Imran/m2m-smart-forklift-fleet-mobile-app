@@ -1,5 +1,5 @@
-import { NavigatorScreenParams } from "@react-navigation/native";
-import { StackScreenProps } from "@react-navigation/stack";
+import type { NavigatorScreenParams } from "@react-navigation/native";
+import type { StackScreenProps } from "@react-navigation/stack";
 
 type DetailsType<T> = {
   item: T;
@@ -23,10 +23,8 @@ export type AuthStackParamsList = {
   Register: undefined;
   ForgetPassword: undefined;
 };
-export type AuthStackScreenProps<T extends keyof AuthStackParamsList> = StackScreenProps<
-  AuthStackParamsList,
-  T
->;
+export type AuthStackScreenProps<T extends keyof AuthStackParamsList> =
+  StackScreenProps<AuthStackParamsList, T>;
 //--------------------------------------
 export type MainTabsParamsList = {
   DashboardStack: NavigatorScreenParams<DashboardStackParamsList>;
@@ -42,10 +40,9 @@ export type DashboardStackParamsList = {
   Dashboard: undefined;
 };
 
-export type DashboardStackScreenProps<T extends keyof DashboardStackParamsList> = StackScreenProps<
-  DashboardStackParamsList,
-  T
->;
+export type DashboardStackScreenProps<
+  T extends keyof DashboardStackParamsList
+> = StackScreenProps<DashboardStackParamsList, T>;
 //--------------------------------------
 export type ForkliftStackParamsList = {
   Forklift: undefined;
@@ -57,10 +54,8 @@ export type ForkliftStackParamsList = {
   NotificationDetails: DetailsType<INotification>;
 };
 
-export type ForkliftStackScreenProps<T extends keyof ForkliftStackParamsList> = StackScreenProps<
-  ForkliftStackParamsList,
-  T
->;
+export type ForkliftStackScreenProps<T extends keyof ForkliftStackParamsList> =
+  StackScreenProps<ForkliftStackParamsList, T>;
 //--------------------------------------
 export type ServiceStackParamsList = {
   Services: undefined;
@@ -69,10 +64,8 @@ export type ServiceStackParamsList = {
   NotificationDetails: DetailsType<INotification>;
 };
 
-export type ServiceStackScreenProps<T extends keyof ServiceStackParamsList> = StackScreenProps<
-  ServiceStackParamsList,
-  T
->;
+export type ServiceStackScreenProps<T extends keyof ServiceStackParamsList> =
+  StackScreenProps<ServiceStackParamsList, T>;
 //--------------------------------------
 export type DriversStackParamsList = {
   Drivers: undefined;
@@ -84,10 +77,8 @@ export type DriversStackParamsList = {
   NotificationDetails: DetailsType<INotification>;
 };
 
-export type DriverStackScreenProps<T extends keyof DriversStackParamsList> = StackScreenProps<
-  DriversStackParamsList,
-  T
->;
+export type DriverStackScreenProps<T extends keyof DriversStackParamsList> =
+  StackScreenProps<DriversStackParamsList, T>;
 //--------------------------------------
 export type ReportsStackParamsList = {
   Reports: undefined;
@@ -95,10 +86,8 @@ export type ReportsStackParamsList = {
   NotificationDetails: DetailsType<INotification>;
 };
 
-export type ReportStackScreenProps<T extends keyof ReportsStackParamsList> = StackScreenProps<
-  ReportsStackParamsList,
-  T
->;
+export type ReportStackScreenProps<T extends keyof ReportsStackParamsList> =
+  StackScreenProps<ReportsStackParamsList, T>;
 //--------------------------------------
 export type ProfileSettingsStackParamsList = {
   Settings: undefined;
@@ -107,5 +96,6 @@ export type ProfileSettingsStackParamsList = {
   Help: undefined;
 };
 
-export type ProfileSettingsStackScreenProps<T extends keyof ProfileSettingsStackParamsList> =
-  StackScreenProps<ProfileSettingsStackParamsList, T>;
+export type ProfileSettingsStackScreenProps<
+  T extends keyof ProfileSettingsStackParamsList
+> = StackScreenProps<ProfileSettingsStackParamsList, T>;

@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 import React, { FC } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { colors, gStyles } from "../../theme";
@@ -71,5 +70,3 @@ const ProfileSettingsStack: FC = () => {
 };
 
 export { ProfileSettingsStack };
-
-const styles = StyleSheet.create({});

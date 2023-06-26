@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { colors, gStyles } from "@theme";
-import { ServiceStackParamsList } from "@navigation-types";
+import type { ServiceStackParamsList } from "@navigation-types";
 import {
   Services,
   ServiceDetails,
@@ -36,10 +36,10 @@ const ServicesStack: React.FC = () => {
       <Stack.Screen
         name="ServiceDetails"
         component={ServiceDetails}
-        options={({ route }) => ({
+        options={{
           headerShown: true,
           title: "Details",
-        })}
+        }}
       />
       <Stack.Screen
         name="Notification"

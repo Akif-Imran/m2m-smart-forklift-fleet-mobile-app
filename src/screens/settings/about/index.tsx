@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import React from "react";
 import { ProfileSettingsStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -8,9 +8,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { colors } from "@theme";
 import { styles } from "./styles";
 
-interface OwnProps {}
 
-const About: React.FC<ProfileSettingsStackScreenProps<"About">> = ({ navigation, route }) => {
+const About: React.FC<ProfileSettingsStackScreenProps<"About">> = ({  }) => {
   return (
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView style={styles.scrollContainer}>

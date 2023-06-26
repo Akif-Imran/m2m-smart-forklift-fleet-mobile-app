@@ -1,31 +1,45 @@
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 import { AntDesign } from "@expo/vector-icons";
-
-import { styles } from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Spinner from "react-native-loading-spinner-overlay";
-import { _DatePicker, _Divider, _ScrollFormLayout, _TextInput } from "@components";
+import {
+  _DatePicker,
+  _Divider,
+  _ScrollFormLayout,
+  _TextInput,
+} from "@components";
 import { colors, theme } from "@theme";
 import { screenStyles } from "src/screens/styles";
-import { DriverStackScreenProps } from "@navigation-types";
+import type { DriverStackScreenProps } from "@navigation-types";
 import * as ImagePicker from "expo-image-picker";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { ToastService } from "@utility";
 
-interface OwnProps {}
-interface IForm extends Omit<IDriver, "_id"> {}
+type IForm = Omit<IDriver, "_id">;
 
 const scheme = yup.object().shape({});
 
-const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({ navigation, route }) => {
+const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({
+  navigation,
+  route,
+}) => {
   const { mode } = route.params;
   const [isLoading, setIsLoading] = React.useState(false);
-  const [hasImages, setHasImages] = React.useState<boolean>(false);
-  const [images, setImages] = React.useState<ImagePicker.ImagePickerAsset[]>([]);
+  const [_hasImages, setHasImages] = React.useState<boolean>(false);
+  const [images, setImages] = React.useState<ImagePicker.ImagePickerAsset[]>(
+    []
+  );
   const [purchaseDate, setPurchaseDate] = React.useState<Date>(new Date());
-  const [showPurchaseDatePicker, setShowPurchaseDatePicker] = React.useState(false);
+  const [showPurchaseDatePicker, setShowPurchaseDatePicker] =
+    React.useState(false);
 
   const form = useFormik<IForm>({
     initialValues: {
@@ -42,6 +56,7 @@ const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({ navigation, 
       setIsLoading(true);
       setTimeout(() => {
         setIsLoading(false);
+        helpers.resetForm();
         ToastService.show("Forklift added successfully");
         navigation.goBack();
       });
@@ -56,7 +71,7 @@ const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({ navigation, 
         ToastService.show("Camera permission denied");
         return;
       }
-      let result = await ImagePicker.launchCameraAsync({
+      const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: false,
         base64: true,
@@ -85,15 +100,24 @@ const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({ navigation, 
   const removeImage = (index: number) => {
     const arr = [...images];
     arr.splice(index, 1);
-    if (arr.length === 0) setHasImages(false);
+    if (arr.length === 0) {
+      setHasImages(false);
+    }
     setImages(arr);
   };
 
   return (
     <SafeAreaView
-      style={StyleSheet.compose(screenStyles.mainContainer, { rowGap: theme.spacing.none })}
+      style={StyleSheet.compose(screenStyles.mainContainer, {
+        rowGap: theme.spacing.none,
+      })}
     >
-      <Spinner visible={isLoading} cancelable={false} animation="fade" size="large" />
+      <Spinner
+        visible={isLoading}
+        cancelable={false}
+        animation="fade"
+        size="large"
+      />
       <_DatePicker
         show={showPurchaseDatePicker}
         setShow={setShowPurchaseDatePicker}
@@ -122,7 +146,7 @@ const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({ navigation, 
                 />
               </TouchableOpacity>
             )}
-            ListFooterComponent={() => (
+            ListFooterComponent={
               <TouchableOpacity
                 style={screenStyles.addImageButton}
                 activeOpacity={0.5}
@@ -130,7 +154,7 @@ const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({ navigation, 
               >
                 <AntDesign name="plus" size={30} color={colors.primary} />
               </TouchableOpacity>
-            )}
+            }
             keyExtractor={(_, index) => index.toString()}
           />
           <_Divider title="Driver Info" />

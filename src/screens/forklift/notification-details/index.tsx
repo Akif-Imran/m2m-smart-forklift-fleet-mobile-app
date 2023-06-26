@@ -1,28 +1,24 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
-import { ForkliftStackScreenProps } from "@navigation-types";
+import type { ForkliftStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "src/screens/styles";
-import { theme } from "@theme";
 import { _DefaultCard, _ScrollFormLayout } from "@components";
 import moment from "moment";
 
-interface OwnProps {}
-
-const ForkliftNotificationDetails: React.FC<ForkliftStackScreenProps<"NotificationDetails">> = ({
-  navigation,
-  route,
-}) => {
-  const { _id, item } = route.params;
+const ForkliftNotificationDetails: React.FC<
+  ForkliftStackScreenProps<"NotificationDetails">
+> = ({ route }) => {
+  const { item } = route.params;
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
       <_ScrollFormLayout>
         <_DefaultCard>
           <View>
-            <Text style={screenStyles.detailsCardHeadingText}>Notification Info</Text>
+            <Text style={screenStyles.detailsCardHeadingText}>
+              Notification Info
+            </Text>
           </View>
           <View style={screenStyles.fieldContainer}>
             <Text style={screenStyles.tblHeaderText}>Forklift</Text>

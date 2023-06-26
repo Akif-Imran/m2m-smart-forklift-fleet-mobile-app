@@ -1,16 +1,14 @@
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import React from "react";
 import { ProfileSettingsStackScreenProps } from "@navigation-types";
 import { styles } from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
-import { Button, Card, Paragraph, Title } from "react-native-paper";
+import { Card } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors } from "../../../theme";
 
-interface Props {}
-
-const Help: React.FC<ProfileSettingsStackScreenProps<"Help">> = ({ navigation, route }) => {
+const Help: React.FC<ProfileSettingsStackScreenProps<"Help">> = ({}) => {
   return (
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView style={styles.scrollContainer}>

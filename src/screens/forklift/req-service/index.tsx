@@ -1,22 +1,31 @@
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
 import { screenStyles } from "src/screens/styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Spinner from "react-native-loading-spinner-overlay";
 import { AntDesign } from "@expo/vector-icons";
-import { _Divider, _Dropdown, _ScrollFormLayout, _TextInput } from "@components";
+import {
+  _Divider,
+  _DropDown,
+  _ScrollFormLayout,
+  _TextInput,
+} from "@components";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
 import * as ImagePicker from "expo-image-picker";
-import { ForkliftStackScreenProps } from "@navigation-types";
+import type { ForkliftStackScreenProps } from "@navigation-types";
 import { ToastService } from "@utility";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import moment from "moment";
 import { Button } from "react-native-paper";
 
-interface OwnProps {}
 interface IForm {
   type: string;
   description: string;
@@ -29,11 +38,12 @@ const schema: yup.ObjectSchema<IForm> = yup.object().shape({
 
 const RequestService: React.FC<ForkliftStackScreenProps<"ReqService">> = ({
   navigation,
-  route,
 }) => {
   const [isLoading, setIsLoading] = React.useState(false);
-  const [hasImages, setHasImages] = React.useState<boolean>(false);
-  const [images, setImages] = React.useState<ImagePicker.ImagePickerAsset[]>([]);
+  const [_hasImages, setHasImages] = React.useState<boolean>(false);
+  const [images, setImages] = React.useState<ImagePicker.ImagePickerAsset[]>(
+    []
+  );
   const [typeDropdownVisible, setTypeDropdownVisible] = React.useState(false);
 
   const typeDropDownList = [
@@ -52,6 +62,7 @@ const RequestService: React.FC<ForkliftStackScreenProps<"ReqService">> = ({
       setIsLoading(true);
       setTimeout(() => {
         setIsLoading(false);
+        helpers.resetForm();
         ToastService.show("Request added successfully");
         navigation.goBack();
       }, 2000);
@@ -66,7 +77,7 @@ const RequestService: React.FC<ForkliftStackScreenProps<"ReqService">> = ({
         ToastService.show("Camera permission denied");
         return;
       }
-      let result = await ImagePicker.launchCameraAsync({
+      const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: false,
         base64: true,
@@ -95,13 +106,20 @@ const RequestService: React.FC<ForkliftStackScreenProps<"ReqService">> = ({
   const removeImage = (index: number) => {
     const arr = [...images];
     arr.splice(index, 1);
-    if (arr.length === 0) setHasImages(false);
+    if (arr.length === 0) {
+      setHasImages(false);
+    }
     setImages(arr);
   };
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
-      <Spinner visible={isLoading} cancelable={false} animation="fade" size="large" />
+      <Spinner
+        visible={isLoading}
+        cancelable={false}
+        animation="fade"
+        size="large"
+      />
       <_ScrollFormLayout>
         <View style={{ rowGap: theme.spacing.xs }}>
           <_Divider title="Forklift Image" />
@@ -123,7 +141,7 @@ const RequestService: React.FC<ForkliftStackScreenProps<"ReqService">> = ({
                 />
               </TouchableOpacity>
             )}
-            ListFooterComponent={() => (
+            ListFooterComponent={
               <TouchableOpacity
                 style={screenStyles.addImageButton}
                 activeOpacity={0.5}
@@ -131,7 +149,7 @@ const RequestService: React.FC<ForkliftStackScreenProps<"ReqService">> = ({
               >
                 <AntDesign name="plus" size={30} color={colors.primary} />
               </TouchableOpacity>
-            )}
+            }
             keyExtractor={(_, index) => index.toString()}
           />
           <_Divider title="Date/Time Info" />
@@ -142,7 +160,7 @@ const RequestService: React.FC<ForkliftStackScreenProps<"ReqService">> = ({
             </Text>
           </View>
           <_Divider title="Service Info" />
-          <_Dropdown
+          <_DropDown
             theme={PaperTheme}
             dropDownItemTextStyle={{ ...gStyles.descText }}
             dropDownItemSelectedTextStyle={{
@@ -167,7 +185,11 @@ const RequestService: React.FC<ForkliftStackScreenProps<"ReqService">> = ({
             label={"Description"}
             onBlur={form.handleBlur("name")}
             onChangeText={form.handleChange("name")}
-            error={form.errors?.description && form.touched?.description ? true : false}
+            error={
+              form.errors?.description && form.touched?.description
+                ? true
+                : false
+            }
             errorText={form.errors?.description}
           />
           <View style={screenStyles.formSubmitButtonContainer}>
@@ -175,7 +197,9 @@ const RequestService: React.FC<ForkliftStackScreenProps<"ReqService">> = ({
               theme={PaperTheme}
               mode="contained"
               onPress={form.handleSubmit}
-              labelStyle={StyleSheet.compose(gStyles.tblHeaderText, { color: colors.white })}
+              labelStyle={StyleSheet.compose(gStyles.tblHeaderText, {
+                color: colors.white,
+              })}
             >
               Request
             </Button>

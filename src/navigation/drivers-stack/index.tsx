@@ -1,13 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { colors, gStyles } from "@theme";
-import { DriversStackParamsList, ServiceStackParamsList } from "@navigation-types";
+import type { DriversStackParamsList } from "@navigation-types";
 import {
-  Forklift,
-  AddForklift,
-  ForkLiftDetails,
-  RequestService,
-  BirdEyeView,
   ForkliftNotification,
   ForkliftNotificationDetails,
   Drivers,
@@ -46,7 +41,8 @@ const DriverStack: React.FC = () => {
         component={AddDriver}
         options={({ route }) => ({
           headerShown: true,
-          title: route.params.mode === "add" ? "Add Forklift" : "Update Forklift",
+          title:
+            route.params.mode === "add" ? "Add Forklift" : "Update Forklift",
         })}
       />
       <Stack.Screen

@@ -1,12 +1,7 @@
 import React from "react";
-import { StyleSheet, Image } from "react-native";
+import { Image } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  FontAwesome,
-  MaterialIcons,
-  FontAwesome5,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { colors } from "@theme";
 import { ProfileSettingsStack } from "../profile-settings-stack"; //not imported from @navigation to avoid cycle
@@ -25,14 +20,14 @@ interface OwnProps {}
 const RootTabs: React.FC<OwnProps> = ({}) => {
   return (
     <Tab.Navigator
-      screenOptions={({ navigation, route }) => ({
+      screenOptions={{
         headerShown: false,
         tabBarLabelStyle: styles.labelStyle,
         tabBarInactiveTintColor: colors.titleText,
         tabBarActiveTintColor: colors.primary,
         tabBarShowLabel: true,
         unmountOnBlur: true,
-      })}
+      }}
       initialRouteName="DashboardStack"
     >
       <Tab.Screen

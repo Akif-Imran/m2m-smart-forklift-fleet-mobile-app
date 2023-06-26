@@ -1,6 +1,5 @@
 import { Text, View, KeyboardAvoidingView, Platform, Image } from "react-native";
-import React, { useState, FC, useEffect } from "react";
-import { Fontisto } from "@expo/vector-icons";
+import React, { useState, FC } from "react";
 
 //third party imports
 import { Button, TextInput } from "react-native-paper";
@@ -11,7 +10,7 @@ import { AuthStackScreenProps } from "@navigation-types";
 import { styles } from "./styles";
 import { ToastService } from "@utility";
 
-const ForgotPassword: FC<AuthStackScreenProps<"ForgetPassword">> = ({ navigation, route }) => {
+const ForgotPassword: FC<AuthStackScreenProps<"ForgetPassword">> = ({}) => {
   const [email, setEmail] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
 

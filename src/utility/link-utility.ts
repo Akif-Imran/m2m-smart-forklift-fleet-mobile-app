@@ -11,7 +11,7 @@ export const handleOpenWebsite = (url: string) => {
         ToastService.show("Website link error");
       }
     })
-    .catch((err) => {
+    .catch((_err) => {
       ToastService.show("Website link error");
     });
 };

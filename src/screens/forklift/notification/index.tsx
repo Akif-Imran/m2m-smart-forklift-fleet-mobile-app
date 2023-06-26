@@ -1,9 +1,8 @@
-import { FlatList, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, RefreshControl, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 
-import { styles } from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { NoIconHeader, _ConfirmModal, _ListEmptyComponent } from "@components";
+import { _ConfirmModal, _ListEmptyComponent } from "@components";
 import { screenStyles } from "src/screens/styles";
 import { Modal, Portal, RadioButton, Searchbar } from "react-native-paper";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
@@ -14,7 +13,6 @@ import { faker } from "@faker-js/faker";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { ForkliftNotificationsFilters } from "@constants";
 
-interface OwnProps {}
 
 const ForkliftNotification: React.FC<ForkliftStackScreenProps<"Notification">> = ({}) => {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
@@ -95,12 +93,12 @@ const ForkliftNotification: React.FC<ForkliftStackScreenProps<"Notification">> =
     const filtered = notifications.filter(
       (value) => value.event.split(" ")[1].toLowerCase() === matchingKey.toString().toLowerCase()
     );
-    setSearchedNotifications((prev) => filtered);
+    setSearchedNotifications((_prev) => filtered);
   };
 
   const handleDelete = React.useCallback((notificationId: string) => {
     setConfirmDeleteVisible(true);
-    console.log("handle delete");
+    console.log("handle delete",notificationId);
   }, []);
 
   const handleDeleteConfirm = () => {

@@ -174,7 +174,7 @@ export const screenStyles = StyleSheet.create({
   },
 });
 
-export const list_card_styles = StyleSheet.create({
+export const listCardStyles = StyleSheet.create({
   contentContainer: {
     flexDirection: "row",
     borderRadius: theme.radius.sm,

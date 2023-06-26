@@ -1,13 +1,12 @@
-import { FlatList, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, RefreshControl, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 
-import { styles } from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "src/screens/styles";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { ToastService } from "@utility";
-import { AssignForkliftFilters, DriversFilters } from "@constants";
+import { AssignForkliftFilters } from "@constants";
 import { faker } from "@faker-js/faker";
 import { _ConfirmModal, _ListEmptyComponent } from "@components";
 import { Modal, Portal, RadioButton, Searchbar } from "react-native-paper";
@@ -15,11 +14,9 @@ import { _AssignForkliftListCard } from "../components";
 import Spinner from "react-native-loading-spinner-overlay";
 import { DriverStackScreenProps } from "@navigation-types";
 
-interface OwnProps {}
 
 const AssignForklift: React.FC<DriverStackScreenProps<"AssignForklift">> = ({
   navigation,
-  route,
 }) => {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [isLoading, setIsLoading] = React.useState(false);
@@ -27,7 +24,6 @@ const AssignForklift: React.FC<DriverStackScreenProps<"AssignForklift">> = ({
   const [searchedForklifts, setSearchedForklifts] = React.useState<IForklift[]>([]);
   const [isFetching, setIsFetching] = React.useState(false);
   const fetchForkliftsTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
-  const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
   const [selectedForklifts, setSelectedForklifts] = React.useState<string[]>([]);
 
   const [visible, setVisible] = React.useState<boolean>(false);
@@ -90,7 +86,6 @@ const AssignForklift: React.FC<DriverStackScreenProps<"AssignForklift">> = ({
       setSearchedForklifts(forklifts);
       return;
     }
-    let matchingKey: string | AssignForkliftFilters = "1";
     if (newValue === "2") {
       const toSort = [...forklifts];
       toSort.sort((a, b) => a.name.localeCompare(b.name));

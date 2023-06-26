@@ -1,7 +1,6 @@
-import { FlatList, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, RefreshControl, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 
-import { styles } from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NoIconHeader, _ConfirmModal, _ListEmptyComponent } from "@components";
 import { screenStyles } from "src/screens/styles";
@@ -14,9 +13,7 @@ import { _DriverListCard } from "../components";
 import { Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { DriversFilters } from "@constants";
 
-interface OwnProps {}
-
-const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({ route, navigation }) => {
+const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [drivers, setDrivers] = React.useState<IDriver[]>([]);
   const [searchedDrivers, setSearchedDrivers] = React.useState<IDriver[]>([]);
@@ -81,12 +78,12 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({ route, navigatio
     const filtered = drivers.filter(
       (value) => value.name.split(" ")[1].toLowerCase() === matchingKey.toString().toLowerCase()
     );
-    setSearchedDrivers((prev) => filtered);
+    setSearchedDrivers((_prev) => filtered);
   };
 
-  const handleDelete = React.useCallback((customerId: string) => {
+  const handleDelete = React.useCallback((driverId: string) => {
     setConfirmDeleteVisible(true);
-    console.log("handle delete");
+    console.log("handle delete", driverId);
   }, []);
 
   const handleDeleteConfirm = () => {

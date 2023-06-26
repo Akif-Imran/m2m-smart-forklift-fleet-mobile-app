@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { colors, gStyles } from "@theme";
-import { ForkliftStackParamsList } from "@navigation-types";
+import type { ForkliftStackParamsList } from "@navigation-types";
 import {
   Forklift,
   AddForklift,
@@ -41,7 +41,8 @@ const ForkliftStack: React.FC = () => {
         component={AddForklift}
         options={({ route }) => ({
           headerShown: true,
-          title: route.params.mode === "add" ? "Add Forklift" : "Update Forklift",
+          title:
+            route.params.mode === "add" ? "Add Forklift" : "Update Forklift",
         })}
       />
       <Stack.Screen

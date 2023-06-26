@@ -1,13 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { colors, gStyles } from "@theme";
-import { ReportsStackParamsList, ServiceStackParamsList } from "@navigation-types";
+import type { ReportsStackParamsList } from "@navigation-types";
 import {
-  Forklift,
-  AddForklift,
-  ForkLiftDetails,
-  RequestService,
-  BirdEyeView,
   ForkliftNotification,
   ForkliftNotificationDetails,
   Reports,
@@ -37,38 +32,6 @@ const ReportsStack: React.FC = () => {
           title: "",
         }}
       />
-      {/* <Stack.Screen
-        name="AddForklift"
-        component={AddForklift}
-        options={({ route }) => ({
-          headerShown: true,
-          title: route.params.mode === "add" ? "Add Forklift" : "Update Forklift",
-        })}
-      />
-      <Stack.Screen
-        name="ForkLiftDetails"
-        component={ForkLiftDetails}
-        options={{
-          headerShown: true,
-          title: "",
-        }}
-      />
-      <Stack.Screen
-        name="ReqService"
-        component={RequestService}
-        options={{
-          headerShown: true,
-          title: "Request Service",
-        }}
-      />
-      <Stack.Screen
-        name="BirdEyeView"
-        component={BirdEyeView}
-        options={{
-          headerShown: true,
-          title: "Bird's Eye View",
-        }}
-      /> */}
       <Stack.Screen
         name="Notification"
         component={ForkliftNotification}

@@ -1,17 +1,13 @@
 import { Text, ScrollView, View, KeyboardAvoidingView, Platform, Image } from "react-native";
-import React, { useState, FC, useEffect } from "react";
+import React, { useState, FC } from "react";
 import Fontisto from "@expo/vector-icons/Fontisto";
-
-//third party imports
 import { Button, TextInput, HelperText } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import axios from "axios";
-//my imports
 import { colors, gStyles, PaperTheme } from "@theme";
 
 import { styles } from "./styles";
 import Spinner from "react-native-loading-spinner-overlay";
-import { FormikHelpers, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as yup from "yup";
 import { AuthStackScreenProps } from "@navigation-types";
 import { useAuthContext } from "@context";
@@ -36,15 +32,14 @@ const schema: yup.ObjectSchema<IForm> = yup.object().shape({
   mobile: yup.string().min(11).max(18).required("Mobile is required."),
 });
 
-const SignUp: FC<AuthStackScreenProps<"Register">> = ({ navigation, route }) => {
+const SignUp: FC<AuthStackScreenProps<"Register">> = ({}) => {
   const [secureEntry, setSecureEntry] = useState<boolean>(true);
   const [icon, setIcon] = useState<string>("eye");
   const [spinnerLoading, setSpinnerLoading] = useState(false);
   const {
-    login,
     state: { isLoading },
   } = useAuthContext();
-  const [requestId, setRequestId] = React.useState("");
+  // const [requestId, setRequestId] = React.useState("");
 
   const initialValues: IForm = {
     email: "",
@@ -56,11 +51,18 @@ const SignUp: FC<AuthStackScreenProps<"Register">> = ({ navigation, route }) => 
     initialValues: initialValues,
     onSubmit: (values, helpers) => {
       console.log(values);
-      ToastService.show("Demo sign up...");
+      setSpinnerLoading(true);
+      setTimeout(() => {
+        helpers.resetForm();
+        ToastService.show("Demo sign up...");
+        setSpinnerLoading(false);
+      }, 1800);
     },
     validationSchema: schema,
   });
-  const continueSignUp = (values: IForm, helpers: FormikHelpers<IForm>) => {};
+
+  // const continueSignUp = (values: IForm, helpers: FormikHelpers<IForm>) => {};
+
   return (
     //safe are container
     <SafeAreaView style={styles.mainContainer}>

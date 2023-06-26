@@ -1,16 +1,16 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import React from "react";
+import type { ForkliftStackScreenProps } from "@navigation-types";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { screenStyles } from "src/screens/styles";
+import { theme } from "@theme";
 
-import { styles } from "./styles";
-import { ForkliftStackScreenProps } from "@navigation-types";
-
-interface OwnProps {}
-
-const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({ navigation, route }) => {
+const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({}) => {
   return (
-    <View>
+    <SafeAreaView style={screenStyles.mainContainer}>
+      <View style={{ height: theme.header.height }} />
       <Text>BirdEyeView</Text>
-    </View>
+    </SafeAreaView>
   );
 };
 

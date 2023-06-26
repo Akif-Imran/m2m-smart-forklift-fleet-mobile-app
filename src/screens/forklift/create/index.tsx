@@ -1,13 +1,23 @@
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Spinner from "react-native-loading-spinner-overlay";
-import { _DatePicker, _Divider, _Dropdown, _ScrollFormLayout, _TextInput } from "@components";
+import {
+  _DatePicker,
+  _Divider,
+  _DropDown,
+  _ScrollFormLayout,
+  _TextInput,
+} from "@components";
 import { screenStyles } from "src/screens/styles";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
-import { ForkliftStackScreenProps } from "@navigation-types";
+import type { ForkliftStackScreenProps } from "@navigation-types";
 import { ToastService } from "@utility";
 import * as ImagePicker from "expo-image-picker";
 import { AntDesign } from "@expo/vector-icons";
@@ -16,8 +26,8 @@ import { useFormik } from "formik";
 import moment from "moment";
 import { Button, TextInput } from "react-native-paper";
 
-interface OwnProps {}
-interface IForm extends Omit<IForklift, "_id" | "image" | "milage" | "age" | "driver"> {
+interface IForm
+  extends Omit<IForklift, "_id" | "image" | "milage" | "age" | "driver"> {
   simNo: string;
   imei: string;
   milage: number;
@@ -43,18 +53,27 @@ const schema: yup.ObjectSchema<IForm> = yup.object().shape({
   year: yup.string().required("Year is required"),
 });
 
-const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ navigation, route }) => {
+const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
+  navigation,
+  route,
+}) => {
   const { mode } = route.params;
   const [isLoading, setIsLoading] = React.useState(false);
-  const [hasImages, setHasImages] = React.useState<boolean>(false);
-  const [images, setImages] = React.useState<ImagePicker.ImagePickerAsset[]>([]);
+  const [_hasImages, setHasImages] = React.useState<boolean>(false);
+  const [images, setImages] = React.useState<ImagePicker.ImagePickerAsset[]>(
+    []
+  );
   const [purchaseDate, setPurchaseDate] = React.useState<Date>(new Date());
-  const [showPurchaseDatePicker, setShowPurchaseDatePicker] = React.useState(false);
+  const [showPurchaseDatePicker, setShowPurchaseDatePicker] =
+    React.useState(false);
   const [rentStartDate, setRentStartDate] = React.useState<Date>(new Date());
-  const [showRentStartDatePicker, setShowRentStartDatePicker] = React.useState(false);
+  const [showRentStartDatePicker, setShowRentStartDatePicker] =
+    React.useState(false);
   const [rentEndDate, setRentEndDate] = React.useState<Date>(new Date());
-  const [showRentEndDatePicker, setShowRentEndDatePicker] = React.useState(false);
-  const [statusDropdownVisible, setStatusDropdownVisible] = React.useState(false);
+  const [showRentEndDatePicker, setShowRentEndDatePicker] =
+    React.useState(false);
+  const [statusDropdownVisible, setStatusDropdownVisible] =
+    React.useState(false);
 
   const statusDropDownList = [
     { label: "Moving", value: "moving" },
@@ -88,6 +107,7 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
       setIsLoading(true);
       setTimeout(() => {
         setIsLoading(false);
+        helpers.resetForm();
         ToastService.show("Forklift added successfully");
         navigation.goBack();
       });
@@ -102,7 +122,7 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
         ToastService.show("Camera permission denied");
         return;
       }
-      let result = await ImagePicker.launchCameraAsync({
+      const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: false,
         base64: true,
@@ -131,7 +151,9 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
   const removeImage = (index: number) => {
     const arr = [...images];
     arr.splice(index, 1);
-    if (arr.length === 0) setHasImages(false);
+    if (arr.length === 0) {
+      setHasImages(false);
+    }
     setImages(arr);
   };
   React.useEffect(() => {
@@ -149,13 +171,18 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rentStartDate]);
   React.useEffect(() => {
-    form.setValues((prev) => ({ ...prev, rentEndDate: moment(rentEndDate).format("YYYY-MM-DD") }));
+    form.setValues((prev) => ({
+      ...prev,
+      rentEndDate: moment(rentEndDate).format("YYYY-MM-DD"),
+    }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rentEndDate]);
 
   React.useEffect(() => {
-    if (route.params.mode === "add") return;
-    const { mode, item, _id } = route.params;
+    if (route.params.mode === "add") {
+      return;
+    }
+    const { item } = route.params;
     form.setValues((prev) => ({
       ...prev,
       name: item.name || "",
@@ -166,8 +193,8 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
       make: item.make || "",
       model: item.model || "",
       manufactureYear: item.manufactureYear || "",
-      milage: parseInt(item.milage) || 0,
-      age: parseInt(item.age) || 0,
+      milage: parseInt(item.milage, 10) || 0,
+      age: parseInt(item.age, 10) || 0,
       status: item.status || "parked",
       purchaseDate: item.purchaseDate || moment().format("YYYY-MM-DD"),
       rentStartDate: item.rentStartDate || moment().format("YYYY-MM-DD"),
@@ -176,15 +203,22 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
       batterySerialNo: item.batterySerialNo || "",
       year: item.year || "",
     }));
-    setImages((prev) => [{ uri: item.image, width: 125, height: 125 }]);
+    setImages((_prev) => [{ uri: item.image, width: 125, height: 125 }]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.params]);
 
   return (
     <SafeAreaView
-      style={StyleSheet.compose(screenStyles.mainContainer, { rowGap: theme.spacing.none })}
+      style={StyleSheet.compose(screenStyles.mainContainer, {
+        rowGap: theme.spacing.none,
+      })}
     >
-      <Spinner visible={isLoading} cancelable={false} animation="fade" size="large" />
+      <Spinner
+        visible={isLoading}
+        cancelable={false}
+        animation="fade"
+        size="large"
+      />
       <_DatePicker
         show={showPurchaseDatePicker}
         setShow={setShowPurchaseDatePicker}
@@ -227,7 +261,7 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
                 />
               </TouchableOpacity>
             )}
-            ListFooterComponent={() => (
+            ListFooterComponent={
               <TouchableOpacity
                 style={screenStyles.addImageButton}
                 activeOpacity={0.5}
@@ -235,7 +269,7 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
               >
                 <AntDesign name="plus" size={30} color={colors.primary} />
               </TouchableOpacity>
-            )}
+            }
             keyExtractor={(_, index) => index.toString()}
           />
           <_Divider title="Forklift Info" />
@@ -273,7 +307,7 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
             error={form.errors?.regNo && form.touched?.regNo ? true : false}
             errorText={form.errors?.regNo}
           />
-          <_Dropdown
+          <_DropDown
             theme={PaperTheme}
             dropDownItemTextStyle={{ ...gStyles.descText }}
             dropDownItemSelectedTextStyle={{
@@ -328,7 +362,11 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
             label={"Manufactured Year"}
             onBlur={form.handleBlur("manufactureYear")}
             onChangeText={form.handleChange("manufactureYear")}
-            error={form.errors?.manufactureYear && form.touched?.manufactureYear ? true : false}
+            error={
+              form.errors?.manufactureYear && form.touched?.manufactureYear
+                ? true
+                : false
+            }
             errorText={form.errors?.manufactureYear}
           />
           <_TextInput
@@ -356,7 +394,11 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
             label={"Purchase Date"}
             onBlur={form.handleBlur("purchaseDate")}
             onChangeText={form.handleChange("purchaseDate")}
-            error={form.errors?.purchaseDate && form.touched?.purchaseDate ? true : false}
+            error={
+              form.errors?.purchaseDate && form.touched?.purchaseDate
+                ? true
+                : false
+            }
             errorText={form.errors?.purchaseDate}
             right={
               <TextInput.Icon
@@ -372,7 +414,11 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
             label={"Rent Start Date"}
             onBlur={form.handleBlur("rentStartDate")}
             onChangeText={form.handleChange("rentStartDate")}
-            error={form.errors?.rentStartDate && form.touched?.rentStartDate ? true : false}
+            error={
+              form.errors?.rentStartDate && form.touched?.rentStartDate
+                ? true
+                : false
+            }
             errorText={form.errors?.rentStartDate}
             right={
               <TextInput.Icon
@@ -388,7 +434,11 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
             label={"Rent End Date"}
             onBlur={form.handleBlur("rentEndDate")}
             onChangeText={form.handleChange("rentEndDate")}
-            error={form.errors?.rentEndDate && form.touched?.rentEndDate ? true : false}
+            error={
+              form.errors?.rentEndDate && form.touched?.rentEndDate
+                ? true
+                : false
+            }
             errorText={form.errors?.rentEndDate}
             right={
               <TextInput.Icon
@@ -403,7 +453,11 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
             label={"Forklift Serial No."}
             onBlur={form.handleBlur("forkliftSerialNo")}
             onChangeText={form.handleChange("forkliftSerialNo")}
-            error={form.errors?.forkliftSerialNo && form.touched?.forkliftSerialNo ? true : false}
+            error={
+              form.errors?.forkliftSerialNo && form.touched?.forkliftSerialNo
+                ? true
+                : false
+            }
             errorText={form.errors?.forkliftSerialNo}
           />
           <_TextInput
@@ -411,7 +465,11 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
             label={"Battery Serial No."}
             onBlur={form.handleBlur("batterySerialNo")}
             onChangeText={form.handleChange("batterySerialNo")}
-            error={form.errors?.batterySerialNo && form.touched?.batterySerialNo ? true : false}
+            error={
+              form.errors?.batterySerialNo && form.touched?.batterySerialNo
+                ? true
+                : false
+            }
             errorText={form.errors?.batterySerialNo}
           />
           <_TextInput
@@ -428,7 +486,9 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({ naviga
               theme={PaperTheme}
               mode="contained"
               onPress={form.handleSubmit}
-              labelStyle={StyleSheet.compose(gStyles.tblHeaderText, { color: colors.white })}
+              labelStyle={StyleSheet.compose(gStyles.tblHeaderText, {
+                color: colors.white,
+              })}
             >
               {mode === "add" ? "Add" : "Update"}
             </Button>

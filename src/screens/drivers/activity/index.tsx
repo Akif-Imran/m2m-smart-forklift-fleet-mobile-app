@@ -1,11 +1,10 @@
-import { FlatList, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, RefreshControl, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { styles } from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
-import { NoIconHeader, _ConfirmModal, _ListEmptyComponent } from "@components";
+import { _ConfirmModal, _ListEmptyComponent } from "@components";
 import { screenStyles } from "src/screens/styles";
 import { Modal, Portal, RadioButton, Searchbar } from "react-native-paper";
 import { ActivityFilters } from "@constants";
@@ -81,12 +80,12 @@ const Activity: React.FC<OwnProps> = ({}) => {
     const filtered = drivers.filter(
       (value) => value.name.split(" ")[1].toLowerCase() === matchingKey.toString().toLowerCase()
     );
-    setSearchedDrivers((prev) => filtered);
+    setSearchedDrivers((_prev) => filtered);
   };
 
-  const handleDelete = React.useCallback((customerId: string) => {
+  const handleDelete = React.useCallback((activityId: string) => {
     setConfirmDeleteVisible(true);
-    console.log("handle delete");
+    console.log("handle delete", activityId);
   }, []);
 
   const handleDeleteConfirm = () => {

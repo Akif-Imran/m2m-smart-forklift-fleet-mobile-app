@@ -29,22 +29,17 @@ const schema: yup.ObjectSchema<IForm> = yup.object().shape({
     .required("Confirm New Password is required"),
 });
 
-interface Props {}
-
-const ChangePassword: React.FC<ProfileSettingsStackScreenProps<"ChangePassword">> = ({
-  navigation,
-  route,
-}) => {
+const ChangePassword: React.FC<ProfileSettingsStackScreenProps<"ChangePassword">> = ({}) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [secureEntry1, setSecureEntry1] = React.useState<boolean>(true);
   const [secureEntry2, setSecureEntry2] = React.useState<boolean>(true);
   const [secureEntry3, setSecureEntry3] = React.useState<boolean>(true);
-  const {
-    state: { token, user },
-  } = useAuthContext();
+  const {} = useAuthContext();
 
   const changePass = (values: IForm, helpers: FormikHelpers<IForm>) => {
     setIsLoading(true);
+    console.log(values);
+    helpers.resetForm();
     // changePassword(token, {
     //   currentPassword: values.old_password,
     //   newPassword: values.new_password,

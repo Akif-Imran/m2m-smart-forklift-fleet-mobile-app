@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import { ScrollView, Text, View, useWindowDimensions } from "react-native";
 import React from "react";
 import { DashboardStackScreenProps } from "@navigation-types";
 
@@ -8,10 +8,9 @@ import { screenStyles } from "src/screens/styles";
 import { NoIconHeader, _DefaultCard, _PieChart } from "@components";
 import { colors, gStyles, theme } from "@theme";
 
-interface OwnProps {}
-
-const Dashboard: React.FC<DashboardStackScreenProps<"Dashboard">> = ({ navigation, route }) => {
+const Dashboard: React.FC<DashboardStackScreenProps<"Dashboard">> = ({}) => {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
+
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
       <ScrollView showsVerticalScrollIndicator={false}>

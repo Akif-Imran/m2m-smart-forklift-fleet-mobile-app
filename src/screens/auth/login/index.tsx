@@ -1,17 +1,14 @@
 import { Text, View, KeyboardAvoidingView, Platform, Image } from "react-native";
 import React from "react";
 import { Fontisto } from "@expo/vector-icons";
-//third party imports
 import { Button, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import axios from "axios";
-//my imports
 import { colors, gStyles, PaperTheme } from "@theme";
 import { useAuthContext } from "@context";
 import { AuthStackScreenProps } from "@navigation-types";
 import { styles } from "./styles";
 
-const Login: React.FC<AuthStackScreenProps<"Login">> = ({ navigation, route }) => {
+const Login: React.FC<AuthStackScreenProps<"Login">> = ({ navigation }) => {
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
   const [secureEntry, setSecureEntry] = React.useState<boolean>(true);

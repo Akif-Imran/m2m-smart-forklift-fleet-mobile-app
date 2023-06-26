@@ -1,13 +1,11 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
 import { _DefaultCard } from "@components";
-import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
-import { colors, gStyles, theme } from "@theme";
+import { Ionicons } from "@expo/vector-icons";
+import { colors, gStyles } from "@theme";
 import { truncateText } from "@utility";
-import { list_card_styles, screenStyles } from "src/screens/styles";
-import { ForkliftStatusColor } from "@constants";
+import { listCardStyles } from "src/screens/styles";
+import { styles } from "./styles";
 
 interface OwnProps {
   item: IForklift;
@@ -15,13 +13,16 @@ interface OwnProps {
   toggleAssignment: (forkliftId: string) => void;
 }
 
-const _AssignForkliftListCard: React.FC<OwnProps> = ({ item, checked, toggleAssignment }) => {
-  const [selected, setSelected] = React.useState(false);
+const _AssignForkliftListCard: React.FC<OwnProps> = ({
+  item,
+  checked,
+  toggleAssignment,
+}) => {
 
   return (
     <_DefaultCard onPress={() => toggleAssignment(item._id)}>
       <View
-        style={StyleSheet.compose(list_card_styles.contentContainer, {
+        style={StyleSheet.compose(listCardStyles.contentContainer, {
           backgroundColor: colors.white,
         })}
       >
@@ -30,11 +31,7 @@ const _AssignForkliftListCard: React.FC<OwnProps> = ({ item, checked, toggleAssi
             name="checkmark-circle"
             size={24}
             color={colors.primary}
-            style={{
-              position: "absolute",
-              top: theme.spacing.none,
-              right: theme.spacing.sm,
-            }}
+            style={styles.assignCheck}
           />
         ) : null}
         <View>
@@ -42,20 +39,24 @@ const _AssignForkliftListCard: React.FC<OwnProps> = ({ item, checked, toggleAssi
             <Image
               source={{ uri: item.image }}
               resizeMode="cover"
-              style={list_card_styles.imgStyle}
+              style={listCardStyles.imgStyle}
             />
           ) : (
             <Image
               source={require("../../../../assets/images/user.png")}
               resizeMode="contain"
-              style={list_card_styles.imgStyle}
+              style={listCardStyles.imgStyle}
             />
           )}
         </View>
-        <View style={list_card_styles.infoWithForward}>
-          <View style={list_card_styles.infoContainer}>
+        <View style={listCardStyles.infoWithForward}>
+          <View style={listCardStyles.infoContainer}>
             <Text style={gStyles.cardInfoTitleText}>{item.name}</Text>
-            <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={1}>
+            <Text
+              style={gStyles.tblDescText}
+              ellipsizeMode="tail"
+              numberOfLines={1}
+            >
               {item.driver}
             </Text>
             <View
@@ -66,7 +67,11 @@ const _AssignForkliftListCard: React.FC<OwnProps> = ({ item, checked, toggleAssi
                 alignItems: "center",
               }}
             >
-              <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={0.5}>
+              <Text
+                style={gStyles.tblDescText}
+                ellipsizeMode="tail"
+                numberOfLines={0.5}
+              >
                 {truncateText(item.model, 22)}
               </Text>
             </View>

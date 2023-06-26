@@ -1,8 +1,8 @@
-import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, ScrollView, Text, View } from "react-native";
 import React from "react";
 import { colors } from "../../../theme";
 import { Card, MultiCard, NoIconHeader, MultiCardItem } from "@components";
-import { MaterialCommunityIcons, FontAwesome5, MaterialIcons, Entypo } from "@expo/vector-icons";
+import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-root-toast";
 import appConfig from "../../../../app.json";
@@ -20,12 +20,10 @@ const group1 = {
 
 export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = ({
   navigation,
-  route,
 }) => {
   const appVersion = appConfig.expo.version;
   const {
-    state: { token, user },
-    logout,
+    state: { user },
   } = useAuthContext();
 
   const multiData1: Array<MultiCardItem> = [

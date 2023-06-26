@@ -1,36 +1,30 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
-import { NoIconHeader, _DefaultCard, _ScrollFormLayout } from "@components";
+import { _DefaultCard, _ScrollFormLayout } from "@components";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ForkliftStackScreenProps } from "@navigation-types";
+import type { ForkliftStackScreenProps } from "@navigation-types";
 import { screenStyles } from "src/screens/styles";
 import { colors, gStyles, theme } from "@theme";
 import { ForkliftStatusColor } from "@constants";
-import { truncateText } from "@utility";
 import { FAB } from "react-native-paper";
 
-interface OwnProps {}
-
-const ForkLiftDetails: React.FC<ForkliftStackScreenProps<"ForkLiftDetails">> = ({
-  navigation,
-  route,
-}) => {
-  const { _id, item } = route.params;
+const ForkLiftDetails: React.FC<
+  ForkliftStackScreenProps<"ForkLiftDetails">
+> = ({ navigation, route }) => {
+  const { item } = route.params;
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
       <_ScrollFormLayout>
         <>
-          <View
-            style={screenStyles.singleImgContainer}
-          >
+          <View style={screenStyles.singleImgContainer}>
             <Image source={{ uri: item.image }} style={screenStyles.imgStyle} />
           </View>
           <_DefaultCard>
             <View>
-              <Text style={screenStyles.detailsCardHeadingText}>General Info</Text>
+              <Text style={screenStyles.detailsCardHeadingText}>
+                General Info
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>RegNo.</Text>
@@ -65,7 +59,9 @@ const ForkLiftDetails: React.FC<ForkliftStackScreenProps<"ForkLiftDetails">> = (
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Manufactured Year</Text>
-              <Text style={screenStyles.tblDescText}>{item.manufactureYear}</Text>
+              <Text style={screenStyles.tblDescText}>
+                {item.manufactureYear}
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Milage</Text>
@@ -78,7 +74,9 @@ const ForkLiftDetails: React.FC<ForkliftStackScreenProps<"ForkLiftDetails">> = (
           </_DefaultCard>
           <_DefaultCard>
             <View>
-              <Text style={screenStyles.detailsCardHeadingText}>Maintenance Info</Text>
+              <Text style={screenStyles.detailsCardHeadingText}>
+                Maintenance Info
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Purchase Date</Text>
@@ -93,12 +91,18 @@ const ForkLiftDetails: React.FC<ForkliftStackScreenProps<"ForkLiftDetails">> = (
               <Text style={screenStyles.tblDescText}>{item.rentEndDate}</Text>
             </View>
             <View style={screenStyles.fieldContainer}>
-              <Text style={screenStyles.tblHeaderText}>Forklift Serial No.</Text>
-              <Text style={screenStyles.tblDescText}>{item.forkliftSerialNo}</Text>
+              <Text style={screenStyles.tblHeaderText}>
+                Forklift Serial No.
+              </Text>
+              <Text style={screenStyles.tblDescText}>
+                {item.forkliftSerialNo}
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Battery Serial No.</Text>
-              <Text style={screenStyles.tblDescText}>{item.batterySerialNo}</Text>
+              <Text style={screenStyles.tblDescText}>
+                {item.batterySerialNo}
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Year</Text>

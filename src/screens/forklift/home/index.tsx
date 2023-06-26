@@ -1,7 +1,6 @@
 import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-import { styles } from "./styles";
 import { ForkliftStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "src/screens/styles";
@@ -12,17 +11,15 @@ import {
   _Divider,
   _ListEmptyComponent,
 } from "@components";
-import { PaperTheme, colors, gStyles, theme } from "@theme";
+import { PaperTheme, colors, gStyles } from "@theme";
 import { FAB, Searchbar } from "react-native-paper";
 import { ToastService } from "@utility";
 import { _ForkliftListCard } from "../components";
 import { faker } from "@faker-js/faker";
 import { ForkliftStatusColor } from "@constants";
-import { MaterialIcons, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 
-interface OwnProps {}
-
-const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation, route }) => {
+const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [forklifts, setForklifts] = React.useState<IForklift[]>([]);
   const [searchedForklifts, setSearchedForklifts] = React.useState<IForklift[]>([]);
@@ -78,7 +75,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation, 
 
   const handleDelete = React.useCallback((customerId: string) => {
     setConfirmDeleteVisible(true);
-    console.log("handle delete");
+    console.log("handle delete", customerId);
   }, []);
 
   const handleDeleteConfirm = () => {
