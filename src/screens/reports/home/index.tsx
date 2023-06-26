@@ -24,7 +24,10 @@ const Reports: React.FC<ReportStackScreenProps<"Reports">> = ({
         ]}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <_ReportCard title="Collision Report" />
+        <_ReportCard
+          title="Collision Report"
+          onPress={() => navigation.navigate("CollisionReport")}
+        />
         <_ReportCard title="Forklift Report" />
         <_ReportCard title="Forklift Breakdown Report" />
         <_ReportCard title="Over Speeding Report" />

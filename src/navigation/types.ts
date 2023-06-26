@@ -84,6 +84,15 @@ export type DriverStackScreenProps<T extends keyof DriversStackParamsList> =
 //--------------------------------------
 export type ReportsStackParamsList = {
   Reports: undefined;
+  CollisionReport: undefined;
+  DriverPerformanceReport: undefined;
+  ForkliftBreakdownReport: undefined;
+  ForkliftMaintenanceReport: undefined;
+  ForkliftUtilizationReport: undefined;
+  OverSpeedingReport: undefined;
+  IdlingReport: undefined;
+  IgnitionReport: undefined;
+  HistoryReport: undefined;
   Notification: undefined;
   NotificationDetails: DetailsType<INotification>;
 };
