@@ -186,6 +186,32 @@ export const listCardStyles = StyleSheet.create({
     paddingVertical: theme.spacing.md,
     // borderWidth: 1,
   },
+  reportListRecord: {
+    flex: 1,
+    //IMP - changes with contentContainer
+    flexDirection: "column",
+    overflow: "hidden",
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.md,
+    //---------------------------------------
+    backgroundColor: colors.white,
+    borderRadius: theme.radius.none,
+    borderColor: colors.borderColor,
+    marginBottom: theme.spacing.xs,
+    rowGap: theme.spacing.sm,
+    borderBottomWidth: 1,
+  },
+  reportRecordRow: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  reportRecordRowItemRight: {
+    alignItems: "flex-end",
+  },
+  reportRecordRowItemLeft: {
+    alignItems: "flex-start",
+  },
   imgStyle: {
     width: 80,
     height: 80,

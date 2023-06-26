@@ -28,14 +28,38 @@ const Reports: React.FC<ReportStackScreenProps<"Reports">> = ({
           title="Collision Report"
           onPress={() => navigation.navigate("CollisionReport")}
         />
-        <_ReportCard title="Forklift Report" />
-        <_ReportCard title="Forklift Breakdown Report" />
-        <_ReportCard title="Over Speeding Report" />
-        <_ReportCard title="Driver Performance Report" />
-        <_ReportCard title="Forklift Maintenance Report" />
-        <_ReportCard title="Idling Report" />
-        <_ReportCard title="Ignition Report" />
-        <_ReportCard title="History Report" />
+        <_ReportCard
+          title="Forklift Utilization Report"
+          onPress={() => navigation.navigate("ForkliftUtilizationReport")}
+        />
+        <_ReportCard
+          title="Forklift Breakdown Report"
+          onPress={() => navigation.navigate("ForkliftBreakdownReport")}
+        />
+        <_ReportCard
+          title="Over Speeding Report"
+          onPress={() => navigation.navigate("OverSpeedingReport")}
+        />
+        <_ReportCard
+          title="Driver Performance Report"
+          onPress={() => navigation.navigate("DriverPerformanceReport")}
+        />
+        <_ReportCard
+          title="Forklift Maintenance Report"
+          onPress={() => navigation.navigate("ForkliftMaintenanceReport")}
+        />
+        <_ReportCard
+          title="Idling Report"
+          onPress={() => navigation.navigate("IdlingReport")}
+        />
+        <_ReportCard
+          title="Ignition Report"
+          onPress={() => navigation.navigate("IgnitionReport")}
+        />
+        <_ReportCard
+          title="History Report"
+          onPress={() => navigation.navigate("HistoryReport")}
+        />
       </ScrollView>
     </SafeAreaView>
   );
