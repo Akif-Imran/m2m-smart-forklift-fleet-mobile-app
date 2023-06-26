@@ -9,6 +9,7 @@ import { PaperTheme, colors, gStyles } from "@theme";
 import { truncateText } from "@utility";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import { AirbnbRating } from "react-native-ratings";
+import { styles } from "./styles";
 
 interface OwnProps {
   item: IDriver;
@@ -16,8 +17,7 @@ interface OwnProps {
 }
 
 const _DriverListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
-  const navigation =
-    useNavigation<DriverStackScreenProps<"Drivers">["navigation"]>();
+  const navigation = useNavigation<DriverStackScreenProps<"Drivers">["navigation"]>();
   return (
     <_DefaultCard>
       <TouchableOpacity
@@ -50,18 +50,12 @@ const _DriverListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
           <View style={listCardStyles.infoContainer}>
             <Text style={gStyles.cardInfoTitleText}>{item.name}</Text>
             {/* <Text style={gStyles.tblHeaderText}>Phone: </Text> */}
-            <Text
-              style={gStyles.tblDescText}
-              ellipsizeMode="tail"
-              numberOfLines={1}
-            >
+            <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={1}>
               {item.email}
             </Text>
             <AirbnbRating
               count={5}
-              starContainerStyle={{
-                alignSelf: "flex-start",
-              }}
+              starContainerStyle={styles.ratingContainer}
               defaultRating={item.rating}
               size={12}
               selectedColor={colors.warning}
@@ -83,11 +77,7 @@ const _DriverListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
           </View>
 
           <View style={listCardStyles.forwardContainer}>
-            <FontAwesome5
-              name="caret-right"
-              size={20}
-              color={colors.iconGray}
-            />
+            <FontAwesome5 name="caret-right" size={20} color={colors.iconGray} />
           </View>
         </View>
       </TouchableOpacity>
@@ -118,10 +108,7 @@ const _DriverListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
           mode={"text"}
           theme={PaperTheme}
           color={colors.titleText}
-          labelStyle={StyleSheet.compose(
-            gStyles.tblDescText,
-            gStyles.buttonLabelTextAddOn
-          )}
+          labelStyle={StyleSheet.compose(gStyles.tblDescText, gStyles.buttonLabelTextAddOn)}
           icon={() => (
             <MaterialCommunityIcons
               name="check-circle-outline"

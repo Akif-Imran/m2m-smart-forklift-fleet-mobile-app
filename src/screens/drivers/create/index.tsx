@@ -46,6 +46,7 @@ const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({
       name: "",
       department: "",
       email: "",
+      // eslint-disable-next-line camelcase
       ic_number: "",
       image: "",
       rating: 0,
