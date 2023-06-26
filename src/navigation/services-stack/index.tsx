@@ -1,9 +1,10 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { colors, gStyles } from "@theme";
+import { colors, gStyles, theme } from "@theme";
 import type { ServiceStackParamsList } from "@navigation-types";
 import {
   Services,
+  AddService,
   ServiceDetails,
   ForkliftNotification,
   ForkliftNotificationDetails,
@@ -39,7 +40,18 @@ const ServicesStack: React.FC = () => {
         options={{
           headerShown: true,
           title: "Details",
+          headerRightContainerStyle: {
+            paddingRight: theme.spacing.md,
+          },
         }}
+      />
+      <Stack.Screen
+        name="AddService"
+        component={AddService}
+        options={({ route }) => ({
+          headerShown: true,
+          title: route.params.mode === "add" ? "Add Service" : "Update Service",
+        })}
       />
       <Stack.Screen
         name="Notification"

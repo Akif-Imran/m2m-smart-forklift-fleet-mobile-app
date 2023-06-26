@@ -59,7 +59,9 @@ export type ForkliftStackScreenProps<T extends keyof ForkliftStackParamsList> =
 //--------------------------------------
 export type ServiceStackParamsList = {
   Services: undefined;
+  AddService: AddUpdateType<IService>;
   ServiceDetails: DetailsType<IService>;
+  // UpdateStatus: DetailsType<IService>;
   Notification: undefined;
   NotificationDetails: DetailsType<INotification>;
 };
