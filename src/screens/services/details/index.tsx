@@ -7,7 +7,7 @@ import type { ServiceStackScreenProps } from "@navigation-types";
 import { ScrollView } from "react-native-gesture-handler";
 import { faker } from "@faker-js/faker";
 import moment from "moment";
-import { FAB, Modal, Portal, RadioButton } from "react-native-paper";
+import { Modal, Portal, RadioButton } from "react-native-paper";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { MaterialIcons } from "@expo/vector-icons";
 
@@ -21,7 +21,7 @@ const ServiceDetails: React.FC<ServiceStackScreenProps<"ServiceDetails">> = ({
   navigation,
   route,
 }) => {
-  const { _id, item } = route.params;
+  const { item } = route.params;
 
   const [visible, setVisible] = React.useState<boolean>(false);
   const [selectedFilter, setSelectedFilter] = React.useState<string>(
@@ -44,7 +44,7 @@ const ServiceDetails: React.FC<ServiceStackScreenProps<"ServiceDetails">> = ({
         </TouchableOpacity>
       ),
     });
-  }, []);
+  }, [navigation]);
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>

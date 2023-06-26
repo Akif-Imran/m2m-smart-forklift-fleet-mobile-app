@@ -1,18 +1,22 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
-import { _DatePicker, _DefaultCard, _ListEmptyComponent, _TextInput } from "@components";
+import {
+  _DatePicker,
+  _DefaultCard,
+  _ListEmptyComponent,
+  _TextInput,
+} from "@components";
 import { Button, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { theme, colors, PaperTheme, gStyles } from "@theme";
 import moment from "moment";
 import { listCardStyles, screenStyles } from "src/screens/styles";
 import { ToastService } from "@utility";
+import type { ReportStackScreenProps } from "@navigation-types";
 
-interface OwnProps {}
-
-const ForkliftBreakdownReport: React.FC<OwnProps> = ({}) => {
+const ForkliftBreakdownReport: React.FC<
+  ReportStackScreenProps<"ForkliftBreakdownReport">
+> = ({}) => {
   const [show, setShow] = React.useState(false);
   const [show2, setShow2] = React.useState(false);
   const [startDate, setStartDate] = React.useState(new Date());
@@ -20,14 +24,18 @@ const ForkliftBreakdownReport: React.FC<OwnProps> = ({}) => {
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
       <View style={{ height: theme.header.height }} />
-      <View style={{ flexDirection: "row" }}>
+      <View style={screenStyles.reportDateInputPickerContainer}>
         <_TextInput
           value={moment(startDate).format("DD MMM, YYYY")}
           label={"Start Date"}
           editable={false}
           errorText={undefined}
           right={
-            <TextInput.Icon icon="calendar" color={colors.iconGray} onPress={() => setShow(true)} />
+            <TextInput.Icon
+              icon="calendar"
+              color={colors.iconGray}
+              onPress={() => setShow(true)}
+            />
           }
         />
         <_TextInput
@@ -63,7 +71,7 @@ const ForkliftBreakdownReport: React.FC<OwnProps> = ({}) => {
           showsVerticalScrollIndicator={false}
           style={screenStyles.flatListStyle}
           ListEmptyComponent={<_ListEmptyComponent label="No Data..." />}
-          renderItem={({ item }) => {
+          renderItem={({}) => {
             return (
               <View style={listCardStyles.reportListRecord}>
                 <View style={listCardStyles.reportRecordRow}>
@@ -80,7 +88,9 @@ const ForkliftBreakdownReport: React.FC<OwnProps> = ({}) => {
                 <View style={listCardStyles.reportRecordRow}>
                   <View style={listCardStyles.reportRecordRowItemLeft}>
                     <Text style={gStyles.tblHeaderText}>Breakdowns Type</Text>
-                    <Text style={gStyles.tblDescText}>Electrical, Internal Combustion</Text>
+                    <Text style={gStyles.tblDescText}>
+                      Electrical, Internal Combustion
+                    </Text>
                   </View>
                   <View style={listCardStyles.reportRecordRowItemRight}>
                     {/* <Text style={gStyles.tblHeaderText}>Charging Duration</Text>

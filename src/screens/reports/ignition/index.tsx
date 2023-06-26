@@ -1,25 +1,31 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
 import { Button, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { _TextInput, _DatePicker, _DefaultCard, _ListEmptyComponent, _DropDown } from "@components";
+import {
+  _TextInput,
+  _DatePicker,
+  _DefaultCard,
+  _ListEmptyComponent,
+  _DropDown,
+} from "@components";
 import { theme, colors, PaperTheme, gStyles } from "@theme";
 import moment from "moment";
 import { listCardStyles, screenStyles } from "src/screens/styles";
 import { ToastService } from "@utility";
 import { faker } from "@faker-js/faker";
+import type { ReportStackScreenProps } from "@navigation-types";
 
-interface OwnProps {}
-
-const IgnitionReport: React.FC<OwnProps> = ({}) => {
+const IgnitionReport: React.FC<
+  ReportStackScreenProps<"IgnitionReport">
+> = ({}) => {
   const [show, setShow] = React.useState(false);
   const [show2, setShow2] = React.useState(false);
   const [startDate, setStartDate] = React.useState(new Date());
   const [endDate, setEndDate] = React.useState(new Date());
 
-  const [vehicleDropdownVisible, setVehicleDropdownVisible] = React.useState(false);
+  const [vehicleDropdownVisible, setVehicleDropdownVisible] =
+    React.useState(false);
   const [value, setValue] = React.useState("all");
 
   const vehicleDropDownList = [
@@ -51,14 +57,18 @@ const IgnitionReport: React.FC<OwnProps> = ({}) => {
           list={vehicleDropDownList}
         />
       </View>
-      <View style={{ flexDirection: "row" }}>
+      <View style={screenStyles.reportDateInputPickerContainer}>
         <_TextInput
           value={moment(startDate).format("DD MMM, YYYY")}
           label={"Start Date"}
           editable={false}
           errorText={undefined}
           right={
-            <TextInput.Icon icon="calendar" color={colors.iconGray} onPress={() => setShow(true)} />
+            <TextInput.Icon
+              icon="calendar"
+              color={colors.iconGray}
+              onPress={() => setShow(true)}
+            />
           }
         />
         <_TextInput
@@ -93,7 +103,7 @@ const IgnitionReport: React.FC<OwnProps> = ({}) => {
           showsVerticalScrollIndicator={false}
           style={screenStyles.flatListStyle}
           ListEmptyComponent={<_ListEmptyComponent label="No Data..." />}
-          renderItem={({ item }) => {
+          renderItem={({}) => {
             return (
               <View style={listCardStyles.reportListRecord}>
                 <View style={listCardStyles.reportRecordRow}>
@@ -104,7 +114,9 @@ const IgnitionReport: React.FC<OwnProps> = ({}) => {
                   <View style={listCardStyles.reportRecordRowItemRight}>
                     <Text style={gStyles.tblHeaderText}>Date/Time</Text>
                     <Text style={gStyles.tblDescText}>
-                      {moment(faker.date.past()).format("DD MMM, YYYY hh:mm:ss A")}
+                      {moment(faker.date.past()).format(
+                        "DD MMM, YYYY hh:mm:ss A"
+                      )}
                     </Text>
                   </View>
                 </View>

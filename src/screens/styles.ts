@@ -174,6 +174,10 @@ export const screenStyles = StyleSheet.create({
   ratingContainer: {
     alignSelf: "flex-start",
   },
+  //date input picker on report screens
+  reportDateInputPickerContainer: {
+    flexDirection: "row",
+  },
 });
 
 export const listCardStyles = StyleSheet.create({
@@ -186,6 +190,7 @@ export const listCardStyles = StyleSheet.create({
     paddingVertical: theme.spacing.md,
     // borderWidth: 1,
   },
+  //--------------------------------------------------
   reportListRecord: {
     flex: 1,
     //IMP - changes with contentContainer
@@ -212,6 +217,7 @@ export const listCardStyles = StyleSheet.create({
   reportRecordRowItemLeft: {
     alignItems: "flex-start",
   },
+  //--------------------------------------------------
   imgStyle: {
     width: 80,
     height: 80,
