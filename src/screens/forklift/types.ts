@@ -49,6 +49,11 @@ interface IDriver {
   touchId: string;
   department: string;
   ic_number: string;
+  password: string;
+  mobileNo: string;
+  joiningDate: string;
+  experience: string;
+  licenseType: string;
 }
 interface IDriverActivity {
   _id: string;

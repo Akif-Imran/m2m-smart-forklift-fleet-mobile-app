@@ -84,8 +84,7 @@ export const screenStyles = StyleSheet.create({
     gap: 6,
   },
   imgStyle: {
-    width: 125,
-    height: 125,
+    ...theme.img.size.lg,
     overflow: "hidden",
     borderRadius: theme.radius.md,
     marginVertical: theme.spacing.xs,
@@ -139,13 +138,13 @@ export const screenStyles = StyleSheet.create({
     overflow: "hidden",
   },
   addedImgStyle: {
-    height: 80,
-    width: 80,
+    ...theme.img.size.md,
+    // height: 80,
+    // width: 80,
     overflow: "hidden",
   },
   addImageButton: {
-    height: 80,
-    width: 80,
+    ...theme.img.size.md,
     borderColor: colors.titleText,
     borderStyle: "dashed",
     justifyContent: "center",
@@ -171,6 +170,9 @@ export const screenStyles = StyleSheet.create({
     overflow: "hidden",
     borderColor: colors.borderColor,
     borderWidth: 1,
+  },
+  ratingContainer: {
+    alignSelf: "flex-start",
   },
 });
 

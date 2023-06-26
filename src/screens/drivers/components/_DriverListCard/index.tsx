@@ -55,7 +55,7 @@ const _DriverListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
             </Text>
             <AirbnbRating
               count={5}
-              starContainerStyle={styles.ratingContainer}
+              starContainerStyle={screenStyles.ratingContainer}
               defaultRating={item.rating}
               size={12}
               selectedColor={colors.warning}

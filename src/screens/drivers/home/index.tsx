@@ -12,6 +12,7 @@ import { faker } from "@faker-js/faker";
 import { _DriverListCard } from "../components";
 import { Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { DriversFilters } from "@constants";
+import moment from "moment";
 
 const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
@@ -37,6 +38,11 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({ navigation }) =>
       email: faker.internet.email(),
       department: faker.helpers.arrayElement(["CEO", "HR", "IT", "Marketing", "Sales"]),
       ic_number: faker.string.alphanumeric({ length: 13, casing: "upper" }),
+      experience: faker.helpers.rangeToNumber({ min: 3, max: 8 }).toString(),
+      joiningDate: moment(faker.date.past()).format("YYYY-MM-DD"),
+      licenseType: faker.helpers.arrayElement(["A", "B", "C", "D", "E"]),
+      mobileNo: faker.phone.number(),
+      password: faker.string.alphanumeric({ length: 10, casing: "upper" }),
     };
     setDrivers((prev) => [...prev, record]);
   };

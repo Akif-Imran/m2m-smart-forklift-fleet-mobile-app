@@ -2,6 +2,18 @@ import { StyleSheet } from "react-native";
 import { colors } from "./colors";
 
 export const theme = {
+  img: {
+    size: {
+      md: {
+        height: 80,
+        width: 80,
+      },
+      lg: {
+        height: 125,
+        width: 125,
+      },
+    },
+  },
   header: {
     height: 45,
   },

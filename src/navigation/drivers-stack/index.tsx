@@ -41,8 +41,7 @@ const DriverStack: React.FC = () => {
         component={AddDriver}
         options={({ route }) => ({
           headerShown: true,
-          title:
-            route.params.mode === "add" ? "Add Forklift" : "Update Forklift",
+          title: route.params.mode === "add" ? "Add Driver" : "Update Driver",
         })}
       />
       <Stack.Screen

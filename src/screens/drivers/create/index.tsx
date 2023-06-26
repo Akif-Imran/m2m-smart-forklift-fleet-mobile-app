@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {
   FlatList,
   Image,
@@ -15,17 +16,33 @@ import {
   _ScrollFormLayout,
   _TextInput,
 } from "@components";
-import { colors, theme } from "@theme";
+import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { screenStyles } from "src/screens/styles";
 import type { DriverStackScreenProps } from "@navigation-types";
 import * as ImagePicker from "expo-image-picker";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { ToastService } from "@utility";
+import moment from "moment";
+import { Button, TextInput } from "react-native-paper";
+import { AirbnbRating } from "react-native-ratings";
 
 type IForm = Omit<IDriver, "_id">;
 
-const scheme = yup.object().shape({});
+const scheme: yup.ObjectSchema<IForm> = yup.object().shape({
+  name: yup.string().required("Name is required"),
+  department: yup.string().required("Department is required"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  ic_number: yup.string().required("IC number is required"),
+  image: yup.string().required("Image is required"),
+  touchId: yup.string().required("Touch ID is required"),
+  experience: yup.string().required("Experience is required"),
+  joiningDate: yup.string().required("Joining date is required"),
+  licenseType: yup.string().required("License type is required"),
+  mobileNo: yup.string().required("Mobile number is required"),
+  password: yup.string().required("Password is required"),
+  rating: yup.number().optional().default(0),
+});
 
 const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({
   navigation,
@@ -37,8 +54,8 @@ const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({
   const [images, setImages] = React.useState<ImagePicker.ImagePickerAsset[]>(
     []
   );
-  const [purchaseDate, setPurchaseDate] = React.useState<Date>(new Date());
-  const [showPurchaseDatePicker, setShowPurchaseDatePicker] =
+  const [joiningDate, setJoiningDate] = React.useState<Date>(new Date());
+  const [showJoiningDatePicker, setShowJoiningDatePicker] =
     React.useState(false);
 
   const form = useFormik<IForm>({
@@ -46,11 +63,15 @@ const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({
       name: "",
       department: "",
       email: "",
-      // eslint-disable-next-line camelcase
       ic_number: "",
       image: "",
-      rating: 0,
       touchId: "",
+      experience: "",
+      joiningDate: moment().format("YYYY-MM-DD"),
+      licenseType: "",
+      mobileNo: "",
+      password: "",
+      rating: 0,
     },
     onSubmit: (values, helpers) => {
       console.log(values);
@@ -58,7 +79,7 @@ const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({
       setTimeout(() => {
         setIsLoading(false);
         helpers.resetForm();
-        ToastService.show("Forklift added successfully");
+        ToastService.show("Driver added successfully");
         navigation.goBack();
       });
     },
@@ -107,6 +128,40 @@ const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({
     setImages(arr);
   };
 
+  React.useEffect(() => {
+    form.setValues((prev) => ({
+      ...prev,
+      joiningDate: moment(joiningDate).format("YYYY-MM-DD"),
+    }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [joiningDate]);
+
+  React.useEffect(() => {
+    if (route.params.mode === "add") {
+      return;
+    }
+    const { item } = route.params;
+    form.setValues((prev) => ({
+      ...prev,
+      name: item.name || "",
+      department: item.department || "",
+      email: item.email || "",
+      ic_number: item.ic_number || "",
+      image: item.image || "",
+      touchId: item.touchId || "",
+      experience: item.experience || "",
+      joiningDate:
+        moment(item.joiningDate).format("YYYY-MM-DD") ||
+        moment().format("YYYY-MM-DD"),
+      licenseType: item.licenseType || "",
+      mobileNo: item.mobileNo || "",
+      password: item.password || "",
+      rating: item.rating || 0,
+    }));
+    setImages((_prev) => [{ uri: item.image, ...theme.img.size.md }]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route.params]);
+
   return (
     <SafeAreaView
       style={StyleSheet.compose(screenStyles.mainContainer, {
@@ -120,11 +175,11 @@ const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({
         size="large"
       />
       <_DatePicker
-        show={showPurchaseDatePicker}
-        setShow={setShowPurchaseDatePicker}
+        show={showJoiningDatePicker}
+        setShow={setShowJoiningDatePicker}
         mode={"date"}
-        date={purchaseDate}
-        setDate={setPurchaseDate}
+        date={joiningDate}
+        setDate={setJoiningDate}
       />
       <_ScrollFormLayout>
         <View style={{ rowGap: theme.spacing.xs }}>
@@ -158,7 +213,7 @@ const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({
             }
             keyExtractor={(_, index) => index.toString()}
           />
-          <_Divider title="Driver Info" />
+          <_Divider title="New Info" />
           <_TextInput
             value={form.values.name}
             label={"Name"}
@@ -167,6 +222,130 @@ const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({
             error={form.errors?.name && form.touched?.name ? true : false}
             errorText={form.errors?.name}
           />
+          <_TextInput
+            value={form.values.ic_number}
+            label={"IC No."}
+            onBlur={form.handleBlur("ic_number")}
+            onChangeText={form.handleChange("ic_number")}
+            error={
+              form.errors?.ic_number && form.touched?.ic_number ? true : false
+            }
+            errorText={form.errors?.ic_number}
+          />
+          <_TextInput
+            value={form.values.touchId}
+            label={"Touch Id"}
+            onBlur={form.handleBlur("touchId")}
+            onChangeText={form.handleChange("touchId")}
+            error={form.errors?.touchId && form.touched?.touchId ? true : false}
+            errorText={form.errors?.touchId}
+          />
+          <_Divider title="Driver Rating" />
+          <AirbnbRating
+            count={5}
+            // starContainerStyle={screenStyles.ratingContainer}
+            defaultRating={0}
+            size={18}
+            selectedColor={colors.warning}
+            showRating={false}
+            onFinishRating={(rating) =>
+              form.setValues((prev) => ({ ...prev, rating: rating }))
+            }
+          />
+          <_Divider title="Driver Info" />
+          <_TextInput
+            value={form.values.email}
+            label={"Email"}
+            onBlur={form.handleBlur("email")}
+            onChangeText={form.handleChange("email")}
+            error={form.errors?.email && form.touched?.email ? true : false}
+            errorText={form.errors?.email}
+          />
+          <_TextInput
+            value={form.values.password}
+            label={"Password"}
+            onBlur={form.handleBlur("password")}
+            onChangeText={form.handleChange("password")}
+            error={
+              form.errors?.password && form.touched?.password ? true : false
+            }
+            errorText={form.errors?.password}
+          />
+          <_TextInput
+            value={form.values.department}
+            label={"Department"}
+            onBlur={form.handleBlur("department")}
+            onChangeText={form.handleChange("department")}
+            error={
+              form.errors?.department && form.touched?.department ? true : false
+            }
+            errorText={form.errors?.department}
+          />
+          <_TextInput
+            value={form.values.mobileNo}
+            label={"Mobile No."}
+            onBlur={form.handleBlur("mobileNo")}
+            onChangeText={form.handleChange("mobileNo")}
+            error={
+              form.errors?.mobileNo && form.touched?.mobileNo ? true : false
+            }
+            errorText={form.errors?.mobileNo}
+          />
+          <_TextInput
+            value={form.values.joiningDate}
+            label={"Joining Date"}
+            editable={false}
+            onBlur={form.handleBlur("joiningDate")}
+            onChangeText={form.handleChange("joiningDate")}
+            error={
+              form.errors?.joiningDate && form.touched?.joiningDate
+                ? true
+                : false
+            }
+            errorText={form.errors?.joiningDate}
+            right={
+              <TextInput.Icon
+                icon="calendar"
+                color={colors.iconGray}
+                onPress={() => setShowJoiningDatePicker(true)}
+              />
+            }
+          />
+          <_TextInput
+            value={form.values.experience}
+            label={"Years of Experience"}
+            onBlur={form.handleBlur("experience")}
+            onChangeText={form.handleChange("experience")}
+            error={
+              form.errors?.experience && form.touched?.experience ? true : false
+            }
+            errorText={form.errors?.experience}
+          />
+          <_Divider title="License Info" />
+          <_TextInput
+            value={form.values.licenseType}
+            label={"License Type"}
+            onBlur={form.handleBlur("licenseType")}
+            onChangeText={form.handleChange("licenseType")}
+            error={
+              form.errors?.licenseType && form.touched?.licenseType
+                ? true
+                : false
+            }
+            errorText={form.errors?.licenseType}
+          />
+          <View style={screenStyles.formSubmitButtonContainer}>
+            <Button
+              theme={PaperTheme}
+              mode="contained"
+              onPress={() => form.handleSubmit()}
+              labelStyle={StyleSheet.compose(gStyles.tblHeaderText, {
+                color: colors.white,
+              })}
+            >
+              {mode === "add" ? "Add" : "Update"}
+            </Button>
+          </View>
         </View>
       </_ScrollFormLayout>
     </SafeAreaView>
