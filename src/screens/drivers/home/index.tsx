@@ -72,19 +72,19 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({ navigation }) =>
       setSearchedDrivers(drivers);
       return;
     }
-    let matchingKey: string | DriversFilters = "1";
-    Object.entries(DriversFilters).forEach((value) => {
-      if (newValue === value[0]) {
-        matchingKey = value[1];
-      }
-    });
-    console.log("matchingKey", matchingKey);
-    if (!matchingKey) return;
-    console.log("matchingKey", matchingKey);
-    const filtered = drivers.filter(
-      (value) => value.name.split(" ")[1].toLowerCase() === matchingKey.toString().toLowerCase()
-    );
-    setSearchedDrivers((_prev) => filtered);
+    // let matchingKey: string | DriversFilters = "1";
+    // Object.entries(DriversFilters).forEach((value) => {
+    //   if (newValue === value[0]) {
+    //     matchingKey = value[1];
+    //   }
+    // });
+    // console.log("matchingKey", matchingKey);
+    // if (!matchingKey) return;
+    // console.log("matchingKey", matchingKey);
+    // const filtered = drivers.filter(
+    //   (value) => value.name.split(" ")[1].toLowerCase() === matchingKey.toString().toLowerCase()
+    // );
+    // setSearchedDrivers((_prev) => filtered);
   };
 
   const handleDelete = React.useCallback((driverId: string) => {
@@ -174,6 +174,26 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({ navigation }) =>
                   theme={PaperTheme}
                   label="All"
                   value={DriversFilters.ALL.toString()}
+                  color={colors.primary}
+                  uncheckedColor={colors.iconGray}
+                  labelStyle={gStyles.descText}
+                />
+              </View>
+              <View style={screenStyles.radioItemStyle}>
+                <RadioButton.Item
+                  theme={PaperTheme}
+                  label="Assigned"
+                  value={DriversFilters.ASSIGNED.toString()}
+                  color={colors.primary}
+                  uncheckedColor={colors.iconGray}
+                  labelStyle={gStyles.descText}
+                />
+              </View>
+              <View style={screenStyles.radioItemStyle}>
+                <RadioButton.Item
+                  theme={PaperTheme}
+                  label="Unassigned"
+                  value={DriversFilters.UNASSIGNED.toString()}
                   color={colors.primary}
                   uncheckedColor={colors.iconGray}
                   labelStyle={gStyles.descText}

@@ -23,6 +23,8 @@ export enum ForkliftNotificationsFilters {
 }
 export enum DriversFilters {
   "ALL" = 1,
+  "ASSIGNED" = 2,
+  "UNASSIGNED" = 3,
 }
 export enum AssignForkliftFilters {
   "ALL" = 1,
