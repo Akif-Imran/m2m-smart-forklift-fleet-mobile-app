@@ -64,3 +64,8 @@ interface IDriverActivity {
   description: string;
   date: string;
 }
+
+interface CoordinatesType {
+  latitude: number;
+  longitude: number;
+}
