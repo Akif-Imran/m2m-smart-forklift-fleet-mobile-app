@@ -75,6 +75,7 @@ export type DriversStackParamsList = {
   AddDriver: AddUpdateType<IDriver>;
   AssignForklift: undefined;
   Activity: undefined;
+  AddActivity: AddUpdateType<IDriverActivity>;
   Notification: undefined;
   NotificationDetails: DetailsType<INotification>;
 };

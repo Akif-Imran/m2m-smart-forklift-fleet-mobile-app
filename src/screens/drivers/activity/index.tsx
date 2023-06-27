@@ -6,15 +6,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { _ConfirmModal, _ListEmptyComponent } from "@components";
 import { screenStyles } from "src/screens/styles";
-import { Modal, Portal, RadioButton, Searchbar } from "react-native-paper";
+import { FAB, Modal, Portal, RadioButton, Searchbar } from "react-native-paper";
 import { ActivityFilters } from "@constants";
 import { faker } from "@faker-js/faker";
 import { ToastService } from "@utility";
 import { _DriverActivityCard } from "../components";
+import { DriverStackScreenProps } from "@navigation-types";
 
-interface OwnProps {}
-
-const Activity: React.FC<OwnProps> = ({}) => {
+const Activity: React.FC<DriverStackScreenProps<"Activity">> = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [drivers, setDrivers] = React.useState<IDriverActivity[]>([]);
   const [searchedDrivers, setSearchedDrivers] = React.useState<IDriverActivity[]>([]);
@@ -185,6 +184,17 @@ const Activity: React.FC<OwnProps> = ({}) => {
             progressBackgroundColor={colors.white}
             onRefresh={handleRefresh}
           />
+        }
+      />
+      <FAB
+        icon="plus"
+        style={gStyles.fab}
+        color={colors.white}
+        onLongPress={() => addInfo()}
+        onPress={() =>
+          navigation.navigate("AddActivity", {
+            mode: "add",
+          })
         }
       />
     </SafeAreaView>

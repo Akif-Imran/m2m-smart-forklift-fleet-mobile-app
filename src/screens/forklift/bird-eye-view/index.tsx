@@ -7,7 +7,6 @@ import { colors, theme } from "@theme";
 import type { LatLng } from "react-native-maps";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 interface _LatLng extends LatLng {
   name: string;

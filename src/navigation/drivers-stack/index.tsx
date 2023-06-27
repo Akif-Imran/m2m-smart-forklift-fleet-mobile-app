@@ -10,6 +10,7 @@ import {
   DriverDetails,
   AssignForklift,
   Activity,
+  AddActivity,
 } from "@screens";
 
 const Stack = createStackNavigator<DriversStackParamsList>();
@@ -59,6 +60,15 @@ const DriverStack: React.FC = () => {
           headerShown: true,
           title: "Activity",
         }}
+      />
+      <Stack.Screen
+        name="AddActivity"
+        component={AddActivity}
+        options={({ route }) => ({
+          headerShown: true,
+          title:
+            route.params.mode === "add" ? "Add Activity" : "Update Activity",
+        })}
       />
       <Stack.Screen
         name="AssignForklift"
