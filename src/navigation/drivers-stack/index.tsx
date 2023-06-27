@@ -11,6 +11,9 @@ import {
   AssignForklift,
   Activity,
   AddActivity,
+  BarcodeScanner,
+  DriverCheckList,
+  DriverTask,
 } from "@screens";
 
 const Stack = createStackNavigator<DriversStackParamsList>();
@@ -78,7 +81,30 @@ const DriverStack: React.FC = () => {
           title: "Assign Forklift",
         }}
       />
-
+      <Stack.Screen
+        name="BarcodeScanner"
+        component={BarcodeScanner}
+        options={{
+          headerShown: true,
+          title: "Barcode Scanner",
+        }}
+      />
+      <Stack.Screen
+        name="DriverCheckList"
+        component={DriverCheckList}
+        options={{
+          headerShown: true,
+          title: "Check List",
+        }}
+      />
+      <Stack.Screen
+        name="DriverTask"
+        component={DriverTask}
+        options={{
+          headerShown: true,
+          title: "Task",
+        }}
+      />
       <Stack.Screen
         name="Notification"
         component={ForkliftNotification}

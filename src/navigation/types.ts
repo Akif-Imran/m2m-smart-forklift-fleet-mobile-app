@@ -76,6 +76,9 @@ export type DriversStackParamsList = {
   AssignForklift: undefined;
   Activity: undefined;
   AddActivity: AddUpdateType<IDriverActivity>;
+  BarcodeScanner: undefined;
+  DriverCheckList: undefined;
+  DriverTask: undefined;
   Notification: undefined;
   NotificationDetails: DetailsType<INotification>;
 };

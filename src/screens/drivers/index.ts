@@ -4,3 +4,6 @@ export * from "./create";
 export * from "./details";
 export * from "./home";
 export * from './create-activity';
+export * from './driver-task';
+export * from './barcode-scanner';
+export * from './checklist';
