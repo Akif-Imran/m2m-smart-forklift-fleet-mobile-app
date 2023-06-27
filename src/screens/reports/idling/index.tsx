@@ -18,7 +18,9 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome5 } from "@expo/vector-icons";
 import type { ReportStackScreenProps } from "@navigation-types";
 
-const IdlingReport: React.FC<ReportStackScreenProps<"IdlingReport">> = ({}) => {
+const IdlingReport: React.FC<ReportStackScreenProps<"IdlingReport">> = ({
+  navigation,
+}) => {
   const [show, setShow] = React.useState(false);
   const [show2, setShow2] = React.useState(false);
   const [startDate, setStartDate] = React.useState(new Date());
@@ -115,7 +117,15 @@ const IdlingReport: React.FC<ReportStackScreenProps<"IdlingReport">> = ({}) => {
                   <View style={listCardStyles.reportRecordRowItemLeft}>
                     <TouchableOpacity
                       activeOpacity={0.7}
-                      onPress={() => ToastService.show("Demo")}
+                      onPress={() =>
+                        navigation.navigate("ViewOnMap", {
+                          location: {
+                            latitude: 3.139003,
+                            longitude: 101.686855,
+                          },
+                          name: "PT-01",
+                        })
+                      }
                     >
                       <FontAwesome5
                         name="map-marked-alt"

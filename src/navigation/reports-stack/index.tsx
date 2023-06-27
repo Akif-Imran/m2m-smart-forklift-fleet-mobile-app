@@ -15,6 +15,7 @@ import {
   IgnitionReport,
   OverSpeedingReport,
   Reports,
+  ViewOnMap,
 } from "@screens";
 
 const Stack = createStackNavigator<ReportsStackParamsList>();
@@ -111,6 +112,14 @@ const ReportsStack: React.FC = () => {
         options={{
           headerShown: true,
           title: "History Report",
+        }}
+      />
+      <Stack.Screen
+        name="ViewOnMap"
+        component={ViewOnMap}
+        options={{
+          headerShown: true,
+          title: "Map View",
         }}
       />
       <Stack.Screen

@@ -5,7 +5,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "src/screens/styles";
 import { colors, theme } from "@theme";
 import type { LatLng } from "react-native-maps";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 
 interface _LatLng extends LatLng {
@@ -16,10 +15,11 @@ const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
 
 const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({}) => {
   const mapRef = React.useRef<MapView>(null);
-  const [trackViewChanges, setTrackViewChanges] = React.useState<boolean>(true);
+  const [trackViewChanges, _setTrackViewChanges] =
+    React.useState<boolean>(true);
   const [latAdjustment, setLatAdjustment] = React.useState<number>(0);
   const [isMapReady, setIsMapReady] = React.useState<boolean>(false);
-  const [markers, setMarkers] = React.useState<_LatLng[]>([
+  const [markers, _setMarkers] = React.useState<_LatLng[]>([
     {
       latitude: 3.139003,
       longitude: 101.686855,
@@ -42,14 +42,17 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({}) => {
     },
   ]);
 
-  const handleMarkerOnPress = React.useCallback((coords: CoordinatesType) => {
-    mapRef.current?.animateCamera({
-      center: {
-        latitude: coords.latitude - latAdjustment,
-        longitude: coords.longitude,
-      },
-    });
-  }, []);
+  const handleMarkerOnPress = React.useCallback(
+    (coords: CoordinatesType) => {
+      mapRef.current?.animateCamera({
+        center: {
+          latitude: coords.latitude - latAdjustment,
+          longitude: coords.longitude,
+        },
+      });
+    },
+    [latAdjustment]
+  );
 
   const calculateDelta = async () => {
     if (!mapRef.current) {

@@ -23,9 +23,9 @@ import { faker } from "@faker-js/faker";
 import { ToastService } from "@utility";
 import type { ReportStackScreenProps } from "@navigation-types";
 
-const HistoryReport: React.FC<
-  ReportStackScreenProps<"HistoryReport">
-> = ({}) => {
+const HistoryReport: React.FC<ReportStackScreenProps<"HistoryReport">> = ({
+  navigation,
+}) => {
   const [show, setShow] = React.useState(false);
   const [show2, setShow2] = React.useState(false);
   const [startDate, setStartDate] = React.useState(new Date());
@@ -122,7 +122,15 @@ const HistoryReport: React.FC<
                   <View style={listCardStyles.reportRecordRowItemLeft}>
                     <TouchableOpacity
                       activeOpacity={0.7}
-                      onPress={() => ToastService.show("Demo")}
+                      onPress={() =>
+                        navigation.navigate("ViewOnMap", {
+                          location: {
+                            latitude: 3.139003,
+                            longitude: 101.686855,
+                          },
+                          name: "PT-01",
+                        })
+                      }
                     >
                       <FontAwesome5
                         name="map-marked-alt"

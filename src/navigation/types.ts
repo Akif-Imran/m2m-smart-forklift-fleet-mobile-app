@@ -97,6 +97,10 @@ export type ReportsStackParamsList = {
   IdlingReport: undefined;
   IgnitionReport: undefined;
   HistoryReport: undefined;
+  ViewOnMap: {
+    location: CoordinatesType;
+    name: string;
+  };
   Notification: undefined;
   NotificationDetails: DetailsType<INotification>;
 };

@@ -8,3 +8,4 @@ export * from  './history'
 export * from  './idling'
 export * from  './ignition'
 export * from  './over-speeding'
+export * from './view-on-map';
