@@ -18,7 +18,12 @@ interface IForklift {
   rentEndDate: string;
   forkliftSerialNo: string;
   batterySerialNo: string;
-  year: string;
+  fuelType: string;
+  fuelCapacity: string;
+  insuranceCompany: string;
+  insuranceNo: string;
+  insuranceType: string;
+  insuranceExpiryDate: string;
 }
 
 interface INotification {

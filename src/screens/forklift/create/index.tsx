@@ -50,6 +50,14 @@ const schema: yup.ObjectSchema<IForm> = yup.object().shape({
   rentEndDate: yup.string().required("Rent end date is required"),
   forkliftSerialNo: yup.string().required("Forklift serial no is required"),
   batterySerialNo: yup.string().required("Battery serial no is required"),
+  fuelType: yup.string().required("Fuel type is required"),
+  fuelCapacity: yup.string().required("Fuel capacity is required"),
+  insuranceType: yup.string().required("Insurance type is required"),
+  insuranceCompany: yup.string().required("Insurance company is required"),
+  insuranceExpiryDate: yup
+    .string()
+    .required("Insurance expiry date is required"),
+  insuranceNo: yup.string().required("Insurance no is required"),
   year: yup.string().required("Year is required"),
 });
 
@@ -71,6 +79,11 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
     React.useState(false);
   const [rentEndDate, setRentEndDate] = React.useState<Date>(new Date());
   const [showRentEndDatePicker, setShowRentEndDatePicker] =
+    React.useState(false);
+  const [insuranceExpiryDate, setInsuranceExpiryDate] = React.useState<Date>(
+    new Date()
+  );
+  const [showInsuranceExpiryDatePicker, setShowInsuranceExpiryDatePicker] =
     React.useState(false);
   const [statusDropdownVisible, setStatusDropdownVisible] =
     React.useState(false);
@@ -100,7 +113,12 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
       rentEndDate: moment().format("YYYY-MM-DD"),
       forkliftSerialNo: "",
       batterySerialNo: "",
-      year: "",
+      fuelCapacity: "",
+      fuelType: "",
+      insuranceCompany: "",
+      insuranceExpiryDate: "",
+      insuranceNo: "",
+      insuranceType: "",
     },
     onSubmit: (values, helpers) => {
       console.log(values);
@@ -179,6 +197,14 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
   }, [rentEndDate]);
 
   React.useEffect(() => {
+    form.setValues((prev) => ({
+      ...prev,
+      insuranceExpiryDate: moment(insuranceExpiryDate).format("YYYY-MM-DD"),
+    }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [insuranceExpiryDate]);
+
+  React.useEffect(() => {
     if (route.params.mode === "add") {
       return;
     }
@@ -201,7 +227,12 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
       rentEndDate: item.rentEndDate || moment().format("YYYY-MM-DD"),
       forkliftSerialNo: item.forkliftSerialNo || "",
       batterySerialNo: item.batterySerialNo || "",
-      year: item.year || "",
+      fuelCapacity: item.fuelCapacity || "",
+      fuelType: item.fuelType || "",
+      insuranceCompany: item.insuranceCompany || "",
+      insuranceExpiryDate: item.insuranceExpiryDate || "",
+      insuranceNo: item.insuranceNo || "",
+      insuranceType: item.insuranceType || "",
     }));
     setImages((_prev) => [{ uri: item.image, width: 125, height: 125 }]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -239,6 +270,13 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
         mode={"date"}
         date={rentEndDate}
         setDate={setRentEndDate}
+      />
+      <_DatePicker
+        show={showInsuranceExpiryDatePicker}
+        setShow={setShowInsuranceExpiryDatePicker}
+        mode={"date"}
+        date={insuranceExpiryDate}
+        setDate={setInsuranceExpiryDate}
       />
       <_ScrollFormLayout>
         <View style={{ rowGap: theme.spacing.xs }}>
@@ -473,13 +511,87 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
             errorText={form.errors?.batterySerialNo}
           />
           <_TextInput
-            value={form.values.year}
-            label={"Year"}
+            value={form.values.fuelType}
+            label={"Fuel Type"}
+            onBlur={form.handleBlur("fuelType")}
+            onChangeText={form.handleChange("fuelType")}
+            error={
+              form.errors?.fuelType && form.touched?.fuelType ? true : false
+            }
+            errorText={form.errors?.fuelType}
+          />
+          <_TextInput
+            value={form.values.fuelCapacity}
+            label={"Fuel Capacity"}
             onBlur={form.handleBlur("year")}
             onChangeText={form.handleChange("year")}
-            error={form.errors?.year && form.touched?.year ? true : false}
-            errorText={form.errors?.year}
+            error={
+              form.errors?.fuelCapacity && form.touched?.fuelCapacity
+                ? true
+                : false
+            }
+            errorText={form.errors?.fuelCapacity}
             keyboardType="numeric"
+          />
+          <_Divider title="Insurance Info" />
+          <_TextInput
+            value={form.values.insuranceCompany}
+            label={"Company"}
+            onBlur={form.handleBlur("insuranceCompany")}
+            onChangeText={form.handleChange("insuranceCompany")}
+            error={
+              form.errors?.insuranceCompany && form.touched?.insuranceCompany
+                ? true
+                : false
+            }
+            errorText={form.errors?.insuranceCompany}
+          />
+          <_TextInput
+            value={form.values.insuranceNo}
+            label={"Insurance No."}
+            onBlur={form.handleBlur("insuranceNo")}
+            onChangeText={form.handleChange("insuranceNo")}
+            error={
+              form.errors?.insuranceNo && form.touched?.insuranceNo
+                ? true
+                : false
+            }
+            errorText={form.errors?.insuranceNo}
+            keyboardType="numeric"
+          />
+          <_TextInput
+            value={form.values.insuranceType}
+            label={"Type"}
+            onBlur={form.handleBlur("insuranceType")}
+            onChangeText={form.handleChange("insuranceType")}
+            error={
+              form.errors?.insuranceType && form.touched?.insuranceType
+                ? true
+                : false
+            }
+            errorText={form.errors?.insuranceType}
+            keyboardType="numeric"
+          />
+          <_TextInput
+            editable={false}
+            value={form.values.insuranceExpiryDate}
+            label={"Expiry Date"}
+            onBlur={form.handleBlur("insuranceExpiryDate")}
+            onChangeText={form.handleChange("insuranceExpiryDate")}
+            error={
+              form.errors?.insuranceExpiryDate &&
+              form.touched?.insuranceExpiryDate
+                ? true
+                : false
+            }
+            errorText={form.errors?.insuranceExpiryDate}
+            right={
+              <TextInput.Icon
+                icon="calendar"
+                color={colors.iconGray}
+                onPress={() => setShowInsuranceExpiryDatePicker(true)}
+              />
+            }
           />
           <View style={screenStyles.formSubmitButtonContainer}>
             <Button

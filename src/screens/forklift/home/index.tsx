@@ -37,7 +37,6 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
       color: faker.vehicle.color(),
       forkliftSerialNo: faker.vehicle.vrm(),
       make: faker.date.past().getFullYear().toString(),
-      year: faker.date.past().getFullYear().toString(),
       manufactureYear: faker.date.past().getFullYear().toString(),
 
       purchaseDate: faker.date.past().toDateString(),
@@ -50,6 +49,12 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
       status: faker.helpers.arrayElement(["moving", "parked", "offline", "faulty"]),
       driver: faker.person.fullName(),
       model: faker.vehicle.vrm(),
+      fuelType: faker.vehicle.fuel(),
+      fuelCapacity: faker.helpers.rangeToNumber({ min: 12, max: 50 }).toString(),
+      insuranceType: "Type 1",
+      insuranceCompany: faker.company.name(),
+      insuranceExpiryDate: faker.date.future().toDateString(),
+      insuranceNo: faker.string.alphanumeric({ length: 8, casing: "upper" }),
     };
     setForklifts((prev) => [...prev, record]);
   };

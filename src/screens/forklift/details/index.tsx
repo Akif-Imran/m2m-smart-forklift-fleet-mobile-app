@@ -105,8 +105,40 @@ const ForkLiftDetails: React.FC<
               </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
-              <Text style={screenStyles.tblHeaderText}>Year</Text>
-              <Text style={screenStyles.tblDescText}>{item.year}</Text>
+              <Text style={screenStyles.tblHeaderText}>Fuel Type</Text>
+              <Text style={screenStyles.tblDescText}>{item.fuelType}</Text>
+            </View>
+            <View style={screenStyles.fieldContainer}>
+              <Text style={screenStyles.tblHeaderText}>Fuel Capacity</Text>
+              <Text style={screenStyles.tblDescText}>{item.fuelCapacity}</Text>
+            </View>
+          </_DefaultCard>
+
+          <_DefaultCard>
+            <View>
+              <Text style={screenStyles.detailsCardHeadingText}>
+                Insurance Info
+              </Text>
+            </View>
+            <View style={screenStyles.fieldContainer}>
+              <Text style={screenStyles.tblHeaderText}>Company</Text>
+              <Text style={screenStyles.tblDescText}>
+                {item.insuranceCompany}
+              </Text>
+            </View>
+            <View style={screenStyles.fieldContainer}>
+              <Text style={screenStyles.tblHeaderText}>Type</Text>
+              <Text style={screenStyles.tblDescText}>{item.insuranceType}</Text>
+            </View>
+            <View style={screenStyles.fieldContainer}>
+              <Text style={screenStyles.tblHeaderText}>No.</Text>
+              <Text style={screenStyles.tblDescText}>{item.insuranceNo}</Text>
+            </View>
+            <View style={screenStyles.fieldContainer}>
+              <Text style={screenStyles.tblHeaderText}>Expiry Date</Text>
+              <Text style={screenStyles.tblDescText}>
+                {item.insuranceExpiryDate}
+              </Text>
             </View>
           </_DefaultCard>
         </>
