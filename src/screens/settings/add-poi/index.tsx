@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "src/screens/styles";
 import { NoIconHeader, _Divider, _ScrollFormLayout, _TextInput } from "@components";
 import type { LatLng } from "react-native-maps";
-import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
+import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from "react-native-maps";
 import type { ProfileSettingsStackScreenProps } from "@navigation-types";
 import { PaperTheme, colors, gStyles } from "@theme";
 import { Button, Modal, Portal } from "react-native-paper";
@@ -151,7 +151,7 @@ const AddPoi: React.FC<ProfileSettingsStackScreenProps<"AddPoi">> = ({}) => {
       <MapView
         ref={mapRef}
         mapType="standard"
-        provider={PROVIDER_DEFAULT}
+        provider={PROVIDER_GOOGLE}
         style={StyleSheet.absoluteFillObject}
         initialRegion={{
           latitude: location.latitude,

@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "src/screens/styles";
 import { colors, theme } from "@theme";
 import type { LatLng } from "react-native-maps";
-import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
 interface _LatLng extends LatLng {
   name: string;
@@ -96,7 +96,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({}) => {
       <MapView
         ref={mapRef}
         mapType="standard"
-        provider={PROVIDER_DEFAULT}
+        provider={PROVIDER_GOOGLE}
         style={StyleSheet.absoluteFillObject}
         initialRegion={{
           latitude: markers[0].latitude,
