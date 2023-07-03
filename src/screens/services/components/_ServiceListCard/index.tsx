@@ -33,9 +33,9 @@ const _ServiceListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
           backgroundColor: colors.white,
         })}
       >
-        <View>
+        {/* <View>
           <FontAwesome5 name="tools" size={45} color={colors.titleText} />
-        </View>
+        </View> */}
         <View style={listCardStyles.infoWithForward}>
           <View style={listCardStyles.infoContainer}>
             <Text style={gStyles.cardInfoTitleText}>{item.regNo}</Text>
