@@ -2,7 +2,7 @@ import { Alert, ScrollView, Text, View } from "react-native";
 import React from "react";
 import { colors } from "../../../theme";
 import { Card, MultiCard, NoIconHeader, MultiCardItem } from "@components";
-import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
+import { MaterialCommunityIcons, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-root-toast";
 import appConfig from "../../../../app.json";
@@ -18,9 +18,7 @@ const group1 = {
   subtitle: "",
 };
 
-export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = ({
-  navigation,
-}) => {
+export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = ({ navigation }) => {
   const appVersion = appConfig.expo.version;
   const {
     state: { user },
@@ -69,6 +67,43 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
       title: "Delete Account",
       color: colors.error,
       onPress: () => deactivateAlert(),
+    },
+  ];
+
+  const multiData4: Array<MultiCardItem> = [
+    {
+      id: 8,
+      icon: <MaterialIcons name="add-location-alt" color={colors.heavyGray} size={20} />,
+      bgColor: colors.mediumGray,
+      title: "Add POI's",
+      color: colors.titleText,
+      onPress: () => {
+        navigation.navigate("AddPoi");
+      },
+    },
+    {
+      id: 9,
+      icon: <MaterialIcons name="home-repair-service" color={colors.heavyGray} size={20} />,
+      bgColor: colors.mediumGray,
+      title: "Services",
+      color: colors.titleText,
+      onPress: () => {
+        navigation.navigate("ServicesStack", {
+          screen: "Services",
+        });
+      },
+    },
+    {
+      id: 10,
+      icon: <MaterialCommunityIcons name="file-multiple" color={colors.heavyGray} size={20} />,
+      bgColor: colors.mediumGray,
+      title: "Reports",
+      color: colors.titleText,
+      onPress: () => {
+        navigation.navigate("ReportsStack", {
+          screen: "Reports",
+        });
+      },
     },
   ];
 
@@ -131,6 +166,9 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
         <Card data={group1} size="large" />
         <View style={styles.segmentContainer}>
           <MultiCard data={multiData1} />
+        </View>
+        <View style={styles.segmentContainer}>
+          <MultiCard data={multiData4} />
         </View>
         <View style={styles.segmentContainer}>
           <MultiCard data={multiData2} />

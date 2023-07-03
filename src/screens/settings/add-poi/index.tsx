@@ -1,15 +1,18 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import React from "react";
-import type { ReportStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
-import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import { screenStyles } from "src/screens/styles";
-import { colors, theme } from "@theme";
+import { NoIconHeader } from "@components";
+import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
+import type { ProfileSettingsStackScreenProps } from "@navigation-types";
+import { colors } from "@theme";
 
-const ViewOnMap: React.FC<ReportStackScreenProps<"ViewOnMap">> = ({
-  route,
-}) => {
-  const { location, name } = route.params;
+const AddPoi: React.FC<ProfileSettingsStackScreenProps<"AddPoi">> = ({}) => {
+  const [location, _setLocation] = React.useState({
+    latitude: 3.139003,
+    longitude: 101.686855,
+    name: "Placeholder",
+  });
   const mapRef = React.useRef<MapView>(null);
   const [_isMapReady, setIsMapReady] = React.useState<boolean>(false);
 
@@ -37,10 +40,9 @@ const ViewOnMap: React.FC<ReportStackScreenProps<"ViewOnMap">> = ({
       zoom: 12,
     });
   }, []);
-
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
-      <View style={{ height: theme.header.height }} />
+      <NoIconHeader title="Add POI" />
       <MapView
         ref={mapRef}
         mapType="standard"
@@ -67,7 +69,7 @@ const ViewOnMap: React.FC<ReportStackScreenProps<"ViewOnMap">> = ({
             latitude: location.latitude,
             longitude: location.longitude,
           }}
-          title={name}
+          title={location.name}
           onPress={() => handleMarkerOnPress(location)}
         />
       </MapView>
@@ -75,4 +77,4 @@ const ViewOnMap: React.FC<ReportStackScreenProps<"ViewOnMap">> = ({
   );
 };
 
-export { ViewOnMap };
+export { AddPoi };

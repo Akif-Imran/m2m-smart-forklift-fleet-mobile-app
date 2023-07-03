@@ -29,9 +29,9 @@ export type AuthStackScreenProps<T extends keyof AuthStackParamsList> =
 export type MainTabsParamsList = {
   DashboardStack: NavigatorScreenParams<DashboardStackParamsList>;
   ForkliftStack: NavigatorScreenParams<ForkliftStackParamsList>;
-  ServicesStack: NavigatorScreenParams<ServiceStackParamsList>;
+  // ServicesStack: NavigatorScreenParams<ServiceStackParamsList>;
   DriversStack: NavigatorScreenParams<DriversStackParamsList>;
-  ReportsStack: NavigatorScreenParams<ReportsStackParamsList>;
+  // ReportsStack: NavigatorScreenParams<ReportsStackParamsList>;
   ProfileSettingsStack: NavigatorScreenParams<ProfileSettingsStackParamsList>;
 };
 
@@ -111,8 +111,11 @@ export type ReportStackScreenProps<T extends keyof ReportsStackParamsList> =
 export type ProfileSettingsStackParamsList = {
   Settings: undefined;
   ChangePassword: undefined;
+  AddPoi: undefined;
   About: undefined;
   Help: undefined;
+  ServicesStack: NavigatorScreenParams<ServiceStackParamsList>;
+  ReportsStack: NavigatorScreenParams<ReportsStackParamsList>;
 };
 
 export type ProfileSettingsStackScreenProps<

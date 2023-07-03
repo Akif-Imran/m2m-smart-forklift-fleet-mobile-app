@@ -2,7 +2,9 @@ import React, { FC } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { colors, gStyles } from "../../theme";
 import { ProfileSettingsStackParamsList } from "@navigation-types";
-import { About, ChangePassword, Help, Settings } from "@screens";
+import { About, AddPoi, ChangePassword, Help, Settings } from "@screens";
+import { ServicesStack } from "../services-stack";
+import { ReportsStack } from "../reports-stack";
 
 const Stack = createStackNavigator<ProfileSettingsStackParamsList>();
 
@@ -39,6 +41,30 @@ const ProfileSettingsStack: FC = () => {
         options={{
           headerTitle: "Change Password",
           headerShown: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="AddPoi"
+        component={AddPoi}
+        options={{
+          headerTitle: "Add POI's",
+          headerShown: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="ServicesStack"
+        component={ServicesStack}
+        options={{
+          headerTitle: "Services",
+        }}
+      />
+      <Stack.Screen
+        name="ReportsStack"
+        component={ReportsStack}
+        options={{
+          headerTitle: "Reports",
         }}
       />
       <Stack.Screen

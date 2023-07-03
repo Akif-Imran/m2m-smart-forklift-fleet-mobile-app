@@ -7,9 +7,9 @@ import { colors } from "@theme";
 import { ProfileSettingsStack } from "../profile-settings-stack"; //not imported from @navigation to avoid cycle
 import { DashboardStack } from "../dashboard-stack"; //not imported from @navigation to avoid cycle
 import { ForkliftStack } from "../forklift-stack";
-import { ServicesStack } from "../services-stack";
 import { DriverStack } from "../drivers-stack";
-import { ReportsStack } from "../reports-stack";
+// import { ServicesStack } from "../services-stack";
+// import { ReportsStack } from "../reports-stack";
 import { MainTabsParamsList } from "@navigation-types";
 import { styles } from "./styles";
 
@@ -63,7 +63,7 @@ const RootTabs: React.FC<OwnProps> = ({}) => {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="ServicesStack"
         component={ServicesStack}
         options={{
@@ -76,7 +76,7 @@ const RootTabs: React.FC<OwnProps> = ({}) => {
             />
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="DriversStack"
         component={DriverStack}
@@ -91,7 +91,7 @@ const RootTabs: React.FC<OwnProps> = ({}) => {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="ReportsStack"
         component={ReportsStack}
         options={{
@@ -104,7 +104,7 @@ const RootTabs: React.FC<OwnProps> = ({}) => {
             />
           ),
         }}
-      />
+      /> */}
       {/* <Tab.Screen
         name="Machines"
         component={MachinesStack}
