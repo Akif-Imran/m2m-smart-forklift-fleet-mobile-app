@@ -11,7 +11,7 @@ import { ForkliftStatusColor } from "@constants";
 
 interface OwnProps {
   item: IForklift;
-  mode: "info" | "list";
+  mode?: "info" | "list";
 }
 
 const _ForkliftListCard: React.FC<OwnProps> = ({ item, mode = "list" }) => {

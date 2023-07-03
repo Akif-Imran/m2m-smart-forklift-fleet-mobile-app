@@ -10,6 +10,7 @@ import { ToastService } from "@utility";
 import Spinner from "react-native-loading-spinner-overlay";
 import { styles } from "./styles";
 import { _ForkliftListCard } from "../components";
+import { _Divider } from "@components";
 
 const images = [
   {
@@ -50,17 +51,22 @@ const images = [
   },
 ];
 
-const SelectIcons: React.FC<ProfileSettingsStackScreenProps<"SelectIcon">> = ({ navigation,route }) => {
-  const {item} = route.params;
+const SelectIcons: React.FC<ProfileSettingsStackScreenProps<"SelectIcon">> = ({
+  navigation,
+  route,
+}) => {
+  const { item } = route.params;
   const [isLoading, setIsLoading] = React.useState(false);
-  const [selectedIcon, setSelectedIcon] = React.useState<string>();
+  const [selectedIcon, setSelectedIcon] = React.useState<string>("marker-pin.png");
   const [icons, _setIcons] = React.useState(images);
   console.log(selectedIcon);
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
       <Spinner visible={isLoading} cancelable={false} animation="fade" size="large" />
       <View style={{ height: theme.header.height }} />
-      <_ForkliftListCard item={item} mode="info"/>
+      <_Divider title="Vehicle Info" />
+      <_ForkliftListCard item={item} mode="info" />
+      <_Divider title="Icons" />
       <View style={styles.iconsContainer}>
         {icons.map((icon) => {
           const checked = selectedIcon ? icon.name === selectedIcon : false;
