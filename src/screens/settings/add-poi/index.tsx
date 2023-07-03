@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Image, StyleSheet } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "src/screens/styles";
@@ -6,6 +6,7 @@ import { NoIconHeader } from "@components";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import type { ProfileSettingsStackScreenProps } from "@navigation-types";
 import { colors } from "@theme";
+import Svg, { Path } from "react-native-svg";
 
 const AddPoi: React.FC<ProfileSettingsStackScreenProps<"AddPoi">> = ({}) => {
   const [location, _setLocation] = React.useState({
@@ -64,6 +65,7 @@ const AddPoi: React.FC<ProfileSettingsStackScreenProps<"AddPoi">> = ({}) => {
         onMapReady={() => fitCoordinates()}
       >
         <Marker
+          pinColor={colors.info}
           tracksViewChanges={false}
           coordinate={{
             latitude: location.latitude,
@@ -71,7 +73,15 @@ const AddPoi: React.FC<ProfileSettingsStackScreenProps<"AddPoi">> = ({}) => {
           }}
           title={location.name}
           onPress={() => handleMarkerOnPress(location)}
-        />
+        >
+          <Image
+            source={require("@assets/images/forklift.png")}
+            // onLoad={() => setViewTrackingA1(false)}
+            // style={{ width: 35, height: 35 }}
+            resizeMethod="auto"
+            resizeMode="contain"
+          />
+        </Marker>
       </MapView>
     </SafeAreaView>
   );

@@ -5,8 +5,8 @@ export const theme = {
   img: {
     size: {
       md: {
-        height: 80,
-        width: 80,
+        height: 72,
+        width: 72,
       },
       lg: {
         height: 125,

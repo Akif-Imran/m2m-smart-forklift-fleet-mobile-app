@@ -27,6 +27,16 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
   const multiData1: Array<MultiCardItem> = [
     {
       id: 1,
+      icon: <MaterialCommunityIcons name="forklift" color={colors.heavyGray} size={25} />,
+      bgColor: colors.mediumGray,
+      title: "Vehicle Icons",
+      color: colors.titleText,
+      onPress: () => {
+        navigation.navigate("VehicleIcons");
+      },
+    },
+    {
+      id: 2,
       icon: <MaterialCommunityIcons name="key" size={20} color={colors.heavyGray} />,
       bgColor: colors.mediumGray,
       title: "Change Password",
@@ -39,7 +49,7 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
 
   const multiData2: Array<MultiCardItem> = [
     {
-      id: 5,
+      id: 3,
       icon: <MaterialCommunityIcons name="information" size={20} color={colors.heavyGray} />,
       bgColor: colors.mediumGray,
       title: "About",
@@ -49,7 +59,7 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
       },
     },
     {
-      id: 6,
+      id: 4,
       icon: <MaterialCommunityIcons name="help-box" size={20} color={colors.heavyGray} />,
       bgColor: colors.mediumGray,
       title: "Help",
@@ -61,7 +71,7 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
   ];
   const multiData3: Array<MultiCardItem> = [
     {
-      id: 7,
+      id: 5,
       icon: <FontAwesome5 name="trash" size={17} color={colors.error} />,
       bgColor: colors.thinError,
       title: "Delete Account",
@@ -72,7 +82,7 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
 
   const multiData4: Array<MultiCardItem> = [
     {
-      id: 8,
+      id: 6,
       icon: <MaterialIcons name="add-location-alt" color={colors.heavyGray} size={20} />,
       bgColor: colors.mediumGray,
       title: "Add POI's",
@@ -82,7 +92,7 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
       },
     },
     {
-      id: 9,
+      id: 7,
       icon: <MaterialIcons name="home-repair-service" color={colors.heavyGray} size={20} />,
       bgColor: colors.mediumGray,
       title: "Services",
@@ -94,7 +104,7 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
       },
     },
     {
-      id: 10,
+      id: 8,
       icon: <MaterialCommunityIcons name="file-multiple" color={colors.heavyGray} size={20} />,
       bgColor: colors.mediumGray,
       title: "Reports",

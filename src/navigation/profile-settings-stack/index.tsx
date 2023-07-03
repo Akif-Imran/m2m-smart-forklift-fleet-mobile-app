@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { colors, gStyles } from "../../theme";
 import { ProfileSettingsStackParamsList } from "@navigation-types";
-import { About, AddPoi, ChangePassword, Help, Settings } from "@screens";
+import { About, AddPoi, ChangePassword, Help, SelectIcons, Settings, VehicleIcons } from "@screens";
 import { ServicesStack } from "../services-stack";
 import { ReportsStack } from "../reports-stack";
 
@@ -49,6 +49,22 @@ const ProfileSettingsStack: FC = () => {
         component={AddPoi}
         options={{
           headerTitle: "Add POI's",
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="VehicleIcons"
+        component={VehicleIcons}
+        options={{
+          headerTitle: "Vehicle Icons",
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="SelectIcon"
+        component={SelectIcons}
+        options={{
+          headerTitle: "Select Icon",
           headerShown: true,
         }}
       />
