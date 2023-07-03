@@ -140,8 +140,9 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
             </Text>
           </View>
           <View
-            style={StyleSheet.compose(screenStyles.countRowItem, screenStyles.countRowMiddleItem)}
-          >
+            style={StyleSheet.compose(screenStyles.countRowMiddleItem, { borderRightWidth: 0 })}
+          />
+          <View style={screenStyles.countRowItem}>
             <Text style={gStyles.headerText}>12</Text>
             <Text
               style={StyleSheet.compose(screenStyles.countInfoText, {
@@ -151,7 +152,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
               Parked
             </Text>
           </View>
-          <View style={screenStyles.countRowItem}>
+          {/* <View style={screenStyles.countRowItem}>
             <Text style={gStyles.headerText}>12</Text>
             <Text
               style={StyleSheet.compose(screenStyles.countInfoText, {
@@ -160,7 +161,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
             >
               Offline
             </Text>
-          </View>
+          </View> */}
         </View>
         <_Divider />
         <View style={screenStyles.countRow}>
@@ -175,6 +176,9 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
             </Text>
           </View>
           <View
+            style={StyleSheet.compose(screenStyles.countRowMiddleItem, { borderRightWidth: 0 })}
+          />
+          {/* <View
             style={StyleSheet.compose(screenStyles.countRowItem, screenStyles.countRowMiddleItem)}
           >
             <Text style={gStyles.headerText}>12</Text>
@@ -188,6 +192,16 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
               })}
             >
               Faulty
+            </Text>
+          </View> */}
+          <View style={screenStyles.countRowItem}>
+            <Text style={gStyles.headerText}>12</Text>
+            <Text
+              style={StyleSheet.compose(screenStyles.countInfoText, {
+                color: ForkliftStatusColor["offline"],
+              })}
+            >
+              Offline
             </Text>
           </View>
         </View>
