@@ -9,6 +9,13 @@ export const styles = StyleSheet.create({
     // paddingHorizontal: theme.spacing.md,
     // borderWidth: 1,
   },
+  scrollStyleNoSpacing: {
+    flex: 1,
+    backgroundColor: theme.colors.transparent,
+    marginTop: theme.spacing.none,
+    // paddingHorizontal: theme.spacing.md,
+    // borderWidth: 1,
+  },
   scrollViewContentContainer: {
     // flex: 1,
     justifyContent: "space-between",

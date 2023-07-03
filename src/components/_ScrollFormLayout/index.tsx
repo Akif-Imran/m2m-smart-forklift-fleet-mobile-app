@@ -3,9 +3,14 @@ import React from "react";
 
 import { styles } from "./styles";
 
-interface OwnProps {}
+interface OwnProps {
+  hasSpacing?: boolean;
+}
 
-const _ScrollFormLayout: React.FC<React.PropsWithChildren<OwnProps>> = ({ children }) => {
+const _ScrollFormLayout: React.FC<React.PropsWithChildren<OwnProps>> = ({
+  children,
+  hasSpacing = true,
+}) => {
   if (React.Children.count(children) !== 1) {
     console.error("Error: _ScrollFormLayout component expects exactly one child node.");
     return null;
@@ -16,7 +21,7 @@ const _ScrollFormLayout: React.FC<React.PropsWithChildren<OwnProps>> = ({ childr
       style={{ flex: 1 }}
     >
       <ScrollView
-        style={styles.scrollStyle}
+        style={hasSpacing ? styles.scrollStyle : styles.scrollStyleNoSpacing}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollViewContentContainer}
       >

@@ -59,6 +59,7 @@ export const screenStyles = StyleSheet.create({
     // borderWidth: 1,
   },
   formSubmitButtonContainer: {
+    columnGap: theme.spacing.sm,
     marginTop: theme.spacing.sm,
     marginBottom: theme.spacing.lg,
     flexDirection: "row",
