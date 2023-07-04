@@ -7,40 +7,19 @@ import { colors, theme } from "@theme";
 import type { LatLng } from "react-native-maps";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
-interface _LatLng extends LatLng {
-  name: string;
-}
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
 
-const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({}) => {
+const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
+  route,
+}) => {
+  const { mode } = route.params;
   const mapRef = React.useRef<MapView>(null);
   const [trackViewChanges, _setTrackViewChanges] =
     React.useState<boolean>(true);
   const [latAdjustment, setLatAdjustment] = React.useState<number>(0);
   const [isMapReady, setIsMapReady] = React.useState<boolean>(false);
-  const [markers, _setMarkers] = React.useState<_LatLng[]>([
-    {
-      latitude: 3.139003,
-      longitude: 101.686855,
-      name: "PT-01",
-    },
-    {
-      latitude: 3.154159,
-      longitude: 101.713877,
-      name: "PT-02",
-    },
-    {
-      latitude: 3.151663,
-      longitude: 101.695417,
-      name: "PT-03",
-    },
-    {
-      latitude: 3.149408,
-      longitude: 101.696225,
-      name: "PT-04",
-    },
-  ]);
+  const [markers, _setMarkers] = React.useState<IMarkerPin[]>([]);
 
   const handleMarkerOnPress = React.useCallback(
     (coords: CoordinatesType) => {
@@ -68,7 +47,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({}) => {
   };
 
   const fitCoordinates = React.useCallback(() => {
-    if (!mapRef.current) {
+    if (!mapRef.current || markers.length === 0) {
       return;
     }
     mapRef.current?.fitToCoordinates(markers, {
@@ -78,6 +57,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({}) => {
         bottom: 50,
         left: 50,
       },
+      animated: true,
     });
   }, [mapRef, markers]);
 
@@ -90,6 +70,15 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({}) => {
     );
   }, [mapRef, isMapReady]);
 
+  React.useEffect(() => {
+    if (mode === "single") {
+      const { point } = route.params;
+      _setMarkers([point]);
+    } else if (mode === "multiple") {
+      _setMarkers(route.params.points);
+    }
+  }, [mode, route.params]);
+
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
       <View style={{ height: theme.header.height }} />
@@ -98,12 +87,16 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({}) => {
         mapType="standard"
         provider={PROVIDER_GOOGLE}
         style={StyleSheet.absoluteFillObject}
-        initialRegion={{
-          latitude: markers[0].latitude,
-          longitude: markers[0].longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
+        initialRegion={
+          markers.length > 0
+            ? {
+                latitude: markers[0].latitude,
+                longitude: markers[0].longitude,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }
+            : undefined
+        }
         loadingEnabled={true}
         loadingIndicatorColor={colors.primary}
         zoomEnabled={true}

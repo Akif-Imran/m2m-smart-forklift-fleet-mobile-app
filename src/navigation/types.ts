@@ -49,7 +49,15 @@ export type ForkliftStackParamsList = {
   AddForklift: AddUpdateType<IForklift>;
   ForkLiftDetails: DetailsType<IForklift>;
   ReqService: undefined;
-  BirdEyeView: undefined;
+  BirdEyeView:
+    | {
+        mode: "single";
+        point: IMarkerPin;
+      }
+    | { mode: "multiple"; points: IMarkerPin[] };
+  Fences: undefined;
+  Trips: undefined;
+  ReportsStack: NavigatorScreenParams<ReportsStackParamsList>;
   Notification: undefined;
   NotificationDetails: DetailsType<INotification>;
 };

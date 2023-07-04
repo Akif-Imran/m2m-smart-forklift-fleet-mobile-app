@@ -108,7 +108,32 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
         left={[
           {
             icon: <FontAwesome5 name="map-marked-alt" size={24} color={colors.primary} />,
-            onPress: () => navigation.navigate("BirdEyeView"),
+            onPress: () =>
+              navigation.navigate("BirdEyeView", {
+                mode: "multiple",
+                points: [
+                  {
+                    latitude: 3.139003,
+                    longitude: 101.686855,
+                    name: "PT-01",
+                  },
+                  {
+                    latitude: 3.154159,
+                    longitude: 101.713877,
+                    name: "PT-02",
+                  },
+                  {
+                    latitude: 3.151663,
+                    longitude: 101.695417,
+                    name: "PT-03",
+                  },
+                  {
+                    latitude: 3.149408,
+                    longitude: 101.696225,
+                    name: "PT-04",
+                  },
+                ],
+              }),
           },
         ]}
         right={[
@@ -126,97 +151,6 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
         onConfirm={handleDeleteConfirm}
         onCancel={handleDeleteCancel}
       />
-      {/* counts */}
-      <_DefaultCard>
-        <View style={screenStyles.countRow}>
-          <View style={screenStyles.countRowItem}>
-            <Text style={gStyles.headerText}>10</Text>
-            <Text
-              style={StyleSheet.compose(screenStyles.countInfoText, {
-                color: ForkliftStatusColor["moving"],
-              })}
-            >
-              Moving
-            </Text>
-          </View>
-          <View
-            style={StyleSheet.compose(screenStyles.countRowMiddleItem, { borderRightWidth: 0 })}
-          />
-          <View style={screenStyles.countRowItem}>
-            <Text style={gStyles.headerText}>12</Text>
-            <Text
-              style={StyleSheet.compose(screenStyles.countInfoText, {
-                color: ForkliftStatusColor["parked"],
-              })}
-            >
-              Parked
-            </Text>
-          </View>
-          {/* <View style={screenStyles.countRowItem}>
-            <Text style={gStyles.headerText}>12</Text>
-            <Text
-              style={StyleSheet.compose(screenStyles.countInfoText, {
-                color: ForkliftStatusColor["offline"],
-              })}
-            >
-              Offline
-            </Text>
-          </View> */}
-        </View>
-        <_Divider />
-        <View style={screenStyles.countRow}>
-          <View style={screenStyles.countRowItem}>
-            <Text style={gStyles.headerText}>10</Text>
-            <Text
-              style={StyleSheet.compose(screenStyles.countInfoText, {
-                color: ForkliftStatusColor["total"],
-              })}
-            >
-              Total
-            </Text>
-          </View>
-          <View
-            style={StyleSheet.compose(screenStyles.countRowMiddleItem, { borderRightWidth: 0 })}
-          />
-          {/* <View
-            style={StyleSheet.compose(screenStyles.countRowItem, screenStyles.countRowMiddleItem)}
-          >
-            <Text style={gStyles.headerText}>12</Text>
-            <Text style={screenStyles.countInfoText}>Avg. Age</Text>
-          </View>
-          <View style={screenStyles.countRowItem}>
-            <Text style={gStyles.headerText}>12</Text>
-            <Text
-              style={StyleSheet.compose(screenStyles.countInfoText, {
-                color: ForkliftStatusColor["faulty"],
-              })}
-            >
-              Faulty
-            </Text>
-          </View> */}
-          <View style={screenStyles.countRowItem}>
-            <Text style={gStyles.headerText}>12</Text>
-            <Text
-              style={StyleSheet.compose(screenStyles.countInfoText, {
-                color: ForkliftStatusColor["offline"],
-              })}
-            >
-              Offline
-            </Text>
-          </View>
-        </View>
-      </_DefaultCard>
-
-      <View style={screenStyles.searchContainer}>
-        <Searchbar
-          theme={PaperTheme}
-          autoCapitalize="none"
-          value={searchQuery}
-          placeholder="Search..."
-          onChangeText={(query) => handleSearch(query)}
-          style={screenStyles.searchStyle}
-        />
-      </View>
 
       <FlatList
         data={searchedForklifts}
@@ -224,6 +158,79 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
         style={screenStyles.flatListStyle}
         // contentContainerStyle={{ padding: 2 }}
         keyExtractor={(item) => item._id}
+        ListHeaderComponent={() => (
+          <>
+            {/* counts */}
+            <_DefaultCard>
+              <View style={screenStyles.countRow}>
+                <View style={screenStyles.countRowItem}>
+                  <Text style={gStyles.headerText}>10</Text>
+                  <Text
+                    style={StyleSheet.compose(screenStyles.countInfoText, {
+                      color: ForkliftStatusColor["moving"],
+                    })}
+                  >
+                    Moving
+                  </Text>
+                </View>
+                <View
+                  style={StyleSheet.compose(screenStyles.countRowMiddleItem, {
+                    borderRightWidth: 0,
+                  })}
+                />
+                <View style={screenStyles.countRowItem}>
+                  <Text style={gStyles.headerText}>12</Text>
+                  <Text
+                    style={StyleSheet.compose(screenStyles.countInfoText, {
+                      color: ForkliftStatusColor["parked"],
+                    })}
+                  >
+                    Parked
+                  </Text>
+                </View>
+              </View>
+              <_Divider />
+              <View style={screenStyles.countRow}>
+                <View style={screenStyles.countRowItem}>
+                  <Text style={gStyles.headerText}>10</Text>
+                  <Text
+                    style={StyleSheet.compose(screenStyles.countInfoText, {
+                      color: ForkliftStatusColor["total"],
+                    })}
+                  >
+                    Total
+                  </Text>
+                </View>
+                <View
+                  style={StyleSheet.compose(screenStyles.countRowMiddleItem, {
+                    borderRightWidth: 0,
+                  })}
+                />
+                <View style={screenStyles.countRowItem}>
+                  <Text style={gStyles.headerText}>12</Text>
+                  <Text
+                    style={StyleSheet.compose(screenStyles.countInfoText, {
+                      color: ForkliftStatusColor["offline"],
+                    })}
+                  >
+                    Offline
+                  </Text>
+                </View>
+              </View>
+            </_DefaultCard>
+
+            <View style={screenStyles.searchContainer}>
+              <Searchbar
+                theme={PaperTheme}
+                autoCapitalize="none"
+                value={searchQuery}
+                placeholder="Search..."
+                onChangeText={(query) => handleSearch(query)}
+                style={screenStyles.searchStyle}
+              />
+            </View>
+          </>
+        )}
         ListEmptyComponent={<_ListEmptyComponent label="No Forklifts..." />}
         renderItem={({ item }) => (
           <_ForkliftListCard key={item._id} item={item} handleDelete={handleDelete} />

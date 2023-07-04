@@ -10,7 +10,10 @@ import {
   BirdEyeView,
   ForkliftNotification,
   ForkliftNotificationDetails,
+  Fences,
+  Trips,
 } from "@screens";
+import { ReportsStack } from "../reports-stack";
 
 const Stack = createStackNavigator<ForkliftStackParamsList>();
 
@@ -41,8 +44,7 @@ const ForkliftStack: React.FC = () => {
         component={AddForklift}
         options={({ route }) => ({
           headerShown: true,
-          title:
-            route.params.mode === "add" ? "Add Forklift" : "Update Forklift",
+          title: route.params.mode === "add" ? "Add Forklift" : "Update Forklift",
         })}
       />
       <Stack.Screen
@@ -67,6 +69,29 @@ const ForkliftStack: React.FC = () => {
         options={{
           headerShown: true,
           title: "Bird's Eye View",
+        }}
+      />
+      <Stack.Screen
+        name="Fences"
+        component={Fences}
+        options={{
+          headerShown: true,
+          title: "Fences",
+        }}
+      />
+      <Stack.Screen
+        name="Trips"
+        component={Trips}
+        options={{
+          title: "Trips",
+        }}
+      />
+      <Stack.Screen
+        name="ReportsStack"
+        component={ReportsStack}
+        options={{
+          headerShown: false,
+          headerTitle: "Reports",
         }}
       />
       <Stack.Screen
