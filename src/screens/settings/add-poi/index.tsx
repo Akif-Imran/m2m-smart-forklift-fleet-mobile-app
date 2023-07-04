@@ -28,7 +28,6 @@ import ParkingPrimary from "../../../assets/images/markers/parking-primary.png";
 import ParkingError from "../../../assets/images/markers/parking-error.png";
 //@ts-ignore
 import ParkingWarning from "../../../assets/images/markers/parking-warning.png";
-//@ts-ignore
 
 import { styles } from "./styles";
 import { ToastService } from "@utility";
@@ -81,7 +80,7 @@ const AddPoi: React.FC<ProfileSettingsStackScreenProps<"AddPoi">> = ({}) => {
   });
   const mapRef = React.useRef<MapView>(null);
   const [_isMapReady, setIsMapReady] = React.useState<boolean>(false);
-  const [markers, setMarkers] = React.useState<Marker[]>([]);
+  const [poiMarkers, setPoiMarkers] = React.useState<Marker[]>([]);
   const [newMarker, setNewMarker] = React.useState<LatLng | undefined>();
   const [visible, setVisible] = React.useState(false);
 
@@ -115,7 +114,7 @@ const AddPoi: React.FC<ProfileSettingsStackScreenProps<"AddPoi">> = ({}) => {
 
   const addMarker = (values: IForm, helpers: FormikHelpers<IForm>) => {
     if (newMarker !== undefined) {
-      setMarkers((prev) => [
+      setPoiMarkers((prev) => [
         ...prev,
         {
           latitude: newMarker.latitude,
@@ -181,7 +180,7 @@ const AddPoi: React.FC<ProfileSettingsStackScreenProps<"AddPoi">> = ({}) => {
           showDialog();
         }}
       >
-        {markers.map((value, index) => (
+        {poiMarkers.map((value, index) => (
           <Marker
             key={index}
             pinColor={colors.info}
