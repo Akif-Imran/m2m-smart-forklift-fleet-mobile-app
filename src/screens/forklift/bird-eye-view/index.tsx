@@ -98,9 +98,6 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({ route 
   const [isMapReady, setIsMapReady] = React.useState<boolean>(false);
   const [markers, _setMarkers] = React.useState<IMarkerPin[]>([]);
   const [poiMarkers, setPoiMarkers] = React.useState<Marker[]>([]);
-  // const [newMarker, _setNewMarker] = React.useState<LatLng | undefined>();
-  const [addressList, setAddressList] = React.useState<{ label: string; value: string }[]>([]);
-  const [addressDropdownVisible, setAddressDropdownVisible] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
 
   const showDialog = () => setVisible(true);
@@ -199,6 +196,9 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({ route 
   }, [mode, route.params]);
 
   React.useEffect(() => {
+    if (form.values.latitude === 0 && form.values.longitude === 0) {
+      return;
+    }
     reverseGeocode({ lat: form.values.latitude, lng: form.values.longitude })
       .then((res) => {
         console.log("returned response =>", res);
@@ -212,8 +212,6 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({ route 
         ToastService.show("Error fetching Addresses");
       });
   }, [form.values.latitude, form.values.longitude]);
-
-  console.log("addressList", addressList);
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
