@@ -14,6 +14,7 @@ const colors = {
   primaryDark: "#009624",
   iconColor: "#00c853",
   secondary: "#ff6d00",
+  secondaryTransparent60: "rgba(255, 109, 0, 0.6)",
   info: "#448AFF",
   // info: "#00BCD4",
   cyan: "#00BCD4",

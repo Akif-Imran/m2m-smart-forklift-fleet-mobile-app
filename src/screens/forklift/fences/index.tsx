@@ -202,7 +202,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
         {polygons.map((polygon, index) => (
           <Polygon
             coordinates={polygon.points}
-            fillColor={colors.primaryTransparent60}
+            fillColor={colors.secondaryTransparent60}
             strokeWidth={0.01}
             key={index}
           />
@@ -212,7 +212,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
             key={index}
             center={circle.center}
             radius={circle.radius}
-            fillColor={colors.primaryTransparent60}
+            fillColor={colors.secondaryTransparent60}
             strokeWidth={0.01}
           />
         ))}
@@ -221,14 +221,14 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
           <Circle
             center={region}
             radius={radius}
-            fillColor={colors.primaryTransparent60}
+            fillColor={colors.secondaryTransparent60}
             strokeWidth={0.01}
           />
         )}
-        {controlMode === "poly" && (
+        {controlMode === "poly" && polygonPoints.length >= 3 && (
           <Polygon
             coordinates={polygonPoints}
-            fillColor={colors.primaryTransparent60}
+            fillColor={colors.secondaryTransparent60}
             strokeWidth={0.01}
           />
         )}
