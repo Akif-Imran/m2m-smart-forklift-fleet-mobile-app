@@ -52,9 +52,9 @@ export type ForkliftStackParamsList = {
   BirdEyeView:
     | {
         mode: "single";
-        point: IMarkerPin;
+        point: IMapPoint;
       }
-    | { mode: "multiple"; points: IMarkerPin[] };
+    | { mode: "multiple"; points: IMapPoint[] };
   Fences: undefined;
   Trips: undefined;
   ReportsStack: NavigatorScreenParams<ReportsStackParamsList>;

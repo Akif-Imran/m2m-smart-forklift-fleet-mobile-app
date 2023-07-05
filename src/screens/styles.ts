@@ -1,5 +1,7 @@
 import { colors, gStyles, theme } from "@theme";
-import { StyleSheet } from "react-native";
+import { Dimensions, Platform, StyleSheet } from "react-native";
+
+const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export const screenStyles = StyleSheet.create({
   mainContainer: {
@@ -35,7 +37,8 @@ export const screenStyles = StyleSheet.create({
   searchContainer: {
     // flex: 1,
     flexDirection: "row",
-    alignItems: "flex-end",
+    alignItems: "flex-start",
+    justifyContent: "flex-end",
     columnGap: theme.spacing.sm,
     // justifyContent: "center",
     // paddingLeft: 8,
@@ -57,6 +60,19 @@ export const screenStyles = StyleSheet.create({
     borderColor: colors.borderColor,
     backgroundColor: colors.white,
     // borderWidth: 1,
+  },
+  shadow: {
+    ...Platform.select({
+      ios: {
+        shadowColor: colors.black,
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.3,
+        shadowRadius: 1,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
   },
   formSubmitButtonContainer: {
     columnGap: theme.spacing.sm,
@@ -260,4 +276,22 @@ export const listCardStyles = StyleSheet.create({
     // borderWidth: 1,
   },
   bottomButton: { flex: 1 },
+});
+
+export const mapStyles = StyleSheet.create({
+  markerFixed: {
+    left: "50%",
+    marginLeft: -16,
+    marginTop: 8,
+    position: "absolute",
+    top: "50%",
+  },
+  marker: {
+    position: "absolute",
+    left: SCREEN_WIDTH / 2 - 28,
+    height: 56,
+    width: 56,
+    borderWidth: 0,
+    tintColor: colors.secondary,
+  },
 });

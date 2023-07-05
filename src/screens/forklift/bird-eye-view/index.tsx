@@ -96,7 +96,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({ route 
   const [trackViewChanges, _setTrackViewChanges] = React.useState<boolean>(true);
   const [latAdjustment, setLatAdjustment] = React.useState<number>(0);
   const [isMapReady, setIsMapReady] = React.useState<boolean>(false);
-  const [markers, _setMarkers] = React.useState<IMarkerPin[]>([]);
+  const [markers, _setMarkers] = React.useState<IMapPoint[]>([]);
   const [poiMarkers, setPoiMarkers] = React.useState<Marker[]>([]);
   const [visible, setVisible] = React.useState(false);
 

@@ -77,6 +77,10 @@ const ForkliftStack: React.FC = () => {
         options={{
           headerShown: true,
           title: "Fences",
+          headerTitleStyle: {
+            ...gStyles.headerText,
+            zIndex: 10,
+          },
         }}
       />
       <Stack.Screen

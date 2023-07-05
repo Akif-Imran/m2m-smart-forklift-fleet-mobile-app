@@ -75,7 +75,7 @@ interface CoordinatesType {
   longitude: number;
 }
 
-interface IMarkerPin {
+interface IMapPoint {
   latitude: number;
   longitude: number;
   name: string;

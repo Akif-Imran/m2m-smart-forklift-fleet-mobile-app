@@ -11,3 +11,9 @@ export { _BarChart } from "./_BarChart";
 export { _PieChart } from "./_PieChart";
 export { _DefaultCard } from "./_DefaultCard";
 export { _ReportCard } from "./_ReportCard";
+export {
+  RightSheetRefProps,
+  _RightSheet,
+  MAX_TRANSLATE_X as RIGHT_SHEET_MAX_TRANSLATE_X,
+  MIN_TRANSLATE_X as RIGHT_SHEET_MIN_TRANSLATE_X,
+} from "./_RightSheet";

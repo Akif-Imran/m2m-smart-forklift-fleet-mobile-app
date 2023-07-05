@@ -24,6 +24,7 @@
     "baseUrl": "./",
     "paths": {
       "@": ["./src"],
+      "@app-config": ["./app.json"],
       "@api": ["./src/api/index.ts"],
       "@api-types": ["./src/api/types.ts"],
       "@assets": ["./src/assets"],
