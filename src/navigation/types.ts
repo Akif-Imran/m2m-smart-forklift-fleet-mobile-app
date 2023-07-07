@@ -1,5 +1,6 @@
 import type { NavigatorScreenParams } from "@react-navigation/native";
 import type { StackScreenProps } from "@react-navigation/stack";
+import type { LatLng } from "react-native-maps";
 
 type DetailsType<T> = {
   item: T;
@@ -57,6 +58,9 @@ export type ForkliftStackParamsList = {
     | { mode: "multiple"; points: IMapPoint[] };
   Fences: undefined;
   Trips: undefined;
+  Playback: {
+    coords: LatLng[];
+  };
   ReportsStack: NavigatorScreenParams<ReportsStackParamsList>;
   Notification: undefined;
   NotificationDetails: DetailsType<INotification>;

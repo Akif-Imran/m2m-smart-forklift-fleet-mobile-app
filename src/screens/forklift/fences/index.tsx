@@ -49,6 +49,7 @@ interface ICircle {
 }
 
 const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
+  //TODO - convert this into custome hook and return the values.
   const { top: TOP_INSET } = useSafeAreaInsets();
   const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = useWindowDimensions();
   const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
@@ -234,7 +235,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
         )}
       </MapView>
       {controlMode === "default" && (
-        <View style={styles.defaultControls} pointerEvents="box-none">
+        <View style={mapStyles.defaultControls} pointerEvents="box-none">
           <View style={{ gap: theme.spacing.sm }}>
             <TouchableOpacity
               style={[screenStyles.filterButtonStyle, screenStyles.shadow]}

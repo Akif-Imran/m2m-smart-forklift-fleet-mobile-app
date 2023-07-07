@@ -5,5 +5,6 @@ export * from "./req-service";
 export * from "./bird-eye-view";
 export * from "./notification";
 export * from "./notification-details";
-export * from './fences';
-export * from './trips';
+export * from "./fences";
+export * from "./trips";
+export * from "./playback";

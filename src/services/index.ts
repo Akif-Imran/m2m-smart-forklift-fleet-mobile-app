@@ -1,1 +1,1 @@
-export { reverseGeocode } from "./google-services";
+export { reverseGeocode,getDirections } from "./google-services";

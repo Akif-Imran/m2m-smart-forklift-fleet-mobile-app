@@ -5,13 +5,13 @@ export const styles = StyleSheet.create({
   placeholder: {
     ...gStyles.tblDescText,
   },
-  defaultControls: {
-    position: "relative",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    gap: theme.spacing.sm,
-    borderRadius: theme.radius.md,
-  },
+  // defaultControls: {
+  //   position: "relative",
+  //   flexDirection: "row",
+  //   justifyContent: "space-between",
+  //   gap: theme.spacing.sm,
+  //   borderRadius: theme.radius.md,
+  // },
   circleControls: {
     flex: 1,
     flexDirection: "column",

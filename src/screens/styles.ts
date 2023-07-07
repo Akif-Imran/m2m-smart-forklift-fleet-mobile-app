@@ -294,4 +294,11 @@ export const mapStyles = StyleSheet.create({
     borderWidth: 0,
     tintColor: colors.secondary,
   },
+  defaultControls: {
+    position: "relative",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: theme.spacing.sm,
+    borderRadius: theme.radius.md,
+  },
 });

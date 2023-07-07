@@ -42,3 +42,11 @@ interface GeocodingResponse {
   results: Result[];
   status: string;
 }
+
+interface GetDirectionsResponseType {
+  coords: {
+    latitude: number;
+    longitude: number;
+  }[];
+  distance: number; //distance in meters.
+}

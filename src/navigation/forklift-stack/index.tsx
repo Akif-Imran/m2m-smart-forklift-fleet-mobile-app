@@ -12,6 +12,7 @@ import {
   ForkliftNotificationDetails,
   Fences,
   Trips,
+  Playback,
 } from "@screens";
 import { ReportsStack } from "../reports-stack";
 
@@ -88,6 +89,13 @@ const ForkliftStack: React.FC = () => {
         component={Trips}
         options={{
           title: "Trips",
+        }}
+      />
+      <Stack.Screen
+        name="Playback"
+        component={Playback}
+        options={{
+          title: "Playback",
         }}
       />
       <Stack.Screen

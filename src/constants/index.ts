@@ -1,4 +1,5 @@
 import { colors } from "@theme";
+import { Dimensions } from "react-native";
 
 export const ForkliftStatusColor: Record<string, string> = {
   faulty: colors.error,
@@ -34,3 +35,9 @@ export enum AssignForkliftFilters {
 export enum ActivityFilters {
   "ALL" = 1,
 }
+
+export const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } =
+  Dimensions.get("window");
+export const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
+export const LATITUDE_DELTA = 0.0922;
+export const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
