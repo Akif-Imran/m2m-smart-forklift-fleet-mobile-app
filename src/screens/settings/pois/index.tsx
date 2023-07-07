@@ -34,8 +34,8 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
       address: faker.location.streetAddress(),
       color: faker.helpers.arrayElement(Object.keys(iconColors)),
       iconName: faker.helpers.arrayElement(Object.keys(iconNames)),
-      latitude: 4.2105,
-      longitude:  101.9758,
+      latitude: 37.78825,
+      longitude: -122.4324,
       name: faker.company.name(),
       type: faker.helpers.arrayElement(["private", "business"]),
     };

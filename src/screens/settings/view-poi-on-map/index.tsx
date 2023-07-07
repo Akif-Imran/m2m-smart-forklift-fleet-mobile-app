@@ -1,4 +1,4 @@
-import { Image, Platform, StyleSheet, Text, View } from "react-native";
+import { Image, Platform, StyleSheet, Text, View, useWindowDimensions } from "react-native";
 import React from "react";
 
 import { styles } from "./styles";
@@ -8,9 +8,15 @@ import { screenStyles } from "@screen-styles";
 import { colors, theme } from "@theme";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import { images } from "@markers";
+import { LATITUDE_DELTA } from "@constants";
 
 const ViewPoiOnMap: React.FC<ProfileSettingsStackScreenProps<"ViewPoiOnMap">> = ({ route }) => {
   const { _id, item } = route.params;
+  const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = useWindowDimensions();
+  const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
+  const LATITUDE_DELTA = 0.0922;
+  const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
   const mapRef = React.useRef<MapView>(null);
   const [_isMapReady, setIsMapReady] = React.useState<boolean>(false);
 
@@ -18,14 +24,13 @@ const ViewPoiOnMap: React.FC<ProfileSettingsStackScreenProps<"ViewPoiOnMap">> = 
     if (!mapRef.current || !item) {
       return;
     }
-    mapRef.current?.fitToCoordinates([item], {
-      animated: true,
-      edgePadding: {
-        top: 50,
-        right: 50,
-        bottom: 50,
-        left: 50,
+    mapRef.current?.animateCamera({
+      center: {
+        latitude: item.latitude,
+        longitude: item.longitude,
       },
+      zoom: 14,
+      altitude: 2500, //altitude in meters.
     });
   }, [mapRef, item]);
 
@@ -35,7 +40,6 @@ const ViewPoiOnMap: React.FC<ProfileSettingsStackScreenProps<"ViewPoiOnMap">> = 
         latitude: coords.latitude,
         longitude: coords.longitude,
       },
-      zoom: 12,
     });
   }, []);
 
@@ -50,8 +54,8 @@ const ViewPoiOnMap: React.FC<ProfileSettingsStackScreenProps<"ViewPoiOnMap">> = 
         initialRegion={{
           latitude: item.latitude,
           longitude: item.longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
         }}
         loadingEnabled={true}
         loadingIndicatorColor={colors.primary}
