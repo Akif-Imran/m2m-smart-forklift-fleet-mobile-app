@@ -24,7 +24,7 @@ import MapView, {
   Region,
 } from "react-native-maps";
 import Slider from "@react-native-community/slider";
-import { Entypo, Ionicons, MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
+import { Entypo, Feather, Ionicons, MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
 import { Searchbar } from "react-native-paper";
 import Spinner from "react-native-loading-spinner-overlay";
 import { ToastService } from "@utility";
@@ -33,6 +33,7 @@ import {
   RIGHT_SHEET_MAX_TRANSLATE_X,
   RIGHT_SHEET_MIN_TRANSLATE_X,
   RightSheetRefProps,
+  _ConfirmModal,
   _DefaultCard,
   _Divider,
   _RightSheet,
@@ -41,10 +42,17 @@ import {
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_API_KEY, GOOGLE_PLACES_API } from "@api";
 import axios from "axios";
+import { faker } from "@faker-js/faker";
 
 interface ICircle {
+  _id: string;
   center: LatLng;
   radius: number;
+  name: string;
+}
+interface IPolygon {
+  _id: string;
+  points: LatLng[];
   name: string;
 }
 
@@ -62,6 +70,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
 
   const mapRef = React.useRef<MapView>(null);
   const rightSheetRef = React.useRef<RightSheetRefProps>(null);
+  const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [placeId, setPlaceId] = React.useState("");
   const [region, setRegion] = React.useState({
@@ -75,40 +84,91 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
   );
   const [radius, setRadius] = React.useState(1);
   const [polygonPoints, setPolygonPoints] = React.useState<LatLng[]>([]);
-  const [polygons, setPolygons] = React.useState<{ points: LatLng[]; name: string }[]>([]);
+  const [polygons, setPolygons] = React.useState<IPolygon[]>([]);
   const [circles, setCircles] = React.useState<ICircle[]>([]);
   const [_searchedLocation, setSearchedLocation] = React.useState<LatLng>(region);
+  const [fenceMode, setFenceMode] = React.useState<"add" | "edit">("add");
+  const [selectedFenceId, setSelectedFenceId] = React.useState("");
   const [name, setName] = React.useState("");
 
   const openMenu = () => rightSheetRef?.current?.scrollTo(RIGHT_SHEET_MAX_TRANSLATE_X);
   const closeMenu = () => rightSheetRef?.current?.scrollTo(RIGHT_SHEET_MIN_TRANSLATE_X);
 
-  const addFence = (type: "poly" | "circle") => {
+  const addFence = (type: "poly" | "circle", fenceMode: "add" | "edit") => {
+    if (name === "") {
+      ToastService.show("Please enter fence name");
+      return;
+    }
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
       ToastService.show("Fence added successfully");
       setControlMode("default");
       if (type === "poly") {
-        setPolygons((prev) => {
-          const newArray = [...prev, { points: polygonPoints, name: name }];
-          return newArray;
-        });
-        setPolygonPoints([]);
+        if (fenceMode === "add") {
+          setPolygons((prev) => {
+            const newArray = [
+              ...prev,
+              {
+                points: polygonPoints,
+                name: name,
+                _id: faker.database.mongodbObjectId(),
+              },
+            ];
+            return newArray;
+          });
+          setPolygonPoints([]);
+        } else {
+          setPolygons((prev) => {
+            const newArray = [...prev];
+            const index = newArray.findIndex((item) => item._id === selectedFenceId);
+            newArray[index].points = polygonPoints;
+            newArray[index].name = name;
+            return newArray;
+          });
+          setPolygonPoints([]);
+          setFenceMode("add");
+        }
       }
       if (type === "circle") {
-        setCircles((prev) => {
-          const newArray = [...prev, { center: region, radius: radius, name: name }];
-          return newArray;
-        });
-        setRadius(1);
+        if (fenceMode === "add") {
+          setCircles((prev) => {
+            const newArray = [
+              ...prev,
+              {
+                center: region,
+                radius: radius,
+                name: name,
+                _id: faker.database.mongodbObjectId(),
+              },
+            ];
+            return newArray;
+          });
+          setRadius(1);
+        } else {
+          setCircles((prev) => {
+            const newArray = [...prev];
+            const index = newArray.findIndex((item) => item._id === selectedFenceId);
+            newArray[index].center = region;
+            newArray[index].radius = radius;
+            newArray[index].name = name;
+            return newArray;
+          });
+          setRadius(1);
+          setFenceMode('add');
+        }
       }
       setName("");
     }, 2000);
   };
 
   const editCircle = (circle: ICircle) => {
+    setFenceMode("edit");
+    setSelectedFenceId(circle._id);
     closeMenu();
+    setRadius(circle.radius);
+    setName(circle.name);
+    setControlMode("circle");
     //TODO - extract method just so i have to pass lat lng only
     mapRef.current?.animateToRegion({
       latitude: circle.center.latitude,
@@ -116,12 +176,39 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
       latitudeDelta: LATITUDE_DELTA,
       longitudeDelta: LONGITUDE_DELTA,
     });
-    setRadius(circle.radius);
-    setName(circle.name);
-    setControlMode("circle");
   };
 
-  const removeCircle = (circle: ICircle) => {};
+  const editPoly = (poly: IPolygon) => {
+    setFenceMode("edit");
+    setSelectedFenceId(poly._id);
+    closeMenu();
+    mapRef.current?.fitToCoordinates(poly.points, {
+      animated: true,
+      edgePadding: {
+        top: 80,
+        right: 80,
+        bottom: 80,
+        left: 80,
+      },
+    });
+    setPolygonPoints(poly.points);
+    setName(poly.name);
+    setControlMode("poly");
+  };
+
+  const handleDelete = React.useCallback((fenceId: string) => {
+    setConfirmDeleteVisible(true);
+    console.log("handle delete", fenceId);
+  }, []);
+
+  const handleDeleteConfirm = () => {
+    ToastService.show("Demo delete");
+    setConfirmDeleteVisible(false);
+  };
+
+  const handleDeleteCancel = () => {
+    setConfirmDeleteVisible(false);
+  };
 
   const removePolyPoint = () => {
     setPolygonPoints((prevArray) => {
@@ -144,6 +231,12 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
   const handleOnRegionChangeComplete = (region: Region, details: Details) => {
     setRegion(region);
     console.log(region, details);
+  };
+
+  const reset = () => {
+    setControlMode("default");
+    setFenceMode("add");
+    setSelectedFenceId("");
   };
 
   React.useEffect(() => {
@@ -200,23 +293,54 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
         onRegionChangeComplete={handleOnRegionChangeComplete}
         onPress={controlMode === "poly" ? handleOnPressMap : undefined}
       >
-        {polygons.map((polygon, index) => (
-          <Polygon
-            coordinates={polygon.points}
-            fillColor={colors.secondaryTransparent60}
-            strokeWidth={0.01}
-            key={index}
-          />
-        ))}
-        {circles.map((circle, index) => (
-          <Circle
-            key={index}
-            center={circle.center}
-            radius={circle.radius}
-            fillColor={colors.secondaryTransparent60}
-            strokeWidth={0.01}
-          />
-        ))}
+        {polygons.map((polygon, index) => {
+          if (fenceMode === "edit") {
+            if (polygon._id !== selectedFenceId) {
+              return (
+                <Polygon
+                  coordinates={polygon.points}
+                  fillColor={colors.titleTextTransparent60}
+                  strokeWidth={0.01}
+                  key={polygon._id}
+                />
+              );
+            }
+          } else {
+            return (
+              <Polygon
+                coordinates={polygon.points}
+                fillColor={colors.secondaryTransparent60}
+                strokeWidth={0.01}
+                key={polygon._id}
+              />
+            );
+          }
+        })}
+        {circles.map((circle) => {
+          if (fenceMode === "edit") {
+            if (circle._id !== selectedFenceId) {
+              return (
+                <Circle
+                  key={circle._id}
+                  center={circle.center}
+                  radius={circle.radius}
+                  fillColor={colors.secondaryTransparent60}
+                  strokeWidth={0.01}
+                />
+              );
+            }
+          } else {
+            return (
+              <Circle
+                key={circle._id}
+                center={circle.center}
+                radius={circle.radius}
+                fillColor={colors.secondaryTransparent60}
+                strokeWidth={0.01}
+              />
+            );
+          }
+        })}
 
         {controlMode === "circle" && (
           <Circle
@@ -289,7 +413,6 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                   },
                   description: gStyles.descText,
                   listView: {
-                    // borderWidth: 1,
                     borderRadius: theme.radius.md,
                   },
                   separator: {
@@ -335,14 +458,14 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
               />
               <TouchableOpacity
                 style={[screenStyles.filterButtonStyle, screenStyles.shadow]}
-                onPress={() => addFence("circle")}
+                onPress={() => addFence("circle", fenceMode)}
                 activeOpacity={0.7}
               >
                 <Ionicons name="ios-checkmark" size={24} color={colors.iconGray} />
               </TouchableOpacity>
               <TouchableOpacity
                 style={[screenStyles.filterButtonStyle, screenStyles.shadow]}
-                onPress={() => setControlMode("default")}
+                onPress={() => reset()}
                 activeOpacity={0.7}
               >
                 <Ionicons name="ios-close-outline" size={24} color={colors.iconGray} />
@@ -392,7 +515,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
               />
               <TouchableOpacity
                 style={[screenStyles.filterButtonStyle, screenStyles.shadow]}
-                onPress={() => addFence("poly")}
+                onPress={() => addFence("poly", fenceMode)}
                 activeOpacity={0.7}
               >
                 <Ionicons name="ios-checkmark" size={24} color={colors.iconGray} />
@@ -400,7 +523,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
               <View style={{ rowGap: theme.spacing.sm }}>
                 <TouchableOpacity
                   style={[screenStyles.filterButtonStyle, screenStyles.shadow]}
-                  onPress={() => setControlMode("default")}
+                  onPress={() => reset()}
                   activeOpacity={0.7}
                 >
                   <Ionicons name="ios-close-outline" size={24} color={colors.iconGray} />
@@ -438,7 +561,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                 <_DefaultCard
                   key={index}
                   onPress={() => {}}
-                  onLongPress={() => removeCircle(circle)}
+                  onLongPress={() => handleDelete(circle.name)}
                 >
                   <View
                     style={StyleSheet.compose(listCardStyles.contentContainer, {
@@ -464,10 +587,48 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                   </View>
                 </_DefaultCard>
               ))}
+              {polygons.map((poly, index) => (
+                <_DefaultCard
+                  key={index}
+                  onPress={() => {}}
+                  onLongPress={() => handleDelete(poly.name)}
+                >
+                  <View
+                    style={StyleSheet.compose(listCardStyles.contentContainer, {
+                      backgroundColor: colors.white,
+                    })}
+                  >
+                    <View>
+                      <Feather name="octagon" size={32} color={colors.titleText} />
+                    </View>
+                    <View style={listCardStyles.infoWithForward}>
+                      <View style={listCardStyles.infoContainer}>
+                        <Text style={gStyles.cardInfoTitleText}>{poly.name}</Text>
+                        <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={1}>
+                          {poly.points.length} points
+                        </Text>
+                      </View>
+                      <View style={listCardStyles.forwardContainer}>
+                        <TouchableOpacity onPress={() => editPoly(poly)} activeOpacity={0.7}>
+                          <MaterialCommunityIcons name="pencil" size={20} color={colors.iconGray} />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                </_DefaultCard>
+              ))}
             </View>
           </_ScrollFormLayout>
         </SafeAreaView>
       </_RightSheet>
+      <_ConfirmModal
+        visible={confirmDeleteVisible}
+        question="Are you sure you want to delete this fence ?"
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+      />
     </SafeAreaView>
   );
 };

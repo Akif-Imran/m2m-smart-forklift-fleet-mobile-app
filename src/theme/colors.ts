@@ -45,6 +45,7 @@ const colors = {
   textOnPrimary: "#FFFFFF",
   textOnSecondary: "#FFFFFF",
   titleText: "#616161",
+  titleTextTransparent60: "rgba(97, 97, 97, 0.6)",
   purple: "#aa00ff",
   materialPurple: "#6200ea",
   qtyTextGray: "#9b9b9d",
