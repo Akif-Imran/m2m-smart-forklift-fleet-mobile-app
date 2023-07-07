@@ -155,7 +155,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
             return newArray;
           });
           setRadius(1);
-          setFenceMode('add');
+          setFenceMode("add");
         }
       }
       setName("");
@@ -237,6 +237,17 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
     setControlMode("default");
     setFenceMode("add");
     setSelectedFenceId("");
+  };
+  const fitToCoordinates = (points: LatLng[], padding = 80) => {
+    mapRef?.current?.fitToCoordinates(points, {
+      animated: true,
+      edgePadding: {
+        top: padding,
+        right: padding,
+        bottom: padding,
+        left: padding,
+      },
+    });
   };
 
   React.useEffect(() => {
@@ -560,7 +571,12 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
               {circles.map((circle, index) => (
                 <_DefaultCard
                   key={index}
-                  onPress={() => {}}
+                  onPress={() => {
+                    closeMenu();
+                    mapRef?.current?.animateCamera({
+                      center: circle.center,
+                    });
+                  }}
                   onLongPress={() => handleDelete(circle.name)}
                 >
                   <View
@@ -590,7 +606,10 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
               {polygons.map((poly, index) => (
                 <_DefaultCard
                   key={index}
-                  onPress={() => {}}
+                  onPress={() => {
+                    closeMenu();
+                    fitToCoordinates(poly.points,125)
+                  }}
                   onLongPress={() => handleDelete(poly.name)}
                 >
                   <View
