@@ -81,16 +81,16 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
   ];
 
   const multiData4: Array<MultiCardItem> = [
-    // {
-    //   id: 6,
-    //   icon: <MaterialIcons name="add-location-alt" color={colors.heavyGray} size={20} />,
-    //   bgColor: colors.mediumGray,
-    //   title: "Add POI's",
-    //   color: colors.titleText,
-    //   onPress: () => {
-    //     navigation.navigate("AddPoi");
-    //   },
-    // },
+    {
+      id: 6,
+      icon: <MaterialIcons name="add-location-alt" color={colors.heavyGray} size={20} />,
+      bgColor: colors.mediumGray,
+      title: "POI List",
+      color: colors.titleText,
+      onPress: () => {
+        navigation.navigate("Pois");
+      },
+    },
     {
       id: 7,
       icon: <MaterialIcons name="home-repair-service" color={colors.heavyGray} size={20} />,

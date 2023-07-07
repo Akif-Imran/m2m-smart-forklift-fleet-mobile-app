@@ -125,7 +125,8 @@ export type ProfileSettingsStackParamsList = {
   ChangePassword: undefined;
   VehicleIcons: undefined;
   SelectIcon: DetailsType<IForklift>;
-  AddPoi: undefined;
+  Pois: undefined;
+  ViewPoiOnMap: DetailsType<IPoi>;
   About: undefined;
   Help: undefined;
   ServicesStack: NavigatorScreenParams<ServiceStackParamsList>;

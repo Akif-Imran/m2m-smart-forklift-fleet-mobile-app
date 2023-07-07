@@ -69,6 +69,16 @@ interface IDriverActivity {
   description: string;
   date: string;
 }
+interface IPoi {
+  _id: string;
+  name: string;
+  type: "private" | "business";
+  latitude: number;
+  longitude: number;
+  address: string;
+  iconName: string;
+  color: string;
+}
 
 interface CoordinatesType {
   latitude: number;

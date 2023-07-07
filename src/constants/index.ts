@@ -15,6 +15,12 @@ export const ServiceStatusColor: Record<string, string> = {
   inprocess: colors.titleText,
 };
 
+export const PoiTypesColor: Record<string, string> = {
+  private: colors.error,
+  business: colors.primary,
+  total: colors.titleText,
+};
+
 export const ForkliftNotificationStatusColor: Record<string, string> = {};
 
 export enum ForkliftNotificationsFilters {

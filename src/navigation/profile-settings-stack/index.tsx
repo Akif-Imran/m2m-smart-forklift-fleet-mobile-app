@@ -2,7 +2,16 @@ import React, { FC } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { colors, gStyles } from "../../theme";
 import { ProfileSettingsStackParamsList } from "@navigation-types";
-import { About, AddPoi, ChangePassword, Help, SelectIcons, Settings, VehicleIcons } from "@screens";
+import {
+  About,
+  ChangePassword,
+  Help,
+  Pois,
+  SelectIcons,
+  Settings,
+  VehicleIcons,
+  ViewPoiOnMap,
+} from "@screens";
 import { ServicesStack } from "../services-stack";
 import { ReportsStack } from "../reports-stack";
 
@@ -45,10 +54,18 @@ const ProfileSettingsStack: FC = () => {
       />
 
       <Stack.Screen
-        name="AddPoi"
-        component={AddPoi}
+        name="Pois"
+        component={Pois}
         options={{
-          headerTitle: "Add POI's",
+          headerTitle: "",
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="ViewPoiOnMap"
+        component={ViewPoiOnMap}
+        options={{
+          headerTitle: "Map View",
           headerShown: true,
         }}
       />
