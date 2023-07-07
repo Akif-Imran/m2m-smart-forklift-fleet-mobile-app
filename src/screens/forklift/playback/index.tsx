@@ -343,7 +343,7 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
               2023-01-31 00:00 - 2023-01-31 22:53
             </Text>
             <TouchableOpacity style={{ borderWidth: 0, paddingHorizontal: 8 }}>
-              <MaterialIcons name="loop" size={20} color={colors.secondary} />
+              <MaterialIcons name="loop" size={20} color={colors.titleText} />
             </TouchableOpacity>
           </View>
         </View>
@@ -481,13 +481,13 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
                 alignItems: "center",
               }}
             >
-              <Text style={[styles.descTextBlack, { color: colors.secondary }]}>
+              <Text style={[styles.descTextBlack, { color: colors.primary }]}>
                 GPS
               </Text>
               <MaterialIcons
                 name="keyboard-arrow-right"
                 size={20}
-                color={colors.secondary}
+                color={colors.primary}
               />
             </TouchableOpacity>
           </View>
