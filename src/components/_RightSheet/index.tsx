@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import React, {
   useCallback,
   useEffect,
@@ -13,7 +13,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 export const MAX_TRANSLATE_X = SCREEN_WIDTH / 6;
 export const MIN_TRANSLATE_X = SCREEN_WIDTH / 1;
 

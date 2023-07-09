@@ -1,16 +1,14 @@
-import { Modal, Text, TouchableOpacity, View } from "react-native";
+import { Modal, TouchableOpacity, View } from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
+import axios from "axios";
+import type { LatLng } from "react-native-maps";
 import { Portal, Searchbar } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { screenStyles } from "@screen-styles";
 import { Ionicons } from "@expo/vector-icons";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { LatLng } from "react-native-maps";
 import { GOOGLE_API_KEY, GOOGLE_PLACES_API } from "@api";
-import axios from "axios";
 import { ToastService } from "@utility";
 
 interface OwnProps {
@@ -23,16 +21,19 @@ interface OwnProps {
 const _SearchLocationModal: React.FC<OwnProps> = ({
   hideModal,
   visible,
-  TOP_INSET,
   setSearchedLocation,
 }) => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [placeId, setPlaceId] = React.useState("");
 
   React.useEffect(() => {
-    if (!placeId) return;
+    if (!placeId) {
+      return;
+    }
     axios
-      .get(`${GOOGLE_PLACES_API}/details/json?place_id=${placeId}&key=${GOOGLE_API_KEY}`)
+      .get(
+        `${GOOGLE_PLACES_API}/details/json?place_id=${placeId}&key=${GOOGLE_API_KEY}`
+      )
       .then((res) => {
         console.log("place details", res.data.result.geometry.location);
         setSearchedLocation({
@@ -68,14 +69,22 @@ const _SearchLocationModal: React.FC<OwnProps> = ({
               onPress={() => {}}
               activeOpacity={0.7}
             >
-              <Ionicons name="ios-checkmark" size={24} color={colors.iconGray} />
+              <Ionicons
+                name="ios-checkmark"
+                size={24}
+                color={colors.iconGray}
+              />
             </TouchableOpacity>
             <TouchableOpacity
               style={[screenStyles.filterButtonStyle, screenStyles.shadow]}
               onPress={() => hideModal()}
               activeOpacity={0.7}
             >
-              <Ionicons name="ios-close-outline" size={24} color={colors.iconGray} />
+              <Ionicons
+                name="ios-close-outline"
+                size={24}
+                color={colors.iconGray}
+              />
             </TouchableOpacity>
           </View>
           <GooglePlacesAutocomplete
@@ -101,7 +110,7 @@ const _SearchLocationModal: React.FC<OwnProps> = ({
               },
             }}
             placeholder="Enter Location"
-            onPress={(data, details) => {
+            onPress={(_data, details) => {
               if (details?.place_id) {
                 setPlaceId(details?.place_id);
               } else {

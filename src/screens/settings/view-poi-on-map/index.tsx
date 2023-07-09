@@ -1,16 +1,21 @@
-import { Image, Platform, StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
-import { ProfileSettingsStackScreenProps } from "@navigation-types";
+import type { ProfileSettingsStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "@screen-styles";
 import { colors, theme } from "@theme";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import { images } from "@markers";
-import { LATITUDE_DELTA } from "@constants";
 
-const ViewPoiOnMap: React.FC<ProfileSettingsStackScreenProps<"ViewPoiOnMap">> = ({ route }) => {
+const ViewPoiOnMap: React.FC<
+  ProfileSettingsStackScreenProps<"ViewPoiOnMap">
+> = ({ route }) => {
   const { _id, item } = route.params;
   const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = useWindowDimensions();
   const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;

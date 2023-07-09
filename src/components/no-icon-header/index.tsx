@@ -12,6 +12,7 @@ interface OwnProps {
 }
 const NoIconHeader: React.FC<OwnProps> = ({ title, right, left }) => {
   const { logout } = useAuthContext();
+
   return (
     <View style={styles.mainContainer}>
       <View
@@ -28,7 +29,6 @@ const NoIconHeader: React.FC<OwnProps> = ({ title, right, left }) => {
                 style={styles.button}
                 key={index}
               >
-                {/* <Ionicons name="exit" size={25} color={colors.primary} /> */}
                 {item.icon}
               </TouchableOpacity>
             ))}
@@ -48,7 +48,6 @@ const NoIconHeader: React.FC<OwnProps> = ({ title, right, left }) => {
                 style={styles.button}
                 key={index}
               >
-                {/* <Ionicons name="exit" size={25} color={colors.primary} /> */}
                 {item.icon}
               </TouchableOpacity>
             ))}
@@ -71,13 +70,10 @@ export { NoIconHeader };
 
 const styles = StyleSheet.create({
   mainContainer: {
-    // flex: 1,
-    // width: "100%",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     height: theme.header.height,
-    // paddingTop: 15,
     borderWidth: 0,
   },
   multiButtonContainer: {

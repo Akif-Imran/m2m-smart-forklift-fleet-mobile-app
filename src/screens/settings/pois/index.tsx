@@ -15,7 +15,7 @@ import type { ProfileSettingsStackScreenProps } from "@navigation-types";
 import { PaperTheme, colors, gStyles } from "@theme";
 import { Searchbar } from "react-native-paper";
 import { ToastService } from "@utility";
-import { ForkliftStatusColor, PoiTypesColor } from "@constants";
+import { PoiTypesColor } from "@constants";
 import { faker } from "@faker-js/faker";
 import { iconColors, iconNames } from "@markers";
 import { _PoiListCard } from "../components/_PoiListCard";

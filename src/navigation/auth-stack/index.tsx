@@ -1,10 +1,12 @@
 import React from "react";
-import { createStackNavigator, StackNavigationOptions } from "@react-navigation/stack";
+import type { StackNavigationOptions } from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import { Login, ForgetPassword, Register } from "@screens";
-import { RootTabs } from "../bottom-tabs";
-import { AuthStackParamsList } from "@navigation-types";
+import type { AuthStackParamsList } from "@navigation-types";
 import { colors } from "@theme";
 import { useAuthContext } from "@context";
+
+import { RootTabs } from "../bottom-tabs";
 
 const Stack = createStackNavigator<AuthStackParamsList>();
 const AuthStack = () => {

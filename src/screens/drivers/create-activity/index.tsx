@@ -1,20 +1,25 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "src/screens/styles";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
 import Spinner from "react-native-loading-spinner-overlay";
-import { _DatePicker, _Divider, _DropDown, _ScrollFormLayout, _TextInput } from "@components";
-import { DriverStackScreenProps } from "@navigation-types";
+import {
+  _DatePicker,
+  _Divider,
+  _DropDown,
+  _ScrollFormLayout,
+  _TextInput,
+} from "@components";
+import type { DriverStackScreenProps } from "@navigation-types";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { ToastService } from "@utility";
 import { Button, TextInput } from "react-native-paper";
 import moment from "moment";
 
-interface IForm extends Omit<IDriverActivity, "_id" | "image" | "name" | "email"> {
+interface IForm
+  extends Omit<IDriverActivity, "_id" | "image" | "name" | "email"> {
   driver: string;
 }
 
@@ -25,13 +30,18 @@ const scheme: yup.ObjectSchema<IForm> = yup.object().shape({
   eventType: yup.string().required("Event Type is required"),
 });
 
-const AddActivity: React.FC<DriverStackScreenProps<"AddActivity">> = ({ navigation, route }) => {
+const AddActivity: React.FC<DriverStackScreenProps<"AddActivity">> = ({
+  navigation,
+  route,
+}) => {
   const { mode } = route.params;
   const [isLoading, setIsLoading] = React.useState(false);
   const [behaviorDate, setBehaviorDate] = React.useState<Date>(new Date());
-  const [showBehaviorDatePicker, setShowBehaviorDatePicker] = React.useState(false);
+  const [showBehaviorDatePicker, setShowBehaviorDatePicker] =
+    React.useState(false);
 
-  const [driverDropdownVisible, setDriverDropdownVisible] = React.useState(false);
+  const [driverDropdownVisible, setDriverDropdownVisible] =
+    React.useState(false);
   const [eventDropdownVisible, setEventDropdownVisible] = React.useState(false);
 
   const driverDropDownList = [
@@ -140,7 +150,11 @@ const AddActivity: React.FC<DriverStackScreenProps<"AddActivity">> = ({ navigati
             label={"Description"}
             onBlur={form.handleBlur("description")}
             onChangeText={form.handleChange("description")}
-            error={form.errors?.description && form.touched?.description ? true : false}
+            error={
+              form.errors?.description && form.touched?.description
+                ? true
+                : false
+            }
             errorText={form.errors?.description}
           />
           <View style={screenStyles.formSubmitButtonContainer}>
@@ -157,7 +171,12 @@ const AddActivity: React.FC<DriverStackScreenProps<"AddActivity">> = ({ navigati
           </View>
         </View>
       </_ScrollFormLayout>
-      <Spinner visible={isLoading} cancelable={false} animation="fade" size="large" />
+      <Spinner
+        visible={isLoading}
+        cancelable={false}
+        animation="fade"
+        size="large"
+      />
       <_DatePicker
         show={showBehaviorDatePicker}
         setShow={setShowBehaviorDatePicker}

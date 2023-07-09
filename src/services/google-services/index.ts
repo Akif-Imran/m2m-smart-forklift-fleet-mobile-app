@@ -35,7 +35,7 @@ export const getDirections = async (
   const data = await res.data;
   console.log("response", data);
   const points = poly.decode(data.routes[0].overview_polyline.points);
-  const coords = points.map((point, index) => {
+  const coords = points.map((point, _index) => {
     return {
       latitude: point[0],
       longitude: point[1],

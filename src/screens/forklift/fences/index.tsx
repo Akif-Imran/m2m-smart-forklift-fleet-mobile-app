@@ -29,7 +29,6 @@ import { Searchbar } from "react-native-paper";
 import Spinner from "react-native-loading-spinner-overlay";
 import { ToastService } from "@utility";
 import {
-  NoIconHeader,
   RIGHT_SHEET_MAX_TRANSLATE_X,
   RIGHT_SHEET_MIN_TRANSLATE_X,
   RightSheetRefProps,
@@ -304,7 +303,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
         onRegionChangeComplete={handleOnRegionChangeComplete}
         onPress={controlMode === "poly" ? handleOnPressMap : undefined}
       >
-        {polygons.map((polygon, index) => {
+        {polygons.map((polygon, _index) => {
           if (fenceMode === "edit") {
             if (polygon._id !== selectedFenceId) {
               return (
@@ -315,7 +314,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                   key={polygon._id}
                 />
               );
-            }
+            } else return null;
           } else {
             return (
               <Polygon
@@ -339,7 +338,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                   strokeWidth={0.01}
                 />
               );
-            }
+            } else return null;
           } else {
             return (
               <Circle
@@ -431,7 +430,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                   },
                 }}
                 placeholder="Enter Location"
-                onPress={(data, details) => {
+                onPress={(_data, details) => {
                   if (details?.place_id) {
                     setPlaceId(details?.place_id);
                   } else {
@@ -608,7 +607,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                   key={index}
                   onPress={() => {
                     closeMenu();
-                    fitToCoordinates(poly.points,125)
+                    fitToCoordinates(poly.points, 125);
                   }}
                   onLongPress={() => handleDelete(poly.name)}
                 >

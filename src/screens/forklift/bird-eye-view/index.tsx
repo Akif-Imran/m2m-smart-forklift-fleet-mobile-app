@@ -3,7 +3,14 @@ import type { ForkliftStackScreenProps } from "@navigation-types";
 import type { LatLng } from "react-native-maps";
 import type { FormikHelpers } from "formik";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View, Modal } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Modal,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "@screen-styles";
 import { Button, Portal, RadioButton } from "react-native-paper";
@@ -11,11 +18,18 @@ import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { ToastService } from "@utility";
-import { _Divider, _DropDown, _ScrollFormLayout, _TextInput } from "@components";
+import {
+  _Divider,
+  _DropDown,
+  _ScrollFormLayout,
+  _TextInput,
+} from "@components";
 import { MaterialIcons } from "@expo/vector-icons";
 import { images, iconNames, iconColors } from "@markers";
-import { styles } from "./styles";
 import { reverseGeocode } from "@services";
+import { useSafeAreaDimensions } from "@hooks";
+
+import { styles } from "./styles";
 interface Marker extends LatLng {
   name: string;
   iconName: string;
@@ -43,15 +57,15 @@ const schema: yup.ObjectSchema<IForm> = yup.object().shape({
   poiType: yup.string().required("POI Type is required"),
   address: yup.string().required("Address is required"),
 });
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
-const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
-
 //------------------Component------------------------------------------------
-const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({ route }) => {
+const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
+  route,
+}) => {
+  const { SCREEN_HEIGHT } = useSafeAreaDimensions();
   const { mode } = route.params;
   const mapRef = React.useRef<MapView>(null);
-  const [trackViewChanges, _setTrackViewChanges] = React.useState<boolean>(true);
+  const [trackViewChanges, _setTrackViewChanges] =
+    React.useState<boolean>(true);
   const [latAdjustment, setLatAdjustment] = React.useState<number>(0);
   const [isMapReady, setIsMapReady] = React.useState<boolean>(false);
   const [markers, _setMarkers] = React.useState<IMapPoint[]>([]);
@@ -141,7 +155,9 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({ route 
     if (!isMapReady) {
       return;
     }
-    calculateDelta().catch((err) => console.error("delta calculate error - CarOnMap", err));
+    calculateDelta().catch((err) =>
+      console.error("delta calculate error - CarOnMap", err)
+    );
   }, [mapRef, isMapReady]);
 
   React.useEffect(() => {
@@ -260,7 +276,9 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({ route 
                 <Text style={gStyles.headerText}>Add POI</Text>
                 <_Divider title="Type" />
                 <RadioButton.Group
-                  onValueChange={(value) => form.setValues((prev) => ({ ...prev, poiType: value }))}
+                  onValueChange={(value) =>
+                    form.setValues((prev) => ({ ...prev, poiType: value }))
+                  }
                   value={form.values.poiType}
                 >
                   <View
@@ -298,7 +316,11 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({ route 
                   value={form.values.name}
                   onChangeText={form.handleChange("name")}
                   onBlur={form.handleBlur("name")}
-                  errorText={form.errors.name || form.errors.color || form.errors.iconName}
+                  errorText={
+                    form.errors.name ||
+                    form.errors.color ||
+                    form.errors.iconName
+                  }
                   error={!!form.errors.name && form.touched.name}
                 />
                 <_TextInput
@@ -340,7 +362,9 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({ route 
                         activeOpacity={0.7}
                       >
                         <Image
-                          source={images[`${value[1]}-${form.values.colorName}`]}
+                          source={
+                            images[`${value[1]}-${form.values.colorName}`]
+                          }
                           // onLoad={() => setViewTrackingA1(false)}
                           style={{ width: 35, height: 35 }}
                           resizeMethod="auto"
@@ -383,10 +407,18 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({ route 
                   })}
                 </View>
                 <View style={screenStyles.formSubmitButtonContainer}>
-                  <Button onPress={hideDialog} theme={PaperTheme} mode="outlined">
+                  <Button
+                    onPress={hideDialog}
+                    theme={PaperTheme}
+                    mode="outlined"
+                  >
                     Cancel
                   </Button>
-                  <Button onPress={() => form.handleSubmit()} mode="contained" theme={PaperTheme}>
+                  <Button
+                    onPress={() => form.handleSubmit()}
+                    mode="contained"
+                    theme={PaperTheme}
+                  >
                     Done
                   </Button>
                 </View>

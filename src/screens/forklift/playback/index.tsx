@@ -57,7 +57,7 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
   const [heading, setHeading] = React.useState(
     calculateHeading(prevCoordinate, polyline[1] ? polyline[1] : coordinate)
   );
-  const [loc, setLoc] = React.useState({
+  const [loc, _setLoc] = React.useState({
     pickupCords: {
       latitude: polyline[0].latitude,
       longitude: polyline[0].longitude,

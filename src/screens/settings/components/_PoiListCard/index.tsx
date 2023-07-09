@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import type { ProfileSettingsStackScreenProps } from "@navigation-types";
 import { truncateText } from "@utility";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { ForkliftStatusColor, PoiTypesColor } from "@constants";
+import { PoiTypesColor } from "@constants";
 import { images } from "@markers";
 
 interface OwnProps {

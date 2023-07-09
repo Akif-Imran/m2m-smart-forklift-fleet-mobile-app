@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import React from "react";
 
 interface OwnProps {
@@ -16,5 +16,3 @@ const TimelineIcon: React.FC<OwnProps> = ({ data }) => {
 };
 
 export { TimelineIcon };
-
-const styles = StyleSheet.create({});

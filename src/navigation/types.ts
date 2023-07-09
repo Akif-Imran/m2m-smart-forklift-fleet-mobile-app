@@ -24,8 +24,10 @@ export type AuthStackParamsList = {
   Register: undefined;
   ForgetPassword: undefined;
 };
+
 export type AuthStackScreenProps<T extends keyof AuthStackParamsList> =
   StackScreenProps<AuthStackParamsList, T>;
+
 //--------------------------------------
 export type MainTabsParamsList = {
   DashboardStack: NavigatorScreenParams<DashboardStackParamsList>;

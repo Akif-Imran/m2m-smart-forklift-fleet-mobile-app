@@ -29,17 +29,7 @@ import {
 } from "@components";
 import MapView, { Marker, PROVIDER_DEFAULT, Polyline } from "react-native-maps";
 import { useFocusEffect } from "@react-navigation/native";
-import { Card } from "react-native-paper";
 import { getDirections } from "@services";
-
-const points = [
-  { latitude: 37.8025259, longitude: -122.4351431 },
-  { latitude: 37.7896386, longitude: -122.421646 },
-  { latitude: 37.7665248, longitude: -122.4161628 },
-  { latitude: 37.7734153, longitude: -122.4577787 },
-  { latitude: 37.7948605, longitude: -122.4596065 },
-  { latitude: 37.8025259, longitude: -122.4351431 },
-];
 
 const routeAData = [
   {
@@ -88,8 +78,8 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
   const [viewTrackingA1, setViewTrackingA1] = React.useState<boolean>(true);
   const [viewTrackingA2, setViewTrackingA2] = React.useState<boolean>(true);
   const [selectedRoute, setSelectedRoute] = React.useState<CoordinatesType[]>([]);
-  const [viewTrackingB1, setViewTrackingB1] = React.useState<boolean>(true);
-  const [viewTrackingB2, setViewTrackingB2] = React.useState<boolean>(true);
+  // const [viewTrackingB1, setViewTrackingB1] = React.useState<boolean>(true);
+  // const [viewTrackingB2, setViewTrackingB2] = React.useState<boolean>(true);
   const [viewTrackingC1, setViewTrackingC1] = React.useState<boolean>(true);
   const [viewTrackingC2, setViewTrackingC2] = React.useState<boolean>(true);
   const [region, setRegion] = React.useState({
@@ -103,9 +93,9 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
   const [coordsC, setCoordsC] = React.useState<CoordinatesType[]>([]);
   const [selected, setSelected] = React.useState<string>("A");
   const [distanceA, setDistanceA] = React.useState<number>(0);
-  const [distanceB, setDistanceB] = React.useState<number>(0);
+  const [_distanceB, setDistanceB] = React.useState<number>(0);
   const [distanceC, setDistanceC] = React.useState<number>(0);
-  const [routeData, setRouteData] = React.useState([
+/*   const [routeData, setRouteData] = React.useState([
     {
       time: `11:20 AM`,
       distance: "2.8 Km",
@@ -131,7 +121,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
       ),
     },
   ]);
-  const [searchQuery, setSearchQuery] = React.useState<string>("");
+  const [searchQuery, setSearchQuery] = React.useState<string>(""); */
 
   const handleSheet = React.useCallback((value: number) => {
     sheetRef.current?.scrollTo(value);

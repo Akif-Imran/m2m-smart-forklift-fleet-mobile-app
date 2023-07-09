@@ -1,18 +1,15 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
-import { DriverStackScreenProps } from "@navigation-types";
+import type { DriverStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { listCardStyles, screenStyles } from "src/screens/styles";
-import { PaperTheme, colors, gStyles, theme } from "@theme";
-import { _AssignForkliftListCard } from "../components";
+import { PaperTheme, colors, gStyles } from "@theme";
 import { _DefaultCard, _ScrollFormLayout } from "@components";
-import { Ionicons } from "@expo/vector-icons";
-import { truncateText } from "@utility";
 import { faker } from "@faker-js/faker";
 import { Button, Checkbox } from "react-native-paper";
 import { useFormik } from "formik";
+
+import { _AssignForkliftListCard } from "../components";
 
 interface IForm {
   tyreOk: boolean;
@@ -20,7 +17,9 @@ interface IForm {
   bodyOk: boolean;
   breakOk: boolean;
 }
-const DriverCheckList: React.FC<DriverStackScreenProps<"DriverCheckList">> = ({ navigation }) => {
+const DriverCheckList: React.FC<DriverStackScreenProps<"DriverCheckList">> = ({
+  navigation,
+}) => {
   const form = useFormik<IForm>({
     initialValues: {
       tyreOk: false,
@@ -28,7 +27,7 @@ const DriverCheckList: React.FC<DriverStackScreenProps<"DriverCheckList">> = ({ 
       bodyOk: false,
       breakOk: false,
     },
-    onSubmit: (values, helpers) => {
+    onSubmit: (values, _helpers) => {
       console.log(values);
       navigation.navigate("DriverTask");
     },
@@ -53,10 +52,18 @@ const DriverCheckList: React.FC<DriverStackScreenProps<"DriverCheckList">> = ({ 
               <View style={listCardStyles.infoWithForward}>
                 <View style={listCardStyles.infoContainer}>
                   <Text style={gStyles.cardInfoTitleText}>PT-01</Text>
-                  <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={1}>
+                  <Text
+                    style={gStyles.tblDescText}
+                    ellipsizeMode="tail"
+                    numberOfLines={1}
+                  >
                     John
                   </Text>
-                  <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={0.5}>
+                  <Text
+                    style={gStyles.tblDescText}
+                    ellipsizeMode="tail"
+                    numberOfLines={0.5}
+                  >
                     AW56MFX
                   </Text>
                 </View>
@@ -74,7 +81,9 @@ const DriverCheckList: React.FC<DriverStackScreenProps<"DriverCheckList">> = ({ 
               })}
             >
               <View>
-                <Text style={screenStyles.detailsCardHeadingText}>Check List</Text>
+                <Text style={screenStyles.detailsCardHeadingText}>
+                  Check List
+                </Text>
               </View>
               <View style={screenStyles.radioItemStyle}>
                 <Checkbox.Item
@@ -83,7 +92,10 @@ const DriverCheckList: React.FC<DriverStackScreenProps<"DriverCheckList">> = ({ 
                   theme={PaperTheme}
                   color={colors.primary}
                   onPress={() => {
-                    form.setValues((prev) => ({ ...prev, tyreOk: !prev.tyreOk }));
+                    form.setValues((prev) => ({
+                      ...prev,
+                      tyreOk: !prev.tyreOk,
+                    }));
                   }}
                 />
               </View>
@@ -94,7 +106,10 @@ const DriverCheckList: React.FC<DriverStackScreenProps<"DriverCheckList">> = ({ 
                   theme={PaperTheme}
                   color={colors.primary}
                   onPress={() => {
-                    form.setValues((prev) => ({ ...prev, bodyChange: !prev.bodyChange }));
+                    form.setValues((prev) => ({
+                      ...prev,
+                      bodyChange: !prev.bodyChange,
+                    }));
                   }}
                 />
               </View>
@@ -105,7 +120,10 @@ const DriverCheckList: React.FC<DriverStackScreenProps<"DriverCheckList">> = ({ 
                   theme={PaperTheme}
                   color={colors.primary}
                   onPress={() => {
-                    form.setValues((prev) => ({ ...prev, bodyOk: !prev.bodyOk }));
+                    form.setValues((prev) => ({
+                      ...prev,
+                      bodyOk: !prev.bodyOk,
+                    }));
                   }}
                 />
               </View>
@@ -116,7 +134,10 @@ const DriverCheckList: React.FC<DriverStackScreenProps<"DriverCheckList">> = ({ 
                   theme={PaperTheme}
                   color={colors.primary}
                   onPress={() => {
-                    form.setValues((prev) => ({ ...prev, breakOk: !prev.breakOk }));
+                    form.setValues((prev) => ({
+                      ...prev,
+                      breakOk: !prev.breakOk,
+                    }));
                   }}
                 />
               </View>

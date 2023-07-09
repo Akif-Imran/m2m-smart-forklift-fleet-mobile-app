@@ -1,7 +1,12 @@
-import { FlatList, RefreshControl, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  RefreshControl,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
-
 import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "src/screens/styles";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
@@ -10,10 +15,10 @@ import { AssignForkliftFilters } from "@constants";
 import { faker } from "@faker-js/faker";
 import { _ConfirmModal, _ListEmptyComponent } from "@components";
 import { Modal, Portal, RadioButton, Searchbar } from "react-native-paper";
-import { _AssignForkliftListCard } from "../components";
 import Spinner from "react-native-loading-spinner-overlay";
-import { DriverStackScreenProps } from "@navigation-types";
+import type { DriverStackScreenProps } from "@navigation-types";
 
+import { _AssignForkliftListCard } from "../components";
 
 const AssignForklift: React.FC<DriverStackScreenProps<"AssignForklift">> = ({
   navigation,
@@ -21,10 +26,14 @@ const AssignForklift: React.FC<DriverStackScreenProps<"AssignForklift">> = ({
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [isLoading, setIsLoading] = React.useState(false);
   const [forklifts, setForklifts] = React.useState<IForklift[]>([]);
-  const [searchedForklifts, setSearchedForklifts] = React.useState<IForklift[]>([]);
+  const [searchedForklifts, setSearchedForklifts] = React.useState<IForklift[]>(
+    []
+  );
   const [isFetching, setIsFetching] = React.useState(false);
   const fetchForkliftsTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
-  const [selectedForklifts, setSelectedForklifts] = React.useState<string[]>([]);
+  const [selectedForklifts, setSelectedForklifts] = React.useState<string[]>(
+    []
+  );
 
   const [visible, setVisible] = React.useState<boolean>(false);
   const [selectedFilter, setSelectedFilter] = React.useState<string>(
@@ -37,26 +46,48 @@ const AssignForklift: React.FC<DriverStackScreenProps<"AssignForklift">> = ({
   const addInfo = () => {
     const record: IForklift = {
       _id: faker.database.mongodbObjectId(),
-      imei: faker.string.alphanumeric({ casing: "upper", length: { min: 12, max: 15 } }),
+      imei: faker.string.alphanumeric({
+        casing: "upper",
+        length: { min: 12, max: 15 },
+      }),
       simNo: faker.string.numeric({ length: 12, allowLeadingZeros: false }),
       age: faker.helpers.arrayElement([10, 11, 12, 13, 14, 15, 16]).toString(),
       batterySerialNo: faker.vehicle.vin(),
       color: faker.vehicle.color(),
       forkliftSerialNo: faker.vehicle.vrm(),
       make: faker.date.past().getFullYear().toString(),
-      year: faker.date.past().getFullYear().toString(),
       manufactureYear: faker.date.past().getFullYear().toString(),
 
       purchaseDate: faker.date.past().toDateString(),
       rentStartDate: faker.date.past().toDateString(),
       rentEndDate: faker.date.future().toDateString(),
-      milage: faker.helpers.rangeToNumber({ min: 13867, max: 50000 }).toString(),
+      milage: faker.helpers
+        .rangeToNumber({ min: 13867, max: 50000 })
+        .toString(),
       regNo: faker.helpers.rangeToNumber({ min: 1, max: 50000 }).toString(),
       image: faker.image.urlPicsumPhotos({ height: 75, width: 75 }),
-      name: faker.helpers.arrayElement(["Forklift 1", "Forklift 2", "Forklift 3", "Forklift 4"]),
-      status: faker.helpers.arrayElement(["moving", "parked", "offline", "faulty"]),
+      name: faker.helpers.arrayElement([
+        "Forklift 1",
+        "Forklift 2",
+        "Forklift 3",
+        "Forklift 4",
+      ]),
+      status: faker.helpers.arrayElement([
+        "moving",
+        "parked",
+        "offline",
+        "faulty",
+      ]),
       driver: faker.person.fullName(),
       model: faker.vehicle.vrm(),
+      fuelType: faker.vehicle.fuel(),
+      fuelCapacity: faker.helpers
+        .rangeToNumber({ min: 13867, max: 50000 })
+        .toString(),
+      insuranceCompany: faker.company.name(),
+      insuranceNo: faker.string.alphanumeric({ length: 12, casing: "upper" }),
+      insuranceType: faker.helpers.arrayElement(["life", "property", "travel"]),
+      insuranceExpiryDate: faker.date.future().toDateString(),
     };
     setForklifts((prev) => [...prev, record]);
   };
@@ -118,7 +149,9 @@ const AssignForklift: React.FC<DriverStackScreenProps<"AssignForklift">> = ({
   };
 
   React.useEffect(() => {
-    if (!forklifts) return;
+    if (!forklifts) {
+      return;
+    }
     setSearchedForklifts(forklifts);
 
     return () => {
@@ -133,7 +166,12 @@ const AssignForklift: React.FC<DriverStackScreenProps<"AssignForklift">> = ({
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
-      <Spinner visible={isLoading} cancelable={false} animation="fade" size="large" />
+      <Spinner
+        visible={isLoading}
+        cancelable={false}
+        animation="fade"
+        size="large"
+      />
       <View style={{ height: theme.header.height }} />
       <View style={screenStyles.searchContainer}>
         <Searchbar
@@ -144,7 +182,10 @@ const AssignForklift: React.FC<DriverStackScreenProps<"AssignForklift">> = ({
           onChangeText={(query) => handleSearch(query)}
           style={screenStyles.searchStyle}
         />
-        <TouchableOpacity style={screenStyles.filterButtonStyle} onPress={() => showModal()}>
+        <TouchableOpacity
+          style={screenStyles.filterButtonStyle}
+          onPress={() => showModal()}
+        >
           <FontAwesome5 name="filter" size={20} color={colors.iconGray} />
         </TouchableOpacity>
         <TouchableOpacity
