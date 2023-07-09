@@ -15,49 +15,7 @@ import { _Divider, _DropDown, _ScrollFormLayout, _TextInput } from "@components"
 import { MaterialIcons } from "@expo/vector-icons";
 import { images, iconNames, iconColors } from "@markers";
 import { styles } from "./styles";
-import axios from "axios";
 import { reverseGeocode } from "@services";
-
-// //@ts-ignore
-// import WarehouseInfo from "@assets/images/markers/warehouse-info.png";
-// //@ts-ignore
-// import WarehousePrimary from "@assets/images/markers/warehouse-primary.png";
-// //@ts-ignore
-// import WarehouseError from "@assets/images/markers/warehouse-error.png";
-// //@ts-ignore
-// import WarehouseWarning from "@assets/images/markers/warehouse-warning.png";
-// //@ts-ignore
-// import WarehouseGray from "@assets/images/markers/warehouse-gray.png";
-// //@ts-ignore
-// import WarehouseDark from "@assets/images/markers/warehouse-dark.png";
-// import { styles } from "./styles";
-
-// const images: Record<string, ImageRequireSource> = {
-//   "bike-info": WarehouseInfo,
-//   "bike-primary": WarehousePrimary,
-//   "bike-error": WarehouseError,
-//   "bike-warning": WarehouseWarning,
-//   "bike-gray": WarehouseGray,
-//   "bike-dark": WarehouseDark,
-//   "car-info": WarehouseInfo,
-//   "car-primary": WarehousePrimary,
-//   "car-error": WarehouseError,
-//   "car-warning": WarehouseWarning,
-//   "car-gray": WarehouseGray,
-//   "car-dark": WarehouseDark,
-//   "flag-info": WarehouseInfo,
-//   "flag-primary": WarehousePrimary,
-//   "flag-error": WarehouseError,
-//   "flag-warning": WarehouseWarning,
-//   "flag-gray": WarehouseGray,
-//   "flag-dark": WarehouseDark,
-//   "warehouse-info": WarehouseInfo,
-//   "warehouse-primary": WarehousePrimary,
-//   "warehouse-error": WarehouseError,
-//   "warehouse-warning": WarehouseWarning,
-//   "warehouse-gray": WarehouseGray,
-//   "warehouse-dark": WarehouseDark,
-// };
 interface Marker extends LatLng {
   name: string;
   iconName: string;

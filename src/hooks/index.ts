@@ -1,1 +1,1 @@
-
+export { useSafeAreaDimensions } from "./useSafeAreaDimensions";
