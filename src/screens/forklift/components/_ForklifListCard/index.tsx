@@ -7,8 +7,14 @@ import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import type { ForkliftStackScreenProps } from "@navigation-types";
 import { truncateText } from "@utility";
-import { Entypo, FontAwesome5, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import {
+  Entypo,
+  FontAwesome5,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import { ForkliftStatusColor } from "@constants";
+
 import { styles } from "./styles";
 
 interface OwnProps {
@@ -17,7 +23,8 @@ interface OwnProps {
 }
 
 const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
-  const navigation = useNavigation<ForkliftStackScreenProps<"Forklift">["navigation"]>();
+  const navigation =
+    useNavigation<ForkliftStackScreenProps<"Forklift">["navigation"]>();
   return (
     <_DefaultCard>
       <TouchableOpacity
@@ -53,7 +60,9 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
         <View style={listCardStyles.infoWithForward}>
           <View style={listCardStyles.infoContainer}>
             <View style={styles.titleContainer}>
-              <Text style={gStyles.cardInfoTitleText}>{truncateText(item.name)}</Text>
+              <Text style={gStyles.cardInfoTitleText}>
+                {truncateText(item.name)}
+              </Text>
               <Entypo
                 name="info-with-circle"
                 color={colors.titleText}
@@ -66,11 +75,19 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
                 }
               />
             </View>
-            <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={1}>
+            <Text
+              style={gStyles.tblDescText}
+              ellipsizeMode="tail"
+              numberOfLines={1}
+            >
               {item.driver}
             </Text>
 
-            <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={0.5}>
+            <Text
+              style={gStyles.tblDescText}
+              ellipsizeMode="tail"
+              numberOfLines={0.5}
+            >
               {truncateText(item.model, 22)}
             </Text>
           </View>
@@ -87,7 +104,11 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
             >
               {truncateText(item.status, 35).toUpperCase()}
             </Text>
-            <FontAwesome5 name="caret-right" size={20} color={colors.iconGray} />
+            <FontAwesome5
+              name="caret-right"
+              size={20}
+              color={colors.iconGray}
+            />
           </View>
         </View>
       </TouchableOpacity>
@@ -99,8 +120,17 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
           mode={"text"}
           theme={PaperTheme}
           color={colors.titleText}
-          labelStyle={StyleSheet.compose(gStyles.tblDescText, gStyles.buttonLabelTextAddOn)}
-          icon={() => <MaterialCommunityIcons name="wall" size={18} color={colors.titleText} />}
+          labelStyle={StyleSheet.compose(
+            gStyles.tblDescText,
+            gStyles.buttonLabelTextAddOn
+          )}
+          icon={() => (
+            <MaterialCommunityIcons
+              name="wall"
+              size={18}
+              color={colors.titleText}
+            />
+          )}
           onPress={() => navigation.navigate("Fences")}
         >
           Fences
@@ -112,8 +142,13 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
           mode={"text"}
           theme={PaperTheme}
           color={colors.titleText}
-          labelStyle={StyleSheet.compose(gStyles.tblDescText, gStyles.buttonLabelTextAddOn)}
-          icon={() => <FontAwesome5 name="road" size={16} color={colors.titleText} />}
+          labelStyle={StyleSheet.compose(
+            gStyles.tblDescText,
+            gStyles.buttonLabelTextAddOn
+          )}
+          icon={() => (
+            <FontAwesome5 name="road" size={16} color={colors.titleText} />
+          )}
           onPress={() => navigation.navigate("Trips")}
         >
           Trips
@@ -125,9 +160,16 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
           mode={"text"}
           theme={PaperTheme}
           color={colors.titleText}
-          labelStyle={StyleSheet.compose(gStyles.tblDescText, gStyles.buttonLabelTextAddOn)}
+          labelStyle={StyleSheet.compose(
+            gStyles.tblDescText,
+            gStyles.buttonLabelTextAddOn
+          )}
           icon={() => (
-            <MaterialCommunityIcons name="file-multiple" size={16} color={colors.titleText} />
+            <MaterialCommunityIcons
+              name="file-multiple"
+              size={16}
+              color={colors.titleText}
+            />
           )}
           onPress={() =>
             navigation.navigate("ReportsStack", {
@@ -146,8 +188,13 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
           mode={"text"}
           theme={PaperTheme}
           color={colors.titleText}
-          labelStyle={StyleSheet.compose(gStyles.tblDescText, gStyles.buttonLabelTextAddOn)}
-          icon={() => <MaterialIcons name="report" size={20} color={colors.titleText} />}
+          labelStyle={StyleSheet.compose(
+            gStyles.tblDescText,
+            gStyles.buttonLabelTextAddOn
+          )}
+          icon={() => (
+            <MaterialIcons name="report" size={20} color={colors.titleText} />
+          )}
           onPress={() => navigation.navigate("ReqService")}
         >
           Req Service

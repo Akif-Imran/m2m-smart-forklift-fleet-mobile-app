@@ -18,6 +18,7 @@ import { ToastService } from "@utility";
 import { PoiTypesColor } from "@constants";
 import { faker } from "@faker-js/faker";
 import { iconColors, iconNames } from "@markers";
+
 import { _PoiListCard } from "../components/_PoiListCard";
 
 //------------------Component------------------------------------------------
@@ -91,19 +92,22 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
             <Text style={gStyles.headerText}>10</Text>
             <Text
               style={StyleSheet.compose(screenStyles.countInfoText, {
-                color: PoiTypesColor["private"],
+                color: PoiTypesColor.private,
               })}
             >
               Private
             </Text>
           </View>
           <View
-            style={StyleSheet.compose(screenStyles.countRowItem, screenStyles.countRowMiddleItem)}
+            style={StyleSheet.compose(
+              screenStyles.countRowItem,
+              screenStyles.countRowMiddleItem
+            )}
           >
             <Text style={gStyles.headerText}>12</Text>
             <Text
               style={StyleSheet.compose(screenStyles.countInfoText, {
-                color: PoiTypesColor["business"],
+                color: PoiTypesColor.business,
               })}
             >
               Business
@@ -113,7 +117,7 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
             <Text style={gStyles.headerText}>10</Text>
             <Text
               style={StyleSheet.compose(screenStyles.countInfoText, {
-                color: PoiTypesColor["total"],
+                color: PoiTypesColor.total,
               })}
             >
               Total
@@ -159,7 +163,11 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
         keyExtractor={(item) => item._id}
         ListEmptyComponent={<_ListEmptyComponent label="No POI..." />}
         renderItem={({ item }) => (
-          <_PoiListCard key={item._id} item={item} handleDelete={handleDelete} />
+          <_PoiListCard
+            key={item._id}
+            item={item}
+            handleDelete={handleDelete}
+          />
         )}
         refreshControl={
           <RefreshControl

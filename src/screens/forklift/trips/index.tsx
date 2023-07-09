@@ -1,11 +1,9 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
 import TimelineComponent from "react-native-timeline-flatlist";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { mapStyles, screenStyles } from "src/screens/styles";
-import { ForkliftStackScreenProps } from "@navigation-types";
+import type { ForkliftStackScreenProps } from "@navigation-types";
 import { colors, gStyles, theme } from "@theme";
 import {
   FontAwesome5,
@@ -14,12 +12,11 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
+import type { BottomSheetRef, RightSheetRefProps } from "@components";
 import {
   BOTTOM_SHEET_MAX_TRANSLATE_Y,
-  BottomSheetRef,
   RIGHT_SHEET_MAX_TRANSLATE_X,
   RIGHT_SHEET_MIN_TRANSLATE_X,
-  RightSheetRefProps,
   TimelineContent,
   _BottomSheet,
   _DatePicker,
@@ -30,10 +27,13 @@ import {
 import MapView, { Marker, PROVIDER_DEFAULT, Polyline } from "react-native-maps";
 import { useFocusEffect } from "@react-navigation/native";
 import { getDirections } from "@services";
+import { useSafeAreaDimensions } from "@hooks";
+
+import { styles } from "./styles";
 
 const routeAData = [
   {
-    time: `11:20 AM`,
+    time: "11:20 AM",
     distance: "2.8 Km",
     title: "Start",
     description: "Street 21, District 3 Lahore",
@@ -41,12 +41,13 @@ const routeAData = [
     icon: (
       <Image
         style={{ width: 20, height: 20, tintColor: colors.primary }}
+        // eslint-disable-next-line import/extensions
         source={require("@assets/images/icons8-engine-96.png")}
       />
     ),
   },
   {
-    time: `3:55 PM`,
+    time: "3:55 PM",
     distance: "2.8 Km",
     title: "Stop",
     start: false,
@@ -54,6 +55,7 @@ const routeAData = [
     icon: (
       <Image
         style={{ width: 20, height: 20, tintColor: colors.error }}
+        // eslint-disable-next-line import/extensions
         source={require("@assets/images/icons8-engine-96.png")}
       />
     ),
@@ -61,12 +63,14 @@ const routeAData = [
 ];
 
 const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
-  const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = useWindowDimensions();
-  const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
-  const LATITUDE_DELTA = 0.0922;
-  const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-  const { bottom: BOT_INSET, top: TOP_INSET } = useSafeAreaInsets();
-  console.log("bottom", BOT_INSET, "top", TOP_INSET);
+  // const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = useWindowDimensions();
+  // const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
+  // const LATITUDE_DELTA = 0.0922;
+  // const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+  // const { bottom: BOT_INSET, top: TOP_INSET } = useSafeAreaInsets();
+  const { SCREEN_HEIGHT, LATITUDE_DELTA, LONGITUDE_DELTA } =
+    useSafeAreaDimensions();
+
   const activeStrokeWidth = 8;
   const inactiveStrokeWidth = 3;
   const mapRef = React.useRef<MapView>(null);
@@ -77,7 +81,9 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
   const [isMapReady, setIsMapReady] = React.useState<boolean>(false);
   const [viewTrackingA1, setViewTrackingA1] = React.useState<boolean>(true);
   const [viewTrackingA2, setViewTrackingA2] = React.useState<boolean>(true);
-  const [selectedRoute, setSelectedRoute] = React.useState<CoordinatesType[]>([]);
+  const [selectedRoute, setSelectedRoute] = React.useState<CoordinatesType[]>(
+    []
+  );
   // const [viewTrackingB1, setViewTrackingB1] = React.useState<boolean>(true);
   // const [viewTrackingB2, setViewTrackingB2] = React.useState<boolean>(true);
   const [viewTrackingC1, setViewTrackingC1] = React.useState<boolean>(true);
@@ -95,7 +101,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
   const [distanceA, setDistanceA] = React.useState<number>(0);
   const [_distanceB, setDistanceB] = React.useState<number>(0);
   const [distanceC, setDistanceC] = React.useState<number>(0);
-/*   const [routeData, setRouteData] = React.useState([
+  /*   const [routeData, setRouteData] = React.useState([
     {
       time: `11:20 AM`,
       distance: "2.8 Km",
@@ -147,21 +153,27 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
   };
 
   React.useEffect(() => {
-    getDirections("37.8025259,-122.4351431", "37.7896386,-122.421646").then((res) => {
-      setCoordsA(res.coords);
-      setDistanceA(res.distance);
-    });
-    getDirections("37.7948605,-122.4596065", "37.8025259,-122.4351431").then((res) => {
-      setCoordsB(res.coords);
-      setDistanceB(res.distance);
-    });
-    getDirections("37.7665248,-122.4161628", "37.7948605,-122.4596065").then((res) => {
-      setCoordsC(res.coords);
-      setDistanceC(res.distance);
-    });
+    getDirections("37.8025259,-122.4351431", "37.7896386,-122.421646").then(
+      (res) => {
+        setCoordsA(res.coords);
+        setDistanceA(res.distance);
+      }
+    );
+    getDirections("37.7948605,-122.4596065", "37.8025259,-122.4351431").then(
+      (res) => {
+        setCoordsB(res.coords);
+        setDistanceB(res.distance);
+      }
+    );
+    getDirections("37.7665248,-122.4161628", "37.7948605,-122.4596065").then(
+      (res) => {
+        setCoordsC(res.coords);
+        setDistanceC(res.distance);
+      }
+    );
   }, []);
 
-  React.useEffect(() => {}, [mapRef, isMapReady]);
+  // React.useEffect(() => {}, [mapRef, isMapReady]);
 
   const handleRightSheet = React.useCallback(() => {
     console.log("called handle right sheet");
@@ -175,12 +187,15 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
       latitudeDelta: LATITUDE_DELTA,
       longitudeDelta: LONGITUDE_DELTA,
     });
-    return () => {};
-  }, [setRegion]);
+  }, [setRegion, LATITUDE_DELTA, LONGITUDE_DELTA]);
 
   useFocusEffect(memoCallback);
 
-  const handleMarkerOnPress = (sheetPosition: number, coords: CoordinatesType[], index: number) => {
+  const handleMarkerOnPress = (
+    sheetPosition: number,
+    coords: CoordinatesType[],
+    index: number
+  ) => {
     mapRef.current?.animateCamera({
       center: {
         latitude: coords[index].latitude,
@@ -207,7 +222,9 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
         <Polyline
           coordinates={coordsA}
           strokeColor={colors.primary} // fallback for when `strokeColors` is not supported by the map-provider
-          strokeWidth={selected === "A" ? activeStrokeWidth : inactiveStrokeWidth}
+          strokeWidth={
+            selected === "A" ? activeStrokeWidth : inactiveStrokeWidth
+          }
           zIndex={selected === "A" ? 100 : 10}
         />
         {coordsA.length !== 0 ? (
@@ -220,9 +237,12 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               anchor={{ x: 0.2, y: 0.25 }}
               zIndex={selected === "A" ? 100 : -100}
               style={{ width: 40, height: 40 }}
-              onPress={() => handleMarkerOnPress(BOTTOM_SHEET_MAX_TRANSLATE_Y, coordsA, 0)}
+              onPress={() =>
+                handleMarkerOnPress(BOTTOM_SHEET_MAX_TRANSLATE_Y, coordsA, 0)
+              }
             >
               <Image
+                // eslint-disable-next-line import/extensions
                 source={require("@assets/images/3d-car-top-view-white.png")}
                 onLoad={() => setViewTrackingA1(false)}
                 style={{ width: 35, height: 35 }}
@@ -240,10 +260,15 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               zIndex={selected === "A" ? 100 : -100}
               style={{ width: 40, height: 40 }}
               onPress={() =>
-                handleMarkerOnPress(BOTTOM_SHEET_MAX_TRANSLATE_Y, coordsA, coordsA.length - 1)
+                handleMarkerOnPress(
+                  BOTTOM_SHEET_MAX_TRANSLATE_Y,
+                  coordsA,
+                  coordsA.length - 1
+                )
               }
             >
               <Image
+                // eslint-disable-next-line import/extensions
                 source={require("@assets/images/racing-flag.png")}
                 onLoad={() => setViewTrackingA2(false)}
                 style={{ width: 35, height: 35 }}
@@ -304,7 +329,9 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
         <Polyline
           coordinates={coordsC}
           strokeColor={colors.warning} // fallback for when `strokeColors` is not supported by the map-provider
-          strokeWidth={selected === "C" ? activeStrokeWidth : inactiveStrokeWidth}
+          strokeWidth={
+            selected === "C" ? activeStrokeWidth : inactiveStrokeWidth
+          }
           zIndex={selected === "C" ? 100 : 10}
         />
         {coordsC.length !== 0 ? (
@@ -317,9 +344,12 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               anchor={{ x: 0.2, y: 0.3 }}
               zIndex={selected === "C" ? 100 : -100}
               style={{ width: 40, height: 40 }}
-              onPress={() => handleMarkerOnPress(BOTTOM_SHEET_MAX_TRANSLATE_Y, coordsC, 0)}
+              onPress={() =>
+                handleMarkerOnPress(BOTTOM_SHEET_MAX_TRANSLATE_Y, coordsC, 0)
+              }
             >
               <Image
+                // eslint-disable-next-line import/extensions
                 source={require("@assets/images/3d-car-top-view-red.png")}
                 onLoad={() => setViewTrackingC1(false)}
                 style={{ width: 35, height: 35 }}
@@ -337,10 +367,15 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               zIndex={selected === "C" ? 100 : -100}
               style={{ width: 40, height: 40 }}
               onPress={() =>
-                handleMarkerOnPress(BOTTOM_SHEET_MAX_TRANSLATE_Y, coordsC, coordsC.length - 1)
+                handleMarkerOnPress(
+                  BOTTOM_SHEET_MAX_TRANSLATE_Y,
+                  coordsC,
+                  coordsC.length - 1
+                )
               }
             >
               <Image
+                // eslint-disable-next-line import/extensions
                 source={require("@assets/images/racing-flag.png")}
                 onLoad={() => setViewTrackingC2(false)}
                 style={{ width: 35, height: 35 }}
@@ -360,11 +395,19 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
             handleRightSheet();
           }}
         >
-          <MaterialCommunityIcons name="menu" size={20} color={colors.titleText} />
+          <MaterialCommunityIcons
+            name="menu"
+            size={20}
+            color={colors.titleText}
+          />
         </TouchableOpacity>
       </View>
 
-      <_RightSheet ref={rightSheetRef} height={SCREEN_HEIGHT} initialPosition="close">
+      <_RightSheet
+        ref={rightSheetRef}
+        height={SCREEN_HEIGHT}
+        initialPosition="close"
+      >
         <SafeAreaView style={screenStyles.mainContainer}>
           <_ScrollFormLayout>
             <View>
@@ -402,7 +445,12 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
                       paddingHorizontal: 10,
                     }}
                     renderDetail={(rowData) => {
-                      return <TimelineContent data={rowData} distanceInMeters={distanceA} />;
+                      return (
+                        <TimelineContent
+                          data={rowData}
+                          distanceInMeters={distanceA}
+                        />
+                      );
                     }}
                   />
                 </View>
@@ -474,7 +522,12 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
                       paddingHorizontal: 10,
                     }}
                     renderDetail={(rowData) => {
-                      return <TimelineContent data={rowData} distanceInMeters={distanceC} />;
+                      return (
+                        <TimelineContent
+                          data={rowData}
+                          distanceInMeters={distanceC}
+                        />
+                      );
                     }}
                   />
                 </View>
@@ -496,13 +549,21 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
             }}
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <MaterialIcons name="keyboard-arrow-left" size={20} color={colors.titleText} />
+              <MaterialIcons
+                name="keyboard-arrow-left"
+                size={20}
+                color={colors.titleText}
+              />
               <Text style={styles.descTextGray}>WMY2186</Text>
             </View>
 
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={styles.descTextGray}>075034760941</Text>
-              <MaterialIcons name="keyboard-arrow-right" size={20} color={colors.titleText} />
+              <MaterialIcons
+                name="keyboard-arrow-right"
+                size={20}
+                color={colors.titleText}
+              />
             </View>
           </View>
 
@@ -518,12 +579,20 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
             }}
           >
             <View style={{ alignItems: "center", gap: theme.spacing.sm }}>
-              <MaterialIcons name="offline-bolt" size={20} color={colors.titleText} />
+              <MaterialIcons
+                name="offline-bolt"
+                size={20}
+                color={colors.titleText}
+              />
               <Text style={styles.descTextGray}>2hr</Text>
             </View>
 
             <View style={{ alignItems: "center", gap: theme.spacing.sm }}>
-              <MaterialCommunityIcons name="engine" size={20} color={colors.titleText} />
+              <MaterialCommunityIcons
+                name="engine"
+                size={20}
+                color={colors.titleText}
+              />
               <Text style={styles.descTextGray}>Off</Text>
             </View>
 
@@ -537,12 +606,22 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
             </View>
 
             <View style={{ alignItems: "center", gap: theme.spacing.sm }}>
-              <MaterialCommunityIcons name="satellite-variant" size={20} color={colors.titleText} />
+              <MaterialCommunityIcons
+                name="satellite-variant"
+                size={20}
+                color={colors.titleText}
+              />
               <Text style={styles.descTextGray}>15</Text>
             </View>
 
-            <TouchableOpacity style={{ alignItems: "center", gap: theme.spacing.sm }}>
-              <MaterialIcons name="keyboard-arrow-right" size={35} color={colors.titleText} />
+            <TouchableOpacity
+              style={{ alignItems: "center", gap: theme.spacing.sm }}
+            >
+              <MaterialIcons
+                name="keyboard-arrow-right"
+                size={35}
+                color={colors.titleText}
+              />
             </TouchableOpacity>
           </View>
 
@@ -574,7 +653,11 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
                 }}
               >
                 <View>
-                  <MaterialIcons name="location-on" size={25} color={colors.titleText} />
+                  <MaterialIcons
+                    name="location-on"
+                    size={25}
+                    color={colors.titleText}
+                  />
                 </View>
                 <View>
                   <Text style={gStyles.tblHeaderText}>2023-01-31 20:07:03</Text>
@@ -592,7 +675,11 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
                 }}
               >
                 <View>
-                  <Fontisto name="heartbeat-alt" size={25} color={colors.titleText} />
+                  <Fontisto
+                    name="heartbeat-alt"
+                    size={25}
+                    color={colors.titleText}
+                  />
                 </View>
                 <View>
                   <Text style={gStyles.tblHeaderText}>2023-01-31 20:07:03</Text>
@@ -626,8 +713,14 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               borderWidth: 0,
             }}
           >
-            <TouchableOpacity style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}>
-              <MaterialIcons name="location-on" size={25} color={colors.titleText} />
+            <TouchableOpacity
+              style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}
+            >
+              <MaterialIcons
+                name="location-on"
+                size={25}
+                color={colors.titleText}
+              />
               <Text style={styles.descTextGray}>Tracking</Text>
             </TouchableOpacity>
 
@@ -643,13 +736,25 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               <Text style={styles.descTextGray}>Playback</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}>
-              <MaterialCommunityIcons name="wall" size={20} color={colors.titleText} />
+            <TouchableOpacity
+              style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}
+            >
+              <MaterialCommunityIcons
+                name="wall"
+                size={20}
+                color={colors.titleText}
+              />
               <Text style={styles.descTextGray}>Geo Fence</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}>
-              <MaterialCommunityIcons name="information" size={24} color={colors.titleText} />
+            <TouchableOpacity
+              style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}
+            >
+              <MaterialCommunityIcons
+                name="information"
+                size={24}
+                color={colors.titleText}
+              />
               <Text style={styles.descTextGray}>Details</Text>
             </TouchableOpacity>
           </View>
@@ -663,23 +768,43 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               borderWidth: 0,
             }}
           >
-            <TouchableOpacity style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}>
+            <TouchableOpacity
+              style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}
+            >
               <Ionicons name="terminal" size={20} color={colors.titleText} />
               <Text style={styles.descTextGray}>Command</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}>
-              <MaterialCommunityIcons name="alert" size={25} color={colors.titleText} />
+            <TouchableOpacity
+              style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}
+            >
+              <MaterialCommunityIcons
+                name="alert"
+                size={25}
+                color={colors.titleText}
+              />
               <Text style={styles.descTextGray}>Alerts</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}>
-              <MaterialCommunityIcons name="monitor" size={20} color={colors.titleText} />
+            <TouchableOpacity
+              style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}
+            >
+              <MaterialCommunityIcons
+                name="monitor"
+                size={20}
+                color={colors.titleText}
+              />
               <Text style={styles.descTextGray}>Console</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}>
-              <MaterialIcons name="more-horiz" size={20} color={colors.titleText} />
+            <TouchableOpacity
+              style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}
+            >
+              <MaterialIcons
+                name="more-horiz"
+                size={20}
+                color={colors.titleText}
+              />
               <Text style={styles.descTextGray}>More</Text>
             </TouchableOpacity>
           </View>

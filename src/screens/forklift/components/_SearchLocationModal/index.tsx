@@ -44,7 +44,8 @@ const _SearchLocationModal: React.FC<OwnProps> = ({
       .catch((_err) => {
         ToastService.show("place lookup error");
       });
-  }, [placeId]);
+  }, [placeId, setSearchedLocation]);
+
   return (
     <Portal theme={PaperTheme}>
       <Modal
@@ -66,7 +67,7 @@ const _SearchLocationModal: React.FC<OwnProps> = ({
             />
             <TouchableOpacity
               style={[screenStyles.filterButtonStyle, screenStyles.shadow]}
-              onPress={() => {}}
+              // onPress={() => {}}
               activeOpacity={0.7}
             >
               <Ionicons

@@ -8,30 +8,30 @@ import {
   useWindowDimensions,
 } from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { listCardStyles, mapStyles, screenStyles } from "@screen-styles";
-import { ForkliftStackScreenProps } from "@navigation-types";
+import type { ForkliftStackScreenProps } from "@navigation-types";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
-import MapView, {
-  Circle,
-  Details,
-  LatLng,
-  MapPressEvent,
-  PROVIDER_DEFAULT,
-  Polygon,
-  Region,
-} from "react-native-maps";
+import type { Details, LatLng, MapPressEvent, Region } from "react-native-maps";
+import MapView, { Circle, PROVIDER_DEFAULT, Polygon } from "react-native-maps";
 import Slider from "@react-native-community/slider";
-import { Entypo, Feather, Ionicons, MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
+import {
+  Entypo,
+  Feather,
+  Ionicons,
+  MaterialCommunityIcons,
+  Octicons,
+} from "@expo/vector-icons";
 import { Searchbar } from "react-native-paper";
 import Spinner from "react-native-loading-spinner-overlay";
 import { ToastService } from "@utility";
+import type { RightSheetRefProps } from "@components";
 import {
   RIGHT_SHEET_MAX_TRANSLATE_X,
   RIGHT_SHEET_MIN_TRANSLATE_X,
-  RightSheetRefProps,
   _ConfirmModal,
   _DefaultCard,
   _Divider,
@@ -42,6 +42,9 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { GOOGLE_API_KEY, GOOGLE_PLACES_API } from "@api";
 import axios from "axios";
 import { faker } from "@faker-js/faker";
+import { useSafeAreaDimensions } from "@hooks";
+
+import { styles } from "./styles";
 
 interface ICircle {
   _id: string;
@@ -57,15 +60,26 @@ interface IPolygon {
 
 const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
   //TODO - convert this into custome hook and return the values.
-  const { top: TOP_INSET } = useSafeAreaInsets();
-  const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = useWindowDimensions();
-  const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
-  const LATITUDE_DELTA = 0.0922;
-  const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+  // const { top: TOP_INSET } = useSafeAreaInsets();
+  // const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = useWindowDimensions();
+  // const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
+  // const LATITUDE_DELTA = 0.0922;
+  // const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+  const {
+    TOP_INSET,
+    SCREEN_HEIGHT,
+    SCREEN_WIDTH,
+    LATITUDE_DELTA,
+    LONGITUDE_DELTA,
+  } = useSafeAreaDimensions();
+
   const ANDROID_OFFSET = TOP_INSET;
   const IOS_OFFSET = 16;
   const IMAGE_SIZE = 56;
-  const PIN_OFFSET = Platform.OS === "ios" ? IMAGE_SIZE + IOS_OFFSET : IMAGE_SIZE + ANDROID_OFFSET;
+  const PIN_OFFSET =
+    Platform.OS === "ios"
+      ? IMAGE_SIZE + IOS_OFFSET
+      : IMAGE_SIZE + ANDROID_OFFSET;
 
   const mapRef = React.useRef<MapView>(null);
   const rightSheetRef = React.useRef<RightSheetRefProps>(null);
@@ -78,22 +92,28 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
     latitudeDelta: LATITUDE_DELTA,
     longitudeDelta: LONGITUDE_DELTA,
   });
-  const [controlMode, setControlMode] = React.useState<"circle" | "poly" | "search" | "default">(
-    "default"
-  );
+  const [controlMode, setControlMode] = React.useState<
+    "circle" | "poly" | "search" | "default"
+  >("default");
   const [radius, setRadius] = React.useState(1);
   const [polygonPoints, setPolygonPoints] = React.useState<LatLng[]>([]);
   const [polygons, setPolygons] = React.useState<IPolygon[]>([]);
   const [circles, setCircles] = React.useState<ICircle[]>([]);
-  const [_searchedLocation, setSearchedLocation] = React.useState<LatLng>(region);
+  const [_searchedLocation, setSearchedLocation] =
+    React.useState<LatLng>(region);
   const [fenceMode, setFenceMode] = React.useState<"add" | "edit">("add");
   const [selectedFenceId, setSelectedFenceId] = React.useState("");
   const [name, setName] = React.useState("");
 
-  const openMenu = () => rightSheetRef?.current?.scrollTo(RIGHT_SHEET_MAX_TRANSLATE_X);
-  const closeMenu = () => rightSheetRef?.current?.scrollTo(RIGHT_SHEET_MIN_TRANSLATE_X);
+  const openMenu = () =>
+    rightSheetRef?.current?.scrollTo(RIGHT_SHEET_MAX_TRANSLATE_X);
+  const closeMenu = () =>
+    rightSheetRef?.current?.scrollTo(RIGHT_SHEET_MIN_TRANSLATE_X);
 
-  const addFence = (type: "poly" | "circle", fenceMode: "add" | "edit") => {
+  const addFence = (
+    type: "poly" | "circle",
+    currentFenceMode: "add" | "edit"
+  ) => {
     if (name === "") {
       ToastService.show("Please enter fence name");
       return;
@@ -104,7 +124,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
       ToastService.show("Fence added successfully");
       setControlMode("default");
       if (type === "poly") {
-        if (fenceMode === "add") {
+        if (currentFenceMode === "add") {
           setPolygons((prev) => {
             const newArray = [
               ...prev,
@@ -120,7 +140,9 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
         } else {
           setPolygons((prev) => {
             const newArray = [...prev];
-            const index = newArray.findIndex((item) => item._id === selectedFenceId);
+            const index = newArray.findIndex(
+              (item) => item._id === selectedFenceId
+            );
             newArray[index].points = polygonPoints;
             newArray[index].name = name;
             return newArray;
@@ -130,7 +152,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
         }
       }
       if (type === "circle") {
-        if (fenceMode === "add") {
+        if (currentFenceMode === "add") {
           setCircles((prev) => {
             const newArray = [
               ...prev,
@@ -147,7 +169,9 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
         } else {
           setCircles((prev) => {
             const newArray = [...prev];
-            const index = newArray.findIndex((item) => item._id === selectedFenceId);
+            const index = newArray.findIndex(
+              (item) => item._id === selectedFenceId
+            );
             newArray[index].center = region;
             newArray[index].radius = radius;
             newArray[index].name = name;
@@ -227,9 +251,12 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
     }
   };
 
-  const handleOnRegionChangeComplete = (region: Region, details: Details) => {
-    setRegion(region);
-    console.log(region, details);
+  const handleOnRegionChangeComplete = (
+    newRegion: Region,
+    details: Details
+  ) => {
+    setRegion(newRegion);
+    console.log(newRegion, details);
   };
 
   const reset = () => {
@@ -250,14 +277,18 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
   };
 
   React.useEffect(() => {
-    if (!placeId) return;
+    if (!placeId) {
+      return;
+    }
     axios
-      .get(`${GOOGLE_PLACES_API}/details/json?place_id=${placeId}&key=${GOOGLE_API_KEY}`)
+      .get(
+        `${GOOGLE_PLACES_API}/details/json?place_id=${placeId}&key=${GOOGLE_API_KEY}`
+      )
       .then((res) => {
         if (res.status === 200) {
           console.log("place details", res.data.result.geometry.location);
-          const lat = res.data.result.geometry.location.lat;
-          const lng = res.data.result.geometry.location.lng;
+          const { lat } = res.data.result.geometry.location;
+          const { lng } = res.data.result.geometry.location;
           setSearchedLocation({
             latitude: lat,
             longitude: lng,
@@ -279,12 +310,17 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
       .catch((_err) => {
         ToastService.show("place lookup error");
       });
-  }, [placeId]);
+  }, [placeId, LONGITUDE_DELTA, LATITUDE_DELTA]);
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
       <View style={{ height: theme.header.height }} />
-      <Spinner visible={isLoading} cancelable={false} animation="fade" size="large" />
+      <Spinner
+        visible={isLoading}
+        cancelable={false}
+        animation="fade"
+        size="large"
+      />
       <MapView
         ref={mapRef}
         initialRegion={region}
@@ -314,7 +350,9 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                   key={polygon._id}
                 />
               );
-            } else return null;
+            } else {
+              return null;
+            }
           } else {
             return (
               <Polygon
@@ -338,7 +376,9 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                   strokeWidth={0.01}
                 />
               );
-            } else return null;
+            } else {
+              return null;
+            }
           } else {
             return (
               <Circle
@@ -376,7 +416,11 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
               onPress={() => openMenu()}
               activeOpacity={0.7}
             >
-              <Ionicons name="ios-list-outline" size={24} color={colors.iconGray} />
+              <Ionicons
+                name="ios-list-outline"
+                size={24}
+                color={colors.iconGray}
+              />
             </TouchableOpacity>
           </View>
           <View style={{ gap: theme.spacing.sm }}>
@@ -392,14 +436,22 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
               onPress={() => setControlMode("circle")}
               activeOpacity={0.7}
             >
-              <MaterialCommunityIcons name="shape-circle-plus" size={24} color={colors.iconGray} />
+              <MaterialCommunityIcons
+                name="shape-circle-plus"
+                size={24}
+                color={colors.iconGray}
+              />
             </TouchableOpacity>
             <TouchableOpacity
               style={[screenStyles.filterButtonStyle, screenStyles.shadow]}
               onPress={() => setControlMode("poly")}
               activeOpacity={0.7}
             >
-              <MaterialCommunityIcons name="shape-polygon-plus" size={24} color={colors.iconGray} />
+              <MaterialCommunityIcons
+                name="shape-polygon-plus"
+                size={24}
+                color={colors.iconGray}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -447,7 +499,11 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                 onPress={() => setControlMode("default")}
                 activeOpacity={0.7}
               >
-                <Ionicons name="ios-close-outline" size={24} color={colors.iconGray} />
+                <Ionicons
+                  name="ios-close-outline"
+                  size={24}
+                  color={colors.iconGray}
+                />
               </TouchableOpacity>
             </View>
           </View>
@@ -471,14 +527,22 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                 onPress={() => addFence("circle", fenceMode)}
                 activeOpacity={0.7}
               >
-                <Ionicons name="ios-checkmark" size={24} color={colors.iconGray} />
+                <Ionicons
+                  name="ios-checkmark"
+                  size={24}
+                  color={colors.iconGray}
+                />
               </TouchableOpacity>
               <TouchableOpacity
                 style={[screenStyles.filterButtonStyle, screenStyles.shadow]}
                 onPress={() => reset()}
                 activeOpacity={0.7}
               >
-                <Ionicons name="ios-close-outline" size={24} color={colors.iconGray} />
+                <Ionicons
+                  name="ios-close-outline"
+                  size={24}
+                  color={colors.iconGray}
+                />
               </TouchableOpacity>
             </View>
             <View>
@@ -528,7 +592,11 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                 onPress={() => addFence("poly", fenceMode)}
                 activeOpacity={0.7}
               >
-                <Ionicons name="ios-checkmark" size={24} color={colors.iconGray} />
+                <Ionicons
+                  name="ios-checkmark"
+                  size={24}
+                  color={colors.iconGray}
+                />
               </TouchableOpacity>
               <View style={{ rowGap: theme.spacing.sm }}>
                 <TouchableOpacity
@@ -536,7 +604,11 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                   onPress={() => reset()}
                   activeOpacity={0.7}
                 >
-                  <Ionicons name="ios-close-outline" size={24} color={colors.iconGray} />
+                  <Ionicons
+                    name="ios-close-outline"
+                    size={24}
+                    color={colors.iconGray}
+                  />
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[screenStyles.filterButtonStyle, screenStyles.shadow]}
@@ -558,12 +630,18 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                 { alignSelf: "center", minWidth: 48 },
               ]}
             >
-              <Text style={gStyles.cardInfoTitleText}>{polygonPoints.length}</Text>
+              <Text style={gStyles.cardInfoTitleText}>
+                {polygonPoints.length}
+              </Text>
             </View>
           </View>
         </>
       )}
-      <_RightSheet ref={rightSheetRef} height={SCREEN_HEIGHT} initialPosition="close">
+      <_RightSheet
+        ref={rightSheetRef}
+        height={SCREEN_HEIGHT}
+        initialPosition="close"
+      >
         <SafeAreaView style={screenStyles.mainContainer}>
           <_ScrollFormLayout>
             <View>
@@ -584,18 +662,35 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                     })}
                   >
                     <View>
-                      <Entypo name="circle" size={32} color={colors.titleText} />
+                      <Entypo
+                        name="circle"
+                        size={32}
+                        color={colors.titleText}
+                      />
                     </View>
                     <View style={listCardStyles.infoWithForward}>
                       <View style={listCardStyles.infoContainer}>
-                        <Text style={gStyles.cardInfoTitleText}>{circle.name}</Text>
-                        <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={1}>
+                        <Text style={gStyles.cardInfoTitleText}>
+                          {circle.name}
+                        </Text>
+                        <Text
+                          style={gStyles.tblDescText}
+                          ellipsizeMode="tail"
+                          numberOfLines={1}
+                        >
                           {circle.radius}m
                         </Text>
                       </View>
                       <View style={listCardStyles.forwardContainer}>
-                        <TouchableOpacity onPress={() => editCircle(circle)} activeOpacity={0.7}>
-                          <MaterialCommunityIcons name="pencil" size={20} color={colors.iconGray} />
+                        <TouchableOpacity
+                          onPress={() => editCircle(circle)}
+                          activeOpacity={0.7}
+                        >
+                          <MaterialCommunityIcons
+                            name="pencil"
+                            size={20}
+                            color={colors.iconGray}
+                          />
                         </TouchableOpacity>
                       </View>
                     </View>
@@ -617,18 +712,35 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                     })}
                   >
                     <View>
-                      <Feather name="octagon" size={32} color={colors.titleText} />
+                      <Feather
+                        name="octagon"
+                        size={32}
+                        color={colors.titleText}
+                      />
                     </View>
                     <View style={listCardStyles.infoWithForward}>
                       <View style={listCardStyles.infoContainer}>
-                        <Text style={gStyles.cardInfoTitleText}>{poly.name}</Text>
-                        <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={1}>
+                        <Text style={gStyles.cardInfoTitleText}>
+                          {poly.name}
+                        </Text>
+                        <Text
+                          style={gStyles.tblDescText}
+                          ellipsizeMode="tail"
+                          numberOfLines={1}
+                        >
                           {poly.points.length} points
                         </Text>
                       </View>
                       <View style={listCardStyles.forwardContainer}>
-                        <TouchableOpacity onPress={() => editPoly(poly)} activeOpacity={0.7}>
-                          <MaterialCommunityIcons name="pencil" size={20} color={colors.iconGray} />
+                        <TouchableOpacity
+                          onPress={() => editPoly(poly)}
+                          activeOpacity={0.7}
+                        >
+                          <MaterialCommunityIcons
+                            name="pencil"
+                            size={20}
+                            color={colors.iconGray}
+                          />
                         </TouchableOpacity>
                       </View>
                     </View>
