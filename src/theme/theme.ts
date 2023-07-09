@@ -9,8 +9,8 @@ export const theme = {
         width: 72,
       },
       lg: {
-        height: 125,
-        width: 125,
+        height: 128,
+        width: 128,
       },
     },
   },
