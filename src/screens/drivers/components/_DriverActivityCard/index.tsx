@@ -1,12 +1,12 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
 import { _DefaultCard, _Divider } from "@components";
-import { listCardStyles, screenStyles } from "src/screens/styles";
+import { listCardStyles, screenStyles } from "@screen-styles";
 import { colors, gStyles } from "@theme";
 import { faker } from "@faker-js/faker";
 import moment from "moment";
+
+import { styles } from "./styles";
 
 interface OwnProps {
   item: IDriverActivity;
@@ -40,7 +40,11 @@ const _DriverActivityCard: React.FC<OwnProps> = ({ item }) => {
           <View style={listCardStyles.infoContainer}>
             <Text style={gStyles.cardInfoTitleText}>{item.name}</Text>
             {/* <Text style={gStyles.tblHeaderText}>Phone: </Text> */}
-            <Text style={gStyles.tblDescText} ellipsizeMode="tail" numberOfLines={1}>
+            <Text
+              style={gStyles.tblDescText}
+              ellipsizeMode="tail"
+              numberOfLines={1}
+            >
               {item.email}
             </Text>
             <_Divider marginVertical={0.5} />

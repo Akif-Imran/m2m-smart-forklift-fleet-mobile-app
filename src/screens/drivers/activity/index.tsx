@@ -1,22 +1,32 @@
-import { FlatList, RefreshControl, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  RefreshControl,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
-
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { _ConfirmModal, _ListEmptyComponent } from "@components";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import { FAB, Modal, Portal, RadioButton, Searchbar } from "react-native-paper";
 import { ActivityFilters } from "@constants";
 import { faker } from "@faker-js/faker";
 import { ToastService } from "@utility";
-import { _DriverActivityCard } from "../components";
-import { DriverStackScreenProps } from "@navigation-types";
+import type { DriverStackScreenProps } from "@navigation-types";
 
-const Activity: React.FC<DriverStackScreenProps<"Activity">> = ({ navigation }) => {
+import { _DriverActivityCard } from "../components";
+
+const Activity: React.FC<DriverStackScreenProps<"Activity">> = ({
+  navigation,
+}) => {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [drivers, setDrivers] = React.useState<IDriverActivity[]>([]);
-  const [searchedDrivers, setSearchedDrivers] = React.useState<IDriverActivity[]>([]);
+  const [searchedDrivers, setSearchedDrivers] = React.useState<
+    IDriverActivity[]
+  >([]);
   const [isFetching, setIsFetching] = React.useState(false);
   const fetchDriversTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
   const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
@@ -68,16 +78,20 @@ const Activity: React.FC<DriverStackScreenProps<"Activity">> = ({ navigation }) 
       return;
     }
     let matchingKey: string | ActivityFilters = "1";
-    Object.entries(ActivityFilters).forEach((value) => {
-      if (newValue === value[0]) {
-        matchingKey = value[1];
+    Object.entries(ActivityFilters).forEach(([key, value]) => {
+      if (newValue === key) {
+        matchingKey = value;
       }
     });
     console.log("matchingKey", matchingKey);
-    if (!matchingKey) return;
+    if (!matchingKey) {
+      return;
+    }
     console.log("matchingKey", matchingKey);
     const filtered = drivers.filter(
-      (value) => value.name.split(" ")[1].toLowerCase() === matchingKey.toString().toLowerCase()
+      (value) =>
+        value.name.split(" ")[1].toLowerCase() ===
+        matchingKey.toString().toLowerCase()
     );
     setSearchedDrivers((_prev) => filtered);
   };
@@ -97,7 +111,9 @@ const Activity: React.FC<DriverStackScreenProps<"Activity">> = ({ navigation }) 
   };
 
   React.useEffect(() => {
-    if (!drivers) return;
+    if (!drivers) {
+      return;
+    }
     setSearchedDrivers(drivers);
 
     return () => {
@@ -130,7 +146,10 @@ const Activity: React.FC<DriverStackScreenProps<"Activity">> = ({ navigation }) 
           onChangeText={(query) => handleSearch(query)}
           style={screenStyles.searchStyle}
         />
-        <TouchableOpacity style={screenStyles.filterButtonStyle} onPress={() => showModal()}>
+        <TouchableOpacity
+          style={screenStyles.filterButtonStyle}
+          onPress={() => showModal()}
+        >
           <FontAwesome5 name="filter" size={20} color={colors.iconGray} />
         </TouchableOpacity>
       </View>
@@ -174,7 +193,11 @@ const Activity: React.FC<DriverStackScreenProps<"Activity">> = ({ navigation }) 
         keyExtractor={(item) => item._id}
         ListEmptyComponent={<_ListEmptyComponent label="No Drivers..." />}
         renderItem={({ item }) => (
-          <_DriverActivityCard key={item._id} item={item} handleDelete={handleDelete} />
+          <_DriverActivityCard
+            key={item._id}
+            item={item}
+            handleDelete={handleDelete}
+          />
         )}
         refreshControl={
           <RefreshControl

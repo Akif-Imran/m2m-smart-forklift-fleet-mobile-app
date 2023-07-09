@@ -10,10 +10,12 @@ import * as SplashScreen from "expo-splash-screen";
 import { registerRootComponent } from "expo";
 import { colors } from "@theme";
 import { AuthInit, AuthProvider } from "@context";
+
 import { App } from "@";
 
 SplashScreen.preventAutoHideAsync();
 
+// eslint-disable-next-line import/no-default-export
 export default function RootApp() {
   const [isAppReady, setIsAppReady] = React.useState(false);
   const [isAuthLoaded, setIsAuthLoaded] = React.useState<boolean>(false);

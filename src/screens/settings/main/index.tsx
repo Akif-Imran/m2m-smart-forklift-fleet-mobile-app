@@ -1,16 +1,22 @@
 import { Alert, ScrollView, Text, View } from "react-native";
 import React from "react";
-import { colors } from "../../../theme";
-import { Card, MultiCard, NoIconHeader, MultiCardItem } from "@components";
-import { MaterialCommunityIcons, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import type { MultiCardItem } from "@components";
+import { Card, MultiCard, NoIconHeader } from "@components";
+import {
+  MaterialCommunityIcons,
+  FontAwesome5,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-root-toast";
-import appConfig from "../../../../app.json";
-import { ProfileSettingsStackScreenProps } from "@navigation-types";
+import type { ProfileSettingsStackScreenProps } from "@navigation-types";
 import { useAuthContext } from "@context";
 import { ToastService } from "@utility";
+import { screenStyles } from "@screen-styles";
+import appConfig from "@app-config";
+import { colors } from "@theme";
+
 import { styles } from "./styles";
-import { screenStyles } from "src/screens/styles";
 
 const group1 = {
   icon: require("../../../assets/images/user.png"),
@@ -18,7 +24,9 @@ const group1 = {
   subtitle: "",
 };
 
-export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = ({ navigation }) => {
+export const Settings: React.FC<
+  ProfileSettingsStackScreenProps<"Settings">
+> = ({ navigation }) => {
   const appVersion = appConfig.expo.version;
   const {
     state: { user },
@@ -27,7 +35,13 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
   const multiData1: Array<MultiCardItem> = [
     {
       id: 1,
-      icon: <MaterialCommunityIcons name="forklift" color={colors.heavyGray} size={25} />,
+      icon: (
+        <MaterialCommunityIcons
+          name="forklift"
+          color={colors.heavyGray}
+          size={25}
+        />
+      ),
       bgColor: colors.mediumGray,
       title: "Vehicle Icons",
       color: colors.titleText,
@@ -37,7 +51,9 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
     },
     {
       id: 2,
-      icon: <MaterialCommunityIcons name="key" size={20} color={colors.heavyGray} />,
+      icon: (
+        <MaterialCommunityIcons name="key" size={20} color={colors.heavyGray} />
+      ),
       bgColor: colors.mediumGray,
       title: "Change Password",
       color: colors.titleText,
@@ -50,7 +66,13 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
   const multiData2: Array<MultiCardItem> = [
     {
       id: 3,
-      icon: <MaterialCommunityIcons name="information" size={20} color={colors.heavyGray} />,
+      icon: (
+        <MaterialCommunityIcons
+          name="information"
+          size={20}
+          color={colors.heavyGray}
+        />
+      ),
       bgColor: colors.mediumGray,
       title: "About",
       color: colors.titleText,
@@ -60,7 +82,13 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
     },
     {
       id: 4,
-      icon: <MaterialCommunityIcons name="help-box" size={20} color={colors.heavyGray} />,
+      icon: (
+        <MaterialCommunityIcons
+          name="help-box"
+          size={20}
+          color={colors.heavyGray}
+        />
+      ),
       bgColor: colors.mediumGray,
       title: "Help",
       color: colors.titleText,
@@ -83,7 +111,13 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
   const multiData4: Array<MultiCardItem> = [
     {
       id: 6,
-      icon: <MaterialIcons name="add-location-alt" color={colors.heavyGray} size={20} />,
+      icon: (
+        <MaterialIcons
+          name="add-location-alt"
+          color={colors.heavyGray}
+          size={20}
+        />
+      ),
       bgColor: colors.mediumGray,
       title: "POI List",
       color: colors.titleText,
@@ -93,7 +127,13 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
     },
     {
       id: 7,
-      icon: <MaterialIcons name="home-repair-service" color={colors.heavyGray} size={20} />,
+      icon: (
+        <MaterialIcons
+          name="home-repair-service"
+          color={colors.heavyGray}
+          size={20}
+        />
+      ),
       bgColor: colors.mediumGray,
       title: "Services",
       color: colors.titleText,
@@ -105,7 +145,13 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
     },
     {
       id: 8,
-      icon: <MaterialCommunityIcons name="file-multiple" color={colors.heavyGray} size={20} />,
+      icon: (
+        <MaterialCommunityIcons
+          name="file-multiple"
+          color={colors.heavyGray}
+          size={20}
+        />
+      ),
       bgColor: colors.mediumGray,
       title: "Reports",
       color: colors.titleText,
@@ -172,7 +218,6 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
         bounces={false}
       >
         <NoIconHeader title={"Profile"} />
-        {/* <Text style={styles.headerText}>Profile</Text> */}
         <Card data={group1} size="large" />
         <View style={styles.segmentContainer}>
           <MultiCard data={multiData1} />
@@ -189,9 +234,6 @@ export const Settings: React.FC<ProfileSettingsStackScreenProps<"Settings">> = (
         <View style={styles.segmentContainer}>
           <Text style={styles.versionText}>Version {appVersion}</Text>
         </View>
-        {/* <View style={styles.segmentContainer}>
-          <MultiCard data={multiData4} />
-        </View> */}
       </ScrollView>
     </SafeAreaView>
   );

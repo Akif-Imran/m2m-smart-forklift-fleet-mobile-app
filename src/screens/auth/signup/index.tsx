@@ -1,18 +1,26 @@
-import { Text, ScrollView, View, KeyboardAvoidingView, Platform, Image } from "react-native";
-import React, { useState, FC } from "react";
+import {
+  Text,
+  ScrollView,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  Image,
+} from "react-native";
+import type { FC } from "react";
+import React, { useState } from "react";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import { Button, TextInput, HelperText } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors, gStyles, PaperTheme } from "@theme";
-
-import { styles } from "./styles";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { AuthStackScreenProps } from "@navigation-types";
+import type { AuthStackScreenProps } from "@navigation-types";
 import { useAuthContext } from "@context";
 import { ToastService } from "@utility";
 import { _TextInput } from "@components";
+
+import { styles } from "./styles";
 
 interface IForm {
   email: string;
@@ -22,13 +30,19 @@ interface IForm {
 }
 
 const schema: yup.ObjectSchema<IForm> = yup.object().shape({
-  email: yup.string().email("Must be valid email.").required("Email is required."),
+  email: yup
+    .string()
+    .email("Must be valid email.")
+    .required("Email is required."),
   name: yup
     .string()
     .min(2, "Name is too short.")
     .max(80, "Name is too long.")
     .required("Name is required."),
-  password: yup.string().min(3, "Password too Short!").required("Password is required."),
+  password: yup
+    .string()
+    .min(3, "Password too Short!")
+    .required("Password is required."),
   mobile: yup.string().min(11).max(18).required("Mobile is required."),
 });
 
@@ -47,26 +61,32 @@ const SignUp: FC<AuthStackScreenProps<"Register">> = ({}) => {
     password: "",
     mobile: "",
   };
-  const { errors, values, handleBlur, handleChange, handleSubmit, touched } = useFormik<IForm>({
-    initialValues: initialValues,
-    onSubmit: (values, helpers) => {
-      console.log(values);
-      setSpinnerLoading(true);
-      setTimeout(() => {
-        helpers.resetForm();
-        ToastService.show("Demo sign up...");
-        setSpinnerLoading(false);
-      }, 1800);
-    },
-    validationSchema: schema,
-  });
+  const { errors, values, handleBlur, handleChange, handleSubmit, touched } =
+    useFormik<IForm>({
+      initialValues: initialValues,
+      onSubmit: (_values, helpers) => {
+        console.log(_values);
+        setSpinnerLoading(true);
+        setTimeout(() => {
+          helpers.resetForm();
+          ToastService.show("Demo sign up...");
+          setSpinnerLoading(false);
+        }, 1800);
+      },
+      validationSchema: schema,
+    });
 
   // const continueSignUp = (values: IForm, helpers: FormikHelpers<IForm>) => {};
 
   return (
     //safe are container
     <SafeAreaView style={styles.mainContainer}>
-      <Spinner visible={spinnerLoading} cancelable={false} animation="fade" size="large" />
+      <Spinner
+        visible={spinnerLoading}
+        cancelable={false}
+        animation="fade"
+        size="large"
+      />
       {/* provides keyboard safe */}
       <KeyboardAvoidingView
         style={styles.keyboardViewContainer}
@@ -99,11 +119,11 @@ const SignUp: FC<AuthStackScreenProps<"Register">> = ({}) => {
                 resizeMethod="resize"
                 resizeMode="contain"
               />
-              {/* <Text style={[gStyles.mediumTitleText, { marginTop: -60, marginBottom: 20 }]}>Smart Machine</Text> */}
-              {/* <Text style={[gStyles.descText, { fontSize: 18, marginTop: -60, marginBottom: 20 }]}>Smart Machine</Text> */}
             </View>
             <Text style={gStyles.headerText}>Sign Up</Text>
-            <Text style={gStyles.descText}>Please enter your account info,</Text>
+            <Text style={gStyles.descText}>
+              Please enter your account info,
+            </Text>
             <Text style={gStyles.descText}>
               in the fields
               <Text style={gStyles.descTextPrimaryBold}> below</Text>
@@ -128,14 +148,18 @@ const SignUp: FC<AuthStackScreenProps<"Register">> = ({}) => {
                 error={errors.email && touched.email ? true : false}
                 onBlur={handleBlur("email")}
                 onChangeText={handleChange("email")}
-                style={{
-                  fontSize: 16,
-                  color: colors.textGray,
-                }}
+                // style={{
+                //   fontSize: 16,
+                //   color: colors.textGray,
+                // }}
                 left={<TextInput.Icon icon="email" color={colors.iconGray} />}
               />
               {errors.email && touched.email ? (
-                <HelperText type="error" selectable={false} style={gStyles.formErrorText}>
+                <HelperText
+                  type="error"
+                  selectable={false}
+                  style={gStyles.formErrorText}
+                >
                   {errors.email}
                 </HelperText>
               ) : null}
@@ -155,14 +179,18 @@ const SignUp: FC<AuthStackScreenProps<"Register">> = ({}) => {
                 error={errors.name && touched.name ? true : false}
                 onBlur={handleBlur("name")}
                 onChangeText={handleChange("name")}
-                style={{
-                  fontSize: 16,
-                  color: colors.textGray,
-                }}
+                // style={{
+                //   fontSize: 16,
+                //   color: colors.textGray,
+                // }}
                 left={<TextInput.Icon icon="account" color={colors.iconGray} />}
               />
               {errors.name && touched.name ? (
-                <HelperText type="error" selectable={false} style={gStyles.formErrorText}>
+                <HelperText
+                  type="error"
+                  selectable={false}
+                  style={gStyles.formErrorText}
+                >
                   {errors.name}
                 </HelperText>
               ) : null}
@@ -184,13 +212,19 @@ const SignUp: FC<AuthStackScreenProps<"Register">> = ({}) => {
                 onBlur={handleBlur("password")}
                 onChangeText={handleChange("password")}
                 secureTextEntry={secureEntry}
-                style={{
-                  fontSize: 16,
-                  color: colors.textGray,
-                }}
+                // style={{
+                //   fontSize: 16,
+                //   color: colors.textGray,
+                // }}
                 left={
                   <TextInput.Icon
-                    icon={() => <Fontisto name="locked" color={colors.iconGray} size={20} />}
+                    icon={() => (
+                      <Fontisto
+                        name="locked"
+                        color={colors.iconGray}
+                        size={20}
+                      />
+                    )}
                   />
                 }
                 right={
@@ -205,7 +239,11 @@ const SignUp: FC<AuthStackScreenProps<"Register">> = ({}) => {
                 }
               />
               {errors.password && touched.password ? (
-                <HelperText type="error" selectable={false} style={gStyles.formErrorText}>
+                <HelperText
+                  type="error"
+                  selectable={false}
+                  style={gStyles.formErrorText}
+                >
                   {errors.password}
                 </HelperText>
               ) : null}
@@ -226,7 +264,12 @@ const SignUp: FC<AuthStackScreenProps<"Register">> = ({}) => {
           </View>
           {/* login button container */}
           <View style={styles.buttonContainer}>
-            <Button mode="contained" theme={PaperTheme} loading={isLoading} onPress={handleSubmit}>
+            <Button
+              mode="contained"
+              theme={PaperTheme}
+              loading={isLoading}
+              onPress={handleSubmit}
+            >
               Sign Up
             </Button>
           </View>
@@ -236,4 +279,4 @@ const SignUp: FC<AuthStackScreenProps<"Register">> = ({}) => {
   );
 };
 
-export default SignUp;
+export { SignUp };

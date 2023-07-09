@@ -3,7 +3,7 @@ import React from "react";
 import type { ReportStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import { colors, theme } from "@theme";
 
 const ViewOnMap: React.FC<ReportStackScreenProps<"ViewOnMap">> = ({

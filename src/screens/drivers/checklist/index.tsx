@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import type { DriverStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { listCardStyles, screenStyles } from "src/screens/styles";
+import { listCardStyles, screenStyles } from "@screen-styles";
 import { PaperTheme, colors, gStyles } from "@theme";
 import { _DefaultCard, _ScrollFormLayout } from "@components";
 import { faker } from "@faker-js/faker";

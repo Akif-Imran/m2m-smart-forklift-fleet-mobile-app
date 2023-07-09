@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { colors, gStyles } from "@theme";
-import { DashboardStackParamsList } from "@navigation-types";
+import type { DashboardStackParamsList } from "@navigation-types";
 import { Dashboard } from "@screens";
 
 const Stack = createStackNavigator<DashboardStackParamsList>();
@@ -28,19 +28,6 @@ const DashboardStack: React.FC = () => {
           title: "",
         }}
       />
-      {/* <Stack.Screen
-        name="OperatorDetails"
-        component={OperatorDetails}
-        options={{
-          headerTitle: "Operator Details",
-          headerRightContainerStyle: {
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            borderWidth: 0,
-          },
-        }}
-      /> */}
     </Stack.Navigator>
   );
 };

@@ -1,20 +1,33 @@
-import { FlatList, RefreshControl, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  RefreshControl,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
-
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NoIconHeader, _ConfirmModal, _ListEmptyComponent } from "@components";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import { FAB, Modal, Portal, RadioButton, Searchbar } from "react-native-paper";
 import { PaperTheme, colors, gStyles } from "@theme";
-import { DriverStackScreenProps } from "@navigation-types";
+import type { DriverStackScreenProps } from "@navigation-types";
 import { ToastService } from "@utility";
 import { faker } from "@faker-js/faker";
-import { _DriverListCard } from "../components";
-import { Feather, FontAwesome5, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  Feather,
+  FontAwesome5,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { DriversFilters } from "@constants";
 import moment from "moment";
 
-const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({ navigation }) => {
+import { _DriverListCard } from "../components";
+
+const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({
+  navigation,
+}) => {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [drivers, setDrivers] = React.useState<IDriver[]>([]);
   const [searchedDrivers, setSearchedDrivers] = React.useState<IDriver[]>([]);
@@ -23,7 +36,9 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({ navigation }) =>
   const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
 
   const [visible, setVisible] = React.useState<boolean>(false);
-  const [selectedFilter, setSelectedFilter] = React.useState<string>(DriversFilters.ALL.toString());
+  const [selectedFilter, setSelectedFilter] = React.useState<string>(
+    DriversFilters.ALL.toString()
+  );
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
@@ -36,7 +51,13 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({ navigation }) =>
       rating: faker.helpers.rangeToNumber({ min: 1, max: 5 }),
       touchId: faker.string.alphanumeric({ length: 10, casing: "upper" }),
       email: faker.internet.email(),
-      department: faker.helpers.arrayElement(["CEO", "HR", "IT", "Marketing", "Sales"]),
+      department: faker.helpers.arrayElement([
+        "CEO",
+        "HR",
+        "IT",
+        "Marketing",
+        "Sales",
+      ]),
       ic_number: faker.string.alphanumeric({ length: 13, casing: "upper" }),
       experience: faker.helpers.rangeToNumber({ min: 3, max: 8 }).toString(),
       joiningDate: moment(faker.date.past()).format("YYYY-MM-DD"),
@@ -102,7 +123,9 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({ navigation }) =>
   };
 
   React.useEffect(() => {
-    if (!drivers) return;
+    if (!drivers) {
+      return;
+    }
     setSearchedDrivers(drivers);
 
     return () => {
@@ -122,11 +145,19 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({ navigation }) =>
         ]}
         right={[
           {
-            icon: <MaterialCommunityIcons name="barcode-scan" size={24} color={colors.primary} />,
+            icon: (
+              <MaterialCommunityIcons
+                name="barcode-scan"
+                size={24}
+                color={colors.primary}
+              />
+            ),
             onPress: () => navigation.navigate("BarcodeScanner"),
           },
           {
-            icon: <Ionicons name="notifications" size={24} color={colors.primary} />,
+            icon: (
+              <Ionicons name="notifications" size={24} color={colors.primary} />
+            ),
             onPress: () => navigation.navigate("Notification"),
           },
         ]}
@@ -148,7 +179,10 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({ navigation }) =>
           onChangeText={(query) => handleSearch(query)}
           style={screenStyles.searchStyle}
         />
-        <TouchableOpacity style={screenStyles.filterButtonStyle} onPress={() => showModal()}>
+        <TouchableOpacity
+          style={screenStyles.filterButtonStyle}
+          onPress={() => showModal()}
+        >
           <FontAwesome5 name="filter" size={20} color={colors.iconGray} />
         </TouchableOpacity>
       </View>
@@ -212,7 +246,11 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({ navigation }) =>
         keyExtractor={(item) => item._id}
         ListEmptyComponent={<_ListEmptyComponent label="No Drivers..." />}
         renderItem={({ item }) => (
-          <_DriverListCard key={item._id} item={item} handleDelete={handleDelete} />
+          <_DriverListCard
+            key={item._id}
+            item={item}
+            handleDelete={handleDelete}
+          />
         )}
         refreshControl={
           <RefreshControl

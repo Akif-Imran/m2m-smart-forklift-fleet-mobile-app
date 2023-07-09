@@ -1,8 +1,9 @@
-import { Text, TextStyle, View } from "react-native";
+import type { TextStyle } from "react-native";
+import { Text, View } from "react-native";
 import React from "react";
-
 import { gStyles, theme } from "@theme";
 import { Divider } from "react-native-paper";
+
 import { styles } from "./styles";
 
 interface OwnProps {
@@ -20,7 +21,9 @@ const _Divider: React.FC<OwnProps> = ({
 }) => {
   return (
     <View style={styles.spacing}>
-      {title && <Text style={[gStyles.tblHeaderText, { textAlign }]}>{title}</Text>}
+      {title && (
+        <Text style={[gStyles.tblHeaderText, { textAlign }]}>{title}</Text>
+      )}
       <Divider style={{ marginVertical: marginVertical }} inset={inset} />
     </View>
   );

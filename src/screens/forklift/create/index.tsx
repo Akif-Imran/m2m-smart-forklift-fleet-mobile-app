@@ -15,7 +15,7 @@ import {
   _ScrollFormLayout,
   _TextInput,
 } from "@components";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
 import type { ForkliftStackScreenProps } from "@navigation-types";
 import { ToastService } from "@utility";

@@ -8,7 +8,7 @@ import {
   VictoryTooltip,
   VictoryVoronoiContainer,
 } from "victory-native";
-import { colors } from "../../theme";
+import { colors } from "@theme";
 
 interface OwnProps {
   x: string;
@@ -18,8 +18,12 @@ interface OwnProps {
   domainPadding: number;
   padding: { bottom: number; left: number; right: number; top: number };
   data: Record<string, number>[];
-  x_axis_tick_values: string[] | number[];
-  x_axis_tick_format?: ((...args: any[]) => any) | unknown[] | null | undefined;
+  xAxisTickValues: string[] | number[];
+  xAxisTickFormat?:
+    | ((...args: unknown[]) => unknown)
+    | unknown[]
+    | null
+    | undefined;
 }
 
 export const _BarChart: React.FC<OwnProps> = ({
@@ -27,8 +31,8 @@ export const _BarChart: React.FC<OwnProps> = ({
   x,
   y,
   color,
-  x_axis_tick_values,
-  x_axis_tick_format,
+  xAxisTickValues: xAxisTickValues,
+  xAxisTickFormat: xAxisTickFormat,
   height,
   domainPadding,
   padding,
@@ -41,15 +45,21 @@ export const _BarChart: React.FC<OwnProps> = ({
     containerComponent={
       <VictoryVoronoiContainer
         responsive={true}
-        labels={({ datum }) => `Date: ${datum.x},\r\nProduction: ${datum.y.toFixed(1)}`}
-        labelComponent={<VictoryTooltip style={{ fontSize: 10 }} orientation={"bottom"} />}
+        labels={({ datum }) =>
+          `Date: ${datum.x},\r\nProduction: ${datum.y.toFixed(1)}`
+        }
+        labelComponent={
+          <VictoryTooltip style={{ fontSize: 10 }} orientation={"bottom"} />
+        }
       />
     }
   >
     <VictoryAxis
-      tickValues={x_axis_tick_values}
-      tickFormat={x_axis_tick_format}
-      tickLabelComponent={<VictoryLabel angle={-30} textAnchor={"end"} style={{ fontSize: 8 }} />}
+      tickValues={xAxisTickValues}
+      tickFormat={xAxisTickFormat}
+      tickLabelComponent={
+        <VictoryLabel angle={-30} textAnchor={"end"} style={{ fontSize: 8 }} />
+      }
       style={{
         axis: {
           stroke: colors.iconGray,

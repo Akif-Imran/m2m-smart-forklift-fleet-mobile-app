@@ -17,7 +17,7 @@ import {
   _TextInput,
 } from "@components";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import type { DriverStackScreenProps } from "@navigation-types";
 import * as ImagePicker from "expo-image-picker";
 import * as yup from "yup";

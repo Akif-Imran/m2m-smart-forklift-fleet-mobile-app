@@ -1,23 +1,29 @@
 import React from "react";
 import { Image } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
-
+import {
+  FontAwesome,
+  MaterialIcons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { colors } from "@theme";
+import type {
+  AuthStackScreenProps,
+  MainTabsParamsList,
+} from "@navigation-types";
+
 import { ProfileSettingsStack } from "../profile-settings-stack"; //not imported from @navigation to avoid cycle
 import { DashboardStack } from "../dashboard-stack"; //not imported from @navigation to avoid cycle
 import { ForkliftStack } from "../forklift-stack";
 import { DriverStack } from "../drivers-stack";
+
 // import { ServicesStack } from "../services-stack";
 // import { ReportsStack } from "../reports-stack";
-import { MainTabsParamsList } from "@navigation-types";
 import { styles } from "./styles";
 
 const Tab = createBottomTabNavigator<MainTabsParamsList>();
 
-interface OwnProps {}
-
-const RootTabs: React.FC<OwnProps> = ({}) => {
+const RootTabs: React.FC<AuthStackScreenProps<"RootTabs">> = ({}) => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -45,7 +51,6 @@ const RootTabs: React.FC<OwnProps> = ({}) => {
               }}
               resizeMode="contain"
             />
-            // <SimpleLineIcons name="screen-smartphone" color={focused ? colors.primary : colors.titleText} size={20} />
           ),
         }}
       />

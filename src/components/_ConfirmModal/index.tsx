@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View, useWindowDimensions } from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
 import { Button, Modal, Portal } from "react-native-paper";
 import LottieView from "lottie-react-native";
 import { PaperTheme, colors, gStyles } from "@theme";
+
+import { styles } from "./styles";
 
 interface OwnProps {
   question: string;
@@ -25,8 +25,6 @@ const _ConfirmModal: React.FC<OwnProps> = ({
 }) => {
   const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = useWindowDimensions();
   const animation = React.useRef(null);
-
-  React.useEffect(() => {}, []);
 
   return (
     <Portal theme={PaperTheme}>
@@ -50,7 +48,7 @@ const _ConfirmModal: React.FC<OwnProps> = ({
           autoPlay
           duration={1500}
           style={styles.lottieView}
-          source={require("@assets/animations/warning-status.json")}
+          source={require("../../assets/animations/warning-status.json")}
           loop={false}
           enableMergePathsAndroidForKitKatAndAbove
         />
@@ -61,7 +59,9 @@ const _ConfirmModal: React.FC<OwnProps> = ({
             mode="text"
             onPress={onCancel}
             color={colors.warning}
-            labelStyle={StyleSheet.compose(gStyles.tblHeaderText, { color: colors.warning })}
+            labelStyle={StyleSheet.compose(gStyles.tblHeaderText, {
+              color: colors.warning,
+            })}
             style={styles.buttonStyle}
           >
             {cancelLabel}
@@ -71,7 +71,9 @@ const _ConfirmModal: React.FC<OwnProps> = ({
             mode="contained"
             onPress={onConfirm}
             color={colors.warning}
-            labelStyle={StyleSheet.compose(gStyles.tblHeaderText, { color: colors.white })}
+            labelStyle={StyleSheet.compose(gStyles.tblHeaderText, {
+              color: colors.white,
+            })}
             style={styles.buttonStyle}
           >
             {confirmLabel}

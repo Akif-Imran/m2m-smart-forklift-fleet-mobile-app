@@ -3,7 +3,7 @@ import React from "react";
 import { _DefaultCard } from "@components";
 import { useNavigation } from "@react-navigation/native";
 import type { ForkliftStackScreenProps } from "@navigation-types";
-import { listCardStyles } from "src/screens/styles";
+import { listCardStyles } from "@screen-styles";
 import { colors, gStyles } from "@theme";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import moment from "moment";

@@ -8,7 +8,7 @@ import {
   VictoryPie,
   VictoryTheme,
 } from "victory-native";
-import { colors } from "../../theme";
+import { colors } from "@theme";
 
 const { width } = Dimensions.get("window");
 
@@ -55,7 +55,12 @@ export const _PieChart: React.FC<OwnProps> = ({
       ];
   // const { width: SCREEN_WIDTH } = useWindowDimensions();
   return (
-    <View style={[styles.mainContainer, direction === "row" ? styles.row : styles.column]}>
+    <View
+      style={[
+        styles.mainContainer,
+        direction === "row" ? styles.row : styles.column,
+      ]}
+    >
       <VictoryPie
         height={height}
         standalone={true}
@@ -94,7 +99,9 @@ export const _PieChart: React.FC<OwnProps> = ({
           },
         }}
         theme={VictoryTheme.material}
-        containerComponent={<VictoryContainer preserveAspectRatio="none" responsive={true} />}
+        containerComponent={
+          <VictoryContainer preserveAspectRatio="none" responsive={true} />
+        }
       >
         <VictoryAxis
           style={{

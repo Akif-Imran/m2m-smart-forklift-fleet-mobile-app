@@ -1,25 +1,36 @@
-import { FlatList, RefreshControl, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  RefreshControl,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
-
 import { SafeAreaView } from "react-native-safe-area-context";
 import { _ConfirmModal, _ListEmptyComponent } from "@components";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import { Modal, Portal, RadioButton, Searchbar } from "react-native-paper";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
-import { _NotificationListCard } from "../components/_NotificationListCard";
-import { ForkliftStackScreenProps } from "@navigation-types";
+import type { ForkliftStackScreenProps } from "@navigation-types";
 import { ToastService } from "@utility";
 import { faker } from "@faker-js/faker";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { ForkliftNotificationsFilters } from "@constants";
 
+import { _NotificationListCard } from "../components/_NotificationListCard";
 
-const ForkliftNotification: React.FC<ForkliftStackScreenProps<"Notification">> = ({}) => {
+const ForkliftNotification: React.FC<
+  ForkliftStackScreenProps<"Notification">
+> = ({}) => {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [notifications, setNotifications] = React.useState<INotification[]>([]);
-  const [searchedNotifications, setSearchedNotifications] = React.useState<INotification[]>([]);
+  const [searchedNotifications, setSearchedNotifications] = React.useState<
+    INotification[]
+  >([]);
   const [isFetching, setIsFetching] = React.useState(false);
-  const fetchNotificationsTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
+  const fetchNotificationsTimeoutRef = React.useRef<
+    NodeJS.Timeout | undefined
+  >();
   const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
 
   const [visible, setVisible] = React.useState<boolean>(false);
@@ -82,23 +93,27 @@ const ForkliftNotification: React.FC<ForkliftStackScreenProps<"Notification">> =
       return;
     }
     let matchingKey: string | ForkliftNotificationsFilters = "1";
-    Object.entries(ForkliftNotificationsFilters).forEach((value) => {
-      if (newValue === value[0]) {
-        matchingKey = value[1];
+    Object.entries(ForkliftNotificationsFilters).forEach(([key, value]) => {
+      if (newValue === key) {
+        matchingKey = value;
       }
     });
     console.log("matchingKey", matchingKey);
-    if (!matchingKey) return;
+    if (!matchingKey) {
+      return;
+    }
     console.log("matchingKey", matchingKey);
     const filtered = notifications.filter(
-      (value) => value.event.split(" ")[1].toLowerCase() === matchingKey.toString().toLowerCase()
+      (value) =>
+        value.event.split(" ")[1].toLowerCase() ===
+        matchingKey.toString().toLowerCase()
     );
     setSearchedNotifications((_prev) => filtered);
   };
 
   const handleDelete = React.useCallback((notificationId: string) => {
     setConfirmDeleteVisible(true);
-    console.log("handle delete",notificationId);
+    console.log("handle delete", notificationId);
   }, []);
 
   const handleDeleteConfirm = () => {
@@ -111,7 +126,9 @@ const ForkliftNotification: React.FC<ForkliftStackScreenProps<"Notification">> =
   };
 
   React.useEffect(() => {
-    if (!notifications) return;
+    if (!notifications) {
+      return;
+    }
     setSearchedNotifications(notifications);
 
     return () => {
@@ -143,7 +160,10 @@ const ForkliftNotification: React.FC<ForkliftStackScreenProps<"Notification">> =
           onChangeText={(query) => handleSearch(query)}
           style={screenStyles.searchStyle}
         />
-        <TouchableOpacity style={screenStyles.filterButtonStyle} onPress={() => showModal()}>
+        <TouchableOpacity
+          style={screenStyles.filterButtonStyle}
+          onPress={() => showModal()}
+        >
           <FontAwesome5 name="filter" size={20} color={colors.iconGray} />
         </TouchableOpacity>
       </View>
@@ -207,7 +227,11 @@ const ForkliftNotification: React.FC<ForkliftStackScreenProps<"Notification">> =
         keyExtractor={(item) => item._id}
         ListEmptyComponent={<_ListEmptyComponent label="No Notifications..." />}
         renderItem={({ item }) => (
-          <_NotificationListCard key={item._id} item={item} handleDelete={handleDelete} />
+          <_NotificationListCard
+            key={item._id}
+            item={item}
+            handleDelete={handleDelete}
+          />
         )}
         refreshControl={
           <RefreshControl

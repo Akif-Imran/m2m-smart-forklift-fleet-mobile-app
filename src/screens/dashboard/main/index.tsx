@@ -1,12 +1,12 @@
 import { ScrollView, Text, View, useWindowDimensions } from "react-native";
 import React from "react";
-import { DashboardStackScreenProps } from "@navigation-types";
-
-import { styles } from "./styles";
+import type { DashboardStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import { NoIconHeader, _DefaultCard, _PieChart } from "@components";
 import { colors, gStyles, theme } from "@theme";
+
+import { styles } from "./styles";
 
 const Dashboard: React.FC<DashboardStackScreenProps<"Dashboard">> = ({}) => {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
@@ -75,7 +75,11 @@ const Dashboard: React.FC<DashboardStackScreenProps<"Dashboard">> = ({}) => {
               radius={80}
               labelRadius={40}
               innerRadius={18}
-              colorScale={[theme.colors.blue[6], theme.colors.pink[6], theme.colors.teal[6]]}
+              colorScale={[
+                theme.colors.blue[6],
+                theme.colors.pink[6],
+                theme.colors.teal[6],
+              ]}
               legends={[
                 {
                   name: `Reporting (${2 || 0})`,
@@ -113,7 +117,11 @@ const Dashboard: React.FC<DashboardStackScreenProps<"Dashboard">> = ({}) => {
               radius={80}
               labelRadius={40}
               innerRadius={0}
-              colorScale={[theme.colors.pink[6], theme.colors.teal[6], theme.colors.violet[6]]}
+              colorScale={[
+                theme.colors.pink[6],
+                theme.colors.teal[6],
+                theme.colors.violet[6],
+              ]}
               legends={[
                 {
                   name: `Pending (${2 || 0})`,

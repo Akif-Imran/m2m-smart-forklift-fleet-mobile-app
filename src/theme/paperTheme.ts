@@ -1,6 +1,7 @@
-import { colors } from "./colors";
 import type { Theme } from "react-native-paper";
 import { DefaultTheme } from "react-native-paper";
+
+import { colors } from "./colors";
 
 const PaperTheme: Theme = {
   ...DefaultTheme,

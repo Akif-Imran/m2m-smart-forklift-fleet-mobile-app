@@ -4,7 +4,8 @@ import { _DefaultCard } from "@components";
 import { Ionicons } from "@expo/vector-icons";
 import { colors, gStyles } from "@theme";
 import { truncateText } from "@utility";
-import { listCardStyles } from "src/screens/styles";
+import { listCardStyles } from "@screen-styles";
+
 import { styles } from "./styles";
 
 interface OwnProps {
@@ -18,7 +19,6 @@ const _AssignForkliftListCard: React.FC<OwnProps> = ({
   checked,
   toggleAssignment,
 }) => {
-
   return (
     <_DefaultCard onPress={() => toggleAssignment(item._id)}>
       <View

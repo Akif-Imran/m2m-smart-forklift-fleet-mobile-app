@@ -89,7 +89,7 @@ const ViewPoiOnMap: React.FC<
           <Image
             source={images[`${item.iconName}-${item.color}`]}
             // onLoad={() => setViewTrackingA1(false)}
-            style={{ width: 48, height: 48 }}
+            style={{ ...theme.img.size.sm }}
             resizeMethod="auto"
             resizeMode="contain"
           />

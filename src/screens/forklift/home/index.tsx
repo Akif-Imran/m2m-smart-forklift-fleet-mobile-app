@@ -1,9 +1,8 @@
 import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
 import React from "react";
-
-import { ForkliftStackScreenProps } from "@navigation-types";
+import type { ForkliftStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import {
   NoIconHeader,
   _ConfirmModal,
@@ -14,15 +13,20 @@ import {
 import { PaperTheme, colors, gStyles } from "@theme";
 import { FAB, Searchbar } from "react-native-paper";
 import { ToastService } from "@utility";
-import { _ForkliftListCard } from "../components";
 import { faker } from "@faker-js/faker";
 import { ForkliftStatusColor } from "@constants";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 
-const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }) => {
+import { _ForkliftListCard } from "../components";
+
+const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
+  navigation,
+}) => {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [forklifts, setForklifts] = React.useState<IForklift[]>([]);
-  const [searchedForklifts, setSearchedForklifts] = React.useState<IForklift[]>([]);
+  const [searchedForklifts, setSearchedForklifts] = React.useState<IForklift[]>(
+    []
+  );
   const [isFetchingForklifts, setIsFetchingForklifts] = React.useState(false);
   const fetchForkliftsTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
   const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
@@ -30,7 +34,10 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
   const addInfo = () => {
     const record: IForklift = {
       _id: faker.database.mongodbObjectId(),
-      imei: faker.string.alphanumeric({ casing: "upper", length: { min: 12, max: 15 } }),
+      imei: faker.string.alphanumeric({
+        casing: "upper",
+        length: { min: 12, max: 15 },
+      }),
       simNo: faker.string.numeric({ length: 12, allowLeadingZeros: false }),
       age: faker.helpers.arrayElement([10, 11, 12, 13, 14, 15, 16]).toString(),
       batterySerialNo: faker.vehicle.vin(),
@@ -42,15 +49,29 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
       purchaseDate: faker.date.past().toDateString(),
       rentStartDate: faker.date.past().toDateString(),
       rentEndDate: faker.date.future().toDateString(),
-      milage: faker.helpers.rangeToNumber({ min: 13867, max: 50000 }).toString(),
+      milage: faker.helpers
+        .rangeToNumber({ min: 13867, max: 50000 })
+        .toString(),
       regNo: faker.helpers.rangeToNumber({ min: 1, max: 50000 }).toString(),
       image: faker.image.urlPicsumPhotos({ height: 75, width: 75 }),
-      name: faker.helpers.arrayElement(["Forklift 1", "Forklift 2", "Forklift 3", "Forklift 4"]),
-      status: faker.helpers.arrayElement(["moving", "parked", "offline", "faulty"]),
+      name: faker.helpers.arrayElement([
+        "Forklift 1",
+        "Forklift 2",
+        "Forklift 3",
+        "Forklift 4",
+      ]),
+      status: faker.helpers.arrayElement([
+        "moving",
+        "parked",
+        "offline",
+        "faulty",
+      ]),
       driver: faker.person.fullName(),
       model: faker.vehicle.vrm(),
       fuelType: faker.vehicle.fuel(),
-      fuelCapacity: faker.helpers.rangeToNumber({ min: 12, max: 50 }).toString(),
+      fuelCapacity: faker.helpers
+        .rangeToNumber({ min: 12, max: 50 })
+        .toString(),
       insuranceType: "Type 1",
       insuranceCompany: faker.company.name(),
       insuranceExpiryDate: faker.date.future().toDateString(),
@@ -93,7 +114,9 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
   };
 
   React.useEffect(() => {
-    if (!forklifts) return;
+    if (!forklifts) {
+      return;
+    }
     setSearchedForklifts(forklifts);
 
     return () => {
@@ -107,7 +130,13 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
         title="Forklifts"
         left={[
           {
-            icon: <FontAwesome5 name="map-marked-alt" size={24} color={colors.primary} />,
+            icon: (
+              <FontAwesome5
+                name="map-marked-alt"
+                size={24}
+                color={colors.primary}
+              />
+            ),
             onPress: () =>
               navigation.navigate("BirdEyeView", {
                 mode: "multiple",
@@ -138,7 +167,9 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
         ]}
         right={[
           {
-            icon: <Ionicons name="notifications" size={24} color={colors.primary} />,
+            icon: (
+              <Ionicons name="notifications" size={24} color={colors.primary} />
+            ),
             onPress: () => navigation.navigate("Notification"),
           },
         ]}
@@ -167,7 +198,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
                   <Text style={gStyles.headerText}>10</Text>
                   <Text
                     style={StyleSheet.compose(screenStyles.countInfoText, {
-                      color: ForkliftStatusColor["moving"],
+                      color: ForkliftStatusColor.moving,
                     })}
                   >
                     Moving
@@ -182,7 +213,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
                   <Text style={gStyles.headerText}>12</Text>
                   <Text
                     style={StyleSheet.compose(screenStyles.countInfoText, {
-                      color: ForkliftStatusColor["parked"],
+                      color: ForkliftStatusColor.parked,
                     })}
                   >
                     Parked
@@ -195,7 +226,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
                   <Text style={gStyles.headerText}>10</Text>
                   <Text
                     style={StyleSheet.compose(screenStyles.countInfoText, {
-                      color: ForkliftStatusColor["total"],
+                      color: ForkliftStatusColor.total,
                     })}
                   >
                     Total
@@ -210,7 +241,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
                   <Text style={gStyles.headerText}>12</Text>
                   <Text
                     style={StyleSheet.compose(screenStyles.countInfoText, {
-                      color: ForkliftStatusColor["offline"],
+                      color: ForkliftStatusColor.offline,
                     })}
                   >
                     Offline
@@ -233,7 +264,11 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({ navigation }
         )}
         ListEmptyComponent={<_ListEmptyComponent label="No Forklifts..." />}
         renderItem={({ item }) => (
-          <_ForkliftListCard key={item._id} item={item} handleDelete={handleDelete} />
+          <_ForkliftListCard
+            key={item._id}
+            item={item}
+            handleDelete={handleDelete}
+          />
         )}
         refreshControl={
           <RefreshControl

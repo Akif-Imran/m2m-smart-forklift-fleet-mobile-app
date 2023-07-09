@@ -12,7 +12,9 @@ const _ScrollFormLayout: React.FC<React.PropsWithChildren<OwnProps>> = ({
   hasSpacing = true,
 }) => {
   if (React.Children.count(children) !== 1) {
-    console.error("Error: _ScrollFormLayout component expects exactly one child node.");
+    console.error(
+      "Error: _ScrollFormLayout component expects exactly one child node."
+    );
     return null;
   }
   return (

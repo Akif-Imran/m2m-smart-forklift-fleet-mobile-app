@@ -3,7 +3,7 @@ import React from "react";
 import { _DefaultCard, _ScrollFormLayout } from "@components";
 import { SafeAreaView } from "react-native-safe-area-context";
 import type { ForkliftStackScreenProps } from "@navigation-types";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import { colors, gStyles, theme } from "@theme";
 import { ForkliftStatusColor } from "@constants";
 import { FAB } from "react-native-paper";

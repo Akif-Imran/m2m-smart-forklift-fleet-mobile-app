@@ -1,9 +1,10 @@
-import { GestureResponderEvent, Text, TouchableOpacity, View } from "react-native";
+import type { GestureResponderEvent } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
-import { styles } from "./styles";
 import { colors, gStyles } from "@theme";
+
+import { styles } from "./styles";
 
 interface OwnProps {
   title: string;
@@ -21,7 +22,11 @@ const _ReportCard: React.FC<OwnProps> = ({ title, onPress }) => {
       <Text style={gStyles.tblHeaderText}>{title}</Text>
       {/* forward icon */}
       <View style={styles.iconContainer}>
-        <MaterialIcons name="keyboard-arrow-right" size={25} color={colors.darkGray} />
+        <MaterialIcons
+          name="keyboard-arrow-right"
+          size={25}
+          color={colors.darkGray}
+        />
       </View>
     </TouchableOpacity>
   );

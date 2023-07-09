@@ -1,17 +1,22 @@
 import { View } from "react-native";
 import React from "react";
-
-import { styles } from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import { theme } from "@theme";
-import { DriverStackScreenProps } from "@navigation-types";
+import type { DriverStackScreenProps } from "@navigation-types";
 import { ToastService } from "@utility";
-import { BarCodeScannedCallback, BarCodeScanner } from "expo-barcode-scanner";
+import type { BarCodeScannedCallback } from "expo-barcode-scanner";
+import { BarCodeScanner } from "expo-barcode-scanner";
 import { _ListEmptyComponent } from "@components";
 
-const BarcodeScanner: React.FC<DriverStackScreenProps<"BarcodeScanner">> = ({ navigation }) => {
-  const [hasPermission, setHasPermission] = React.useState<boolean | null>(null);
+import { styles } from "./styles";
+
+const BarcodeScanner: React.FC<DriverStackScreenProps<"BarcodeScanner">> = ({
+  navigation,
+}) => {
+  const [hasPermission, setHasPermission] = React.useState<boolean | null>(
+    null
+  );
   const [scanned, setScanned] = React.useState<boolean>(false);
   // const [text, setText] = useState<string>("Not yet scanned");
 

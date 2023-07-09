@@ -1,7 +1,7 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import { _DefaultCard, _ScrollFormLayout } from "@components";
 import type { ServiceStackScreenProps } from "@navigation-types";
 import { ScrollView } from "react-native-gesture-handler";

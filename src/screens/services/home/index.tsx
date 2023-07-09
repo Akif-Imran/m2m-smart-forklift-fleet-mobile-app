@@ -1,8 +1,7 @@
 import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
 import React from "react";
-
 import { SafeAreaView } from "react-native-safe-area-context";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import {
   NoIconHeader,
   _ConfirmModal,
@@ -13,17 +12,21 @@ import {
 import { PaperTheme, colors, gStyles } from "@theme";
 import { ServiceStatusColor } from "@constants";
 import { Searchbar } from "react-native-paper";
-import { _ServiceListCard } from "../components";
 import { faker } from "@faker-js/faker";
 import { ToastService } from "@utility";
 import { Ionicons } from "@expo/vector-icons";
-import { ServiceStackScreenProps } from "@navigation-types";
+import type { ServiceStackScreenProps } from "@navigation-types";
 
+import { _ServiceListCard } from "../components";
 
-const Services: React.FC<ServiceStackScreenProps<"Services">> = ({ navigation }) => {
+const Services: React.FC<ServiceStackScreenProps<"Services">> = ({
+  navigation,
+}) => {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [services, setServices] = React.useState<IService[]>([]);
-  const [searchedServices, setSearchedServices] = React.useState<IService[]>([]);
+  const [searchedServices, setSearchedServices] = React.useState<IService[]>(
+    []
+  );
   const [isFetching, setIsFetching] = React.useState(false);
   const fetchServicesTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
   const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
@@ -34,7 +37,12 @@ const Services: React.FC<ServiceStackScreenProps<"Services">> = ({ navigation })
       date: faker.date.past().toJSON(),
       regNo: faker.vehicle.vrm(),
       status: faker.helpers.arrayElement(["completed", "inprocess", "pending"]),
-      type: faker.helpers.arrayElement(["body", "breakdown", "warranty", "scheduled"]),
+      type: faker.helpers.arrayElement([
+        "body",
+        "breakdown",
+        "warranty",
+        "scheduled",
+      ]),
       description: faker.lorem.sentence({ min: 5, max: 8 }),
     };
     const record2: IService = {
@@ -42,7 +50,12 @@ const Services: React.FC<ServiceStackScreenProps<"Services">> = ({ navigation })
       date: faker.date.past().toJSON(),
       regNo: faker.vehicle.vrm(),
       status: faker.helpers.arrayElement(["completed", "inprocess", "pending"]),
-      type: faker.helpers.arrayElement(["body", "breakdown", "warranty", "scheduled"]),
+      type: faker.helpers.arrayElement([
+        "body",
+        "breakdown",
+        "warranty",
+        "scheduled",
+      ]),
       description: faker.lorem.sentence({ min: 5, max: 8 }),
     };
     setServices((prev) => [...prev, record1, record2]);
@@ -86,7 +99,9 @@ const Services: React.FC<ServiceStackScreenProps<"Services">> = ({ navigation })
   };
 
   React.useEffect(() => {
-    if (!services) return;
+    if (!services) {
+      return;
+    }
     setSearchedServices(services);
 
     return () => {
@@ -104,7 +119,9 @@ const Services: React.FC<ServiceStackScreenProps<"Services">> = ({ navigation })
         title="Services"
         right={[
           {
-            icon: <Ionicons name="notifications" size={24} color={colors.primary} />,
+            icon: (
+              <Ionicons name="notifications" size={24} color={colors.primary} />
+            ),
             onPress: () => navigation.navigate("Notification"),
           },
         ]}
@@ -124,19 +141,22 @@ const Services: React.FC<ServiceStackScreenProps<"Services">> = ({ navigation })
             <Text style={gStyles.headerText}>10</Text>
             <Text
               style={StyleSheet.compose(screenStyles.countInfoText, {
-                color: ServiceStatusColor["completed"],
+                color: ServiceStatusColor.completed,
               })}
             >
               Complete
             </Text>
           </View>
           <View
-            style={StyleSheet.compose(screenStyles.countRowItem, screenStyles.countRowMiddleItem)}
+            style={StyleSheet.compose(
+              screenStyles.countRowItem,
+              screenStyles.countRowMiddleItem
+            )}
           >
             <Text style={gStyles.headerText}>12</Text>
             <Text
               style={StyleSheet.compose(screenStyles.countInfoText, {
-                color: ServiceStatusColor["pending"],
+                color: ServiceStatusColor.pending,
               })}
             >
               Pending
@@ -146,7 +166,7 @@ const Services: React.FC<ServiceStackScreenProps<"Services">> = ({ navigation })
             <Text style={gStyles.headerText}>12</Text>
             <Text
               style={StyleSheet.compose(screenStyles.countInfoText, {
-                color: ServiceStatusColor["inprocess"],
+                color: ServiceStatusColor.inprocess,
               })}
             >
               In process
@@ -174,7 +194,11 @@ const Services: React.FC<ServiceStackScreenProps<"Services">> = ({ navigation })
         keyExtractor={(item) => item._id}
         ListEmptyComponent={<_ListEmptyComponent label="No Services..." />}
         renderItem={({ item }) => (
-          <_ServiceListCard key={item._id} item={item} handleDelete={handleDelete} />
+          <_ServiceListCard
+            key={item._id}
+            item={item}
+            handleDelete={handleDelete}
+          />
         )}
         refreshControl={
           <RefreshControl

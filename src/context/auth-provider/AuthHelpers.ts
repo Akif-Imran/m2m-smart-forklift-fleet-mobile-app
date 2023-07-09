@@ -1,6 +1,6 @@
-import { AuthModel } from "@context-types";
+import type { AuthModel } from "@context-types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AxiosStatic } from "axios";
+import type { AxiosStatic } from "axios";
 
 const AUTH_LOCAL_STORAGE_KEY = "m2m-sales-tracking-auth";
 const getAuth = async (): Promise<AuthModel | undefined> => {
@@ -8,7 +8,9 @@ const getAuth = async (): Promise<AuthModel | undefined> => {
     return;
   }
 
-  const lsValue: string | null = await AsyncStorage.getItem(AUTH_LOCAL_STORAGE_KEY);
+  const lsValue: string | null = await AsyncStorage.getItem(
+    AUTH_LOCAL_STORAGE_KEY
+  );
   if (!lsValue) {
     return;
   }
@@ -59,15 +61,15 @@ export function setupAxios(axios: AxiosStatic) {
       getAuth().then((auth) => {
         if (auth && auth.token) {
           config.headers.Authorization = `Bearer ${auth.token}`;
-          //@ts-expect-error
+          //@ts-expect-error config.retry custom retry logic later changed to axios-retry package
           config.retry = 3;
-          //@ts-expect-error
+          //@ts-expect-error custom retry logic later changed to axios-retry package
           config.retryDelay = 3000;
         }
       });
       return config;
     },
-    (err: any) => Promise.reject(err)
+    (err: unknown) => Promise.reject(err)
   );
   //response interceptor
   axios.interceptors.response.use(undefined, (error) => {
@@ -80,10 +82,10 @@ export function setupAxios(axios: AxiosStatic) {
       return Promise.reject(error);
     }
     config.retry -= 1;
-    const delayRetryRequest = new Promise((resolve: any) => {
+    const delayRetryRequest = new Promise((resolve) => {
       setTimeout(() => {
         console.log("retry the request", config.url);
-        resolve();
+        resolve(0);
       }, config.retryDelay || 3000);
     });
     return delayRetryRequest.then(() => axios.request(config));

@@ -8,7 +8,7 @@ import {
 import React from "react";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { ToastService } from "@utility";
 import { AssignForkliftFilters } from "@constants";

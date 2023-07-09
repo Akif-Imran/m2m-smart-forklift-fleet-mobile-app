@@ -3,7 +3,7 @@ import React from "react";
 import { _DefaultCard } from "@components";
 import { useNavigation } from "@react-navigation/native";
 import type { ServiceStackScreenProps } from "@navigation-types";
-import { listCardStyles, screenStyles } from "src/screens/styles";
+import { listCardStyles, screenStyles } from "@screen-styles";
 import { truncateText } from "@utility";
 import { colors, gStyles } from "@theme";
 import { ServiceStatusColor } from "@constants";

@@ -3,14 +3,16 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import React from "react";
 import type { ProfileSettingsStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { Button } from "react-native-paper";
 import { ToastService } from "@utility";
 import Spinner from "react-native-loading-spinner-overlay";
-import { styles } from "./styles";
-import { _ForkliftListCard } from "../components";
 import { _Divider } from "@components";
+
+import { _ForkliftListCard } from "../components";
+
+import { styles } from "./styles";
 
 const images = [
   {
@@ -57,12 +59,18 @@ const SelectIcons: React.FC<ProfileSettingsStackScreenProps<"SelectIcon">> = ({
 }) => {
   const { item } = route.params;
   const [isLoading, setIsLoading] = React.useState(false);
-  const [selectedIcon, setSelectedIcon] = React.useState<string>("marker-pin.png");
+  const [selectedIcon, setSelectedIcon] =
+    React.useState<string>("marker-pin.png");
   const [icons, _setIcons] = React.useState(images);
   console.log(selectedIcon);
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
-      <Spinner visible={isLoading} cancelable={false} animation="fade" size="large" />
+      <Spinner
+        visible={isLoading}
+        cancelable={false}
+        animation="fade"
+        size="large"
+      />
       <View style={{ height: theme.header.height }} />
       <_Divider title="Vehicle Info" />
       <_ForkliftListCard item={item} mode="info" />

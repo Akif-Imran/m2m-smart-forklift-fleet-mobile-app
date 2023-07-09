@@ -8,7 +8,7 @@ import {
 } from "@components";
 import { Button, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { listCardStyles, screenStyles } from "src/screens/styles";
+import { listCardStyles, screenStyles } from "@screen-styles";
 import { theme, colors, PaperTheme, gStyles } from "@theme";
 import moment from "moment";
 import { ToastService } from "@utility";

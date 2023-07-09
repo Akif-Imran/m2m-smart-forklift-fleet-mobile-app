@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 import React from "react";
 import type { ForkliftStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import { _DefaultCard, _ScrollFormLayout } from "@components";
 import moment from "moment";
 

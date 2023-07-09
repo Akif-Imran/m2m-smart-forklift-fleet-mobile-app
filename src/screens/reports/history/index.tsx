@@ -17,7 +17,7 @@ import {
 } from "@components";
 import { theme, colors, PaperTheme, gStyles } from "@theme";
 import moment from "moment";
-import { listCardStyles, screenStyles } from "src/screens/styles";
+import { listCardStyles, screenStyles } from "@screen-styles";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { faker } from "@faker-js/faker";
 import { ToastService } from "@utility";

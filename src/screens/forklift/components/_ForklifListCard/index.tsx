@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { _DefaultCard } from "@components";
 import { PaperTheme, colors, gStyles } from "@theme";
-import { listCardStyles, screenStyles } from "src/screens/styles";
+import { listCardStyles, screenStyles } from "@screen-styles";
 import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import type { ForkliftStackScreenProps } from "@navigation-types";

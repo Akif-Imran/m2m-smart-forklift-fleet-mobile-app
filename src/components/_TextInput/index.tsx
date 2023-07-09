@@ -1,7 +1,9 @@
 import React from "react";
 import { View } from "react-native";
-import { HelperText, TextInput, TextInputProps } from "react-native-paper";
+import type { TextInputProps } from "react-native-paper";
+import { HelperText, TextInput } from "react-native-paper";
 import { PaperTheme, colors } from "@theme";
+
 import { styles } from "./styles";
 
 interface OwnProp {
@@ -9,11 +11,9 @@ interface OwnProp {
   error?: boolean;
 }
 
-const _TextInput: React.FC<Omit<TextInputProps, keyof OwnProp | "theme"> & OwnProp> = ({
-  errorText,
-  error,
-  ...props
-}) => {
+const _TextInput: React.FC<
+  Omit<TextInputProps, keyof OwnProp | "theme"> & OwnProp
+> = ({ errorText, error, ...props }) => {
   return (
     <View style={styles.mainContainer}>
       <TextInput
@@ -30,7 +30,11 @@ const _TextInput: React.FC<Omit<TextInputProps, keyof OwnProp | "theme"> & OwnPr
         {...props}
       />
       {error ? (
-        <HelperText type="error" selectable={false} style={styles.formErrorText}>
+        <HelperText
+          type="error"
+          selectable={false}
+          style={styles.formErrorText}
+        >
           {errorText}
         </HelperText>
       ) : null}

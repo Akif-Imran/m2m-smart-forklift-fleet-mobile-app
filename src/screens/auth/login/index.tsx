@@ -1,11 +1,18 @@
-import { Text, View, KeyboardAvoidingView, Platform, Image } from "react-native";
+import {
+  Text,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  Image,
+} from "react-native";
 import React from "react";
 import { Fontisto } from "@expo/vector-icons";
 import { Button, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors, gStyles, PaperTheme } from "@theme";
 import { useAuthContext } from "@context";
-import { AuthStackScreenProps } from "@navigation-types";
+import type { AuthStackScreenProps } from "@navigation-types";
+
 import { styles } from "./styles";
 
 const Login: React.FC<AuthStackScreenProps<"Login">> = ({ navigation }) => {
@@ -46,14 +53,19 @@ const Login: React.FC<AuthStackScreenProps<"Login">> = ({ navigation }) => {
               resizeMethod="resize"
               resizeMode="contain"
             />
-            <Text style={[gStyles.headerText, { marginTop: -60 }]}>Smart Forklift</Text>
+            <Text style={[gStyles.headerText, { marginTop: -60 }]}>
+              Smart Forklift
+            </Text>
           </View>
           {/* <Text style={gStyles.headerText}>Login</Text> */}
           <Text style={gStyles.descText}>If you don't have an account,</Text>
           <Text style={gStyles.descText}>
             please start{" "}
             <Text
-              style={[gStyles.descTextPrimaryBold, { textDecorationLine: "underline" }]}
+              style={[
+                gStyles.descTextPrimaryBold,
+                { textDecorationLine: "underline" },
+              ]}
               onPress={goToRegister}
             >
               here
@@ -96,7 +108,9 @@ const Login: React.FC<AuthStackScreenProps<"Login">> = ({ navigation }) => {
               style={styles.textInputStyle}
               left={
                 <TextInput.Icon
-                  icon={() => <Fontisto name="locked" color={colors.iconGray} size={20} />}
+                  icon={() => (
+                    <Fontisto name="locked" color={colors.iconGray} size={20} />
+                  )}
                 />
               }
               right={
@@ -141,4 +155,4 @@ const Login: React.FC<AuthStackScreenProps<"Login">> = ({ navigation }) => {
   );
 };
 
-export default Login;
+export { Login };

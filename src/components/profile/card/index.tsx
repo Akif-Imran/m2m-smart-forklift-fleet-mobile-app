@@ -1,11 +1,14 @@
-import { ImageRequireSource, Text, View, TouchableOpacity } from "react-native";
-import React, { FC } from "react";
-import { PaperTheme, colors, gStyles } from "../../../theme";
+import type { ImageRequireSource } from "react-native";
+import { Text, View, TouchableOpacity } from "react-native";
+import type { FC } from "react";
+import React from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Avatar } from "react-native-paper";
 import { useAuthContext } from "@context";
-import { styles } from "./styles";
 import { ToastService } from "@utility";
+import { PaperTheme, colors, gStyles } from "@theme";
+
+import { styles } from "./styles";
 
 interface CardProps {
   size: "small" | "large";
@@ -37,11 +40,17 @@ const Card: FC<CardProps> = ({ data }) => {
       </View>
       <View style={styles.dataContainer}>
         <Text style={gStyles.cardInfoTitleText}>{user?.name}</Text>
-        <Text style={gStyles.tblDescText}>{user?.email || "example.user@gmail.com"}</Text>
+        <Text style={gStyles.tblDescText}>
+          {user?.email || "example.user@gmail.com"}
+        </Text>
         <Text style={gStyles.tblDescText}>(Salesman)</Text>
       </View>
       <View style={styles.forwardContainer}>
-        <MaterialIcons name="keyboard-arrow-right" color={colors.textGray} size={20} />
+        <MaterialIcons
+          name="keyboard-arrow-right"
+          color={colors.textGray}
+          size={20}
+        />
       </View>
     </TouchableOpacity>
   );

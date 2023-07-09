@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import React from "react";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Spinner from "react-native-loading-spinner-overlay";
 import { AntDesign } from "@expo/vector-icons";

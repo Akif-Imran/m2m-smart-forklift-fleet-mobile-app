@@ -1,7 +1,7 @@
-import React, { FC } from "react";
+import type { FC } from "react";
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { colors, gStyles } from "../../theme";
-import { ProfileSettingsStackParamsList } from "@navigation-types";
+import type { ProfileSettingsStackParamsList } from "@navigation-types";
 import {
   About,
   ChangePassword,
@@ -12,6 +12,8 @@ import {
   VehicleIcons,
   ViewPoiOnMap,
 } from "@screens";
+
+import { colors, gStyles } from "../../theme";
 import { ServicesStack } from "../services-stack";
 import { ReportsStack } from "../reports-stack";
 

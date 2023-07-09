@@ -14,6 +14,7 @@ import {
   Trips,
   Playback,
 } from "@screens";
+
 import { ReportsStack } from "../reports-stack";
 
 const Stack = createStackNavigator<ForkliftStackParamsList>();
@@ -45,7 +46,8 @@ const ForkliftStack: React.FC = () => {
         component={AddForklift}
         options={({ route }) => ({
           headerShown: true,
-          title: route.params.mode === "add" ? "Add Forklift" : "Update Forklift",
+          title:
+            route.params.mode === "add" ? "Add Forklift" : "Update Forklift",
         })}
       />
       <Stack.Screen

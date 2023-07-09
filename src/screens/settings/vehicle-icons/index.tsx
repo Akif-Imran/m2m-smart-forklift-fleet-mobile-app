@@ -2,7 +2,7 @@ import { FlatList, RefreshControl, View } from "react-native";
 import React from "react";
 import type { ProfileSettingsStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import { PaperTheme, colors, theme } from "@theme";
 import { _ListEmptyComponent } from "@components";
 import { Searchbar } from "react-native-paper";

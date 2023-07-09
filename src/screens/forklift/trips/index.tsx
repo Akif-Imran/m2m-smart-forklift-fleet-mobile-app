@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import TimelineComponent from "react-native-timeline-flatlist";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { mapStyles, screenStyles } from "src/screens/styles";
+import { mapStyles, screenStyles } from "@screen-styles";
 import type { ForkliftStackScreenProps } from "@navigation-types";
 import { colors, gStyles, theme } from "@theme";
 import {

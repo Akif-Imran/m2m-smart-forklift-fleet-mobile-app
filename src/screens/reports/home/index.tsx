@@ -2,7 +2,7 @@ import { ScrollView } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import { NoIconHeader, _ReportCard } from "@components";
 import { colors } from "@theme";
 import type { ReportStackScreenProps } from "@navigation-types";

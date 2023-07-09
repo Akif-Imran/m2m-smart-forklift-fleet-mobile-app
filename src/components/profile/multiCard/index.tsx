@@ -1,7 +1,9 @@
 import { Text, TouchableOpacity, View, Switch } from "react-native";
-import React, { FC, useState } from "react";
-import { colors } from "../../../theme";
+import type { FC } from "react";
+import React, { useState } from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { colors } from "@theme";
+
 import { styles } from "./styles";
 
 interface MultiCardProps {
@@ -60,10 +62,16 @@ const MultiCard: FC<MultiCardProps> = ({ data }) => {
           onPress={item.onPress}
         >
           <View style={styles.iconContainer}>
-            <View style={[styles.iconWrapper, { backgroundColor: item.bgColor }]}>{item.icon}</View>
+            <View
+              style={[styles.iconWrapper, { backgroundColor: item.bgColor }]}
+            >
+              {item.icon}
+            </View>
           </View>
           <View style={styles.dataContainer}>
-            <Text style={[styles.headerText, { color: item.color }]}>{item.title}</Text>
+            <Text style={[styles.headerText, { color: item.color }]}>
+              {item.title}
+            </Text>
             {item.title === "Notifications" ? (
               <Switch
                 trackColor={{ false: colors.heavyGray, true: colors.primary }}
@@ -74,7 +82,11 @@ const MultiCard: FC<MultiCardProps> = ({ data }) => {
             ) : null}
           </View>
           <View style={styles.forwardContainer}>
-            <MaterialIcons name="keyboard-arrow-right" color={colors.textGray} size={20} />
+            <MaterialIcons
+              name="keyboard-arrow-right"
+              color={colors.textGray}
+              size={20}
+            />
           </View>
         </TouchableOpacity>
       ))}

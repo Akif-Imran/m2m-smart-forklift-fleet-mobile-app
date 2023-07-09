@@ -4,7 +4,7 @@ import { _DefaultCard } from "@components";
 import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import type { DriverStackScreenProps } from "@navigation-types";
-import { listCardStyles, screenStyles } from "src/screens/styles";
+import { listCardStyles, screenStyles } from "@screen-styles";
 import { PaperTheme, colors, gStyles } from "@theme";
 import { truncateText } from "@utility";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";

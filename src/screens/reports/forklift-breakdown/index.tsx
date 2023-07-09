@@ -10,7 +10,7 @@ import { Button, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { theme, colors, PaperTheme, gStyles } from "@theme";
 import moment from "moment";
-import { listCardStyles, screenStyles } from "src/screens/styles";
+import { listCardStyles, screenStyles } from "@screen-styles";
 import { ToastService } from "@utility";
 import type { ReportStackScreenProps } from "@navigation-types";
 

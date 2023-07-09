@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
 import Spinner from "react-native-loading-spinner-overlay";
 import {

@@ -1,35 +1,39 @@
 import { View } from "react-native";
 import React from "react";
-import { ProfileSettingsStackScreenProps } from "@navigation-types";
+import type { ProfileSettingsStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "./styles";
-import { FormikHelpers, useFormik } from "formik";
+import type { FormikHelpers } from "formik";
+import { useFormik } from "formik";
 import * as yup from "yup";
 import { _TextInput } from "@components";
 import { ScrollView } from "react-native-gesture-handler";
 import { Button, TextInput } from "react-native-paper";
 import { PaperTheme, colors } from "@theme";
 import { useAuthContext } from "@context";
+
+import { styles } from "./styles";
 // import { ToastService } from "@utility";
 
 interface IForm {
-  old_password: string;
-  new_password: string;
-  confirm_password: string;
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
 }
 const schema: yup.ObjectSchema<IForm> = yup.object().shape({
-  old_password: yup.string().required("Old password is required"),
-  new_password: yup
+  oldPassword: yup.string().required("Old password is required"),
+  newPassword: yup
     .string()
     .oneOf([yup.ref("confirm_password")], "New Password must match")
     .required("New password is required"),
-  confirm_password: yup
+  confirmPassword: yup
     .string()
     .oneOf([yup.ref("new_password")], "New Password must match")
     .required("Confirm New Password is required"),
 });
 
-const ChangePassword: React.FC<ProfileSettingsStackScreenProps<"ChangePassword">> = ({}) => {
+const ChangePassword: React.FC<
+  ProfileSettingsStackScreenProps<"ChangePassword">
+> = ({}) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [secureEntry1, setSecureEntry1] = React.useState<boolean>(true);
   const [secureEntry2, setSecureEntry2] = React.useState<boolean>(true);
@@ -58,9 +62,9 @@ const ChangePassword: React.FC<ProfileSettingsStackScreenProps<"ChangePassword">
 
   const form = useFormik<IForm>({
     initialValues: {
-      old_password: "",
-      confirm_password: "",
-      new_password: "",
+      oldPassword: "",
+      confirmPassword: "",
+      newPassword: "",
     },
     onSubmit: (values, helpers) => {
       changePass(values, helpers);
@@ -73,13 +77,13 @@ const ChangePassword: React.FC<ProfileSettingsStackScreenProps<"ChangePassword">
         <View style={styles.inputContainer}>
           <_TextInput
             label={"Current Password"}
-            value={form.values.old_password}
+            value={form.values.oldPassword}
             onChangeText={form.handleChange("old_password")}
             onBlur={form.handleBlur("old_password")}
             placeholder="Old Password"
             secureTextEntry={secureEntry1}
-            error={form.touched.old_password && !!form.errors.old_password}
-            errorText={form.errors.old_password}
+            error={form.touched.oldPassword && !!form.errors.oldPassword}
+            errorText={form.errors.oldPassword}
             right={
               <TextInput.Icon
                 icon={secureEntry1 ? "eye-off" : "eye"}
@@ -94,13 +98,13 @@ const ChangePassword: React.FC<ProfileSettingsStackScreenProps<"ChangePassword">
         <View style={styles.inputContainer}>
           <_TextInput
             label={"New Password"}
-            value={form.values.new_password}
+            value={form.values.newPassword}
             onChangeText={form.handleChange("new_password")}
             onBlur={form.handleBlur("new_password")}
             placeholder="New Password"
             secureTextEntry={secureEntry2}
-            error={form.touched.new_password && !!form.errors.new_password}
-            errorText={form.errors.new_password}
+            error={form.touched.newPassword && !!form.errors.newPassword}
+            errorText={form.errors.newPassword}
             right={
               <TextInput.Icon
                 icon={secureEntry2 ? "eye-off" : "eye"}
@@ -115,13 +119,15 @@ const ChangePassword: React.FC<ProfileSettingsStackScreenProps<"ChangePassword">
         <View style={styles.inputContainer}>
           <_TextInput
             label={"Confirm New Password"}
-            value={form.values.confirm_password}
+            value={form.values.confirmPassword}
             onChangeText={form.handleChange("confirm_password")}
             onBlur={form.handleBlur("confirm_password")}
             placeholder="Confirm New Password"
             secureTextEntry={secureEntry3}
-            error={form.touched.confirm_password && !!form.errors.confirm_password}
-            errorText={form.errors.confirm_password}
+            error={
+              form.touched.confirmPassword && !!form.errors.confirmPassword
+            }
+            errorText={form.errors.confirmPassword}
             right={
               <TextInput.Icon
                 icon={secureEntry3 ? "eye-off" : "eye"}

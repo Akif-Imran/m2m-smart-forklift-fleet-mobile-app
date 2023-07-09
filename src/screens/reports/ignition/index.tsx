@@ -11,7 +11,7 @@ import {
 } from "@components";
 import { theme, colors, PaperTheme, gStyles } from "@theme";
 import moment from "moment";
-import { listCardStyles, screenStyles } from "src/screens/styles";
+import { listCardStyles, screenStyles } from "@screen-styles";
 import { ToastService } from "@utility";
 import { faker } from "@faker-js/faker";
 import type { ReportStackScreenProps } from "@navigation-types";

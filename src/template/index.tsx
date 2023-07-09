@@ -3,7 +3,9 @@ import React from "react";
 
 import { styles } from "./styles";
 
-interface OwnProps {}
+interface OwnProps {
+  navigation: unknown;
+}
 
 const _Component: React.FC<OwnProps> = ({}) => {
   return (

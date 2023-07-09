@@ -1,7 +1,7 @@
 import React from "react";
 import type { StackNavigationOptions } from "@react-navigation/stack";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Login, ForgetPassword, Register } from "@screens";
+import { Login, ForgotPassword, Register } from "@screens";
 import type { AuthStackParamsList } from "@navigation-types";
 import { colors } from "@theme";
 import { useAuthContext } from "@context";
@@ -45,7 +45,7 @@ const AuthStack = () => {
           />
           <Stack.Screen
             name="ForgetPassword"
-            component={ForgetPassword}
+            component={ForgotPassword}
             options={{ headerShown: true, headerTitle: "" }}
           />
         </>

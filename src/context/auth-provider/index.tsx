@@ -1,6 +1,7 @@
 import React from "react";
-import * as authHelpers from "./AuthHelpers";
 import axios from "axios";
+
+import * as authHelpers from "./AuthHelpers";
 
 interface AuthContextType {
   state: AuthState;
@@ -22,8 +23,14 @@ interface AuthState {
 
 type AuthAction =
   | { type: "LOGOUT" }
-  | { type: "LOGIN"; payload: { email: string; password: string; save: boolean } }
-  | { type: "GIVE_ACCESS"; payload: { isAuthorized: boolean; token: string; user: UserData } };
+  | {
+      type: "LOGIN";
+      payload: { email: string; password: string; save: boolean };
+    }
+  | {
+      type: "GIVE_ACCESS";
+      payload: { isAuthorized: boolean; token: string; user: UserData };
+    };
 
 const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 
@@ -31,9 +38,19 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
     case "LOGOUT":
       authHelpers.removeAuth().then();
-      return { ...state, token: "", user: null, isAuthorized: false, isLoading: false };
+      return {
+        ...state,
+        token: "",
+        user: null,
+        isAuthorized: false,
+        isLoading: false,
+      };
     case "LOGIN":
-      const u = { email: action.payload.email, name: "John Doe", token: "secure-token" };
+      const u = {
+        email: action.payload.email,
+        name: "John Doe",
+        token: "secure-token",
+      };
       return {
         ...state,
         token: u.token,
@@ -42,7 +59,12 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         isLoading: false,
       };
     case "GIVE_ACCESS":
-      return { ...state, ...action.payload, isLoading: false, isAuthorized: true };
+      return {
+        ...state,
+        ...action.payload,
+        isLoading: false,
+        isAuthorized: true,
+      };
     default:
       return state;
   }
@@ -81,8 +103,6 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
         dispatch({ type: "LOGOUT" });
       }
     })();
-
-    return () => {};
   }, []);
 
   React.useEffect(() => {
@@ -98,7 +118,10 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     []
   );
 
-  const value = React.useMemo(() => ({ state, login, logout }), [state, login, logout]);
+  const value = React.useMemo(
+    () => ({ state, login, logout }),
+    [state, login, logout]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

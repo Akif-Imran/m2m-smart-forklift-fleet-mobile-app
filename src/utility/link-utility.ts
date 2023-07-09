@@ -1,4 +1,5 @@
 import { Linking, Platform } from "react-native";
+
 import { ToastService } from "./toast-utility";
 
 export const handleOpenWebsite = (url: string) => {
@@ -16,8 +17,15 @@ export const handleOpenWebsite = (url: string) => {
     });
 };
 
-export const getMapsUrlFromLatLng = (label: string, lat: string, lng: string): string => {
-  const scheme = Platform.select({ ios: "maps://0,0?q=", android: "geo:0,0?q=" });
+export const getMapsUrlFromLatLng = (
+  label: string,
+  lat: string,
+  lng: string
+): string => {
+  const scheme = Platform.select({
+    ios: "maps://0,0?q=",
+    android: "geo:0,0?q=",
+  });
   const latLng = `${lat},${lng}`;
   const url =
     Platform.select({

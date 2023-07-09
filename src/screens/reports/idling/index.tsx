@@ -11,7 +11,7 @@ import {
   _DropDown,
 } from "@components";
 import moment from "moment";
-import { listCardStyles, screenStyles } from "src/screens/styles";
+import { listCardStyles, screenStyles } from "@screen-styles";
 import { ToastService } from "@utility";
 import { faker } from "@faker-js/faker";
 import { TouchableOpacity } from "react-native-gesture-handler";

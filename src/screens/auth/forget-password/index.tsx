@@ -1,14 +1,19 @@
-import { Text, View, KeyboardAvoidingView, Platform, Image } from "react-native";
-import React, { useState, FC } from "react";
-
-//third party imports
+import {
+  Text,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  Image,
+} from "react-native";
+import type { FC } from "react";
+import React, { useState } from "react";
 import { Button, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-//my imports
-import { colors, gStyles, PaperTheme } from "@theme";
-import { AuthStackScreenProps } from "@navigation-types";
-import { styles } from "./styles";
+import { colors, gStyles, PaperTheme, theme } from "@theme";
+import type { AuthStackScreenProps } from "@navigation-types";
 import { ToastService } from "@utility";
+
+import { styles } from "./styles";
 
 const ForgotPassword: FC<AuthStackScreenProps<"ForgetPassword">> = ({}) => {
   const [email, setEmail] = useState<string>("");
@@ -33,6 +38,7 @@ const ForgotPassword: FC<AuthStackScreenProps<"ForgetPassword">> = ({}) => {
         <View style={styles.textContainer}>
           <View style={styles.imgContainer}>
             <Image
+              // eslint-disable-next-line import/extensions
               source={require("@assets/images/forgot-password.png")}
               style={styles.imgStyle}
               resizeMethod="resize"
@@ -61,10 +67,10 @@ const ForgotPassword: FC<AuthStackScreenProps<"ForgetPassword">> = ({}) => {
               clearButtonMode="while-editing"
               activeOutlineColor={colors.primary}
               onChangeText={(text) => setEmail(text)}
-              style={{
-                fontSize: 16,
-                color: colors.textGray,
-              }}
+              // style={{
+              //   fontSize: theme.fontSize.md,
+              //   color: colors.textGray,
+              // }}
               left={<TextInput.Icon icon="email" color={colors.iconGray} />}
             />
           </View>
@@ -77,7 +83,7 @@ const ForgotPassword: FC<AuthStackScreenProps<"ForgetPassword">> = ({}) => {
             loading={isLoading}
             onPress={resetPassword}
             style={{
-              paddingVertical: 8,
+              paddingVertical: theme.spacing.md,
             }}
           >
             Reset Password
@@ -88,4 +94,4 @@ const ForgotPassword: FC<AuthStackScreenProps<"ForgetPassword">> = ({}) => {
   );
 };
 
-export default ForgotPassword;
+export { ForgotPassword };

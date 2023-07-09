@@ -2,7 +2,7 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { EvilIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { screenStyles } from "src/screens/styles";
+import { screenStyles } from "@screen-styles";
 import { _DefaultCard, _ScrollFormLayout } from "@components";
 import { faker } from "@faker-js/faker";
 import type { DriverStackScreenProps } from "@navigation-types";
