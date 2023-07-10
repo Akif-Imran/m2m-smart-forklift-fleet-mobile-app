@@ -16,20 +16,37 @@ import { ToastService } from "@utility";
 import { faker } from "@faker-js/faker";
 import { ForkliftStatusColor } from "@constants";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { getDashCounts } from "@services";
+import { useAuthContext } from "@context";
 
 import { _ForkliftListCard } from "../components";
+interface ForkliftCounts {
+  moving: number;
+  parked: number;
+  total: number;
+  offline: number;
+}
 
 const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
   navigation,
 }) => {
+  const {
+    state: { token },
+  } = useAuthContext();
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [forklifts, setForklifts] = React.useState<IForklift[]>([]);
   const [searchedForklifts, setSearchedForklifts] = React.useState<IForklift[]>(
     []
   );
-  const [isFetchingForklifts, setIsFetchingForklifts] = React.useState(false);
+  const [isFetching, setIsFetching] = React.useState(false);
   const fetchForkliftsTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
   const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
+  const [counts, setCounts] = React.useState<ForkliftCounts>({
+    moving: 0,
+    offline: 0,
+    parked: 0,
+    total: 0,
+  });
 
   const addInfo = () => {
     const record: IForklift = {
@@ -81,9 +98,9 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
   };
 
   const handleRefresh = () => {
-    setIsFetchingForklifts(true);
+    setIsFetching(true);
     fetchForkliftsTimeoutRef.current = setTimeout(() => {
-      setIsFetchingForklifts(false);
+      setIsFetching(false);
     }, 3000);
   };
 
@@ -93,8 +110,8 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
       setSearchedForklifts(forklifts);
       return;
     }
-    const filteredCustomers = forklifts.filter((customer) =>
-      customer.name.toLowerCase().includes(query.toLowerCase())
+    const filteredCustomers = forklifts.filter((forklift) =>
+      forklift.name.toLowerCase().includes(query.toLowerCase())
     );
     setSearchedForklifts(filteredCustomers);
   };
@@ -112,17 +129,62 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
   const handleDeleteCancel = () => {
     setConfirmDeleteVisible(false);
   };
+  const fetchCounts = React.useCallback(() => {
+    getDashCounts(token)
+      .then((res) => {
+        console.log(res);
+        if (res.success) {
+          const { moving, parked, total_vehicles: total, offline } = res.data;
+          setCounts((prev) => ({
+            ...prev,
+            moving,
+            parked,
+            total,
+            offline,
+          }));
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Counts Error");
+      });
+  }, []);
+
+  // const fetchDevices = React.useCallback(() => {
+  //   setIsFetching(true);
+  //   getDevicesList(token)
+  //     .then((res) => {
+  //       if (res.success) {
+  //         setForklifts((_prev) => res.result.rows);
+  //       }
+  //     })
+  //     .catch((_err) => {
+  //       ToastService.show("Error occurred!");
+  //     })
+  //     .then(() => {
+  //       setIsFetching(false);
+  //     });
+  // }, []);
 
   React.useEffect(() => {
     if (!forklifts) {
       return;
     }
     setSearchedForklifts(forklifts);
-
-    return () => {
-      clearTimeout(fetchForkliftsTimeoutRef.current);
-    };
   }, [forklifts]);
+
+  // React.useEffect(() => {
+  //   if (!token) {
+  //     return;
+  //   }
+  //   fetchDevices();
+  // }, [token, fetchDevices]);
+
+  React.useEffect(() => {
+    if (!token) {
+      return;
+    }
+    fetchCounts();
+  }, [token, fetchCounts]);
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
@@ -195,7 +257,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
             <_DefaultCard>
               <View style={screenStyles.countRow}>
                 <View style={screenStyles.countRowItem}>
-                  <Text style={gStyles.headerText}>10</Text>
+                  <Text style={gStyles.headerText}>{counts.moving}</Text>
                   <Text
                     style={StyleSheet.compose(screenStyles.countInfoText, {
                       color: ForkliftStatusColor.moving,
@@ -210,7 +272,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
                   })}
                 />
                 <View style={screenStyles.countRowItem}>
-                  <Text style={gStyles.headerText}>12</Text>
+                  <Text style={gStyles.headerText}>{counts.parked}</Text>
                   <Text
                     style={StyleSheet.compose(screenStyles.countInfoText, {
                       color: ForkliftStatusColor.parked,
@@ -223,7 +285,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
               <_Divider />
               <View style={screenStyles.countRow}>
                 <View style={screenStyles.countRowItem}>
-                  <Text style={gStyles.headerText}>10</Text>
+                  <Text style={gStyles.headerText}>{counts.total}</Text>
                   <Text
                     style={StyleSheet.compose(screenStyles.countInfoText, {
                       color: ForkliftStatusColor.total,
@@ -238,7 +300,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
                   })}
                 />
                 <View style={screenStyles.countRowItem}>
-                  <Text style={gStyles.headerText}>12</Text>
+                  <Text style={gStyles.headerText}>{counts.offline}</Text>
                   <Text
                     style={StyleSheet.compose(screenStyles.countInfoText, {
                       color: ForkliftStatusColor.offline,
@@ -273,7 +335,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
         refreshControl={
           <RefreshControl
             enabled={true}
-            refreshing={isFetchingForklifts}
+            refreshing={isFetching}
             colors={[colors.primary]}
             progressBackgroundColor={colors.white}
             onRefresh={handleRefresh}

@@ -78,7 +78,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
   const rightSheetRef = React.useRef<RightSheetRefProps>(null);
   const [date, setDate] = React.useState<Date>(new Date());
   const [showDatePicker, setShowDatePicker] = React.useState<boolean>(false);
-  const [isMapReady, setIsMapReady] = React.useState<boolean>(false);
+  const [_isMapReady, setIsMapReady] = React.useState<boolean>(false);
   const [viewTrackingA1, setViewTrackingA1] = React.useState<boolean>(true);
   const [viewTrackingA2, setViewTrackingA2] = React.useState<boolean>(true);
   const [selectedRoute, setSelectedRoute] = React.useState<CoordinatesType[]>(

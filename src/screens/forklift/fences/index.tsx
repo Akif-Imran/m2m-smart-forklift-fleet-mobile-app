@@ -5,13 +5,9 @@ import {
   Text,
   TouchableOpacity,
   View,
-  useWindowDimensions,
 } from "react-native";
 import React from "react";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { listCardStyles, mapStyles, screenStyles } from "@screen-styles";
 import type { ForkliftStackScreenProps } from "@navigation-types";
 import { PaperTheme, colors, gStyles, theme } from "@theme";

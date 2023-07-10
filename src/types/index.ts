@@ -18,3 +18,85 @@ interface ILoginUserData {
   updatedAt: null;
   user_type: IUserType;
 }
+
+interface IDevice {
+  id: number;
+  IMEI: string;
+  device_type_id: number;
+  sim_no: string;
+  device_name: string;
+  user_id: number;
+  activation_status: number;
+  assigned_at: string;
+  activated_at: string;
+  expired_at: string;
+  warranty_start_date: string;
+  warranty_end_date: string;
+  group_id: null;
+  createdAt: string;
+  updatedAt: string;
+  device_type: string;
+  group_name: string;
+  latitude: null;
+  longitude: null;
+  external_power_voltage: null;
+  back_battery_percentage: null;
+  mileage: null;
+  speed: null;
+  touch_id: null;
+  gps_accuracy: null;
+  motion_state: null;
+  gps_time: string;
+  is_idling: false;
+  is_ignition: false;
+  ignition_time: string;
+  sos_command: number;
+  out_command: number;
+  is_faulty: false;
+  battery_info_time: null;
+  voltage: null;
+  current: null;
+  temperature: null;
+  power_capacity: null;
+  battery_level: null;
+  charging_status: null;
+  vehicle_id: number;
+  vehicle_picture: string;
+  vehicle_driver_id: null;
+  vehicle_reg_no: string;
+  vehicle_icon: string;
+  is_online: number;
+}
+
+interface IVehicle {
+  id: number;
+  device_id: number;
+  reg_no: string;
+  color: string;
+  make: string;
+  model: string;
+  picture: string;
+  driver_id: null;
+  purchase_date: string;
+  rent_start_date: string;
+  rent_end_date: string;
+  serial_number: string;
+  battery_serial_number: string;
+  year: number;
+  age: string;
+  fuel_type_id: number;
+  fuel_capacity: string;
+  insurance_company: string;
+  insurance_number: string;
+  insurance_type: string;
+  insurance_expiry_date: string;
+  mileage: null;
+  icon: string;
+  user_id: number;
+  is_active: boolean;
+  createdAt: string;
+  updatedAt: string;
+  fuel_type_name: string;
+  driver_name: string;
+  driver_picture: string;
+}

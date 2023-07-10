@@ -17,12 +17,38 @@ export const urls = {
   auth: {
     login: `${baseURL}/login`,
   },
+  dashboard: {
+    counts: `${baseURL}/app_dashboard`,
+  },
+  devices: {
+    list: `${baseURL}/device_list`,
+  },
+  vehicles: {
+    list: `${baseURL}/vehicle_list`,
+  },
+};
+
+export const apiGet = async <R>(
+  url: string,
+  token: string
+): Promise<AxiosResponse<R>> => {
+  const response = await axios.get<R>(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
 };
 
 export const apiPost = async <R, P>(
   url: string,
+  token: string,
   body: P
 ): Promise<AxiosResponse<R>> => {
-  const response = await axios.post<R>(url, body);
+  const response = await axios.post<R>(url, body, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response;
 };

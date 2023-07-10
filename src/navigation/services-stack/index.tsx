@@ -4,7 +4,6 @@ import { colors, gStyles, theme } from "@theme";
 import type { ServiceStackParamsList } from "@navigation-types";
 import {
   Services,
-  AddService,
   ServiceDetails,
   ForkliftNotification,
   ForkliftNotificationDetails,
@@ -45,14 +44,14 @@ const ServicesStack: React.FC = () => {
           },
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="AddService"
         component={AddService}
         options={({ route }) => ({
           headerShown: true,
           title: route.params.mode === "add" ? "Add Service" : "Update Service",
         })}
-      />
+      /> */}
       <Stack.Screen
         name="Notification"
         component={ForkliftNotification}

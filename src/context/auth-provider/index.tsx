@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import { apiLogin } from "@services";
 import { ToastService } from "@utility";
 
@@ -96,11 +95,11 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     })();
   }, []);
 
-  React.useEffect(() => {
-    if (state.isAuthorized) {
-      authHelpers.setupAxios(axios);
-    }
-  }, [state.isAuthorized]);
+  // React.useEffect(() => {
+  //   if (state.isAuthorized) {
+  //     authHelpers.setupAxios(axios);
+  //   }
+  // }, [state.isAuthorized]);
 
   const logout = React.useCallback(() => dispatch({ type: "LOGOUT" }), []);
 
@@ -108,7 +107,7 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     (email: string, password: string, save: boolean) => {
       apiLogin({ email, password })
         .then((res) => {
-          ToastService.show(res.message);
+          ToastService.show(res?.message || "");
           if (res.success) {
             if (save) {
               authHelpers

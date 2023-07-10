@@ -59,6 +59,7 @@ export function setupAxios(axios: AxiosStatic) {
     (config) => {
       getAuth().then((auth) => {
         if (auth && auth.token) {
+          console.log("axios setup", auth.token);
           config.headers.Authorization = `Bearer ${auth.token}`;
           //@ts-expect-error config.retry custom retry logic later changed to axios-retry package
           config.retry = 3;
