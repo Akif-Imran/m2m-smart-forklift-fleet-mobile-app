@@ -1,5 +1,7 @@
 import React from "react";
 import axios from "axios";
+import { apiLogin } from "@services";
+import { ToastService } from "@utility";
 
 import * as authHelpers from "./AuthHelpers";
 
@@ -9,27 +11,22 @@ interface AuthContextType {
   logout: () => void;
 }
 
-interface UserData {
-  name: string;
-  email: string;
-}
-
 interface AuthState {
   isAuthorized: boolean;
   isLoading: boolean;
   token: string;
-  user: UserData | null;
+  user: ILoginUserData | null;
 }
 
 type AuthAction =
   | { type: "LOGOUT" }
   | {
       type: "LOGIN";
-      payload: { email: string; password: string; save: boolean };
+      payload: { token: string; user: ILoginUserData; save: boolean };
     }
   | {
       type: "GIVE_ACCESS";
-      payload: { isAuthorized: boolean; token: string; user: UserData };
+      payload: { isAuthorized: boolean; token: string; user: ILoginUserData };
     };
 
 const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
@@ -46,15 +43,10 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         isLoading: false,
       };
     case "LOGIN":
-      const u = {
-        email: action.payload.email,
-        name: "John Doe",
-        token: "secure-token",
-      };
       return {
         ...state,
-        token: u.token,
-        user: { name: u.name, email: u.email },
+        token: action.payload.token,
+        user: action.payload.user,
         isAuthorized: true,
         isLoading: false,
       };
@@ -84,7 +76,6 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     (async () => {
       try {
         const auth = await authHelpers.getAuth();
-
         if (!auth) {
           dispatch({ type: "LOGOUT" });
           return;
@@ -93,7 +84,7 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
             type: "GIVE_ACCESS",
             payload: {
               isAuthorized: true,
-              user: { name: auth.name, email: auth.email },
+              user: auth.user,
               token: auth.token,
             },
           });
@@ -112,9 +103,34 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   }, [state.isAuthorized]);
 
   const logout = React.useCallback(() => dispatch({ type: "LOGOUT" }), []);
+
   const login = React.useCallback(
-    (email: string, password: string, save: boolean) =>
-      dispatch({ type: "LOGIN", payload: { email, password, save } }),
+    (email: string, password: string, save: boolean) => {
+      apiLogin({ email, password })
+        .then((res) => {
+          ToastService.show(res.message);
+          if (res.success) {
+            if (save) {
+              authHelpers
+                .setAuth({ token: res.token, user: res.data })
+                .then(() => {
+                  dispatch({
+                    type: "LOGIN",
+                    payload: { user: res.data, save: true, token: res.token },
+                  });
+                });
+            } else {
+              dispatch({
+                type: "LOGIN",
+                payload: { user: res.data, save: true, token: res.token },
+              });
+            }
+          }
+        })
+        .catch((_err) => {
+          ToastService.show("Error occurred. Try again");
+        });
+    },
     []
   );
 

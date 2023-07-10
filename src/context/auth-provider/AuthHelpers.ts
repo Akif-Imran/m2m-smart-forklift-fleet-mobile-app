@@ -44,7 +44,6 @@ const removeAuth = async () => {
   if (!AsyncStorage) {
     return;
   }
-
   try {
     await AsyncStorage.removeItem(AUTH_LOCAL_STORAGE_KEY);
   } catch (error) {
