@@ -1,15 +1,18 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
+/* eslint-disable camelcase */
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "@screen-styles";
 import { _DefaultCard, _ScrollFormLayout } from "@components";
 import type { ServiceStackScreenProps } from "@navigation-types";
 import { ScrollView } from "react-native-gesture-handler";
-import { faker } from "@faker-js/faker";
-import moment from "moment";
 import { Modal, Portal, RadioButton } from "react-native-paper";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { MaterialIcons } from "@expo/vector-icons";
+import { baseURL } from "@api";
+import { getServiceStatus, updateServiceStatus } from "@services";
+import { useAuthContext } from "@context";
+import { FORMAT_DATE_STRING_DD_MM_YYYY_HH_MM_12, ToastService } from "@utility";
 
 enum ServiceStatus {
   "COMPLETE" = 1,
@@ -22,7 +25,10 @@ const ServiceDetails: React.FC<ServiceStackScreenProps<"ServiceDetails">> = ({
   route,
 }) => {
   const { item } = route.params;
-
+  const {
+    state: { token },
+  } = useAuthContext();
+  const [statusList, setStatusList] = React.useState<IServiceStatus[]>([]);
   const [visible, setVisible] = React.useState<boolean>(false);
   const [selectedFilter, setSelectedFilter] = React.useState<string>(
     ServiceStatus.COMPLETE.toString()
@@ -46,6 +52,36 @@ const ServiceDetails: React.FC<ServiceStackScreenProps<"ServiceDetails">> = ({
     });
   }, [navigation]);
 
+  const fetchServiceStatus = React.useCallback(() => {
+    getServiceStatus(token)
+      .then((res) => {
+        if (res.success) {
+          setStatusList(res.data);
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Error occurred");
+      });
+  }, [token]);
+
+  const updateStatus = async (serviceId: number, statusId: string) => {
+    updateServiceStatus(token, {
+      id: serviceId,
+      status_id: parseInt(statusId, 10),
+    })
+      .then((res) => {
+        console.log(res);
+        ToastService.show("Service updated");
+      })
+      .catch((_err) => {
+        ToastService.show("Error occurred");
+      });
+  };
+
+  React.useEffect(() => {
+    fetchServiceStatus();
+  }, [fetchServiceStatus]);
+
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
       <Portal theme={PaperTheme}>
@@ -58,12 +94,99 @@ const ServiceDetails: React.FC<ServiceStackScreenProps<"ServiceDetails">> = ({
           <>
             <RadioButton.Group
               onValueChange={(newValue) => {
+                updateStatus(item.id, newValue);
                 setSelectedFilter(newValue);
                 hideModal();
               }}
               value={selectedFilter}
             >
-              <View style={screenStyles.radioItemStyle}>
+              {statusList.map((status) => (
+                <View style={screenStyles.radioItemStyle} key={status.id}>
+                  <RadioButton.Item
+                    theme={PaperTheme}
+                    label={status.status_name}
+                    value={status.id.toString()}
+                    color={colors.primary}
+                    uncheckedColor={colors.iconGray}
+                    labelStyle={gStyles.descText}
+                  />
+                </View>
+              ))}
+            </RadioButton.Group>
+          </>
+        </Modal>
+      </Portal>
+      <_ScrollFormLayout>
+        <>
+          <ScrollView
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            showsVerticalScrollIndicator={false}
+            alwaysBounceVertical={false}
+            contentContainerStyle={{ gap: theme.spacing.sm }}
+          >
+            {item.pictures.length > 0 ? (
+              <>
+                {item.pictures.map((picture, index) => (
+                  <Image
+                    key={index}
+                    source={{ uri: `${baseURL}${picture}` }}
+                    style={screenStyles.imgStyle}
+                  />
+                ))}
+              </>
+            ) : (
+              <View
+                style={StyleSheet.compose(
+                  screenStyles.imgStyle,
+                  screenStyles.noImage
+                )}
+              >
+                <Text style={gStyles.cardInfoTitleText}>No Images</Text>
+              </View>
+            )}
+          </ScrollView>
+          <_DefaultCard>
+            <View>
+              <Text style={screenStyles.detailsCardHeadingText}>
+                Service Info
+              </Text>
+            </View>
+            <View style={screenStyles.fieldContainer}>
+              <Text style={screenStyles.tblHeaderText}>Registration No.</Text>
+              <Text style={screenStyles.tblDescText}>{item.id}</Text>
+            </View>
+            <View style={screenStyles.fieldContainer}>
+              <Text style={screenStyles.tblHeaderText}>Status</Text>
+              <Text style={screenStyles.tblDescText}>{item.status}</Text>
+            </View>
+            <View style={screenStyles.fieldContainer}>
+              <Text style={screenStyles.tblHeaderText}>Request Date</Text>
+              <Text style={screenStyles.tblDescText}>
+                {/* {moment(item.service_date).format("DD MMM, YYYY hh:mm A")} */}
+                {FORMAT_DATE_STRING_DD_MM_YYYY_HH_MM_12(item.service_date)}
+              </Text>
+            </View>
+            <View style={screenStyles.fieldContainer}>
+              <Text style={screenStyles.tblHeaderText}>Service Type</Text>
+              <Text style={screenStyles.tblDescText}>
+                {item.type_name.toUpperCase()}
+              </Text>
+            </View>
+            <View style={screenStyles.fieldContainer}>
+              <Text style={screenStyles.tblHeaderText}>Description</Text>
+              <Text style={screenStyles.tblDescText}>{item.description}</Text>
+            </View>
+          </_DefaultCard>
+        </>
+      </_ScrollFormLayout>
+    </SafeAreaView>
+  );
+};
+
+export { ServiceDetails };
+
+/* <View style={screenStyles.radioItemStyle}>
                 <RadioButton.Item
                   theme={PaperTheme}
                   label="Complete"
@@ -92,77 +215,4 @@ const ServiceDetails: React.FC<ServiceStackScreenProps<"ServiceDetails">> = ({
                   uncheckedColor={colors.iconGray}
                   labelStyle={gStyles.descText}
                 />
-              </View>
-            </RadioButton.Group>
-          </>
-        </Modal>
-      </Portal>
-      <_ScrollFormLayout>
-        <>
-          <ScrollView
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
-            showsVerticalScrollIndicator={false}
-            alwaysBounceVertical={false}
-            contentContainerStyle={{ gap: theme.spacing.sm }}
-          >
-            <Image
-              source={{ uri: faker.image.url() }}
-              style={screenStyles.imgStyle}
-            />
-            <Image
-              source={{ uri: faker.image.url() }}
-              style={screenStyles.imgStyle}
-            />
-          </ScrollView>
-          <_DefaultCard>
-            <View>
-              <Text style={screenStyles.detailsCardHeadingText}>
-                Service Info
-              </Text>
-            </View>
-            <View style={screenStyles.fieldContainer}>
-              <Text style={screenStyles.tblHeaderText}>Registration No.</Text>
-              <Text style={screenStyles.tblDescText}>{item.regNo}</Text>
-            </View>
-            <View style={screenStyles.fieldContainer}>
-              <Text style={screenStyles.tblHeaderText}>Status</Text>
-              <Text style={screenStyles.tblDescText}>{item.status}</Text>
-            </View>
-            <View style={screenStyles.fieldContainer}>
-              <Text style={screenStyles.tblHeaderText}>Request Date</Text>
-              <Text style={screenStyles.tblDescText}>
-                {moment(item.date).format("DD MMM, YYYY hh:mm A")}
-              </Text>
-            </View>
-            <View style={screenStyles.fieldContainer}>
-              <Text style={screenStyles.tblHeaderText}>Service Type</Text>
-              <Text style={screenStyles.tblDescText}>
-                {item.type.toUpperCase()}
-              </Text>
-            </View>
-            <View style={screenStyles.fieldContainer}>
-              <Text style={screenStyles.tblHeaderText}>Description</Text>
-              <Text style={screenStyles.tblDescText}>{item.description}</Text>
-            </View>
-          </_DefaultCard>
-        </>
-      </_ScrollFormLayout>
-      {/* //TODO - update serivce screen; */}
-      {/* <FAB
-        icon="pencil"
-        style={gStyles.fab}
-        color={colors.white}
-        onPress={() =>
-          navigation.navigate("AddService", {
-            mode: "edit",
-            _id: _id,
-            item: item,
-          })
-        }
-      /> */}
-    </SafeAreaView>
-  );
-};
-
-export { ServiceDetails };
+              </View> */

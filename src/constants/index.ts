@@ -10,6 +10,11 @@ export const ForkliftStatusColor: Record<string, string> = {
 };
 
 export const ServiceStatusColor: Record<string, string> = {
+  //how api returns response
+  Pending: colors.error,
+  Complited: colors.primary,
+  "In Process": colors.titleText,
+  //how app handles it
   pending: colors.error,
   completed: colors.primary,
   inprocess: colors.titleText,

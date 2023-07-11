@@ -1,3 +1,7 @@
+type MessageResponse = {
+  success: boolean;
+  message: string;
+};
 type FailedResponse = {
   success: false;
   message: string;
@@ -16,3 +20,8 @@ type SuccessResponse<T, Key> = Key extends "data"
     };
 
 type ApiResponse<T, Key = "data"> = FailedResponse | SuccessResponse<T, Key>;
+
+type ListResponse<T> = {
+  count: number;
+  rows: T;
+};

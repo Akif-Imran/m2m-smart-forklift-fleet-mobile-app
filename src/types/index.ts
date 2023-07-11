@@ -100,3 +100,63 @@ interface IVehicle {
   driver_name: string;
   driver_picture: string;
 }
+
+interface IService {
+  id: number;
+  vehicle_id: number;
+  type_id: number;
+  pictures: string[];
+  description: string;
+  service_date: string;
+  status_id: number;
+  user_id: number;
+  updated_by: null;
+  is_active: boolean;
+  createdAt: string;
+  updatedAt: string;
+  vehicle_reg_no: string;
+  user_name: string;
+  type_name: string;
+  status: string;
+}
+
+interface IServiceType {
+  id: number;
+  type_name: string;
+  is_active: boolean;
+  createdAt: string;
+  updatedAt: string | null;
+}
+
+interface IServiceStatus {
+  id: number;
+  status_name: string;
+  is_active: boolean;
+  createdAt: null;
+  updatedAt: null;
+}
+
+interface IDriver {
+  id: number;
+  name: string;
+  ic_number: string;
+  picture: string;
+  touch_id: string;
+  mobile_number: string;
+  joining_date: string;
+  experience_in_year: number;
+  license_type: string;
+  license_number: string;
+  license_expiry: string;
+  department: string;
+  created_by: number;
+  user_id: number;
+  is_active: boolean;
+  assign_status: boolean;
+  dob: string;
+  available_status: boolean;
+  createdAt: string;
+  updatedAt: string;
+  email: string;
+  password: string;
+}

@@ -107,6 +107,12 @@ export const screenStyles = StyleSheet.create({
     marginVertical: theme.spacing.xs,
     // borderWidth: 1,
   },
+  noImage: {
+    borderWidth: 1,
+    borderColor: colors.borderColor,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   badgeView: {
     overflow: "hidden",
     borderRadius: theme.radius.xs,

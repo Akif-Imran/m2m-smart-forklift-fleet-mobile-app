@@ -36,30 +36,30 @@ interface INotification {
   description: string;
 }
 
-interface IService {
-  _id: string;
-  regNo: string;
-  date: string;
-  type: string;
-  description: string;
-  status: string;
-}
+// interface IService {
+//   _id: string;
+//   regNo: string;
+//   date: string;
+//   type: string;
+//   description: string;
+//   status: string;
+// }
 
-interface IDriver {
-  _id: string;
-  image: string;
-  name: string;
-  email: string;
-  rating: number;
-  touchId: string;
-  department: string;
-  ic_number: string;
-  password: string;
-  mobileNo: string;
-  joiningDate: string;
-  experience: string;
-  licenseType: string;
-}
+// interface IDriver {
+//   _id: string;
+//   image: string;
+//   name: string;
+//   email: string;
+//   rating: number;
+//   touchId: string;
+//   department: string;
+//   ic_number: string;
+//   password: string;
+//   mobileNo: string;
+//   joiningDate: string;
+//   experience: string;
+//   licenseType: string;
+// }
 interface IDriverActivity {
   _id: string;
   image: string;

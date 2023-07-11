@@ -1,15 +1,3 @@
-type DevicesListResponseType = ApiResponse<
-  {
-    count: number;
-    rows: IDevice[];
-  },
-  "result"
->;
+type DevicesListResponseType = ApiResponse<ListResponse<IDevice[]>, "result">;
 
-type VehicleListResponseType = ApiResponse<
-  {
-    count: number;
-    rows: IVehicle[];
-  },
-  "data"
->;
+type VehicleListResponseType = ApiResponse<ListResponse<IVehicle[]>, "data">;

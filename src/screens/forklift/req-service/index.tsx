@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {
   FlatList,
   Image,
@@ -25,6 +26,8 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import moment from "moment";
 import { Button } from "react-native-paper";
+import { addService, getServiceTypes } from "@services";
+import { useAuthContext } from "@context";
 
 interface IForm {
   type: string;
@@ -39,18 +42,22 @@ const schema: yup.ObjectSchema<IForm> = yup.object().shape({
 const RequestService: React.FC<ForkliftStackScreenProps<"ReqService">> = ({
   navigation,
 }) => {
+  const {
+    state: { token },
+  } = useAuthContext();
   const [isLoading, setIsLoading] = React.useState(false);
+  const [date, setDate] = React.useState<Date>(new Date());
   const [_hasImages, setHasImages] = React.useState<boolean>(false);
   const [images, setImages] = React.useState<ImagePicker.ImagePickerAsset[]>(
     []
   );
   const [typeDropdownVisible, setTypeDropdownVisible] = React.useState(false);
 
-  const typeDropDownList = [
+  const [typeDropDownList, setTypeDropDownList] = React.useState([
     { label: "Breakdown", value: "breakdown" },
     { label: "Scheduled", value: "scheduled" },
     { label: "Warranty", value: "warranty" },
-  ];
+  ]);
 
   const form = useFormik<IForm>({
     initialValues: {
@@ -60,12 +67,34 @@ const RequestService: React.FC<ForkliftStackScreenProps<"ReqService">> = ({
     onSubmit: (values, helpers) => {
       console.log(values);
       setIsLoading(true);
-      setTimeout(() => {
-        setIsLoading(false);
-        helpers.resetForm();
-        ToastService.show("Request added successfully");
-        navigation.goBack();
-      }, 2000);
+      const pictures: string[] = [];
+      if (images) {
+        images.forEach((item) => {
+          if (item?.base64) {
+            pictures.push(item.base64);
+          }
+        });
+      }
+      addService(token, {
+        //TODO - change this to vehicle id pass parameter from previous screen.
+        vehicle_id: 1,
+        type_id: parseInt(values.type, 10),
+        description: values.description,
+        pictures: pictures,
+        service_date: moment().utc().toJSON(),
+      })
+        .then((res) => {
+          console.log(res);
+          ToastService.show("Service Request added successfully");
+        })
+        .catch((_err) => {
+          ToastService.show("Error occurred");
+        })
+        .finally(() => {
+          setIsLoading(false);
+          helpers.resetForm();
+          navigation.goBack();
+        });
     },
     validationSchema: schema,
   });
@@ -112,6 +141,26 @@ const RequestService: React.FC<ForkliftStackScreenProps<"ReqService">> = ({
     setImages(arr);
   };
 
+  const fetchServiceTypes = React.useCallback(() => {
+    getServiceTypes(token)
+      .then((res) => {
+        if (res.success) {
+          const types = res.data.map((item) => {
+            return { label: item.type_name, value: item.id.toString() };
+          });
+          console.log(types);
+          setTypeDropDownList(types);
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Error occurred");
+      });
+  }, [token]);
+
+  React.useEffect(() => {
+    fetchServiceTypes();
+  }, [fetchServiceTypes]);
+
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
       <Spinner
@@ -156,7 +205,7 @@ const RequestService: React.FC<ForkliftStackScreenProps<"ReqService">> = ({
           <View style={screenStyles.fieldContainer}>
             <Text style={screenStyles.tblHeaderText}>Request Date/Time</Text>
             <Text style={screenStyles.tblDescText}>
-              {moment().format("DD MMM, YYYY hh:mm:ss A")}
+              {moment(date).format("DD MMM, YYYY hh:mm A")}
             </Text>
           </View>
           <_Divider title="Service Info" />
@@ -168,7 +217,7 @@ const RequestService: React.FC<ForkliftStackScreenProps<"ReqService">> = ({
             }}
             mode="outlined"
             label="Type"
-            value={form.values}
+            value={form.values.type}
             visible={typeDropdownVisible}
             showDropDown={() => setTypeDropdownVisible(true)}
             onDismiss={() => setTypeDropdownVisible(false)}
@@ -183,8 +232,8 @@ const RequestService: React.FC<ForkliftStackScreenProps<"ReqService">> = ({
             numberOfLines={4}
             value={form.values.description}
             label={"Description"}
-            onBlur={form.handleBlur("name")}
-            onChangeText={form.handleChange("name")}
+            onBlur={form.handleBlur("description")}
+            onChangeText={form.handleChange("description")}
             error={
               form.errors?.description && form.touched?.description
                 ? true

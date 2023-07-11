@@ -26,6 +26,22 @@ export const urls = {
   vehicles: {
     list: `${baseURL}/vehicle_list`,
   },
+  services: {
+    counts: `${baseURL}/services_status_count`,
+    list: `${baseURL}/get_services`,
+    typeList: `${baseURL}/get_service_types`,
+    statusList: `${baseURL}/get_all_status`,
+    updateStatus: `${baseURL}/update_service`,
+    create: `${baseURL}/add_service`,
+    delete: (serviceId: string) => `${baseURL}/delete_service/${serviceId}`,
+  },
+  driver: {
+    list: `${baseURL}/get_driver_list`,
+    getById: (driverId: string) => `${baseURL}/get_driver/${driverId}`,
+    create: `${baseURL}/add_new_driver`,
+    update: `${baseURL}/update_driver`,
+    delete: (driverId: string) => `${baseURL}/delete_driver/${driverId}`,
+  },
 };
 
 export const apiGet = async <R>(

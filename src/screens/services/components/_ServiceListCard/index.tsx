@@ -12,7 +12,7 @@ import moment from "moment";
 
 interface OwnProps {
   item: IService;
-  handleDelete: (serviceId: string) => void;
+  handleDelete: (serviceId: number) => void;
 }
 
 const _ServiceListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
@@ -20,10 +20,10 @@ const _ServiceListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
     useNavigation<ServiceStackScreenProps<"Services">["navigation"]>();
   return (
     <_DefaultCard
-      onLongPress={() => handleDelete(item._id)}
+      onLongPress={() => handleDelete(item.id)}
       onPress={() =>
         navigation.navigate("ServiceDetails", {
-          _id: item._id,
+          _id: item.id.toString(),
           item: item,
         })
       }
@@ -38,20 +38,20 @@ const _ServiceListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
         </View> */}
         <View style={listCardStyles.infoWithForward}>
           <View style={listCardStyles.infoContainer}>
-            <Text style={gStyles.cardInfoTitleText}>{item.regNo}</Text>
+            <Text style={gStyles.cardInfoTitleText}>{item.id}</Text>
             <Text
               style={gStyles.tblDescText}
               ellipsizeMode="tail"
               numberOfLines={1}
             >
-              {moment(item.date).format("DD MMM, YYYY hh:mm A")}
+              {moment(item.service_date).format("DD MMM, YYYY hh:mm A")}
             </Text>
             <Text
               style={gStyles.tblDescText}
               ellipsizeMode="tail"
               numberOfLines={0.5}
             >
-              {truncateText(item.type, 22)}
+              {truncateText(item.type_name, 22)}
             </Text>
           </View>
 
