@@ -50,3 +50,23 @@ export const addDriver = async (
   );
   return response.data;
 };
+
+export const assignVehicles = async (
+  token: string,
+  body: AssignVehicleRequest
+): Promise<AssignVehicleResponse> => {
+  const response = await apiPost<AssignVehicleResponse, AssignVehicleRequest>(
+    urls.driver.assignVehicles,
+    token,
+    body
+  );
+  return response.data;
+};
+
+export const getAssignedVehicles = async (token: string, driverId: string) => {
+  const response = await apiGet<GetAssignedVehicleResponse>(
+    urls.driver.getAssignedVehicles(driverId),
+    token
+  );
+  return response.data;
+};

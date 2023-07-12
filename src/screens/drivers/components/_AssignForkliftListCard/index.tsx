@@ -5,13 +5,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { colors, gStyles } from "@theme";
 import { truncateText } from "@utility";
 import { listCardStyles } from "@screen-styles";
+import { baseURL } from "@api";
 
 import { styles } from "./styles";
 
 interface OwnProps {
-  item: IForklift;
+  item: IVehicle;
   checked: boolean;
-  toggleAssignment: (forkliftId: string) => void;
+  toggleAssignment: (forkliftId: number) => void;
 }
 
 const _AssignForkliftListCard: React.FC<OwnProps> = ({
@@ -20,7 +21,7 @@ const _AssignForkliftListCard: React.FC<OwnProps> = ({
   toggleAssignment,
 }) => {
   return (
-    <_DefaultCard onPress={() => toggleAssignment(item._id)}>
+    <_DefaultCard onPress={() => toggleAssignment(item.id)}>
       <View
         style={StyleSheet.compose(listCardStyles.contentContainer, {
           backgroundColor: colors.white,
@@ -35,9 +36,9 @@ const _AssignForkliftListCard: React.FC<OwnProps> = ({
           />
         ) : null}
         <View>
-          {item.image ? (
+          {item.picture ? (
             <Image
-              source={{ uri: item.image }}
+              source={{ uri: `${baseURL}${item.picture}` }}
               resizeMode="cover"
               style={listCardStyles.imgStyle}
             />
@@ -51,13 +52,13 @@ const _AssignForkliftListCard: React.FC<OwnProps> = ({
         </View>
         <View style={listCardStyles.infoWithForward}>
           <View style={listCardStyles.infoContainer}>
-            <Text style={gStyles.cardInfoTitleText}>{item.name}</Text>
+            <Text style={gStyles.cardInfoTitleText}>{item.reg_no}</Text>
             <Text
               style={gStyles.tblDescText}
               ellipsizeMode="tail"
               numberOfLines={1}
             >
-              {item.driver}
+              {item.model}-{item.make}-{item.year}
             </Text>
             <View
               style={{

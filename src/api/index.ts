@@ -4,6 +4,8 @@ import type { AxiosResponse } from "axios";
 import axios from "axios";
 
 export const baseURL = "http://www.sealtracking.com:4600";
+export const baseDeviceURL = `${baseURL}/device`;
+export const baseVehicleURL = `${baseURL}/vehicle`;
 export const GOOGLE_MAPS_API = "https://maps.googleapis.com/maps/api";
 export const GOOGLE_PLACES_API = `${GOOGLE_MAPS_API}/place`;
 export const GOOGLE_DIRECTIONS_API = `${GOOGLE_MAPS_API}/directions/json`;
@@ -21,10 +23,20 @@ export const urls = {
     counts: `${baseURL}/app_dashboard`,
   },
   devices: {
-    list: `${baseURL}/device_list`,
+    list: `${baseDeviceURL}/getAll`,
+    getDeviceDetails: (imei: string) =>
+      `${baseDeviceURL}/getDeviceDetail?IMEI=${imei}`,
+    create: `${baseDeviceURL}/create`,
+    createMany: `${baseDeviceURL}/createMultiple`,
+    update: `${baseDeviceURL}/update`,
   },
   vehicles: {
-    list: `${baseURL}/vehicle_list`,
+    list: `${baseVehicleURL}/getAll`,
+    getById: (vehicleId: string) =>
+      `${baseVehicleURL}/getVehicleById?id=${vehicleId}`,
+    create: `${baseVehicleURL}/create`,
+    update: `${baseVehicleURL}/update`,
+    delete: (vehicleId: string) => `${baseVehicleURL}/delete?id=${vehicleId}`,
   },
   services: {
     counts: `${baseURL}/services_status_count`,
@@ -41,6 +53,9 @@ export const urls = {
     create: `${baseURL}/add_new_driver`,
     update: `${baseURL}/update_driver`,
     delete: (driverId: string) => `${baseURL}/delete_driver/${driverId}`,
+    assignVehicles: `${baseURL}/assign_driver`, //this assigns multiple vehicles to a driver
+    getAssignedVehicles: (driverId: string) =>
+      `${baseURL}/get_assigned_vehicle/${driverId}`,
   },
 };
 

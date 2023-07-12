@@ -1,3 +1,3 @@
-type DevicesListResponseType = ApiResponse<ListResponse<IDevice[]>, "result">;
+type DevicesListResponse = ApiResponse<ListResponse<IDevice[]>, "result">;
 
-type VehicleListResponseType = ApiResponse<ListResponse<IVehicle[]>, "data">;
+type VehicleListResponse = ApiResponse<ListResponse<IVehicle[]>>;

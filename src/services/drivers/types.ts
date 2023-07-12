@@ -38,3 +38,22 @@ type AddDriverRequest = {
 type AddDriverResponse = ApiResponse<IDriver>;
 
 type DeleteDriverResponse = MessageResponse;
+
+type AssignVehicleRequest = {
+  driver_id: number;
+  vehicle_ids: number[];
+};
+
+interface AssignedVehicle {
+  //response when you assign a vehicle to a driver
+  id: number;
+  driver_id: number;
+  vehicle_id: number;
+  user_id: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+type AssignVehicleResponse = ApiResponse<AssignedVehicle[]>;
+
+type GetAssignedVehicleResponse = ApiResponse<IGetAssignedVehicle[]>;

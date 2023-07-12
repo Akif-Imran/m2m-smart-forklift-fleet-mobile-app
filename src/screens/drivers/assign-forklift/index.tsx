@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {
   FlatList,
   RefreshControl,
@@ -12,26 +13,32 @@ import { screenStyles } from "@screen-styles";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { ToastService } from "@utility";
 import { AssignForkliftFilters } from "@constants";
-import { faker } from "@faker-js/faker";
 import { _ConfirmModal, _ListEmptyComponent } from "@components";
 import { Modal, Portal, RadioButton, Searchbar } from "react-native-paper";
 import Spinner from "react-native-loading-spinner-overlay";
 import type { DriverStackScreenProps } from "@navigation-types";
+import { assignVehicles, getAssignedVehicles, getVehicleList } from "@services";
+import { useAuthContext } from "@context";
 
 import { _AssignForkliftListCard } from "../components";
 
 const AssignForklift: React.FC<DriverStackScreenProps<"AssignForklift">> = ({
   navigation,
+  route,
 }) => {
+  const {
+    state: { token },
+  } = useAuthContext();
+  const { item } = route.params;
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [isLoading, setIsLoading] = React.useState(false);
-  const [forklifts, setForklifts] = React.useState<IForklift[]>([]);
-  const [searchedForklifts, setSearchedForklifts] = React.useState<IForklift[]>(
+  const [vehicles, setVehicles] = React.useState<IVehicle[]>([]);
+  const [searchedVehicles, setSearchedVehicles] = React.useState<IVehicle[]>(
     []
   );
   const [isFetching, setIsFetching] = React.useState(false);
   const fetchForkliftsTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
-  const [selectedForklifts, setSelectedForklifts] = React.useState<string[]>(
+  const [selectedForklifts, setSelectedForklifts] = React.useState<number[]>(
     []
   );
 
@@ -43,55 +50,6 @@ const AssignForklift: React.FC<DriverStackScreenProps<"AssignForklift">> = ({
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
-  const addInfo = () => {
-    const record: IForklift = {
-      _id: faker.database.mongodbObjectId(),
-      imei: faker.string.alphanumeric({
-        casing: "upper",
-        length: { min: 12, max: 15 },
-      }),
-      simNo: faker.string.numeric({ length: 12, allowLeadingZeros: false }),
-      age: faker.helpers.arrayElement([10, 11, 12, 13, 14, 15, 16]).toString(),
-      batterySerialNo: faker.vehicle.vin(),
-      color: faker.vehicle.color(),
-      forkliftSerialNo: faker.vehicle.vrm(),
-      make: faker.date.past().getFullYear().toString(),
-      manufactureYear: faker.date.past().getFullYear().toString(),
-
-      purchaseDate: faker.date.past().toDateString(),
-      rentStartDate: faker.date.past().toDateString(),
-      rentEndDate: faker.date.future().toDateString(),
-      milage: faker.helpers
-        .rangeToNumber({ min: 13867, max: 50000 })
-        .toString(),
-      regNo: faker.helpers.rangeToNumber({ min: 1, max: 50000 }).toString(),
-      image: faker.image.urlPicsumPhotos({ height: 75, width: 75 }),
-      name: faker.helpers.arrayElement([
-        "Forklift 1",
-        "Forklift 2",
-        "Forklift 3",
-        "Forklift 4",
-      ]),
-      status: faker.helpers.arrayElement([
-        "moving",
-        "parked",
-        "offline",
-        "faulty",
-      ]),
-      driver: faker.person.fullName(),
-      model: faker.vehicle.vrm(),
-      fuelType: faker.vehicle.fuel(),
-      fuelCapacity: faker.helpers
-        .rangeToNumber({ min: 13867, max: 50000 })
-        .toString(),
-      insuranceCompany: faker.company.name(),
-      insuranceNo: faker.string.alphanumeric({ length: 12, casing: "upper" }),
-      insuranceType: faker.helpers.arrayElement(["life", "property", "travel"]),
-      insuranceExpiryDate: faker.date.future().toDateString(),
-    };
-    setForklifts((prev) => [...prev, record]);
-  };
-
   const handleRefresh = () => {
     setIsFetching(true);
     fetchForkliftsTimeoutRef.current = setTimeout(() => {
@@ -102,37 +60,37 @@ const AssignForklift: React.FC<DriverStackScreenProps<"AssignForklift">> = ({
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     if (!query) {
-      setSearchedForklifts(forklifts);
+      setSearchedVehicles(vehicles);
       return;
     }
-    const filteredCustomers = forklifts.filter((customer) =>
-      customer.name.toLowerCase().includes(query.toLowerCase())
+    const filtered = vehicles.filter((vehicle) =>
+      vehicle.reg_no.toLowerCase().includes(query.toLowerCase())
     );
-    setSearchedForklifts(filteredCustomers);
+    setSearchedVehicles(filtered);
   };
 
   const handleFilterData = (newValue: string) => {
     console.log("newValue", newValue);
     if (newValue === "1") {
-      setSearchedForklifts(forklifts);
+      setSearchedVehicles(vehicles);
+      return;
+    } else if (newValue === "2") {
+      const toSort = [...vehicles];
+      toSort.sort((a, b) => a.reg_no.localeCompare(b.reg_no));
+      setSearchedVehicles(toSort);
+      return;
+    } else {
+      const toSort = [...vehicles];
+      toSort.sort((a, b) => a.id - b.id);
+      setSearchedVehicles(toSort);
       return;
     }
-    if (newValue === "2") {
-      const toSort = [...forklifts];
-      toSort.sort((a, b) => a.name.localeCompare(b.name));
-      setSearchedForklifts(toSort);
-      return;
-    }
-    const toSort = [...forklifts];
-    toSort.sort((a, b) => a.regNo.localeCompare(b.regNo));
-    setSearchedForklifts(toSort);
-    return;
   };
 
-  const handleSelectForklift = (forkliftId: string) => {
+  const handleSelectForklift = (forkliftId: number) => {
     let ids = [...selectedForklifts];
     if (ids.includes(forkliftId)) {
-      ids = ids.filter((item) => item !== forkliftId);
+      ids = ids.filter((id) => id !== forkliftId);
     } else {
       ids.push(forkliftId);
     }
@@ -141,28 +99,69 @@ const AssignForklift: React.FC<DriverStackScreenProps<"AssignForklift">> = ({
 
   const handleAssignForklift = () => {
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      ToastService.show("Forklift assigned successfully");
-      navigation.goBack();
-    }, 1800);
+    assignVehicles(token, {
+      driver_id: item.id,
+      vehicle_ids: selectedForklifts,
+    })
+      .then((res) => {
+        console.log(res);
+        if (res.success) {
+          ToastService.show("Forklifts assigned successfully");
+          navigation.goBack();
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Error occurred");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   React.useEffect(() => {
-    if (!forklifts) {
+    if (!vehicles) {
       return;
     }
-    setSearchedForklifts(forklifts);
+    setSearchedVehicles(vehicles);
+  }, [vehicles]);
 
-    return () => {
-      clearTimeout(fetchForkliftsTimeoutRef.current);
-    };
-  }, [forklifts]);
+  const fetchVehicles = React.useCallback(() => {
+    setIsFetching(true);
+    getVehicleList(token)
+      .then((res) => {
+        if (res.success) {
+          setVehicles(res.data.rows);
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Error occurred");
+      })
+      .finally(() => {
+        setIsFetching(false);
+      });
+  }, [token]);
+
+  const fetchAssignedVehicles = React.useCallback(() => {
+    setIsFetching(true);
+    getAssignedVehicles(token, item.id.toString())
+      .then((res) => {
+        if (res.success) {
+          const ids = res.data.map((row) => row.vehicle_id);
+          setSelectedForklifts(ids);
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Error occurred");
+      })
+      .finally(() => {
+        setIsFetching(false);
+      });
+  }, [token, item.id]);
 
   React.useEffect(() => {
-    addInfo();
-    addInfo();
-  }, []);
+    fetchAssignedVehicles();
+    fetchVehicles();
+  }, [fetchVehicles, fetchAssignedVehicles]);
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
@@ -248,18 +247,18 @@ const AssignForklift: React.FC<DriverStackScreenProps<"AssignForklift">> = ({
       </Portal>
 
       <FlatList
-        data={searchedForklifts}
+        data={searchedVehicles}
         showsVerticalScrollIndicator={false}
         style={screenStyles.flatListStyle}
         // contentContainerStyle={{ padding: 2 }}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(_) => _.id.toString()}
         ListEmptyComponent={<_ListEmptyComponent label="No Forklifts..." />}
-        renderItem={({ item }) => {
-          const checked = selectedForklifts.includes(item._id);
+        renderItem={({ item: vehicle }) => {
+          const checked = selectedForklifts.includes(vehicle.id);
           return (
             <_AssignForkliftListCard
-              key={item._id}
-              item={item}
+              key={vehicle.id.toString()}
+              item={vehicle}
               checked={checked}
               toggleAssignment={handleSelectForklift}
             />

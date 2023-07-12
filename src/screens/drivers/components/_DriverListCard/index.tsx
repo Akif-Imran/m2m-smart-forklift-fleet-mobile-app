@@ -9,10 +9,11 @@ import { PaperTheme, colors, gStyles } from "@theme";
 import { truncateText } from "@utility";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import { AirbnbRating } from "react-native-ratings";
+import { baseURL } from "@api";
 
 interface OwnProps {
   item: IDriver;
-  handleDelete: (driverId: string) => void;
+  handleDelete: (driverId: number) => void;
 }
 
 const _DriverListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
@@ -26,15 +27,15 @@ const _DriverListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
         onPress={() =>
           navigation.navigate("DriverDetails", {
             item: item,
-            _id: item._id,
+            _id: item.id.toString(),
           })
         }
-        onLongPress={() => handleDelete(item._id)}
+        onLongPress={() => handleDelete(item.id)}
       >
         <View>
-          {item.image ? (
+          {item.picture ? (
             <Image
-              source={{ uri: item.image }}
+              source={{ uri: `${baseURL}${item.picture}` }}
               resizeMode="cover"
               style={listCardStyles.imgStyle}
             />
@@ -60,7 +61,7 @@ const _DriverListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
             <AirbnbRating
               count={5}
               starContainerStyle={screenStyles.ratingContainer}
-              defaultRating={item.rating}
+              defaultRating={3}
               size={12}
               selectedColor={colors.warning}
               showRating={false}
@@ -127,7 +128,12 @@ const _DriverListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
               color={colors.titleText}
             />
           )}
-          onPress={() => navigation.navigate("AssignForklift")}
+          onPress={() =>
+            navigation.navigate("AssignForklift", {
+              _id: item.id.toString(),
+              item: item,
+            })
+          }
         >
           Assign Forklift
         </Button>

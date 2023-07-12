@@ -13,7 +13,6 @@ import { FAB, Modal, Portal, RadioButton, Searchbar } from "react-native-paper";
 import { PaperTheme, colors, gStyles } from "@theme";
 import type { DriverStackScreenProps } from "@navigation-types";
 import { ToastService } from "@utility";
-import { faker } from "@faker-js/faker";
 import {
   Feather,
   FontAwesome5,
@@ -21,13 +20,20 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { DriversFilters } from "@constants";
-import moment from "moment";
+import { deleteDriver, getDrivers } from "@services";
+import { useAuthContext } from "@context";
+import { useIsFocused } from "@react-navigation/native";
 
 import { _DriverListCard } from "../components";
 
 const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({
   navigation,
 }) => {
+  const {
+    state: { token },
+  } = useAuthContext();
+  const isFocused = useIsFocused();
+  const [toDeleteDriverId, setToDeleteDriverId] = React.useState<number>(0);
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [drivers, setDrivers] = React.useState<IDriver[]>([]);
   const [searchedDrivers, setSearchedDrivers] = React.useState<IDriver[]>([]);
@@ -43,30 +49,30 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
-  const addInfo = () => {
-    const record: IDriver = {
-      _id: faker.database.mongodbObjectId(),
-      image: faker.image.urlPicsumPhotos(),
-      name: faker.person.fullName(),
-      rating: faker.helpers.rangeToNumber({ min: 1, max: 5 }),
-      touchId: faker.string.alphanumeric({ length: 10, casing: "upper" }),
-      email: faker.internet.email(),
-      department: faker.helpers.arrayElement([
-        "CEO",
-        "HR",
-        "IT",
-        "Marketing",
-        "Sales",
-      ]),
-      ic_number: faker.string.alphanumeric({ length: 13, casing: "upper" }),
-      experience: faker.helpers.rangeToNumber({ min: 3, max: 8 }).toString(),
-      joiningDate: moment(faker.date.past()).format("YYYY-MM-DD"),
-      licenseType: faker.helpers.arrayElement(["A", "B", "C", "D", "E"]),
-      mobileNo: faker.phone.number(),
-      password: faker.string.alphanumeric({ length: 10, casing: "upper" }),
-    };
-    setDrivers((prev) => [...prev, record]);
-  };
+  // const addInfo = () => {
+  //   const record: IDriver = {
+  //     _id: faker.database.mongodbObjectId(),
+  //     image: faker.image.urlPicsumPhotos(),
+  //     name: faker.person.fullName(),
+  //     rating: faker.helpers.rangeToNumber({ min: 1, max: 5 }),
+  //     touchId: faker.string.alphanumeric({ length: 10, casing: "upper" }),
+  //     email: faker.internet.email(),
+  //     department: faker.helpers.arrayElement([
+  //       "CEO",
+  //       "HR",
+  //       "IT",
+  //       "Marketing",
+  //       "Sales",
+  //     ]),
+  //     ic_number: faker.string.alphanumeric({ length: 13, casing: "upper" }),
+  //     experience: faker.helpers.rangeToNumber({ min: 3, max: 8 }).toString(),
+  //     joiningDate: moment(faker.date.past()).format("YYYY-MM-DD"),
+  //     licenseType: faker.helpers.arrayElement(["A", "B", "C", "D", "E"]),
+  //     mobileNo: faker.phone.number(),
+  //     password: faker.string.alphanumeric({ length: 10, casing: "upper" }),
+  //   };
+  //   setDrivers((prev) => [...prev, record]);
+  // };
 
   const handleRefresh = () => {
     setIsFetching(true);
@@ -92,6 +98,16 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({
     if (newValue === "1") {
       setSearchedDrivers(drivers);
       return;
+    } else if (newValue === "2") {
+      //assigned
+      const filtered = drivers.filter((value) => value.assign === true);
+      setSearchedDrivers((_prev) => filtered);
+      return;
+    } else if (newValue === "3") {
+      //unassigned
+      const filtered = drivers.filter((value) => value.assign === false);
+      setSearchedDrivers((_prev) => filtered);
+      return;
     }
     // let matchingKey: string | DriversFilters = "1";
     // Object.entries(DriversFilters).forEach((value) => {
@@ -108,18 +124,48 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({
     // setSearchedDrivers((_prev) => filtered);
   };
 
-  const handleDelete = React.useCallback((driverId: string) => {
-    setConfirmDeleteVisible(true);
+  const handleDelete = React.useCallback((driverId: number) => {
+    setToDeleteDriverId(driverId);
     console.log("handle delete", driverId);
+    setConfirmDeleteVisible(true);
   }, []);
 
   const handleDeleteConfirm = () => {
-    ToastService.show("Demo delete");
-    setConfirmDeleteVisible(false);
+    removeDriver();
   };
 
   const handleDeleteCancel = () => {
     setConfirmDeleteVisible(false);
+  };
+
+  const fetchDrivers = React.useCallback(() => {
+    setIsFetching(true);
+    getDrivers(token)
+      .then((res) => {
+        if (res.success) {
+          setDrivers(res.data.rows);
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Error occurred");
+      })
+      .finally(() => {
+        setIsFetching(false);
+      });
+  }, [token]);
+
+  const removeDriver = () => {
+    deleteDriver(token, toDeleteDriverId.toString())
+      .then((res) => {
+        ToastService.show(res.message);
+      })
+      .catch((_err) => {
+        ToastService.show("Error occurred");
+      })
+      .finally(() => {
+        setConfirmDeleteVisible(false);
+        fetchDrivers();
+      });
   };
 
   React.useEffect(() => {
@@ -127,11 +173,17 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({
       return;
     }
     setSearchedDrivers(drivers);
-
     return () => {
       clearTimeout(fetchDriversTimeoutRef.current);
     };
   }, [drivers]);
+
+  React.useEffect(() => {
+    if (!isFocused) {
+      return;
+    }
+    fetchDrivers();
+  }, [fetchDrivers, isFocused]);
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
@@ -243,11 +295,11 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({
         showsVerticalScrollIndicator={false}
         style={screenStyles.flatListStyle}
         // contentContainerStyle={{ padding: 2 }}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={<_ListEmptyComponent label="No Drivers..." />}
         renderItem={({ item }) => (
           <_DriverListCard
-            key={item._id}
+            key={item.id.toString()}
             item={item}
             handleDelete={handleDelete}
           />
@@ -267,7 +319,7 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({
         icon="plus"
         style={gStyles.fab}
         color={colors.white}
-        onLongPress={() => addInfo()}
+        // onLongPress={() => addInfo()}
         onPress={() =>
           navigation.navigate("AddDriver", {
             mode: "add",

@@ -136,7 +136,7 @@ interface IServiceStatus {
   updatedAt: null;
 }
 
-interface IDriver {
+interface IDriverBase {
   id: number;
   name: string;
   ic_number: string;
@@ -159,4 +159,44 @@ interface IDriver {
   updatedAt: string;
   email: string;
   password: string;
+}
+
+type IDriver<T extends "List" | "Add" = "List"> = T extends "Add"
+  ? IDriverBase
+  : Omit<IDriverBase, "assign_status"> & {
+      assign: boolean;
+      start_date_time: null;
+      end_date_time: null;
+    };
+
+interface IGetAssignedVehicle {
+  driver_id: number;
+  IMEI: string;
+  vehicle_id: number;
+  vehicle_device_id: number;
+  vehicle_reg_no: string;
+  vehicle_color: string;
+  vehicle_make: string;
+  vehicle_model: string;
+  vehicle_picture: string;
+  vehicle_driver_id: null;
+  vehicle_purchase_date: string;
+  vehicle_rent_start_date: string;
+  vehicle_rent_end_date: string;
+  vehicle_serial_number: string;
+  vehicle_battery_serial_number: string;
+  vehicle_year: number;
+  vehicle_age: string;
+  vehicle_fuel_type_id: number;
+  vehicle_fuel_capacity: string;
+  vehicle_insurance_company: string;
+  vehicle_insurance_number: string;
+  vehicle_insurance_type: string;
+  vehicle_insurance_expiry_date: string;
+  vehicle_mileage: null;
+  vehicle_icon: string;
+  vehicle_user_id: number;
+  vehicle_is_active: true;
+  vehicle_createdAt: string;
+  vehicle_updatedAt: string;
 }
