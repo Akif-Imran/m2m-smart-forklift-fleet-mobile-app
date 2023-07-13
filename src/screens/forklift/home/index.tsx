@@ -16,7 +16,7 @@ import { ToastService } from "@utility";
 import { faker } from "@faker-js/faker";
 import { ForkliftStatusColor } from "@constants";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
-import { getDashCounts } from "@services";
+import { getDashCounts, getVehicleList } from "@services";
 import { useAuthContext } from "@context";
 
 import { _ForkliftListCard } from "../components";
@@ -34,8 +34,8 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
     state: { token },
   } = useAuthContext();
   const [searchQuery, setSearchQuery] = React.useState<string>("");
-  const [forklifts, setForklifts] = React.useState<IForklift[]>([]);
-  const [searchedForklifts, setSearchedForklifts] = React.useState<IForklift[]>(
+  const [forklifts, setForklifts] = React.useState<IVehicle[]>([]);
+  const [searchedForklifts, setSearchedForklifts] = React.useState<IVehicle[]>(
     []
   );
   const [isFetching, setIsFetching] = React.useState(false);
@@ -48,54 +48,54 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
     total: 0,
   });
 
-  const addInfo = () => {
-    const record: IForklift = {
-      _id: faker.database.mongodbObjectId(),
-      imei: faker.string.alphanumeric({
-        casing: "upper",
-        length: { min: 12, max: 15 },
-      }),
-      simNo: faker.string.numeric({ length: 12, allowLeadingZeros: false }),
-      age: faker.helpers.arrayElement([10, 11, 12, 13, 14, 15, 16]).toString(),
-      batterySerialNo: faker.vehicle.vin(),
-      color: faker.vehicle.color(),
-      forkliftSerialNo: faker.vehicle.vrm(),
-      make: faker.date.past().getFullYear().toString(),
-      manufactureYear: faker.date.past().getFullYear().toString(),
+  // const addInfo = () => {
+  //   const record: IForklift = {
+  //     _id: faker.database.mongodbObjectId(),
+  //     imei: faker.string.alphanumeric({
+  //       casing: "upper",
+  //       length: { min: 12, max: 15 },
+  //     }),
+  //     simNo: faker.string.numeric({ length: 12, allowLeadingZeros: false }),
+  //     age: faker.helpers.arrayElement([10, 11, 12, 13, 14, 15, 16]).toString(),
+  //     batterySerialNo: faker.vehicle.vin(),
+  //     color: faker.vehicle.color(),
+  //     forkliftSerialNo: faker.vehicle.vrm(),
+  //     make: faker.date.past().getFullYear().toString(),
+  //     manufactureYear: faker.date.past().getFullYear().toString(),
 
-      purchaseDate: faker.date.past().toDateString(),
-      rentStartDate: faker.date.past().toDateString(),
-      rentEndDate: faker.date.future().toDateString(),
-      milage: faker.helpers
-        .rangeToNumber({ min: 13867, max: 50000 })
-        .toString(),
-      regNo: faker.helpers.rangeToNumber({ min: 1, max: 50000 }).toString(),
-      image: faker.image.urlPicsumPhotos({ height: 75, width: 75 }),
-      name: faker.helpers.arrayElement([
-        "Forklift 1",
-        "Forklift 2",
-        "Forklift 3",
-        "Forklift 4",
-      ]),
-      status: faker.helpers.arrayElement([
-        "moving",
-        "parked",
-        "offline",
-        "faulty",
-      ]),
-      driver: faker.person.fullName(),
-      model: faker.vehicle.vrm(),
-      fuelType: faker.vehicle.fuel(),
-      fuelCapacity: faker.helpers
-        .rangeToNumber({ min: 12, max: 50 })
-        .toString(),
-      insuranceType: "Type 1",
-      insuranceCompany: faker.company.name(),
-      insuranceExpiryDate: faker.date.future().toDateString(),
-      insuranceNo: faker.string.alphanumeric({ length: 8, casing: "upper" }),
-    };
-    setForklifts((prev) => [...prev, record]);
-  };
+  //     purchaseDate: faker.date.past().toDateString(),
+  //     rentStartDate: faker.date.past().toDateString(),
+  //     rentEndDate: faker.date.future().toDateString(),
+  //     milage: faker.helpers
+  //       .rangeToNumber({ min: 13867, max: 50000 })
+  //       .toString(),
+  //     regNo: faker.helpers.rangeToNumber({ min: 1, max: 50000 }).toString(),
+  //     image: faker.image.urlPicsumPhotos({ height: 75, width: 75 }),
+  //     name: faker.helpers.arrayElement([
+  //       "Forklift 1",
+  //       "Forklift 2",
+  //       "Forklift 3",
+  //       "Forklift 4",
+  //     ]),
+  //     status: faker.helpers.arrayElement([
+  //       "moving",
+  //       "parked",
+  //       "offline",
+  //       "faulty",
+  //     ]),
+  //     driver: faker.person.fullName(),
+  //     model: faker.vehicle.vrm(),
+  //     fuelType: faker.vehicle.fuel(),
+  //     fuelCapacity: faker.helpers
+  //       .rangeToNumber({ min: 12, max: 50 })
+  //       .toString(),
+  //     insuranceType: "Type 1",
+  //     insuranceCompany: faker.company.name(),
+  //     insuranceExpiryDate: faker.date.future().toDateString(),
+  //     insuranceNo: faker.string.alphanumeric({ length: 8, casing: "upper" }),
+  //   };
+  //   setForklifts((prev) => [...prev, record]);
+  // };
 
   const handleRefresh = () => {
     setIsFetching(true);
@@ -110,13 +110,13 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
       setSearchedForklifts(forklifts);
       return;
     }
-    const filteredCustomers = forklifts.filter((forklift) =>
-      forklift.name.toLowerCase().includes(query.toLowerCase())
+    const filtered = forklifts.filter((forklift) =>
+      forklift.reg_no.toLowerCase().includes(query.toLowerCase())
     );
-    setSearchedForklifts(filteredCustomers);
+    setSearchedForklifts(filtered);
   };
 
-  const handleDelete = React.useCallback((customerId: string) => {
+  const handleDelete = React.useCallback((customerId: number) => {
     setConfirmDeleteVisible(true);
     console.log("handle delete", customerId);
   }, []);
@@ -147,7 +147,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
       .catch((_err) => {
         ToastService.show("Counts Error");
       });
-  }, []);
+  }, [token]);
 
   // const fetchDevices = React.useCallback(() => {
   //   setIsFetching(true);
@@ -164,6 +164,22 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
   //       setIsFetching(false);
   //     });
   // }, []);
+
+  const fetchVehicles = React.useCallback(() => {
+    setIsFetching(true);
+    getVehicleList(token)
+      .then((res) => {
+        if (res.success) {
+          setForklifts(res.data.rows);
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Error occurred");
+      })
+      .finally(() => {
+        setIsFetching(false);
+      });
+  }, [token]);
 
   React.useEffect(() => {
     if (!forklifts) {
@@ -184,7 +200,8 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
       return;
     }
     fetchCounts();
-  }, [token, fetchCounts]);
+    fetchVehicles();
+  }, [token, fetchCounts, fetchVehicles]);
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
@@ -250,7 +267,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
         showsVerticalScrollIndicator={false}
         style={screenStyles.flatListStyle}
         // contentContainerStyle={{ padding: 2 }}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item.id.toString()}
         ListHeaderComponent={() => (
           <>
             {/* counts */}
@@ -327,7 +344,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
         ListEmptyComponent={<_ListEmptyComponent label="No Forklifts..." />}
         renderItem={({ item }) => (
           <_ForkliftListCard
-            key={item._id}
+            key={item.id.toString()}
             item={item}
             handleDelete={handleDelete}
           />
@@ -347,7 +364,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
         icon="plus"
         style={gStyles.fab}
         color={colors.white}
-        onLongPress={() => addInfo()}
+        // onLongPress={() => addInfo()}
         onPress={() =>
           navigation.navigate("AddForklift", {
             mode: "add",

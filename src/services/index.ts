@@ -1,7 +1,18 @@
 export { reverseGeocode, getDirections } from "./google-services";
 export { apiLogin } from "./auth";
 export { getDashCounts } from "./common";
-export { getDevicesList, getVehicleList } from "./devices-vehicles";
+export {
+  getDevicesList,
+  getVehicleList,
+  addVehicle,
+  deleteVehicle,
+  updateVehicle,
+  getVehicleById,
+  getPoiList,
+  deletePoi,
+  addPoi,
+  updatePoi,
+} from "./devices-vehicles";
 export {
   getServiceCounts,
   getServices,

@@ -84,13 +84,13 @@ interface IVehicle {
   battery_serial_number: string;
   year: number;
   age: string;
+  mileage: null | string;
   fuel_type_id: number;
   fuel_capacity: string;
   insurance_company: string;
   insurance_number: string;
   insurance_type: string;
   insurance_expiry_date: string;
-  mileage: null;
   icon: string;
   user_id: number;
   is_active: boolean;
@@ -199,4 +199,20 @@ interface IGetAssignedVehicle {
   vehicle_is_active: true;
   vehicle_createdAt: string;
   vehicle_updatedAt: string;
+}
+
+interface IPOI {
+  id: number;
+  poi_type: number;
+  poi_name: string;
+  latitude: string;
+  longitude: string;
+  color: string;
+  address: string;
+  marker_shape: string;
+  zone_id: number;
+  user_id: number;
+  is_active: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

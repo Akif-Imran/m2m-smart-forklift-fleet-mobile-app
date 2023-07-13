@@ -16,37 +16,38 @@ import { PaperTheme, colors, gStyles } from "@theme";
 import { Searchbar } from "react-native-paper";
 import { ToastService } from "@utility";
 import { PoiTypesColor } from "@constants";
-import { faker } from "@faker-js/faker";
-import { iconColors, iconNames } from "@markers";
+import { deletePoi, getPoiList } from "@services";
+import { useAuthContext } from "@context";
 
 import { _PoiListCard } from "../components/_PoiListCard";
 
 //------------------Component------------------------------------------------
 const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
+  const {
+    state: { token },
+  } = useAuthContext();
   const [searchQuery, setSearchQuery] = React.useState<string>("");
-  const [pois, setPois] = React.useState<IPoi[]>([]);
-  const [searchedPois, setSearchedPois] = React.useState<IPoi[]>([]);
+  const [pois, setPois] = React.useState<IPOI[]>([]);
+  const [searchedPois, setSearchedPois] = React.useState<IPOI[]>([]);
   const [isFetching, setIsFetching] = React.useState(false);
   const fetchPoisTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
   const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
-  const addInfo = () => {
-    const records: IPoi = {
-      _id: faker.database.mongodbObjectId(),
-      address: faker.location.streetAddress(),
-      color: faker.helpers.arrayElement(Object.keys(iconColors)),
-      iconName: faker.helpers.arrayElement(Object.keys(iconNames)),
-      latitude: 37.78825,
-      longitude: -122.4324,
-      name: faker.company.name(),
-      type: faker.helpers.arrayElement(["private", "business"]),
-    };
-    setPois((prev) => [...prev, records]);
-  };
+  const [toBeDeletedPoiId, setToBeDeletedPoiId] = React.useState<number>(0);
+  // const addInfo = () => {
+  //   const records: IPoi = {
+  //     _id: faker.database.mongodbObjectId(),
+  //     address: faker.location.streetAddress(),
+  //     color: faker.helpers.arrayElement(Object.keys(iconColors)),
+  //     iconName: faker.helpers.arrayElement(Object.keys(iconNames)),
+  //     latitude: 37.78825,
+  //     longitude: -122.4324,
+  //     name: faker.company.name(),
+  //     type: faker.helpers.arrayElement(["private", "business"]),
+  //   };
+  //   setPois((prev) => [...prev, records]);
+  // };
   const handleRefresh = () => {
-    setIsFetching(true);
-    fetchPoisTimeoutRef.current = setTimeout(() => {
-      setIsFetching(false);
-    }, 3000);
+    fetchPois();
   };
 
   const handleSearch = (query: string) => {
@@ -55,13 +56,14 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
       setSearchedPois(pois);
       return;
     }
-    const filteredPois = pois.filter((customer) =>
-      customer.name.toLowerCase().includes(query.toLowerCase())
+    const filtered = pois.filter((poi) =>
+      poi.poi_name.toLowerCase().includes(query.toLowerCase())
     );
-    setSearchedPois(filteredPois);
+    setSearchedPois(filtered);
   };
 
-  const handleDelete = React.useCallback((poiId: string) => {
+  const handleDelete = React.useCallback((poiId: number) => {
+    setToBeDeletedPoiId(poiId);
     setConfirmDeleteVisible(true);
     console.log("handle delete", poiId);
   }, []);
@@ -69,19 +71,50 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
   const handleDeleteConfirm = () => {
     ToastService.show("Demo delete");
     setConfirmDeleteVisible(false);
+    deletePoi(token, toBeDeletedPoiId.toString())
+      .then((res) => {
+        ToastService.show(res?.message || "");
+      })
+      .catch((_err) => {
+        ToastService.show("Error occurred");
+      })
+      .finally(() => {
+        setConfirmDeleteVisible(false);
+        fetchPois();
+      });
   };
 
   const handleDeleteCancel = () => {
     setConfirmDeleteVisible(false);
   };
 
-  React.useEffect(() => {
-    addInfo();
-  }, []);
+  // React.useEffect(() => {
+  //   addInfo();
+  // }, []);
 
   React.useEffect(() => {
     setSearchedPois(pois);
   }, [pois]);
+
+  const fetchPois = React.useCallback(() => {
+    setIsFetching(true);
+    getPoiList(token)
+      .then((res) => {
+        if (res.success) {
+          setPois((_prev) => res.data.rows);
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("POI Error occurred");
+      })
+      .finally(() => {
+        setIsFetching(false);
+      });
+  }, [token]);
+
+  React.useEffect(() => {
+    fetchPois();
+  }, [fetchPois]);
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
@@ -160,11 +193,11 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
         showsVerticalScrollIndicator={false}
         style={screenStyles.flatListStyle}
         // contentContainerStyle={{ padding: 2 }}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={<_ListEmptyComponent label="No POI..." />}
         renderItem={({ item }) => (
           <_PoiListCard
-            key={item._id}
+            key={item.id.toString()}
             item={item}
             handleDelete={handleDelete}
           />

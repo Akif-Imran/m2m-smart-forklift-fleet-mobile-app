@@ -4,8 +4,9 @@ import type { AxiosResponse } from "axios";
 import axios from "axios";
 
 export const baseURL = "http://www.sealtracking.com:4600";
-export const baseDeviceURL = `${baseURL}/device`;
-export const baseVehicleURL = `${baseURL}/vehicle`;
+export const BASE_DEVICE_URL = `${baseURL}/device`;
+export const BASE_VEHICLE_URL = `${baseURL}/vehicle`;
+export const BASE_POI_URL = `${baseURL}/poi`;
 export const GOOGLE_MAPS_API = "https://maps.googleapis.com/maps/api";
 export const GOOGLE_PLACES_API = `${GOOGLE_MAPS_API}/place`;
 export const GOOGLE_DIRECTIONS_API = `${GOOGLE_MAPS_API}/directions/json`;
@@ -23,20 +24,20 @@ export const urls = {
     counts: `${baseURL}/app_dashboard`,
   },
   devices: {
-    list: `${baseDeviceURL}/getAll`,
+    list: `${BASE_DEVICE_URL}/getAll`,
     getDeviceDetails: (imei: string) =>
-      `${baseDeviceURL}/getDeviceDetail?IMEI=${imei}`,
-    create: `${baseDeviceURL}/create`,
-    createMany: `${baseDeviceURL}/createMultiple`,
-    update: `${baseDeviceURL}/update`,
+      `${BASE_DEVICE_URL}/getDeviceDetail?IMEI=${imei}`,
+    create: `${BASE_DEVICE_URL}/create`,
+    createMany: `${BASE_DEVICE_URL}/createMultiple`,
+    update: `${BASE_DEVICE_URL}/update`,
   },
   vehicles: {
-    list: `${baseVehicleURL}/getAll`,
+    list: `${BASE_VEHICLE_URL}/getAll`,
     getById: (vehicleId: string) =>
-      `${baseVehicleURL}/getVehicleById?id=${vehicleId}`,
-    create: `${baseVehicleURL}/create`,
-    update: `${baseVehicleURL}/update`,
-    delete: (vehicleId: string) => `${baseVehicleURL}/delete?id=${vehicleId}`,
+      `${BASE_VEHICLE_URL}/getVehicleById?id=${vehicleId}`,
+    create: `${BASE_VEHICLE_URL}/create`,
+    update: `${BASE_VEHICLE_URL}/update`,
+    delete: (vehicleId: string) => `${BASE_VEHICLE_URL}/delete?id=${vehicleId}`,
   },
   services: {
     counts: `${baseURL}/services_status_count`,
@@ -57,6 +58,12 @@ export const urls = {
     getAssignedVehicles: (driverId: string) =>
       `${baseURL}/get_assigned_vehicle/${driverId}`,
   },
+  poi: {
+    list: `${BASE_POI_URL}/getAll`,
+    create: `${BASE_POI_URL}/create`,
+    update: `${BASE_POI_URL}/update`,
+    delete: (poiId: string) => `${BASE_POI_URL}/delete/${poiId}`,
+  },
 };
 
 export const apiGet = async <R>(
@@ -64,6 +71,18 @@ export const apiGet = async <R>(
   token: string
 ): Promise<AxiosResponse<R>> => {
   const response = await axios.get<R>(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};
+
+export const apiDelete = async <R>(
+  url: string,
+  token: string
+): Promise<AxiosResponse<R>> => {
+  const response = await axios.delete<R>(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

@@ -14,12 +14,13 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import { ForkliftStatusColor } from "@constants";
+import { baseURL } from "@api";
 
 import { styles } from "./styles";
 
 interface OwnProps {
-  item: IForklift;
-  handleDelete: (customerId: string) => void;
+  item: IVehicle;
+  handleDelete: (customerId: number) => void;
 }
 
 const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
@@ -40,12 +41,12 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
             },
           })
         }
-        onLongPress={() => handleDelete(item._id)}
+        onLongPress={() => handleDelete(item.id)}
       >
         <View>
-          {item.image ? (
+          {item.picture ? (
             <Image
-              source={{ uri: item.image }}
+              source={{ uri: `${baseURL}${item.picture}` }}
               resizeMode="cover"
               style={listCardStyles.imgStyle}
             />
@@ -61,7 +62,7 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
           <View style={listCardStyles.infoContainer}>
             <View style={styles.titleContainer}>
               <Text style={gStyles.cardInfoTitleText}>
-                {truncateText(item.name)}
+                {truncateText(item.reg_no)}
               </Text>
               <Entypo
                 name="info-with-circle"
@@ -69,8 +70,8 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
                 size={18}
                 onPress={() =>
                   navigation.navigate("ForkLiftDetails", {
+                    _id: item.id.toString(),
                     item: item,
-                    _id: item._id,
                   })
                 }
               />
@@ -80,7 +81,7 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
               ellipsizeMode="tail"
               numberOfLines={1}
             >
-              {item.driver}
+              {item.model}-{item.make}-{item.year}
             </Text>
 
             <Text
@@ -88,7 +89,7 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
               ellipsizeMode="tail"
               numberOfLines={0.5}
             >
-              {truncateText(item.model, 22)}
+              {truncateText(item.fuel_type_name, 22)}
             </Text>
           </View>
 
@@ -97,13 +98,13 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
               flexDirection: "row",
             })}
           >
-            <Text
+            {/* <Text
               style={StyleSheet.compose(screenStyles.badgeText, {
                 backgroundColor: ForkliftStatusColor[item.status],
               })}
             >
               {truncateText(item.status, 35).toUpperCase()}
-            </Text>
+            </Text> */}
             <FontAwesome5
               name="caret-right"
               size={20}

@@ -49,8 +49,8 @@ export type DashboardStackScreenProps<
 //--------------------------------------
 export type ForkliftStackParamsList = {
   Forklift: undefined;
-  AddForklift: AddUpdateType<IForklift>;
-  ForkLiftDetails: DetailsType<IForklift>;
+  AddForklift: AddUpdateType<IVehicle>;
+  ForkLiftDetails: DetailsType<IVehicle>;
   ReqService: undefined;
   BirdEyeView:
     | {
@@ -128,7 +128,7 @@ export type ProfileSettingsStackParamsList = {
   VehicleIcons: undefined;
   SelectIcon: DetailsType<IForklift>;
   Pois: undefined;
-  ViewPoiOnMap: DetailsType<IPoi>;
+  ViewPoiOnMap: DetailsType<IPOI>;
   About: undefined;
   Help: undefined;
   ServicesStack: NavigatorScreenParams<ServiceStackParamsList>;

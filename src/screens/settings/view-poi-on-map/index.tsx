@@ -31,8 +31,8 @@ const ViewPoiOnMap: React.FC<
     }
     mapRef.current?.animateCamera({
       center: {
-        latitude: item.latitude,
-        longitude: item.longitude,
+        latitude: parseFloat(item.latitude),
+        longitude: parseFloat(item.longitude),
       },
       zoom: 14,
       altitude: 2500, //altitude in meters.
@@ -57,8 +57,8 @@ const ViewPoiOnMap: React.FC<
         provider={PROVIDER_DEFAULT}
         style={StyleSheet.absoluteFillObject}
         initialRegion={{
-          latitude: item.latitude,
-          longitude: item.longitude,
+          latitude: parseFloat(item.latitude),
+          longitude: parseFloat(item.longitude),
           latitudeDelta: LATITUDE_DELTA,
           longitudeDelta: LONGITUDE_DELTA,
         }}
@@ -79,15 +79,20 @@ const ViewPoiOnMap: React.FC<
           pinColor={colors.info}
           tracksViewChanges={false}
           coordinate={{
-            latitude: item.latitude,
-            longitude: item.longitude,
+            latitude: parseFloat(item.latitude),
+            longitude: parseFloat(item.longitude),
           }}
           centerOffset={{ x: 0, y: -18 }}
-          title={item.name}
-          onPress={() => handleMarkerOnPress(item)}
+          title={item.poi_name}
+          onPress={() =>
+            handleMarkerOnPress({
+              latitude: parseFloat(item.latitude),
+              longitude: parseFloat(item.longitude),
+            })
+          }
         >
           <Image
-            source={images[`${item.iconName}-${item.color}`]}
+            source={images[`${item.marker_shape}-${item.color}`]}
             // onLoad={() => setViewTrackingA1(false)}
             style={{ ...theme.img.size.sm }}
             resizeMethod="auto"

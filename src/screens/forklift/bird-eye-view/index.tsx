@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React from "react";
 import type { ForkliftStackScreenProps } from "@navigation-types";
 import type { LatLng } from "react-native-maps";
@@ -26,13 +27,15 @@ import {
 } from "@components";
 import { MaterialIcons } from "@expo/vector-icons";
 import { images, iconNames, iconColors } from "@markers";
-import { reverseGeocode } from "@services";
-import { useSafeAreaDimensions } from "@hooks";
+import { addPoi, getPoiList, reverseGeocode } from "@services";
+import { useAuthContext } from "@context";
+import Spinner from "react-native-loading-spinner-overlay";
 
 import { styles } from "./styles";
 interface Marker extends LatLng {
   name: string;
   iconName: string;
+  colorName: string;
   color: string;
   type: string;
   address: string;
@@ -61,44 +64,31 @@ const schema: yup.ObjectSchema<IForm> = yup.object().shape({
 const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
   route,
 }) => {
-  const { SCREEN_HEIGHT } = useSafeAreaDimensions();
+  const {
+    state: { token },
+  } = useAuthContext();
+  // const { SCREEN_HEIGHT } = useSafeAreaDimensions();
   const { mode } = route.params;
   const mapRef = React.useRef<MapView>(null);
   const [trackViewChanges, _setTrackViewChanges] =
     React.useState<boolean>(true);
-  const [latAdjustment, setLatAdjustment] = React.useState<number>(0);
-  const [isMapReady, setIsMapReady] = React.useState<boolean>(false);
+  const [_isMapReady, setIsMapReady] = React.useState<boolean>(false);
   const [markers, _setMarkers] = React.useState<IMapPoint[]>([]);
   const [poiMarkers, setPoiMarkers] = React.useState<Marker[]>([]);
   const [visible, setVisible] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
 
-  const handleMarkerOnPress = React.useCallback(
-    (coords: CoordinatesType) => {
-      mapRef.current?.animateCamera({
-        center: {
-          latitude: coords.latitude - latAdjustment,
-          longitude: coords.longitude,
-        },
-      });
-    },
-    [latAdjustment]
-  );
-
-  const calculateDelta = async () => {
-    if (!mapRef.current) {
-      return;
-    }
-    const boundingBox = await mapRef.current?.getMapBoundaries();
-    const northeastLat = boundingBox?.northEast.latitude;
-    const southwestLat = boundingBox?.southWest.latitude;
-    const latDelta = northeastLat - southwestLat;
-    // const lngDelta = latDelta * ASPECT_RATIO;
-    const latAdj = (latDelta / SCREEN_HEIGHT) * SCREEN_HEIGHT * 0.1;
-    setLatAdjustment(latAdj);
-  };
+  const handleMarkerOnPress = React.useCallback((coords: CoordinatesType) => {
+    mapRef.current?.animateCamera({
+      center: {
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      },
+    });
+  }, []);
 
   const fitCoordinates = React.useCallback(() => {
     if (!mapRef.current || markers.length === 0) {
@@ -116,21 +106,31 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
   }, [mapRef, markers]);
 
   const addMarker = (values: IForm, helpers: FormikHelpers<IForm>) => {
-    setPoiMarkers((prev) => [
-      ...prev,
-      {
-        latitude: values.latitude,
-        longitude: values.longitude,
-        name: values.name,
-        color: values.colorName,
-        iconName: values.iconName,
-        type: values.poiType,
-        address: values.address,
-      },
-    ]);
-    helpers.resetForm();
-    ToastService.show("Marker added successfully");
-    hideDialog();
+    setIsLoading(true);
+    addPoi(token, {
+      address: values.address,
+      marker_shape: values.iconName,
+      color: values.colorName,
+      latitude: values.latitude.toString(),
+      longitude: values.longitude.toString(),
+      poi_name: values.name,
+      poi_type: 1,
+      zone_id: 3,
+    })
+      .then((res) => {
+        ToastService.show(res?.message || "");
+        if (res.success) {
+          helpers.resetForm();
+          hideDialog();
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Error occurred!");
+      })
+      .finally(() => {
+        setIsLoading(false);
+        fetchPois();
+      });
   };
 
   const form = useFormik<IForm>({
@@ -150,15 +150,6 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
     },
     validationSchema: schema,
   });
-
-  React.useEffect(() => {
-    if (!isMapReady) {
-      return;
-    }
-    calculateDelta().catch((err) =>
-      console.error("delta calculate error - CarOnMap", err)
-    );
-  }, [mapRef, isMapReady]);
 
   React.useEffect(() => {
     if (mode === "single") {
@@ -187,8 +178,42 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
       });
   }, [form.values.latitude, form.values.longitude]);
 
+  const fetchPois = React.useCallback(() => {
+    getPoiList(token)
+      .then((res) => {
+        if (res.success) {
+          const pois: Marker[] = res.data.rows.map((poi) => ({
+            latitude: parseFloat(poi.latitude),
+            longitude: parseFloat(poi.longitude),
+            name: poi.poi_name,
+            colorName: poi.color,
+            iconName: poi.marker_shape,
+            type: poi.poi_type === 1 ? "private" : "public",
+            address: poi.address,
+            color: iconColors[poi.color],
+          }));
+          setPoiMarkers((_prev) => pois);
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("POI Error occurred");
+      });
+  }, [token]);
+
+  React.useEffect(() => {
+    fetchPois();
+  }, [fetchPois]);
+
+  console.log(poiMarkers);
+
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
+      <Spinner
+        visible={isLoading}
+        cancelable={false}
+        animation="fade"
+        size="large"
+      />
       <View style={{ height: theme.header.height }} />
       <MapView
         ref={mapRef}
@@ -254,7 +279,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
             onPress={() => handleMarkerOnPress(value)}
           >
             <Image
-              source={images[`${value.iconName}-${value.color}`]}
+              source={images[`${value.iconName}-${value.colorName}`]}
               // onLoad={() => setViewTrackingA1(false)}
               style={{ width: 48, height: 48 }}
               resizeMethod="auto"
