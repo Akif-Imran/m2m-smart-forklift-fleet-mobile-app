@@ -30,8 +30,8 @@ export const ForkliftNotificationStatusColor: Record<string, string> = {};
 
 export enum ForkliftNotificationsFilters {
   "ALL" = 1,
-  "ON" = 2,
-  "OFF" = 3,
+  "DRIVER" = 2,
+  "SERVICE" = 3,
 }
 export enum DriversFilters {
   "ALL" = 1,

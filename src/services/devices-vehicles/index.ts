@@ -120,3 +120,11 @@ export const updatePoi = async (
   );
   return response.data;
 };
+
+export const getNotificationsList = async (token: string) => {
+  const response = await apiGet<NotificationListResponse>(
+    urls.notifications.list,
+    token
+  );
+  return response.data;
+};

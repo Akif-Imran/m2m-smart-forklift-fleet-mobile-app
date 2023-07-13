@@ -65,6 +65,9 @@ export const urls = {
     update: `${BASE_POI_URL}/update`,
     delete: (poiId: string) => `${BASE_POI_URL}/delete/${poiId}`,
   },
+  notifications: {
+    list: `${baseURL}/notifications`,
+  },
 };
 
 export const apiGet = async <R>(

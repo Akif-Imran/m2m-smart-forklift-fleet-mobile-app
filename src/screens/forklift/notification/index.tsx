@@ -16,12 +16,17 @@ import { ToastService } from "@utility";
 import { faker } from "@faker-js/faker";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { ForkliftNotificationsFilters } from "@constants";
+import { getNotificationsList } from "@services";
+import { useAuthContext } from "@context";
 
 import { _NotificationListCard } from "../components/_NotificationListCard";
 
 const ForkliftNotification: React.FC<
   ForkliftStackScreenProps<"Notification">
 > = ({}) => {
+  const {
+    state: { token },
+  } = useAuthContext();
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [notifications, setNotifications] = React.useState<INotification[]>([]);
   const [searchedNotifications, setSearchedNotifications] = React.useState<
@@ -41,7 +46,7 @@ const ForkliftNotification: React.FC<
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
-  const addInfo = () => {
+  /*   const addInfo = () => {
     const on: INotification = {
       _id: faker.database.mongodbObjectId(),
       model: faker.vehicle.vrm(),
@@ -61,13 +66,10 @@ const ForkliftNotification: React.FC<
       driver: faker.person.fullName(),
     };
     setNotifications((prev) => [...prev, on, off]);
-  };
+  }; */
 
   const handleRefresh = () => {
-    setIsFetching(true);
-    fetchNotificationsTimeoutRef.current = setTimeout(() => {
-      setIsFetching(false);
-    }, 3000);
+    fetchNotifications();
   };
 
   const handleSearch = (query: string) => {
@@ -78,10 +80,9 @@ const ForkliftNotification: React.FC<
     }
     const filtered = notifications.filter(
       (notification) =>
-        notification.driver.toLowerCase().includes(query.toLowerCase()) ||
-        notification.event.toLowerCase().includes(query.toLowerCase()) ||
-        notification.model.toLowerCase().includes(query.toLowerCase()) ||
-        notification.regNo.toLowerCase().includes(query.toLowerCase())
+        notification.title.toLowerCase().includes(query.toLowerCase()) ||
+        notification.body.toLowerCase().includes(query.toLowerCase()) ||
+        notification.IMEI.toLowerCase().includes(query.toLowerCase())
     );
     setSearchedNotifications(filtered);
   };
@@ -91,24 +92,19 @@ const ForkliftNotification: React.FC<
     if (newValue === "1") {
       setSearchedNotifications(notifications);
       return;
-    }
-    let matchingKey: string | ForkliftNotificationsFilters = "1";
-    Object.entries(ForkliftNotificationsFilters).forEach(([key, value]) => {
-      if (newValue === key) {
-        matchingKey = value;
-      }
-    });
-    console.log("matchingKey", matchingKey);
-    if (!matchingKey) {
+    } else if (newValue === "2") {
+      const filtered = notifications.filter((value) => {
+        return value.driver === true;
+      });
+      setSearchedNotifications((_prev) => filtered);
+      return;
+    } else if (newValue === "3") {
+      const filtered = notifications.filter((value) => {
+        return value.service === true;
+      });
+      setSearchedNotifications((_prev) => filtered);
       return;
     }
-    console.log("matchingKey", matchingKey);
-    const filtered = notifications.filter(
-      (value) =>
-        value.event.split(" ")[1].toLowerCase() ===
-        matchingKey.toString().toLowerCase()
-    );
-    setSearchedNotifications((_prev) => filtered);
   };
 
   const handleDelete = React.useCallback((notificationId: string) => {
@@ -125,20 +121,33 @@ const ForkliftNotification: React.FC<
     setConfirmDeleteVisible(false);
   };
 
+  const fetchNotifications = React.useCallback(() => {
+    setIsFetching(true);
+    getNotificationsList(token)
+      .then((res) => {
+        if (res.success) {
+          setNotifications(res.result);
+        }
+      })
+      .catch((_err) => {
+        ToastService.show(_err.message || "");
+      })
+      .finally(() => {
+        setIsFetching(false);
+      });
+  }, [token]);
+
   React.useEffect(() => {
     if (!notifications) {
       return;
     }
     setSearchedNotifications(notifications);
-
-    return () => {
-      clearTimeout(fetchNotificationsTimeoutRef.current);
-    };
   }, [notifications]);
 
   React.useEffect(() => {
-    addInfo();
-  }, []);
+    // addInfo();
+    fetchNotifications();
+  }, [fetchNotifications]);
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
@@ -197,8 +206,8 @@ const ForkliftNotification: React.FC<
               <View style={screenStyles.radioItemStyle}>
                 <RadioButton.Item
                   theme={PaperTheme}
-                  label="Ignition On"
-                  value={ForkliftNotificationsFilters.ON.toString()}
+                  label="Driver"
+                  value={ForkliftNotificationsFilters.DRIVER.toString()}
                   color={colors.primary}
                   uncheckedColor={colors.iconGray}
                   labelStyle={gStyles.descText}
@@ -207,8 +216,8 @@ const ForkliftNotification: React.FC<
               <View style={screenStyles.radioItemStyle}>
                 <RadioButton.Item
                   theme={PaperTheme}
-                  label="Ignition Off"
-                  value={ForkliftNotificationsFilters.OFF.toString()}
+                  label="Service"
+                  value={ForkliftNotificationsFilters.SERVICE.toString()}
                   color={colors.primary}
                   uncheckedColor={colors.iconGray}
                   labelStyle={gStyles.descText}

@@ -86,3 +86,5 @@ type POIPostResponseBase = {
 type AddPOIResponse = ApiResponse<Omit<POIPostResponseBase, "is_active">>;
 type UpdatePOIResponse = ApiResponse<POIPostResponseBase, "is_active">;
 type DeletePoiResponse = MessageResponse;
+
+type NotificationListResponse = ApiResponse<INotification[], "result">;

@@ -26,15 +26,15 @@ interface IForklift {
   insuranceExpiryDate: string;
 }
 
-interface INotification {
-  _id: string;
-  regNo: string;
-  model: string;
-  date: string;
-  driver: string;
-  event: string;
-  description: string;
-}
+// interface INotification {
+//   _id: string;
+//   regNo: string;
+//   model: string;
+//   date: string;
+//   driver: string;
+//   event: string;
+//   description: string;
+// }
 
 // interface IService {
 //   _id: string;

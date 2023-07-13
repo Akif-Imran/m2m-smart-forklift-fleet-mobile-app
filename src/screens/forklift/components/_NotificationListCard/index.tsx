@@ -6,7 +6,7 @@ import type { ForkliftStackScreenProps } from "@navigation-types";
 import { listCardStyles } from "@screen-styles";
 import { colors, gStyles } from "@theme";
 import { Ionicons, Entypo } from "@expo/vector-icons";
-import moment from "moment";
+import { FORMAT_DATE_STRING_DD_MM_YYYY_HH_MM_12 } from "@utility";
 
 interface OwnProps {
   item: INotification;
@@ -37,20 +37,20 @@ const _NotificationListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
         </View>
         <View style={listCardStyles.infoWithForward}>
           <View style={listCardStyles.infoContainer}>
-            <Text style={gStyles.cardInfoTitleText}>{item.regNo}</Text>
+            <Text style={gStyles.cardInfoTitleText}>{item.title}</Text>
             <Text
               style={gStyles.tblDescText}
               ellipsizeMode="tail"
               numberOfLines={1}
             >
-              {item.event}
+              {item.body}
             </Text>
             <Text
               style={gStyles.tblDescText}
               ellipsizeMode="tail"
               numberOfLines={1}
             >
-              {moment(item.date).format("DD MMM, YYYY hh:mm A")}
+              {FORMAT_DATE_STRING_DD_MM_YYYY_HH_MM_12(item.createdAt)}
             </Text>
           </View>
           <View style={listCardStyles.forwardContainer}>

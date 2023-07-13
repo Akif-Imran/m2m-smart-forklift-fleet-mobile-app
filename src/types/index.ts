@@ -222,3 +222,16 @@ interface IPOI {
   createdAt: string;
   updatedAt: string;
 }
+
+interface INotification {
+  title: string;
+  body: string;
+  IMEI: string;
+  driver: boolean;
+  service: boolean;
+  fcm_token: string[];
+  createdAt: string;
+  _id: string;
+  data: Record<string, number | string | boolean | null>;
+  __v: number;
+}

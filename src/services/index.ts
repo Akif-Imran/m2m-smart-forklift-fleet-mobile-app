@@ -14,6 +14,7 @@ export {
   addPoi,
   updatePoi,
   getFuelTypes,
+  getNotificationsList,
 } from "./devices-vehicles";
 export {
   getServiceCounts,
