@@ -3,6 +3,7 @@ export { apiLogin } from "./auth";
 export { getDashCounts } from "./common";
 export {
   getDevicesList,
+  addDevice,
   getVehicleList,
   addVehicle,
   deleteVehicle,
@@ -12,6 +13,7 @@ export {
   deletePoi,
   addPoi,
   updatePoi,
+  getFuelTypes,
 } from "./devices-vehicles";
 export {
   getServiceCounts,

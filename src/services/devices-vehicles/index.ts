@@ -7,6 +7,27 @@ export const getDevicesList = async (
   return response.data;
 };
 
+export const addDevice = async (
+  token: string,
+  body: AddDeviceRequest
+): Promise<AddDeviceResponse> => {
+  const response = await apiPost<AddDeviceResponse, AddDeviceRequest>(
+    urls.devices.create,
+    token,
+    body
+  );
+  return response.data;
+};
+export const getFuelTypes = async (
+  token: string
+): Promise<FuelTypeListResponse> => {
+  const response = await apiGet<FuelTypeListResponse>(
+    urls.vehicles.getFuelTypes,
+    token
+  );
+  return response.data;
+};
+
 export const getVehicleList = async (
   token: string
 ): Promise<VehicleListResponse> => {

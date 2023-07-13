@@ -16,7 +16,7 @@ import { ToastService } from "@utility";
 import { faker } from "@faker-js/faker";
 import { ForkliftStatusColor } from "@constants";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
-import { getDashCounts, getVehicleList } from "@services";
+import { deleteVehicle, getDashCounts, getVehicleList } from "@services";
 import { useAuthContext } from "@context";
 
 import { _ForkliftListCard } from "../components";
@@ -41,6 +41,8 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
   const [isFetching, setIsFetching] = React.useState(false);
   const fetchForkliftsTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
   const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
+  const [toBeDeletedVehicleId, setToBeDeletedVehicleId] =
+    React.useState<number>(0);
   const [counts, setCounts] = React.useState<ForkliftCounts>({
     moving: 0,
     offline: 0,
@@ -98,10 +100,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
   // };
 
   const handleRefresh = () => {
-    setIsFetching(true);
-    fetchForkliftsTimeoutRef.current = setTimeout(() => {
-      setIsFetching(false);
-    }, 3000);
+    fetchVehicles();
   };
 
   const handleSearch = (query: string) => {
@@ -116,14 +115,24 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
     setSearchedForklifts(filtered);
   };
 
-  const handleDelete = React.useCallback((customerId: number) => {
+  const handleDelete = React.useCallback((vehicleId: number) => {
+    setToBeDeletedVehicleId(vehicleId);
     setConfirmDeleteVisible(true);
-    console.log("handle delete", customerId);
+    console.log("handle delete", vehicleId);
   }, []);
 
   const handleDeleteConfirm = () => {
-    ToastService.show("Demo delete");
-    setConfirmDeleteVisible(false);
+    deleteVehicle(token, toBeDeletedVehicleId.toString())
+      .then((res) => {
+        ToastService.show(res?.message || "");
+      })
+      .catch((_err) => {
+        ToastService.show("Error occurred");
+      })
+      .finally(() => {
+        setConfirmDeleteVisible(false);
+        fetchVehicles();
+      });
   };
 
   const handleDeleteCancel = () => {
@@ -255,7 +264,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
       />
       <_ConfirmModal
         visible={confirmDeleteVisible}
-        question="Are you sure you want to delete this customer ?"
+        question="Are you sure you want to delete this vehicle ?"
         confirmLabel="Delete"
         cancelLabel="Cancel"
         onConfirm={handleDeleteConfirm}

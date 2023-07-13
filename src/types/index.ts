@@ -135,7 +135,13 @@ interface IServiceStatus {
   createdAt: null;
   updatedAt: null;
 }
-
+interface IFuelType {
+  id: number;
+  name: string;
+  is_active: boolean;
+  createdAt: string;
+  updatedAt: null | string;
+}
 interface IDriverBase {
   id: number;
   name: string;

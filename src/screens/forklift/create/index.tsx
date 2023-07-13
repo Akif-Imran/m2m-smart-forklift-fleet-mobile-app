@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {
   FlatList,
   Image,
@@ -22,43 +23,51 @@ import { ToastService } from "@utility";
 import * as ImagePicker from "expo-image-picker";
 import { AntDesign } from "@expo/vector-icons";
 import * as yup from "yup";
+import type { FormikHelpers } from "formik";
 import { useFormik } from "formik";
 import moment from "moment";
 import { Button, TextInput } from "react-native-paper";
+import { baseURL } from "@api";
+import {
+  addDevice,
+  addVehicle,
+  getDevicesList,
+  getFuelTypes,
+  updateVehicle,
+} from "@services";
+import { useAuthContext } from "@context";
+import { mapMarkers } from "@map-markers";
 
-interface IForm
-  extends Omit<IForklift, "_id" | "image" | "milage" | "age" | "driver"> {
-  simNo: string;
-  imei: string;
-  milage: number;
-  age: number;
+interface IForm extends Omit<AddVehicleRequest, "device_id" | "fuel_type_id"> {
+  sim_no: string;
+  IMEI: string;
+  fuel_type_id: string;
 }
 const schema: yup.ObjectSchema<IForm> = yup.object().shape({
-  name: yup.string().required("Name is required"), //list
-  simNo: yup.string().required("Sim Number is required"),
-  imei: yup.string().required("IMEI is required"),
-  regNo: yup.string().required("Registration Number is required"),
+  IMEI: yup.string().required("IMEI is required"),
+  sim_no: yup.string().required("Sim Number is required"),
+  reg_no: yup.string().required("Registration Number is required"),
   color: yup.string().required("Color is required"),
   make: yup.string().required("Make is required"),
   model: yup.string().required("Model is required"),
-  manufactureYear: yup.string().required("Manufacture Year is required"),
-  milage: yup.number().required("Milage is required"),
-  age: yup.number().required("Age is required"),
-  status: yup.string().required("Status is required"), //list
-  purchaseDate: yup.string().required("Purchase Date is required"),
-  rentStartDate: yup.string().required("Rent start date is required"),
-  rentEndDate: yup.string().required("Rent end date is required"),
-  forkliftSerialNo: yup.string().required("Forklift serial no is required"),
-  batterySerialNo: yup.string().required("Battery serial no is required"),
-  fuelType: yup.string().required("Fuel type is required"),
-  fuelCapacity: yup.string().required("Fuel capacity is required"),
-  insuranceType: yup.string().required("Insurance type is required"),
-  insuranceCompany: yup.string().required("Insurance company is required"),
-  insuranceExpiryDate: yup
+  year: yup.number().required("Manufacture Year is required"),
+  mileage: yup.string().required("Milage is required"),
+  age: yup.string().required("Age is required"),
+  // status: yup.string().required("Status is required"), //list
+  purchase_date: yup.string().required("Purchase Date is required"),
+  rent_start_date: yup.string().required("Rent start date is required"),
+  rent_end_date: yup.string().required("Rent end date is required"),
+  serial_number: yup.string().required("Forklift serial no is required"),
+  battery_serial_number: yup.string().required("Battery serial no is required"),
+  fuel_type_id: yup.string().required("Fuel type is required"),
+  fuel_capacity: yup.string().required("Fuel capacity is required"),
+  insurance_company: yup.string().required("Insurance company is required"),
+  insurance_number: yup.string().required("Insurance no is required"),
+  insurance_type: yup.string().required("Insurance type is required"),
+  insurance_expiry_date: yup
     .string()
     .required("Insurance expiry date is required"),
-  insuranceNo: yup.string().required("Insurance no is required"),
-  year: yup.string().required("Year is required"),
+  icon: yup.string().required("Year is required"),
 });
 
 const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
@@ -66,6 +75,9 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
   route,
 }) => {
   const { mode } = route.params;
+  const {
+    state: { token },
+  } = useAuthContext();
   const [isLoading, setIsLoading] = React.useState(false);
   const [_hasImages, setHasImages] = React.useState<boolean>(false);
   const [images, setImages] = React.useState<ImagePicker.ImagePickerAsset[]>(
@@ -85,53 +97,159 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
   );
   const [showInsuranceExpiryDatePicker, setShowInsuranceExpiryDatePicker] =
     React.useState(false);
-  const [statusDropdownVisible, setStatusDropdownVisible] =
+  /*   const [statusDropdownVisible, setStatusDropdownVisible] =
+    React.useState(false); */
+  const [fuelTypeDropdownVisible, setFuelTypeDropdownVisible] =
     React.useState(false);
 
-  const statusDropDownList = [
+  const [fuelTypeList, setFuelTypeList] = React.useState<
+    { label: string; value: string }[]
+  >([]);
+  /*   const statusDropDownList = [
     { label: "Moving", value: "moving" },
     { label: "Parked", value: "parked" },
     { label: "Offline", value: "offline" },
     { label: "Faulty", value: "faulty" },
-  ];
+  ]; */
 
   const form = useFormik<IForm>({
     initialValues: {
-      name: "",
-      simNo: "",
-      imei: "",
-      regNo: "",
+      sim_no: "",
+      IMEI: "",
+      reg_no: "",
       color: "",
       make: "",
       model: "",
-      manufactureYear: "",
-      milage: 0,
-      age: 0,
-      status: "parked",
-      purchaseDate: moment().format("YYYY-MM-DD"),
-      rentStartDate: moment().format("YYYY-MM-DD"),
-      rentEndDate: moment().format("YYYY-MM-DD"),
-      forkliftSerialNo: "",
-      batterySerialNo: "",
-      fuelCapacity: "",
-      fuelType: "",
-      insuranceCompany: "",
-      insuranceExpiryDate: "",
-      insuranceNo: "",
-      insuranceType: "",
+      year: 0,
+      mileage: "0",
+      age: "0",
+      // status: "parked",
+      purchase_date: moment().format("YYYY-MM-DD"),
+      rent_start_date: moment().format("YYYY-MM-DD"),
+      rent_end_date: moment().format("YYYY-MM-DD"),
+      serial_number: "",
+      battery_serial_number: "",
+      fuel_capacity: "",
+      fuel_type_id: "0",
+      insurance_company: "",
+      insurance_number: "",
+      insurance_type: "",
+      insurance_expiry_date: "",
+      icon: mapMarkers["marker-pin"].name,
     },
     onSubmit: (values, helpers) => {
       console.log(values);
-      setIsLoading(true);
-      setTimeout(() => {
-        setIsLoading(false);
-        helpers.resetForm();
-        ToastService.show("Forklift added successfully");
-        navigation.goBack();
-      });
+      if (mode === "add") {
+        createVehicle(values, helpers);
+      } else {
+        editVehicle(values, helpers);
+      }
     },
     validationSchema: schema,
   });
+
+  const createVehicle = (values: IForm, helpers: FormikHelpers<IForm>) => {
+    setIsLoading(true);
+    addDevice(token, {
+      device_type_id: 1,
+      IMEI: values.IMEI,
+      sim_no: values.sim_no,
+    })
+      .then((device) => {
+        ToastService.show(device?.message || "");
+        console.log("device", device);
+        if (device.success) {
+          addVehicle(token, {
+            device_id: device.data.id,
+            reg_no: values.reg_no,
+            color: values.color,
+            make: values.make,
+            model: values.model,
+            purchase_date: values.purchase_date,
+            rent_start_date: values.rent_start_date,
+            rent_end_date: values.rent_end_date,
+            serial_number: values.serial_number,
+            battery_serial_number: values.battery_serial_number,
+            year: values.year,
+            age: values.age,
+            mileage: values.mileage,
+            fuel_type_id: parseInt(values.fuel_type_id, 10),
+            fuel_capacity: values.fuel_capacity,
+            insurance_company: values.insurance_company,
+            insurance_number: values.insurance_number,
+            insurance_type: values.insurance_type,
+            insurance_expiry_date: values.insurance_expiry_date,
+            icon: values.icon,
+          })
+            .then((res) => {
+              ToastService.show(res?.message || "");
+              helpers.resetForm();
+              navigation.goBack();
+            })
+            .catch((_err) => {
+              ToastService.show("Error occurred!");
+            });
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Device error occurred");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const editVehicle = (values: IForm, helpers: FormikHelpers<IForm>) => {
+    setIsLoading(true);
+    addDevice(token, {
+      device_type_id: 1,
+      IMEI: values.IMEI,
+      sim_no: values.sim_no,
+    })
+      .then((device) => {
+        ToastService.show(device?.message || "");
+        console.log("device", device);
+        if (device.success) {
+          updateVehicle(token, {
+            id: mode === "edit" ? route.params.item.id : 0,
+            device_id: device.data.id,
+            reg_no: values.reg_no,
+            color: values.color,
+            make: values.make,
+            model: values.model,
+            purchase_date: values.purchase_date,
+            rent_start_date: values.rent_start_date,
+            rent_end_date: values.rent_end_date,
+            serial_number: values.serial_number,
+            battery_serial_number: values.battery_serial_number,
+            year: values.year,
+            age: values.age,
+            mileage: values.mileage,
+            fuel_type_id: parseInt(values.fuel_type_id, 10),
+            fuel_capacity: values.fuel_capacity,
+            insurance_company: values.insurance_company,
+            insurance_number: values.insurance_number,
+            insurance_type: values.insurance_type,
+            insurance_expiry_date: values.insurance_expiry_date,
+            icon: values.icon,
+          })
+            .then((res) => {
+              ToastService.show(res?.message || "");
+              helpers.resetForm();
+              navigation.goBack();
+            })
+            .catch((_err) => {
+              ToastService.show("Error occurred!");
+            });
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Device error occurred");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   const captureImage = async () => {
     try {
@@ -174,24 +292,27 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
     }
     setImages(arr);
   };
+
   React.useEffect(() => {
     form.setValues((prev) => ({
       ...prev,
-      purchaseDate: moment(purchaseDate).format("YYYY-MM-DD"),
+      purchase_date: moment(purchaseDate).format("YYYY-MM-DD"),
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [purchaseDate]);
+
   React.useEffect(() => {
     form.setValues((prev) => ({
       ...prev,
-      rentStartDate: moment(rentStartDate).format("YYYY-MM-DD"),
+      rent_start_date: moment(rentStartDate).format("YYYY-MM-DD"),
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rentStartDate]);
+
   React.useEffect(() => {
     form.setValues((prev) => ({
       ...prev,
-      rentEndDate: moment(rentEndDate).format("YYYY-MM-DD"),
+      rent_end_date: moment(rentEndDate).format("YYYY-MM-DD"),
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rentEndDate]);
@@ -199,7 +320,7 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
   React.useEffect(() => {
     form.setValues((prev) => ({
       ...prev,
-      insuranceExpiryDate: moment(insuranceExpiryDate).format("YYYY-MM-DD"),
+      insurance_expiry_date: moment(insuranceExpiryDate).format("YYYY-MM-DD"),
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [insuranceExpiryDate]);
@@ -209,34 +330,88 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
       return;
     }
     const { item } = route.params;
-    form.setValues((prev) => ({
-      ...prev,
-      name: item.name || "",
-      simNo: item.simNo || "",
-      imei: item.imei || "",
-      regNo: item.regNo || "",
-      color: item.color || "",
-      make: item.make || "",
-      model: item.model || "",
-      manufactureYear: item.manufactureYear || "",
-      milage: parseInt(item.milage, 10) || 0,
-      age: parseInt(item.age, 10) || 0,
-      status: item.status || "parked",
-      purchaseDate: item.purchaseDate || moment().format("YYYY-MM-DD"),
-      rentStartDate: item.rentStartDate || moment().format("YYYY-MM-DD"),
-      rentEndDate: item.rentEndDate || moment().format("YYYY-MM-DD"),
-      forkliftSerialNo: item.forkliftSerialNo || "",
-      batterySerialNo: item.batterySerialNo || "",
-      fuelCapacity: item.fuelCapacity || "",
-      fuelType: item.fuelType || "",
-      insuranceCompany: item.insuranceCompany || "",
-      insuranceExpiryDate: item.insuranceExpiryDate || "",
-      insuranceNo: item.insuranceNo || "",
-      insuranceType: item.insuranceType || "",
-    }));
-    setImages((_prev) => [{ uri: item.image, width: 125, height: 125 }]);
+    setIsLoading(true);
+    getDevicesList(token)
+      .then((res) => {
+        console.log(res);
+        if (res.success) {
+          const index = res.data.rows.findIndex(
+            (value) => value.id === item.device_id
+          );
+          if (index === -1) {
+            ToastService.show("Device Invalid");
+            navigation.goBack();
+            return;
+          }
+          const device = res.data.rows[index];
+          form.setValues((_prev) => ({
+            sim_no: device.sim_no || "",
+            IMEI: device.IMEI || "",
+            reg_no: item.reg_no || "",
+            color: item.color || "",
+            make: item.make || "",
+            model: item.model || "",
+            year: item.year || 0,
+            mileage: item?.mileage || "",
+            age: item.age,
+            // status: item.status || "parked",
+            purchase_date: item.purchase_date || moment().format("YYYY-MM-DD"),
+            rent_start_date:
+              item.rent_start_date || moment().format("YYYY-MM-DD"),
+            rent_end_date: item.rent_end_date || moment().format("YYYY-MM-DD"),
+            serial_number: item.serial_number || "",
+            battery_serial_number: item.battery_serial_number || "",
+            fuel_capacity: item.fuel_capacity || "",
+            fuel_type_id: item.fuel_type_name || "",
+            insurance_company: item.insurance_company || "",
+            insurance_expiry_date:
+              item.insurance_expiry_date || moment().format("YYYY-MM-DD"),
+            insurance_number: item.insurance_number || "",
+            insurance_type: item.insurance_type || "",
+            icon: item.icon,
+          }));
+          setImages((_prev) => {
+            if (!item.picture) {
+              return [];
+            }
+            return [
+              { uri: `${baseURL}${item.picture}`, width: 125, height: 125 },
+            ];
+          });
+        } else {
+          ToastService.show("Device Invalid");
+          navigation.goBack();
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Device fetch error");
+        console.log(_err.message);
+        navigation.goBack();
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.params]);
+
+  React.useEffect(() => {
+    if (!token) {
+      return;
+    }
+    getFuelTypes(token)
+      .then((res) => {
+        if (res.success) {
+          const list = res.data.rows.map((type) => ({
+            label: type.name,
+            value: type.id.toString(),
+          }));
+          setFuelTypeList(list);
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Error occured");
+      });
+  }, [token]);
 
   return (
     <SafeAreaView
@@ -281,7 +456,7 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
       <_ScrollFormLayout>
         <View style={{ rowGap: theme.spacing.xs }}>
           <_Divider title="Forklift Image" />
-          <FlatList
+          {/* <FlatList
             horizontal
             data={images}
             showsHorizontalScrollIndicator={false}
@@ -309,43 +484,67 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
               </TouchableOpacity>
             }
             keyExtractor={(_, index) => index.toString()}
-          />
+          /> */}
+          {images.length > 0 ? (
+            <TouchableOpacity
+              style={[
+                screenStyles.addedImageBtnStyle,
+                screenStyles.addedImgStyle,
+              ]}
+              onPress={() => removeImage(0)}
+            >
+              <Image
+                source={{ uri: images[0]?.uri }}
+                style={screenStyles.addedImgStyle}
+                resizeMethod="scale"
+                resizeMode="cover"
+              />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={screenStyles.addImageButton}
+              activeOpacity={0.5}
+              onPress={() => captureImage()}
+            >
+              <AntDesign name="plus" size={30} color={colors.primary} />
+            </TouchableOpacity>
+          )}
           <_Divider title="Forklift Info" />
-          <_TextInput
+          {/* <_TextInput
             value={form.values.name}
             label={"Name"}
             onBlur={form.handleBlur("name")}
             onChangeText={form.handleChange("name")}
             error={form.errors?.name && form.touched?.name ? true : false}
             errorText={form.errors?.name}
-          />
+          /> */}
           <_TextInput
-            value={form.values.imei}
+            value={form.values.IMEI}
             label={"BlackBox IMEI No."}
-            onBlur={form.handleBlur("imei")}
-            onChangeText={form.handleChange("imei")}
-            error={form.errors?.imei && form.touched?.imei ? true : false}
-            errorText={form.errors?.imei}
+            onBlur={form.handleBlur("IMEI")}
+            onChangeText={form.handleChange("IMEI")}
+            error={form.errors?.IMEI && form.touched?.IMEI ? true : false}
+            errorText={form.errors?.IMEI}
           />
           <_TextInput
-            value={form.values.simNo}
+            value={form.values.sim_no}
             label={"Sim No."}
-            onBlur={form.handleBlur("simNo")}
-            onChangeText={form.handleChange("simNo")}
-            error={form.errors?.simNo && form.touched?.simNo ? true : false}
-            errorText={form.errors?.simNo}
+            onBlur={form.handleBlur("sim_no")}
+            onChangeText={form.handleChange("sim_no")}
+            error={form.errors?.sim_no && form.touched?.sim_no ? true : false}
+            errorText={form.errors?.sim_no}
           />
           <_Divider title="General Info" />
 
           <_TextInput
-            value={form.values.regNo}
+            value={form.values.reg_no}
             label={"Registration No."}
-            onBlur={form.handleBlur("regNo")}
-            onChangeText={form.handleChange("regNo")}
-            error={form.errors?.regNo && form.touched?.regNo ? true : false}
-            errorText={form.errors?.regNo}
+            onBlur={form.handleBlur("reg_no")}
+            onChangeText={form.handleChange("reg_no")}
+            error={form.errors?.reg_no && form.touched?.reg_no ? true : false}
+            errorText={form.errors?.reg_no}
           />
-          <_DropDown
+          {/* <_DropDown
             theme={PaperTheme}
             dropDownItemTextStyle={{ ...gStyles.descText }}
             dropDownItemSelectedTextStyle={{
@@ -362,15 +561,15 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
               form.setValues((prev) => ({ ...prev, status: value }));
             }}
             list={statusDropDownList}
-          />
-          <_TextInput
+          /> */}
+          {/* <_TextInput
             value={form.values.simNo}
             label={"Sim No."}
             onBlur={form.handleBlur("simNo")}
             onChangeText={form.handleChange("simNo")}
             error={form.errors?.simNo && form.touched?.simNo ? true : false}
             errorText={form.errors?.simNo}
-          />
+          /> */}
           <_TextInput
             value={form.values.color}
             label={"Color"}
@@ -396,28 +595,24 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
             errorText={form.errors?.model}
           />
           <_TextInput
-            value={form.values.manufactureYear}
+            value={form.values.year.toString()}
             label={"Manufactured Year"}
-            onBlur={form.handleBlur("manufactureYear")}
-            onChangeText={form.handleChange("manufactureYear")}
-            error={
-              form.errors?.manufactureYear && form.touched?.manufactureYear
-                ? true
-                : false
-            }
-            errorText={form.errors?.manufactureYear}
+            onBlur={form.handleBlur("year")}
+            onChangeText={form.handleChange("year")}
+            error={form.errors?.year && form.touched?.year ? true : false}
+            errorText={form.errors?.year}
           />
           <_TextInput
-            value={form.values.milage.toString()}
+            value={form?.values?.mileage}
             label={"Milage"}
-            onBlur={form.handleBlur("milage")}
-            onChangeText={form.handleChange("milage")}
-            error={form.errors?.milage && form.touched?.milage ? true : false}
-            errorText={form.errors?.milage}
+            onBlur={form.handleBlur("mileage")}
+            onChangeText={form.handleChange("mileage")}
+            error={form.errors?.mileage && form.touched?.mileage ? true : false}
+            errorText={form.errors?.mileage}
             keyboardType="numeric"
           />
           <_TextInput
-            value={form.values.age.toString()}
+            value={form.values.age}
             label={"Age"}
             onBlur={form.handleBlur("age")}
             onChangeText={form.handleChange("age")}
@@ -428,16 +623,16 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
           <_Divider title="Maintenance Info" />
           <_TextInput
             editable={false}
-            value={form.values.purchaseDate}
+            value={form.values.purchase_date}
             label={"Purchase Date"}
-            onBlur={form.handleBlur("purchaseDate")}
-            onChangeText={form.handleChange("purchaseDate")}
+            onBlur={form.handleBlur("purchase_date")}
+            onChangeText={form.handleChange("purchase_date")}
             error={
-              form.errors?.purchaseDate && form.touched?.purchaseDate
+              form.errors?.purchase_date && form.touched?.purchase_date
                 ? true
                 : false
             }
-            errorText={form.errors?.purchaseDate}
+            errorText={form.errors?.purchase_date}
             right={
               <TextInput.Icon
                 icon="calendar"
@@ -448,16 +643,16 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
           />
           <_TextInput
             editable={false}
-            value={form.values.rentStartDate}
+            value={form.values.rent_start_date}
             label={"Rent Start Date"}
-            onBlur={form.handleBlur("rentStartDate")}
-            onChangeText={form.handleChange("rentStartDate")}
+            onBlur={form.handleBlur("rent_start_date")}
+            onChangeText={form.handleChange("rent_start_date")}
             error={
-              form.errors?.rentStartDate && form.touched?.rentStartDate
+              form.errors?.rent_start_date && form.touched?.rent_start_date
                 ? true
                 : false
             }
-            errorText={form.errors?.rentStartDate}
+            errorText={form.errors?.rent_start_date}
             right={
               <TextInput.Icon
                 icon="calendar"
@@ -468,16 +663,16 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
           />
           <_TextInput
             editable={false}
-            value={form.values.rentEndDate}
+            value={form.values.rent_end_date}
             label={"Rent End Date"}
-            onBlur={form.handleBlur("rentEndDate")}
-            onChangeText={form.handleChange("rentEndDate")}
+            onBlur={form.handleBlur("rent_end_date")}
+            onChangeText={form.handleChange("rent_end_date")}
             error={
-              form.errors?.rentEndDate && form.touched?.rentEndDate
+              form.errors?.rent_end_date && form.touched?.rent_end_date
                 ? true
                 : false
             }
-            errorText={form.errors?.rentEndDate}
+            errorText={form.errors?.rent_end_date}
             right={
               <TextInput.Icon
                 icon="calendar"
@@ -487,30 +682,49 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
             }
           />
           <_TextInput
-            value={form.values.forkliftSerialNo}
+            value={form.values.serial_number}
             label={"Forklift Serial No."}
-            onBlur={form.handleBlur("forkliftSerialNo")}
-            onChangeText={form.handleChange("forkliftSerialNo")}
+            onBlur={form.handleBlur("serial_number")}
+            onChangeText={form.handleChange("serial_number")}
             error={
-              form.errors?.forkliftSerialNo && form.touched?.forkliftSerialNo
+              form.errors?.serial_number && form.touched?.serial_number
                 ? true
                 : false
             }
-            errorText={form.errors?.forkliftSerialNo}
+            errorText={form.errors?.serial_number}
           />
           <_TextInput
-            value={form.values.batterySerialNo}
+            value={form.values.battery_serial_number}
             label={"Battery Serial No."}
-            onBlur={form.handleBlur("batterySerialNo")}
-            onChangeText={form.handleChange("batterySerialNo")}
+            onBlur={form.handleBlur("battery_serial_number")}
+            onChangeText={form.handleChange("battery_serial_number")}
             error={
-              form.errors?.batterySerialNo && form.touched?.batterySerialNo
+              form.errors?.battery_serial_number &&
+              form.touched?.battery_serial_number
                 ? true
                 : false
             }
-            errorText={form.errors?.batterySerialNo}
+            errorText={form.errors?.battery_serial_number}
           />
-          <_TextInput
+          <_DropDown
+            theme={PaperTheme}
+            dropDownItemTextStyle={{ ...gStyles.descText }}
+            dropDownItemSelectedTextStyle={{
+              ...gStyles.descTextPrimary,
+            }}
+            mode="outlined"
+            label="Fuel Type"
+            value={form.values.fuel_type_id}
+            visible={fuelTypeDropdownVisible}
+            showDropDown={() => setFuelTypeDropdownVisible(true)}
+            onDismiss={() => setFuelTypeDropdownVisible(false)}
+            setValue={(value) => {
+              console.log(value);
+              form.setValues((prev) => ({ ...prev, fuel_type_id: value }));
+            }}
+            list={fuelTypeList}
+          />
+          {/* <_TextInput
             value={form.values.fuelType}
             label={"Fuel Type"}
             onBlur={form.handleBlur("fuelType")}
@@ -519,72 +733,69 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
               form.errors?.fuelType && form.touched?.fuelType ? true : false
             }
             errorText={form.errors?.fuelType}
-          />
+          /> */}
           <_TextInput
-            value={form.values.fuelCapacity}
+            value={form.values.fuel_capacity}
             label={"Fuel Capacity"}
-            onBlur={form.handleBlur("year")}
-            onChangeText={form.handleChange("year")}
+            onBlur={form.handleBlur("fuel_capacity")}
+            onChangeText={form.handleChange("fuel_capacity")}
             error={
-              form.errors?.fuelCapacity && form.touched?.fuelCapacity
+              form.errors?.fuel_capacity && form.touched?.fuel_capacity
                 ? true
                 : false
             }
-            errorText={form.errors?.fuelCapacity}
-            keyboardType="numeric"
+            errorText={form.errors?.fuel_capacity}
           />
           <_Divider title="Insurance Info" />
           <_TextInput
-            value={form.values.insuranceCompany}
+            value={form.values.insurance_company}
             label={"Company"}
-            onBlur={form.handleBlur("insuranceCompany")}
-            onChangeText={form.handleChange("insuranceCompany")}
+            onBlur={form.handleBlur("insurance_company")}
+            onChangeText={form.handleChange("insurance_company")}
             error={
-              form.errors?.insuranceCompany && form.touched?.insuranceCompany
+              form.errors?.insurance_company && form.touched?.insurance_company
                 ? true
                 : false
             }
-            errorText={form.errors?.insuranceCompany}
+            errorText={form.errors?.insurance_company}
           />
           <_TextInput
-            value={form.values.insuranceNo}
+            value={form.values.insurance_number}
             label={"Insurance No."}
-            onBlur={form.handleBlur("insuranceNo")}
-            onChangeText={form.handleChange("insuranceNo")}
+            onBlur={form.handleBlur("insurance_number")}
+            onChangeText={form.handleChange("insurance_number")}
             error={
-              form.errors?.insuranceNo && form.touched?.insuranceNo
+              form.errors?.insurance_number && form.touched?.insurance_number
                 ? true
                 : false
             }
-            errorText={form.errors?.insuranceNo}
-            keyboardType="numeric"
+            errorText={form.errors?.insurance_number}
           />
           <_TextInput
-            value={form.values.insuranceType}
+            value={form.values.insurance_type}
             label={"Type"}
-            onBlur={form.handleBlur("insuranceType")}
-            onChangeText={form.handleChange("insuranceType")}
+            onBlur={form.handleBlur("insurance_type")}
+            onChangeText={form.handleChange("insurance_type")}
             error={
-              form.errors?.insuranceType && form.touched?.insuranceType
+              form.errors?.insurance_type && form.touched?.insurance_type
                 ? true
                 : false
             }
-            errorText={form.errors?.insuranceType}
-            keyboardType="numeric"
+            errorText={form.errors?.insurance_type}
           />
           <_TextInput
             editable={false}
-            value={form.values.insuranceExpiryDate}
+            value={form.values.insurance_expiry_date}
             label={"Expiry Date"}
-            onBlur={form.handleBlur("insuranceExpiryDate")}
-            onChangeText={form.handleChange("insuranceExpiryDate")}
+            onBlur={form.handleBlur("insurance_expiry_date")}
+            onChangeText={form.handleChange("insurance_expiry_date")}
             error={
-              form.errors?.insuranceExpiryDate &&
-              form.touched?.insuranceExpiryDate
+              form.errors?.insurance_expiry_date &&
+              form.touched?.insurance_expiry_date
                 ? true
                 : false
             }
-            errorText={form.errors?.insuranceExpiryDate}
+            errorText={form.errors?.insurance_expiry_date}
             right={
               <TextInput.Icon
                 icon="calendar"

@@ -28,3 +28,7 @@ export const FORMAT_DATE_STRING_DD_MM_YYYY_HH_MM_12 = (
 ): string => {
   return moment(date).format("DD MMM, YYYY hh:mm A");
 };
+
+export const FORMAT_DATE_DD_MM_YYYY = (date: string): string => {
+  return moment(date).format("DD MMM, YYYY");
+};

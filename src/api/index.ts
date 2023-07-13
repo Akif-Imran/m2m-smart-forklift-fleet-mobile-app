@@ -38,6 +38,7 @@ export const urls = {
     create: `${BASE_VEHICLE_URL}/create`,
     update: `${BASE_VEHICLE_URL}/update`,
     delete: (vehicleId: string) => `${BASE_VEHICLE_URL}/delete?id=${vehicleId}`,
+    getFuelTypes: `${BASE_VEHICLE_URL}/getFuelTypes`,
   },
   services: {
     counts: `${baseURL}/services_status_count`,

@@ -1,8 +1,24 @@
-type DevicesListResponse = ApiResponse<ListResponse<IDevice[]>, "result">;
+type DevicesListResponse = ApiResponse<ListResponse<IDevice[]>>;
+type AddDeviceRequest = {
+  IMEI: string;
+  device_type_id: number;
+  sim_no: string;
+};
+type AddDeviceResponse = ApiResponse<{
+  id: number;
+  IMEI: string;
+  device_type_id: number;
+  sim_no: string;
+  activation_status: number;
+  updatedAt: string;
+  createdAt: string;
+}>;
 
 type VehicleListResponse = ApiResponse<ListResponse<IVehicle[]>>;
 type VehicleByIdResponse = ApiResponse<IVehicle>;
 type DeleteVehicleResponse = MessageResponse;
+
+type FuelTypeListResponse = ApiResponse<ListResponse<IFuelType[]>>;
 
 interface IAddUpdateVehicleRequestBase {
   id: number;

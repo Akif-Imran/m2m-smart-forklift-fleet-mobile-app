@@ -15,6 +15,7 @@ module.exports = function (api) {
             "@api-types": "./src/api/types.ts",
             "@assets": "./src/assets",
             "@markers": "./src/assets/images/markers/index.ts",
+            "@map-markers": "./src/assets/images/map-markers/index.ts",
             "@components": "./src/components/index.ts",
             "@constants": "./src/constants/index.ts",
             "@context": "./src/context/index.ts",

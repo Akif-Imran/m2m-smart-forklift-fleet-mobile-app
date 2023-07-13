@@ -7,6 +7,8 @@ import { screenStyles } from "@screen-styles";
 import { colors, gStyles, theme } from "@theme";
 import { ForkliftStatusColor } from "@constants";
 import { FAB } from "react-native-paper";
+import { baseURL } from "@api";
+import { FORMAT_DATE_DD_MM_YYYY } from "@utility";
 
 const ForkLiftDetails: React.FC<
   ForkliftStackScreenProps<"ForkLiftDetails">
@@ -18,7 +20,17 @@ const ForkLiftDetails: React.FC<
       <_ScrollFormLayout>
         <>
           <View style={screenStyles.singleImgContainer}>
-            <Image source={{ uri: item.image }} style={screenStyles.imgStyle} />
+            {item.picture ? (
+              <Image
+                source={{ uri: `${baseURL}${item.picture}` }}
+                style={screenStyles.imgStyle}
+              />
+            ) : (
+              <Image
+                source={require("../../../assets/images/user.png")}
+                style={screenStyles.imgStyle}
+              />
+            )}
           </View>
           <_DefaultCard>
             <View>
@@ -28,9 +40,9 @@ const ForkLiftDetails: React.FC<
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>RegNo.</Text>
-              <Text style={screenStyles.tblDescText}>{item.regNo}</Text>
+              <Text style={screenStyles.tblDescText}>{item.reg_no}</Text>
             </View>
-            <View style={screenStyles.fieldContainer}>
+            {/* <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Status</Text>
               <Text
                 style={StyleSheet.compose(
@@ -38,13 +50,13 @@ const ForkLiftDetails: React.FC<
                     marginHorizontal: theme.spacing.none,
                   }),
                   {
-                    backgroundColor: ForkliftStatusColor[item.status],
+                    backgroundColor: ForkliftStatusColor[item],
                   }
                 )}
               >
                 {item.status}
               </Text>
-            </View>
+            </View> */}
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Color</Text>
               <Text style={screenStyles.tblDescText}>{item.color}</Text>
@@ -59,13 +71,11 @@ const ForkLiftDetails: React.FC<
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Manufactured Year</Text>
-              <Text style={screenStyles.tblDescText}>
-                {item.manufactureYear}
-              </Text>
+              <Text style={screenStyles.tblDescText}>{item.year}</Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Milage</Text>
-              <Text style={screenStyles.tblDescText}>{item.milage}</Text>
+              <Text style={screenStyles.tblDescText}>{item?.mileage || 0}</Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Age</Text>
@@ -80,37 +90,43 @@ const ForkLiftDetails: React.FC<
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Purchase Date</Text>
-              <Text style={screenStyles.tblDescText}>{item.purchaseDate}</Text>
+              <Text style={screenStyles.tblDescText}>
+                {FORMAT_DATE_DD_MM_YYYY(item.purchase_date)}
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Rent Start Date</Text>
-              <Text style={screenStyles.tblDescText}>{item.rentStartDate}</Text>
+              <Text style={screenStyles.tblDescText}>
+                {FORMAT_DATE_DD_MM_YYYY(item.rent_start_date)}
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Rent End Date</Text>
-              <Text style={screenStyles.tblDescText}>{item.rentEndDate}</Text>
+              <Text style={screenStyles.tblDescText}>
+                {FORMAT_DATE_DD_MM_YYYY(item.rent_end_date)}
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>
                 Forklift Serial No.
               </Text>
-              <Text style={screenStyles.tblDescText}>
-                {item.forkliftSerialNo}
-              </Text>
+              <Text style={screenStyles.tblDescText}>{item.serial_number}</Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Battery Serial No.</Text>
               <Text style={screenStyles.tblDescText}>
-                {item.batterySerialNo}
+                {item.battery_serial_number}
               </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Fuel Type</Text>
-              <Text style={screenStyles.tblDescText}>{item.fuelType}</Text>
+              <Text style={screenStyles.tblDescText}>
+                {item.fuel_type_name}
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Fuel Capacity</Text>
-              <Text style={screenStyles.tblDescText}>{item.fuelCapacity}</Text>
+              <Text style={screenStyles.tblDescText}>{item.fuel_capacity}</Text>
             </View>
           </_DefaultCard>
 
@@ -123,21 +139,25 @@ const ForkLiftDetails: React.FC<
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Company</Text>
               <Text style={screenStyles.tblDescText}>
-                {item.insuranceCompany}
+                {item.insurance_company}
               </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Type</Text>
-              <Text style={screenStyles.tblDescText}>{item.insuranceType}</Text>
+              <Text style={screenStyles.tblDescText}>
+                {item.insurance_type}
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>No.</Text>
-              <Text style={screenStyles.tblDescText}>{item.insuranceNo}</Text>
+              <Text style={screenStyles.tblDescText}>
+                {item.insurance_number}
+              </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Expiry Date</Text>
               <Text style={screenStyles.tblDescText}>
-                {item.insuranceExpiryDate}
+                {FORMAT_DATE_DD_MM_YYYY(item.insurance_expiry_date)}
               </Text>
             </View>
           </_DefaultCard>
@@ -151,7 +171,7 @@ const ForkLiftDetails: React.FC<
           navigation.navigate("AddForklift", {
             mode: "edit",
             item: item,
-            _id: item._id,
+            _id: item.id.toString(),
           })
         }
       />
