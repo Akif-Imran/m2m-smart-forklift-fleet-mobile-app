@@ -34,6 +34,7 @@ type AddDriverRequest = {
   email: string;
   password: string;
   dob: string;
+  picture?: string;
 };
 type AddDriverResponse = ApiResponse<IDriver>;
 

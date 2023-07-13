@@ -8,15 +8,15 @@ import {
   _ListEmptyComponent,
   _ScrollFormLayout,
 } from "@components";
-import { faker } from "@faker-js/faker";
 import type { DriverStackScreenProps } from "@navigation-types";
 import { colors, gStyles } from "@theme";
 import { handleOpenWebsite } from "@utility";
 import moment from "moment";
 import { FAB } from "react-native-paper";
 import { baseURL } from "@api";
-import { getAssignedVehicles } from "@services";
+import { getAssignedVehicles, getDriverById } from "@services";
 import { useAuthContext } from "@context";
+import { useIsFocused } from "@react-navigation/native";
 
 const DriverDetails: React.FC<DriverStackScreenProps<"DriverDetails">> = ({
   navigation,
@@ -26,6 +26,7 @@ const DriverDetails: React.FC<DriverStackScreenProps<"DriverDetails">> = ({
   const {
     state: { token },
   } = useAuthContext();
+  const isFocused = useIsFocused();
   const [assignedVehicles, setAssignedVehicles] = React.useState<
     IGetAssignedVehicle[]
   >([]);
@@ -41,6 +42,21 @@ const DriverDetails: React.FC<DriverStackScreenProps<"DriverDetails">> = ({
       }
     });
   }, [token, _id]);
+
+  const refreshDriver = React.useCallback(() => {
+    getDriverById(token, _id).then((res) => {
+      if (res.success) {
+        navigation.setParams({ item: { ...res.data } });
+      }
+    });
+  }, [token, _id, navigation]);
+
+  React.useEffect(() => {
+    if (!isFocused) {
+      return;
+    }
+    refreshDriver();
+  }, [refreshDriver, isFocused]);
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
