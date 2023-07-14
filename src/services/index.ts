@@ -33,4 +33,7 @@ export {
   updateDriver,
   assignVehicles,
   getAssignedVehicles,
+  addDriverBehavior,
+  getDriverBehaviorByDriverId,
+  getBehaviorEventTypes as getEventTypes,
 } from "./drivers";

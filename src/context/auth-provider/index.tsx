@@ -15,6 +15,10 @@ interface AuthState {
   isLoading: boolean;
   token: string;
   user: ILoginUserData | null;
+  isAdmin: boolean;
+  isService: boolean;
+  isDriver: boolean;
+  isWarehouse: boolean;
 }
 
 type AuthAction =
@@ -40,12 +44,20 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         user: null,
         isAuthorized: false,
         isLoading: false,
+        isAdmin: false,
+        isService: false,
+        isDriver: false,
+        isWarehouse: false,
       };
     case "LOGIN":
       return {
         ...state,
         token: action.payload.token,
         user: action.payload.user,
+        isAdmin: action.payload.user.user_type === "Admin",
+        isDriver: action.payload.user.user_type === "Driver",
+        isService: action.payload.user.user_type === "Service",
+        isWarehouse: action.payload.user.user_type === "Warehouse",
         isAuthorized: true,
         isLoading: false,
       };
@@ -55,6 +67,10 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         ...action.payload,
         isLoading: false,
         isAuthorized: true,
+        isAdmin: action.payload.user.user_type === "Admin",
+        isDriver: action.payload.user.user_type === "Driver",
+        isService: action.payload.user.user_type === "Service",
+        isWarehouse: action.payload.user.user_type === "Warehouse",
       };
     default:
       return state;
@@ -66,6 +82,10 @@ const initAuthState: AuthState = {
   isLoading: true, // note that this is now true
   token: "",
   user: null,
+  isAdmin: false,
+  isDriver: false,
+  isService: false,
+  isWarehouse: false,
 };
 
 const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {

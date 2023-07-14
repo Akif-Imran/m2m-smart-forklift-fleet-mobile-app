@@ -58,3 +58,37 @@ interface AssignedVehicle {
 type AssignVehicleResponse = ApiResponse<AssignedVehicle[]>;
 
 type GetAssignedVehicleResponse = ApiResponse<IGetAssignedVehicle[]>;
+
+type AddDriverBehaviorRequest = {
+  driver_id: number;
+  event_type_id: number;
+  behavior_date: string;
+  description: string;
+};
+
+type AddDriverBehaviorResponse = ApiResponse<{
+  id: number;
+  driver_id: number;
+  event_type_id: number;
+  behavior_date: string;
+  description: string;
+  user_id: number;
+  updatedAt: string;
+  createdAt: string;
+}>;
+
+type DriverBehaviorResponse = ApiResponse<
+  ListResponse<{
+    id: number;
+    behavior_date: string;
+    description: string;
+    event_type: null;
+    EventType: null;
+  }>
+>;
+
+type DriverBehaviorEventType = ApiResponse<
+  {
+    id: number;
+  }[]
+>;

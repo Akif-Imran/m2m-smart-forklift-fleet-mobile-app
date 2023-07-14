@@ -11,6 +11,7 @@ import type {
   AuthStackScreenProps,
   MainTabsParamsList,
 } from "@navigation-types";
+import { useAuthContext } from "@context";
 
 import { ProfileSettingsStack } from "../profile-settings-stack"; //not imported from @navigation to avoid cycle
 import { DashboardStack } from "../dashboard-stack"; //not imported from @navigation to avoid cycle
@@ -24,6 +25,9 @@ import { styles } from "./styles";
 const Tab = createBottomTabNavigator<MainTabsParamsList>();
 
 const RootTabs: React.FC<AuthStackScreenProps<"RootTabs">> = ({}) => {
+  const {
+    state: { isDriver, isWarehouse, isAdmin },
+  } = useAuthContext();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -36,38 +40,42 @@ const RootTabs: React.FC<AuthStackScreenProps<"RootTabs">> = ({}) => {
       }}
       initialRouteName="DashboardStack"
     >
-      <Tab.Screen
-        name="DashboardStack"
-        component={DashboardStack}
-        options={{
-          title: "Dashboard",
-          tabBarIcon: ({ focused }) => (
-            <Image
-              source={require("../../assets/images/dashboard.png")}
-              style={{
-                height: 18,
-                width: 18,
-                tintColor: focused ? colors.primary : colors.titleText,
-              }}
-              resizeMode="contain"
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="ForkliftStack"
-        component={ForkliftStack}
-        options={{
-          title: "Forklifts",
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="forklift"
-              color={focused ? colors.primary : colors.titleText}
-              size={25}
-            />
-          ),
-        }}
-      />
+      {(isAdmin || isWarehouse) && (
+        <Tab.Screen
+          name="DashboardStack"
+          component={DashboardStack}
+          options={{
+            title: "Dashboard",
+            tabBarIcon: ({ focused }) => (
+              <Image
+                source={require("../../assets/images/dashboard.png")}
+                style={{
+                  height: 18,
+                  width: 18,
+                  tintColor: focused ? colors.primary : colors.titleText,
+                }}
+                resizeMode="contain"
+              />
+            ),
+          }}
+        />
+      )}
+      {(isAdmin || isWarehouse || isDriver) && (
+        <Tab.Screen
+          name="ForkliftStack"
+          component={ForkliftStack}
+          options={{
+            title: "Forklifts",
+            tabBarIcon: ({ focused }) => (
+              <MaterialCommunityIcons
+                name="forklift"
+                color={focused ? colors.primary : colors.titleText}
+                size={25}
+              />
+            ),
+          }}
+        />
+      )}
       {/* <Tab.Screen
         name="ServicesStack"
         component={ServicesStack}
@@ -82,20 +90,22 @@ const RootTabs: React.FC<AuthStackScreenProps<"RootTabs">> = ({}) => {
           ),
         }}
       /> */}
-      <Tab.Screen
-        name="DriversStack"
-        component={DriverStack}
-        options={{
-          title: "Drivers",
-          tabBarIcon: ({ focused }) => (
-            <FontAwesome
-              name="users"
-              color={focused ? colors.primary : colors.titleText}
-              size={20}
-            />
-          ),
-        }}
-      />
+      {(isAdmin || isWarehouse) && (
+        <Tab.Screen
+          name="DriversStack"
+          component={DriverStack}
+          options={{
+            title: "Drivers",
+            tabBarIcon: ({ focused }) => (
+              <FontAwesome
+                name="users"
+                color={focused ? colors.primary : colors.titleText}
+                size={20}
+              />
+            ),
+          }}
+        />
+      )}
       {/* <Tab.Screen
         name="ReportsStack"
         component={ReportsStack}

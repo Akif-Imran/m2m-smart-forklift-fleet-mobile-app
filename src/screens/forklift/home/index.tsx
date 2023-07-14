@@ -31,7 +31,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
   navigation,
 }) => {
   const {
-    state: { token },
+    state: { token, isAdmin },
   } = useAuthContext();
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [forklifts, setForklifts] = React.useState<IVehicle[]>([]);
@@ -368,18 +368,19 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
           />
         }
       />
-
-      <FAB
-        icon="plus"
-        style={gStyles.fab}
-        color={colors.white}
-        // onLongPress={() => addInfo()}
-        onPress={() =>
-          navigation.navigate("AddForklift", {
-            mode: "add",
-          })
-        }
-      />
+      {isAdmin && (
+        <FAB
+          icon="plus"
+          style={gStyles.fab}
+          color={colors.white}
+          // onLongPress={() => addInfo()}
+          onPress={() =>
+            navigation.navigate("AddForklift", {
+              mode: "add",
+            })
+          }
+        />
+      )}
     </SafeAreaView>
   );
 };

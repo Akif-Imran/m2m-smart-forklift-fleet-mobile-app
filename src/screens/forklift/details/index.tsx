@@ -9,11 +9,15 @@ import { ForkliftStatusColor } from "@constants";
 import { FAB } from "react-native-paper";
 import { baseURL } from "@api";
 import { FORMAT_DATE_DD_MM_YYYY } from "@utility";
+import { useAuthContext } from "@context";
 
 const ForkLiftDetails: React.FC<
   ForkliftStackScreenProps<"ForkLiftDetails">
 > = ({ navigation, route }) => {
   const { item } = route.params;
+  const {
+    state: { isAdmin },
+  } = useAuthContext();
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
@@ -163,18 +167,20 @@ const ForkLiftDetails: React.FC<
           </_DefaultCard>
         </>
       </_ScrollFormLayout>
-      <FAB
-        icon="pencil"
-        style={gStyles.fab}
-        color={colors.white}
-        onPress={() =>
-          navigation.navigate("AddForklift", {
-            mode: "edit",
-            item: item,
-            _id: item.id.toString(),
-          })
-        }
-      />
+      {isAdmin && (
+        <FAB
+          icon="pencil"
+          style={gStyles.fab}
+          color={colors.white}
+          onPress={() =>
+            navigation.navigate("AddForklift", {
+              mode: "edit",
+              item: item,
+              _id: item.id.toString(),
+            })
+          }
+        />
+      )}
     </SafeAreaView>
   );
 };

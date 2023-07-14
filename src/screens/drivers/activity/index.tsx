@@ -16,12 +16,17 @@ import { ActivityFilters } from "@constants";
 import { faker } from "@faker-js/faker";
 import { ToastService } from "@utility";
 import type { DriverStackScreenProps } from "@navigation-types";
+import { useAuthContext } from "@context";
 
 import { _DriverActivityCard } from "../components";
 
 const Activity: React.FC<DriverStackScreenProps<"Activity">> = ({
   navigation,
 }) => {
+  //FIXME - remove isAdmin from here. (only here for test);
+  const {
+    state: { isWarehouse, isAdmin },
+  } = useAuthContext();
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [drivers, setDrivers] = React.useState<IDriverActivity[]>([]);
   const [searchedDrivers, setSearchedDrivers] = React.useState<
@@ -209,17 +214,19 @@ const Activity: React.FC<DriverStackScreenProps<"Activity">> = ({
           />
         }
       />
-      <FAB
-        icon="plus"
-        style={gStyles.fab}
-        color={colors.white}
-        onLongPress={() => addInfo()}
-        onPress={() =>
-          navigation.navigate("AddActivity", {
-            mode: "add",
-          })
-        }
-      />
+      {(isWarehouse || isAdmin) && (
+        <FAB
+          icon="plus"
+          style={gStyles.fab}
+          color={colors.white}
+          onLongPress={() => addInfo()}
+          onPress={() =>
+            navigation.navigate("AddActivity", {
+              mode: "add",
+            })
+          }
+        />
+      )}
     </SafeAreaView>
   );
 };

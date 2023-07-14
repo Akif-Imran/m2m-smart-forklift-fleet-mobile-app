@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { StyleSheet, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,6 +18,9 @@ import { useFormik } from "formik";
 import { ToastService } from "@utility";
 import { Button, TextInput } from "react-native-paper";
 import moment from "moment";
+import { addDriverBehavior, getDrivers, getEventTypes } from "@services";
+import { useAuthContext } from "@context";
+import { getBehaviorEventTypes } from "src/services/drivers";
 
 interface IForm
   extends Omit<IDriverActivity, "_id" | "image" | "name" | "email"> {
@@ -35,7 +39,16 @@ const AddActivity: React.FC<DriverStackScreenProps<"AddActivity">> = ({
   route,
 }) => {
   const { mode } = route.params;
+  const {
+    state: { token },
+  } = useAuthContext();
   const [isLoading, setIsLoading] = React.useState(false);
+  const [driverDropDownList, setDriverDropDownList] = React.useState<
+    { label: string; value: string }[]
+  >([]);
+  const [eventDropDownList, setEventDropDownList] = React.useState<
+    { label: string; value: string }[]
+  >([]);
   const [behaviorDate, setBehaviorDate] = React.useState<Date>(new Date());
   const [showBehaviorDatePicker, setShowBehaviorDatePicker] =
     React.useState(false);
@@ -44,19 +57,19 @@ const AddActivity: React.FC<DriverStackScreenProps<"AddActivity">> = ({
     React.useState(false);
   const [eventDropdownVisible, setEventDropdownVisible] = React.useState(false);
 
-  const driverDropDownList = [
-    { label: "Driver 1", value: "driver1" },
-    { label: "Driver 2", value: "driver2" },
-    { label: "Driver 3", value: "driver3" },
-    { label: "Driver 4", value: "driver4" },
-  ];
+  // const driverDropDownList = [
+  //   { label: "Driver 1", value: "driver1" },
+  //   { label: "Driver 2", value: "driver2" },
+  //   { label: "Driver 3", value: "driver3" },
+  //   { label: "Driver 4", value: "driver4" },
+  // ];
 
-  const eventDropDownList = [
-    { label: "Type 1", value: "type1" },
-    { label: "Type 2", value: "type2" },
-    { label: "Type 3", value: "type3" },
-    { label: "Type 4", value: "type4" },
-  ];
+  // const eventDropDownList = [
+  //   { label: "Type 1", value: "type1" },
+  //   { label: "Type 2", value: "type2" },
+  //   { label: "Type 3", value: "type3" },
+  //   { label: "Type 4", value: "type4" },
+  // ];
 
   const form = useFormik<IForm>({
     initialValues: {
@@ -67,16 +80,64 @@ const AddActivity: React.FC<DriverStackScreenProps<"AddActivity">> = ({
     },
     onSubmit: (values, helpers) => {
       setIsLoading(true);
-      console.log(values);
-      setTimeout(() => {
-        setIsLoading(false);
-        helpers.resetForm();
-        ToastService.show("Activity added successfully");
-        navigation.goBack();
-      }, 1800);
+      addDriverBehavior(token, {
+        driver_id: parseInt(values.driver, 10),
+        behavior_date: values.date,
+        description: values.description,
+        //FIXME - get event type and add them to list
+        event_type_id: parseInt(values.eventType, 10),
+      })
+        .then((res) => {
+          ToastService.show(res?.message || "");
+          if (res.success) {
+            helpers.resetForm();
+            navigation.goBack();
+          }
+        })
+        .catch((_err) => {
+          ToastService.show("Error occurred");
+          console.log(_err.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     },
     validationSchema: scheme,
   });
+
+  const fetchDrivers = React.useCallback(() => {
+    getDrivers(token)
+      .then((res) => {
+        if (res.success) {
+          const list = res.data.rows.map((item) => ({
+            label: item.name,
+            value: item.id.toString(),
+          }));
+          setDriverDropDownList(list);
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Something went wrong");
+      });
+  }, [token]);
+
+  const fetchEventTypes = React.useCallback(() => {
+    getBehaviorEventTypes(token)
+      .then((res) => {
+        if (res.success) {
+          const list = res.data.map((value) => ({
+            label: value.id.toString(),
+            value: value.id.toString(),
+          }));
+          //FIXME - remove this self added record
+          list.push({ label: "Type 01", value: "1" });
+          setEventDropDownList(list);
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Event Type Error");
+      });
+  }, [token]);
 
   React.useEffect(() => {
     form.setValues((prev) => ({
@@ -85,6 +146,11 @@ const AddActivity: React.FC<DriverStackScreenProps<"AddActivity">> = ({
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [behaviorDate]);
+
+  React.useEffect(() => {
+    fetchDrivers();
+    fetchEventTypes();
+  }, [fetchDrivers, fetchEventTypes]);
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>

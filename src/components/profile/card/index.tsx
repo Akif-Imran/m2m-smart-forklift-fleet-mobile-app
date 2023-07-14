@@ -43,7 +43,7 @@ const Card: FC<CardProps> = ({ data }) => {
         <Text style={gStyles.tblDescText}>
           {user?.email || "example.user@gmail.com"}
         </Text>
-        <Text style={gStyles.tblDescText}>(Salesman)</Text>
+        <Text style={gStyles.tblDescText}>({user?.user_type})</Text>
       </View>
       <View style={styles.forwardContainer}>
         <MaterialIcons

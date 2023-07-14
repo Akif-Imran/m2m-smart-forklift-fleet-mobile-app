@@ -58,6 +58,10 @@ export const urls = {
     assignVehicles: `${baseURL}/assign_driver`, //this assigns multiple vehicles to a driver
     getAssignedVehicles: (driverId: string) =>
       `${baseURL}/get_assigned_vehicle/${driverId}`,
+    addBehavior: `${baseURL}/add_driver_behavior`,
+    getBehaviorByDriverId: (driverId: string) =>
+      `${baseURL}/get_driver_behavior/${driverId}`,
+    getBehaviorEventType: `${baseURL}/get_event_type`,
   },
   poi: {
     list: `${BASE_POI_URL}/getAll`,

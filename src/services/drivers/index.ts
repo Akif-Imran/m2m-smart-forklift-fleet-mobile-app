@@ -70,3 +70,35 @@ export const getAssignedVehicles = async (token: string, driverId: string) => {
   );
   return response.data;
 };
+
+export const addDriverBehavior = async (
+  token: string,
+  body: AddDriverBehaviorRequest
+): Promise<AddDriverBehaviorResponse> => {
+  const response = await apiPost<
+    AddDriverBehaviorResponse,
+    AddDriverBehaviorRequest
+  >(urls.driver.addBehavior, token, body);
+  return response.data;
+};
+
+export const getDriverBehaviorByDriverId = async (
+  token: string,
+  driverId: string
+): Promise<DriverBehaviorResponse> => {
+  const response = await apiGet<DriverBehaviorResponse>(
+    urls.driver.getBehaviorByDriverId(driverId),
+    token
+  );
+  return response.data;
+};
+
+export const getBehaviorEventTypes = async (
+  token: string
+): Promise<DriverBehaviorEventType> => {
+  const response = await apiGet<DriverBehaviorEventType>(
+    urls.driver.getBehaviorEventType,
+    token
+  );
+  return response.data;
+};

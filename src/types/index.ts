@@ -1,4 +1,4 @@
-type IUserType = "Admin" | "Warehouse" | "Driver";
+type IUserType = "Admin" | "Warehouse" | "Driver" | "Service";
 interface ILoginUserData {
   id: number;
   name: string;
