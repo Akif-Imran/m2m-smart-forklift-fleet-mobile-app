@@ -136,6 +136,7 @@ export type ProfileSettingsStackParamsList = {
   Help: undefined;
   ServicesStack: NavigatorScreenParams<ServiceStackParamsList>;
   ReportsStack: NavigatorScreenParams<ReportsStackParamsList>;
+  DriverWorkingTime: undefined;
 };
 
 export type ProfileSettingsStackScreenProps<

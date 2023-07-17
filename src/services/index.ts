@@ -47,4 +47,5 @@ export {
   getCheckList,
   getTaskList,
   qrScanDeviceDetails,
+  addDriverWorkingTime,
 } from "./drivers";

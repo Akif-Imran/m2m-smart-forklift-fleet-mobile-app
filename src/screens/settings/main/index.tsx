@@ -119,6 +119,16 @@ export const Settings: React.FC<
 
   const multiData4: Array<MultiCardItem> = [
     {
+      id: 9,
+      icon: <MaterialIcons name="timer" color={colors.heavyGray} size={20} />,
+      bgColor: colors.mediumGray,
+      title: "Driver Working Time",
+      color: colors.titleText,
+      onPress: () => {
+        navigation.navigate("DriverWorkingTime");
+      },
+    },
+    {
       id: 6,
       icon: (
         <MaterialIcons

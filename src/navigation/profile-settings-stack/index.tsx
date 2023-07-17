@@ -5,6 +5,7 @@ import type { ProfileSettingsStackParamsList } from "@navigation-types";
 import {
   About,
   ChangePassword,
+  DriverWorkingTime,
   Help,
   Pois,
   SelectIcons,
@@ -87,7 +88,13 @@ const ProfileSettingsStack: FC = () => {
           headerShown: true,
         }}
       />
-
+      <Stack.Screen
+        name="DriverWorkingTime"
+        component={DriverWorkingTime}
+        options={{
+          headerTitle: "",
+        }}
+      />
       <Stack.Screen
         name="ServicesStack"
         component={ServicesStack}

@@ -120,3 +120,10 @@ type EndTaskRequest = {
 type EndTaskResponse = MessageResponse;
 
 type GetTaskListResponse = ApiResponse<ListResponse<ITask[]>>;
+
+type AddWorkingTimeRequest = {
+  id: number;
+  start_date_time: string;
+  end_date_time: string;
+};
+type AddWorkingTimeResponse = ApiResponse<IDriver>;

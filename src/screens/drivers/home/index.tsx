@@ -192,16 +192,16 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({
         title="Drivers"
         left={[]}
         right={[
-          {
-            icon: (
-              <MaterialCommunityIcons
-                name="barcode-scan"
-                size={24}
-                color={colors.primary}
-              />
-            ),
-            onPress: () => navigation.navigate("BarcodeScanner"),
-          },
+          // {
+          //   icon: (
+          //     <MaterialCommunityIcons
+          //       name="barcode-scan"
+          //       size={24}
+          //       color={colors.primary}
+          //     />
+          //   ),
+          //   onPress: () => navigation.navigate("BarcodeScanner"),
+          // },
           {
             icon: (
               <Ionicons name="notifications" size={24} color={colors.primary} />

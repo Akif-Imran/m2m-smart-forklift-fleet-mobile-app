@@ -68,7 +68,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         user: action.payload.user,
         isAdmin: action.payload.user.user_type === "Admin",
         isDriver: action.payload.user.user_type === "Driver",
-        isService: action.payload.user.user_type === "Service",
+        isService: action.payload.user.user_type === "Services",
         isWarehouse: action.payload.user.user_type === "Warehouse",
         isAuthorized: true,
         isLoading: false,

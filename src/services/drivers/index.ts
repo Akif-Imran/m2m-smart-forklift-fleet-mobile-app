@@ -158,3 +158,15 @@ export const getTaskList = async (
   );
   return response.data;
 };
+
+export const addDriverWorkingTime = async (
+  token: string,
+  body: AddWorkingTimeRequest
+) => {
+  const response = await apiPost<AddWorkingTimeResponse, AddWorkingTimeRequest>(
+    urls.driver.addDriverWorkingTime,
+    token,
+    body
+  );
+  return response.data;
+};

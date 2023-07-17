@@ -6,3 +6,4 @@ export { Pois } from "./pois";
 export { VehicleIcons } from "./vehicle-icons";
 export { SelectIcons } from "./select-icons";
 export { ViewPoiOnMap } from "./view-poi-on-map";
+export { DriverWorkingTime } from "./driver-working-time";
