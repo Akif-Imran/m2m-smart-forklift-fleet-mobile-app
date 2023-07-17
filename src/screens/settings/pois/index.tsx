@@ -69,7 +69,6 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
   }, []);
 
   const handleDeleteConfirm = () => {
-    ToastService.show("Demo delete");
     setConfirmDeleteVisible(false);
     deletePoi(token, toBeDeletedPoiId.toString())
       .then((res) => {

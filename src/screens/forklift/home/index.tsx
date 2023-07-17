@@ -22,6 +22,7 @@ import {
 } from "@expo/vector-icons";
 import { deleteVehicle, getDashCounts, getVehicleList } from "@services";
 import { useAuthContext } from "@context";
+import { useIsFocused } from "@react-navigation/native";
 
 import { _ForkliftListCard } from "../components";
 interface ForkliftCounts {
@@ -34,6 +35,7 @@ interface ForkliftCounts {
 const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
   navigation,
 }) => {
+  const isFocused = useIsFocused();
   const {
     state: { token, isAdmin, isDriver },
   } = useAuthContext();
@@ -178,21 +180,24 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
   //     });
   // }, []);
 
-  const fetchVehicles = React.useCallback(() => {
-    setIsFetching(true);
-    getVehicleList(token)
-      .then((res) => {
-        if (res.success) {
-          setForklifts(res.data.rows);
-        }
-      })
-      .catch((_err) => {
-        ToastService.show("Error occurred");
-      })
-      .finally(() => {
-        setIsFetching(false);
-      });
-  }, [token]);
+  const fetchVehicles = React.useCallback(
+    (withLoader = true) => {
+      setIsFetching(withLoader);
+      getVehicleList(token)
+        .then((res) => {
+          if (res.success) {
+            setForklifts(res.data.rows);
+          }
+        })
+        .catch((_err) => {
+          ToastService.show("Error occurred");
+        })
+        .finally(() => {
+          setIsFetching(false);
+        });
+    },
+    [token]
+  );
 
   React.useEffect(() => {
     if (!forklifts) {
@@ -213,8 +218,8 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
       return;
     }
     fetchCounts();
-    fetchVehicles();
-  }, [token, fetchCounts, fetchVehicles]);
+    fetchVehicles(false);
+  }, [token, fetchCounts, fetchVehicles, isFocused]);
 
   const right = [
     {

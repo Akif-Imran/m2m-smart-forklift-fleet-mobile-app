@@ -162,18 +162,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({ route }) => {
       if (currentFenceMode === "add") {
         addGeoFence();
       } else {
-        setCircles((prev) => {
-          const newArray = [...prev];
-          const index = newArray.findIndex(
-            (circle) => circle.id === selectedFenceId
-          );
-          newArray[index].center = region;
-          newArray[index].radius = radius;
-          newArray[index].name = name;
-          return newArray;
-        });
-        setRadius(1);
-        setFenceMode("add");
+        editGeoFence();
       }
     }
   };
@@ -296,6 +285,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({ route }) => {
         setIsLoading(false);
       });
   };
+
   const editGeoFence = () => {
     setIsLoading(true);
     updateGeoFence(token, {
