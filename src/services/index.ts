@@ -15,6 +15,12 @@ export {
   updatePoi,
   getFuelTypes,
   getNotificationsList,
+  createGeoFence,
+  updateGeoFence,
+  deleteGeoFence,
+  getGeoFenceById,
+  getGeoFenceByDeviceId,
+  getGeoFenceList,
 } from "./devices-vehicles";
 export {
   getServiceCounts,

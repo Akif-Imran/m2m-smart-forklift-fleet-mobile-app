@@ -7,6 +7,7 @@ export const baseURL = "http://www.sealtracking.com:4600";
 export const BASE_USER_URL = `${baseURL}/user`;
 export const BASE_DEVICE_URL = `${baseURL}/device`;
 export const BASE_VEHICLE_URL = `${baseURL}/vehicle`;
+export const BASE_GEO_FENCE_URL = `${baseURL}/geofence`;
 export const BASE_SERVICE_URL = `${baseURL}/service`;
 export const BASE_DRIVER_URL = `${baseURL}/driver`;
 export const BASE_POI_URL = `${baseURL}/poi`;
@@ -46,6 +47,17 @@ export const urls = {
     update: `${BASE_VEHICLE_URL}/update`,
     delete: (vehicleId: string) => `${BASE_VEHICLE_URL}/delete?id=${vehicleId}`,
     getFuelTypes: `${BASE_VEHICLE_URL}/getFuelTypes`,
+  },
+  geoFence: {
+    create: `${BASE_GEO_FENCE_URL}/create`,
+    update: `${BASE_GEO_FENCE_URL}/update`,
+    list: `${BASE_GEO_FENCE_URL}/getall`,
+    getById: (geoFenceId: string) =>
+      `${BASE_GEO_FENCE_URL}/getById?id=${geoFenceId}`,
+    getByDeviceId: (deviceId: string) =>
+      `${BASE_GEO_FENCE_URL}/getAllByDeviceId?device_id=${deviceId}`,
+    delete: (geoFenceId: string) =>
+      `${BASE_GEO_FENCE_URL}/delete?id=${geoFenceId}`,
   },
   services: {
     counts: `${BASE_SERVICE_URL}/statusCount`,

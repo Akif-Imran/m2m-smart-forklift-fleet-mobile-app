@@ -58,7 +58,7 @@ export type ForkliftStackParamsList = {
         point: IMapPoint;
       }
     | { mode: "multiple"; points: IMapPoint[] };
-  Fences: undefined;
+  Fences: DetailsType<IVehicle>;
   Trips: undefined;
   Playback: {
     coords: LatLng[];

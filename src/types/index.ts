@@ -223,6 +223,21 @@ interface IPOI {
   updatedAt: string;
 }
 
+interface IGeoFence {
+  id: number;
+  display_name: string;
+  latitude: string;
+  longitude: string;
+  radius: string;
+  device_id: number;
+  is_enabled: number;
+  alert_enter: number;
+  alert_exit: number;
+  user_id: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface INotification {
   title: string;
   body: string;

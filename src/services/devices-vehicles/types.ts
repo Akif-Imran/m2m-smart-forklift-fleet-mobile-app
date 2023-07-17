@@ -88,3 +88,25 @@ type UpdatePOIResponse = ApiResponse<POIPostResponseBase, "is_active">;
 type DeletePoiResponse = MessageResponse;
 
 type NotificationListResponse = ApiResponse<INotification[], "result">;
+
+type GeoFenceRequestBase = {
+  display_name: string;
+  latitude: string;
+  longitude: string;
+  radius: string;
+};
+type GeoFenceAlertAddon = {
+  is_enabled: number;
+  alert_enter: number;
+  alert_exit: number;
+};
+
+type AddGeoFenceRequest = { device_id: number } & GeoFenceRequestBase;
+type AddGeoFenceResponse = ApiResponse<
+  Omit<IGeoFence, keyof GeoFenceAlertAddon>
+>;
+type UpdateGeoFenceRequest = { id: number } & Partial<GeoFenceRequestBase>;
+type UpdateGeoFenceResponse = ApiResponse<IGeoFence>;
+type GeoFenceListResponse = ApiResponse<ListResponse<IGeoFence[]>>;
+type GeoFenceByIdResponse = ApiResponse<IGeoFence>;
+type DeleteGeoFenceResponse = MessageResponse;

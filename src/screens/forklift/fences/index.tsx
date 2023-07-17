@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {
   Image,
   Platform,
@@ -39,28 +40,40 @@ import { GOOGLE_API_KEY, GOOGLE_PLACES_API } from "@api";
 import axios from "axios";
 import { faker } from "@faker-js/faker";
 import { useSafeAreaDimensions } from "@hooks";
+import {
+  createGeoFence,
+  deleteGeoFence,
+  getGeoFenceByDeviceId,
+  getGeoFenceList,
+  updateGeoFence,
+} from "@services";
+import { useAuthContext } from "@context";
 
 import { styles } from "./styles";
 
 interface ICircle {
-  _id: string;
+  id: number;
   center: LatLng;
   radius: number;
   name: string;
 }
 interface IPolygon {
-  _id: string;
+  id: number;
   points: LatLng[];
   name: string;
 }
 
-const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
+const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({ route }) => {
   //TODO - convert this into custome hook and return the values.
   // const { top: TOP_INSET } = useSafeAreaInsets();
   // const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = useWindowDimensions();
   // const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
   // const LATITUDE_DELTA = 0.0922;
   // const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+  const { item } = route.params;
+  const {
+    state: { token },
+  } = useAuthContext();
   const {
     TOP_INSET,
     SCREEN_HEIGHT,
@@ -98,7 +111,8 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
   const [_searchedLocation, setSearchedLocation] =
     React.useState<LatLng>(region);
   const [fenceMode, setFenceMode] = React.useState<"add" | "edit">("add");
-  const [selectedFenceId, setSelectedFenceId] = React.useState("");
+  const [selectedFenceId, setSelectedFenceId] = React.useState<number>(0);
+  const [toBeDeletedFenceId, setToBeDeletedFenceId] = React.useState<number>(0);
   const [name, setName] = React.useState("");
 
   const openMenu = () =>
@@ -115,91 +129,74 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
       return;
     }
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      ToastService.show("Fence added successfully");
-      setControlMode("default");
-      if (type === "poly") {
-        if (currentFenceMode === "add") {
-          setPolygons((prev) => {
-            const newArray = [
-              ...prev,
-              {
-                points: polygonPoints,
-                name: name,
-                _id: faker.database.mongodbObjectId(),
-              },
-            ];
-            return newArray;
-          });
-          setPolygonPoints([]);
-        } else {
-          setPolygons((prev) => {
-            const newArray = [...prev];
-            const index = newArray.findIndex(
-              (item) => item._id === selectedFenceId
-            );
-            newArray[index].points = polygonPoints;
-            newArray[index].name = name;
-            return newArray;
-          });
-          setPolygonPoints([]);
-          setFenceMode("add");
-        }
+    setControlMode("default");
+    if (type === "poly") {
+      if (currentFenceMode === "add") {
+        setPolygons((prev) => {
+          const newArray = [
+            ...prev,
+            {
+              points: polygonPoints,
+              name: name,
+              id: faker.number.int({ min: 1, max: 100000 }),
+            },
+          ];
+          return newArray;
+        });
+        setPolygonPoints([]);
+      } else {
+        setPolygons((prev) => {
+          const newArray = [...prev];
+          const index = newArray.findIndex(
+            (poly) => poly.id === selectedFenceId
+          );
+          newArray[index].points = polygonPoints;
+          newArray[index].name = name;
+          return newArray;
+        });
+        setPolygonPoints([]);
+        setFenceMode("add");
       }
-      if (type === "circle") {
-        if (currentFenceMode === "add") {
-          setCircles((prev) => {
-            const newArray = [
-              ...prev,
-              {
-                center: region,
-                radius: radius,
-                name: name,
-                _id: faker.database.mongodbObjectId(),
-              },
-            ];
-            return newArray;
-          });
-          setRadius(1);
-        } else {
-          setCircles((prev) => {
-            const newArray = [...prev];
-            const index = newArray.findIndex(
-              (item) => item._id === selectedFenceId
-            );
-            newArray[index].center = region;
-            newArray[index].radius = radius;
-            newArray[index].name = name;
-            return newArray;
-          });
-          setRadius(1);
-          setFenceMode("add");
-        }
+    }
+    if (type === "circle") {
+      if (currentFenceMode === "add") {
+        addGeoFence();
+      } else {
+        setCircles((prev) => {
+          const newArray = [...prev];
+          const index = newArray.findIndex(
+            (circle) => circle.id === selectedFenceId
+          );
+          newArray[index].center = region;
+          newArray[index].radius = radius;
+          newArray[index].name = name;
+          return newArray;
+        });
+        setRadius(1);
+        setFenceMode("add");
       }
-      setName("");
-    }, 2000);
+    }
   };
 
   const editCircle = (circle: ICircle) => {
     setFenceMode("edit");
-    setSelectedFenceId(circle._id);
+    setSelectedFenceId(circle.id);
     closeMenu();
     setRadius(circle.radius);
     setName(circle.name);
     setControlMode("circle");
     //TODO - extract method just so i have to pass lat lng only
-    mapRef.current?.animateToRegion({
-      latitude: circle.center.latitude,
-      longitude: circle.center.longitude,
-      latitudeDelta: LATITUDE_DELTA,
-      longitudeDelta: LONGITUDE_DELTA,
+    mapRef.current?.animateCamera({
+      center: {
+        latitude: circle.center.latitude,
+        longitude: circle.center.longitude,
+      },
     });
   };
 
   const editPoly = (poly: IPolygon) => {
     setFenceMode("edit");
-    setSelectedFenceId(poly._id);
+    setSelectedFenceId(poly.id);
     closeMenu();
     mapRef.current?.fitToCoordinates(poly.points, {
       animated: true,
@@ -215,14 +212,14 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
     setControlMode("poly");
   };
 
-  const handleDelete = React.useCallback((fenceId: string) => {
+  const handleDelete = React.useCallback((fenceId: number) => {
+    setToBeDeletedFenceId(fenceId);
     setConfirmDeleteVisible(true);
     console.log("handle delete", fenceId);
   }, []);
 
   const handleDeleteConfirm = () => {
-    ToastService.show("Demo delete");
-    setConfirmDeleteVisible(false);
+    removeGeoFence();
   };
 
   const handleDeleteCancel = () => {
@@ -258,8 +255,11 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
   const reset = () => {
     setControlMode("default");
     setFenceMode("add");
-    setSelectedFenceId("");
+    setSelectedFenceId(0);
+    setRadius(1);
+    setName("");
   };
+
   const fitToCoordinates = (points: LatLng[], padding = 80) => {
     mapRef?.current?.fitToCoordinates(points, {
       animated: true,
@@ -271,6 +271,92 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
       },
     });
   };
+
+  const addGeoFence = () => {
+    setIsLoading(true);
+    createGeoFence(token, {
+      device_id: item.device_id,
+      display_name: name,
+      latitude: region.latitude.toString(),
+      longitude: region.longitude.toString(),
+      radius: radius.toString(),
+    })
+      .then((res) => {
+        ToastService.show(res?.message || "");
+        if (res.success) {
+          reset();
+          fetchGeoFences();
+        }
+      })
+      .catch((_err) => {
+        console.log(_err?.message);
+        ToastService.show("Add fence error");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+  const editGeoFence = () => {
+    setIsLoading(true);
+    updateGeoFence(token, {
+      id: selectedFenceId,
+      display_name: name,
+      //FIXME - uncomment following when api endpoint is updated.
+      // latitude: region.latitude.toString(),
+      // longitude: region.longitude.toString(),
+      // radius: radius.toString(),
+    })
+      .then((res) => {
+        ToastService.show(res?.message || "");
+        if (res.success) {
+          reset();
+          fetchGeoFences();
+        }
+      })
+      .catch((_err) => {
+        console.log(_err?.message);
+        ToastService.show("Add fence error");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const removeGeoFence = () => {
+    setConfirmDeleteVisible(false);
+    setIsLoading(true);
+    deleteGeoFence(token, toBeDeletedFenceId.toString())
+      .then((res) => {
+        ToastService.show(res?.message || "");
+        if (res.success) {
+          fetchGeoFences();
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Delete fence error");
+        console.log(_err?.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const fetchGeoFences = React.useCallback(() => {
+    getGeoFenceByDeviceId(token, item.device_id.toString()).then((res) => {
+      if (res.success) {
+        const circlesList: ICircle[] = res.data.rows.map((value) => ({
+          id: value.id,
+          center: {
+            latitude: parseFloat(value.latitude),
+            longitude: parseFloat(value.longitude),
+          },
+          name: value.display_name,
+          radius: parseFloat(value.radius),
+        }));
+        setCircles(circlesList);
+      }
+    });
+  }, [token, item.device_id]);
 
   React.useEffect(() => {
     if (!placeId) {
@@ -308,6 +394,13 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
       });
   }, [placeId, LONGITUDE_DELTA, LATITUDE_DELTA]);
 
+  React.useEffect(() => {
+    if (!token) {
+      return;
+    }
+    fetchGeoFences();
+  }, [token, fetchGeoFences]);
+
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
       <View style={{ height: theme.header.height }} />
@@ -337,13 +430,13 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
       >
         {polygons.map((polygon, _index) => {
           if (fenceMode === "edit") {
-            if (polygon._id !== selectedFenceId) {
+            if (polygon.id !== selectedFenceId) {
               return (
                 <Polygon
                   coordinates={polygon.points}
                   fillColor={colors.titleTextTransparent60}
                   strokeWidth={0.01}
-                  key={polygon._id}
+                  key={polygon.id}
                 />
               );
             } else {
@@ -355,20 +448,20 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                 coordinates={polygon.points}
                 fillColor={colors.secondaryTransparent60}
                 strokeWidth={0.01}
-                key={polygon._id}
+                key={polygon.id}
               />
             );
           }
         })}
         {circles.map((circle) => {
           if (fenceMode === "edit") {
-            if (circle._id !== selectedFenceId) {
+            if (circle.id !== selectedFenceId) {
               return (
                 <Circle
-                  key={circle._id}
+                  key={circle.id}
                   center={circle.center}
                   radius={circle.radius}
-                  fillColor={colors.secondaryTransparent60}
+                  fillColor={colors.titleTextTransparent60}
                   strokeWidth={0.01}
                 />
               );
@@ -378,7 +471,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
           } else {
             return (
               <Circle
-                key={circle._id}
+                key={circle.id}
                 center={circle.center}
                 radius={circle.radius}
                 fillColor={colors.secondaryTransparent60}
@@ -438,7 +531,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                 color={colors.iconGray}
               />
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={[screenStyles.filterButtonStyle, screenStyles.shadow]}
               onPress={() => setControlMode("poly")}
               activeOpacity={0.7}
@@ -448,7 +541,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                 size={24}
                 color={colors.iconGray}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       )}
@@ -650,7 +743,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                       center: circle.center,
                     });
                   }}
-                  onLongPress={() => handleDelete(circle.name)}
+                  onLongPress={() => handleDelete(circle.id)}
                 >
                   <View
                     style={StyleSheet.compose(listCardStyles.contentContainer, {
@@ -700,7 +793,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({}) => {
                     closeMenu();
                     fitToCoordinates(poly.points, 125);
                   }}
-                  onLongPress={() => handleDelete(poly.name)}
+                  onLongPress={() => handleDelete(poly.id)}
                 >
                   <View
                     style={StyleSheet.compose(listCardStyles.contentContainer, {

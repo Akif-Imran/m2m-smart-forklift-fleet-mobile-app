@@ -132,7 +132,12 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
               color={colors.titleText}
             />
           )}
-          onPress={() => navigation.navigate("Fences")}
+          onPress={() =>
+            navigation.navigate("Fences", {
+              _id: item.id.toString(),
+              item: item,
+            })
+          }
         >
           Fences
         </Button>
