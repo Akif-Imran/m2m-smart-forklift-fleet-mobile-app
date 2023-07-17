@@ -190,12 +190,7 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({
     <SafeAreaView style={screenStyles.mainContainer}>
       <NoIconHeader
         title="Drivers"
-        left={[
-          {
-            icon: <Feather name="activity" size={25} color={colors.primary} />,
-            onPress: () => navigation.navigate("Activity"),
-          },
-        ]}
+        left={[]}
         right={[
           {
             icon: (

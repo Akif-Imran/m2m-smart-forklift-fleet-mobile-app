@@ -91,7 +91,7 @@ export type DriversStackParamsList = {
   DriverDetails: DetailsType<IDriver>;
   AddDriver: AddUpdateType<IDriver>;
   AssignForklift: DetailsType<IDriver>;
-  Activity: undefined;
+  Activity: DetailsType<IDriver>;
   AddActivity: AddUpdateType<IDriverActivity>;
   BarcodeScanner: undefined;
   DriverCheckList: undefined;

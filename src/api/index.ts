@@ -80,7 +80,7 @@ export const urls = {
     delete: (driverId: string) => `${BASE_DRIVER_URL}/delete?id=${driverId}`,
     getAssignedVehicles: (driverId: string) =>
       `${BASE_DRIVER_URL}/getAssignedVehiclesByDriverId?driver_id=${driverId}`,
-    getBehaviorEventType: `${baseURL}/get_event_type`,
+    getBehaviorEventType: `${BASE_DRIVER_URL}/getEventType`,
     addBehavior: `${BASE_DRIVER_URL}/addDriverBehavior`,
     getBehaviorByDriverId: (driverId: string) =>
       `${BASE_DRIVER_URL}/getDriverBehavior?driver_id=${driverId}`,

@@ -34,6 +34,7 @@ type AddDriverRequest = {
   email: string;
   password: string;
   dob: string;
+  rating: number;
   picture?: string;
 };
 type AddDriverResponse = ApiResponse<IDriver>;
@@ -77,18 +78,15 @@ type AddDriverBehaviorResponse = ApiResponse<{
   createdAt: string;
 }>;
 
-type DriverBehaviorResponse = ApiResponse<
-  ListResponse<{
-    id: number;
-    behavior_date: string;
-    description: string;
-    event_type: null;
-    EventType: null;
-  }>
->;
+type DriverBehaviorResponse = ApiResponse<ListResponse<IDriverActivity[]>>;
 
 type DriverBehaviorEventType = ApiResponse<
   {
     id: number;
+    name: string;
+    rating: number;
+    is_active: boolean;
+    createdAt: string;
+    updatedAt: null | string;
   }[]
 >;

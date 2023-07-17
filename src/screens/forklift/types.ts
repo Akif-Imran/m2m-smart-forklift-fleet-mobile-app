@@ -60,15 +60,15 @@ interface IForklift {
 //   experience: string;
 //   licenseType: string;
 // }
-interface IDriverActivity {
-  _id: string;
-  image: string;
-  name: string;
-  email: string;
-  eventType: string;
-  description: string;
-  date: string;
-}
+// interface IDriverActivity {
+//   _id: string;
+//   image: string;
+//   name: string;
+//   email: string;
+//   eventType: string;
+//   description: string;
+//   date: string;
+// }
 interface IPoi {
   _id: string;
   name: string;

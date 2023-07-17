@@ -22,16 +22,18 @@ import { addDriverBehavior, getDrivers, getEventTypes } from "@services";
 import { useAuthContext } from "@context";
 import { getBehaviorEventTypes } from "src/services/drivers";
 
-interface IForm
-  extends Omit<IDriverActivity, "_id" | "image" | "name" | "email"> {
-  driver: string;
+interface IForm {
+  driver_id: string;
+  event_type_id: string;
+  behavior_date: string;
+  description: string;
 }
 
 const scheme: yup.ObjectSchema<IForm> = yup.object().shape({
-  driver: yup.string().required("Required"),
-  date: yup.string().required("Date is required"),
+  driver_id: yup.string().required("Required"),
+  behavior_date: yup.string().required("Date is required"),
   description: yup.string().required("Description is required"),
-  eventType: yup.string().required("Event Type is required"),
+  event_type_id: yup.string().required("Event Type is required"),
 });
 
 const AddActivity: React.FC<DriverStackScreenProps<"AddActivity">> = ({
@@ -73,19 +75,19 @@ const AddActivity: React.FC<DriverStackScreenProps<"AddActivity">> = ({
 
   const form = useFormik<IForm>({
     initialValues: {
-      driver: "",
-      date: "",
+      driver_id: "",
+      behavior_date: moment().format("YYYY-MM-DD"),
       description: "",
-      eventType: "",
+      event_type_id: "",
     },
     onSubmit: (values, helpers) => {
       setIsLoading(true);
       addDriverBehavior(token, {
-        driver_id: parseInt(values.driver, 10),
-        behavior_date: values.date,
+        driver_id: parseInt(values.driver_id, 10),
+        behavior_date: values.behavior_date,
         description: values.description,
         //FIXME - get event type and add them to list
-        event_type_id: parseInt(values.eventType, 10),
+        event_type_id: parseInt(values.event_type_id, 10),
       })
         .then((res) => {
           ToastService.show(res?.message || "");
@@ -126,11 +128,10 @@ const AddActivity: React.FC<DriverStackScreenProps<"AddActivity">> = ({
       .then((res) => {
         if (res.success) {
           const list = res.data.map((value) => ({
-            label: value.id.toString(),
+            label: value.name.toString(),
             value: value.id.toString(),
           }));
           //FIXME - remove this self added record
-          list.push({ label: "Type 01", value: "1" });
           setEventDropDownList(list);
         }
       })
@@ -142,7 +143,7 @@ const AddActivity: React.FC<DriverStackScreenProps<"AddActivity">> = ({
   React.useEffect(() => {
     form.setValues((prev) => ({
       ...prev,
-      date: moment(behaviorDate).format("YYYY-MM-DD"),
+      behavior_date: moment(behaviorDate).format("YYYY-MM-DD"),
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [behaviorDate]);
@@ -165,24 +166,28 @@ const AddActivity: React.FC<DriverStackScreenProps<"AddActivity">> = ({
             }}
             mode="outlined"
             label="Driver"
-            value={form.values.driver}
+            value={form.values.driver_id}
             visible={driverDropdownVisible}
             showDropDown={() => setDriverDropdownVisible(true)}
             onDismiss={() => setDriverDropdownVisible(false)}
             setValue={(value) => {
               console.log(value);
-              form.setValues((prev) => ({ ...prev, driver: value }));
+              form.setValues((prev) => ({ ...prev, driver_id: value }));
             }}
             list={driverDropDownList}
           />
           <_TextInput
-            value={form.values.date}
+            value={form.values.behavior_date}
             label={"Behavior Date"}
             editable={false}
-            onBlur={form.handleBlur("date")}
-            onChangeText={form.handleChange("date")}
-            error={form.errors?.date && form.touched?.date ? true : false}
-            errorText={form.errors?.date}
+            onBlur={form.handleBlur("behavior_date")}
+            onChangeText={form.handleChange("behavior_date")}
+            error={
+              form.errors?.behavior_date && form.touched?.behavior_date
+                ? true
+                : false
+            }
+            errorText={form.errors?.behavior_date}
             right={
               <TextInput.Icon
                 icon="calendar"
@@ -199,13 +204,13 @@ const AddActivity: React.FC<DriverStackScreenProps<"AddActivity">> = ({
             }}
             mode="outlined"
             label="Event Type"
-            value={form.values.eventType}
+            value={form.values.event_type_id}
             visible={eventDropdownVisible}
             showDropDown={() => setEventDropdownVisible(true)}
             onDismiss={() => setEventDropdownVisible(false)}
             setValue={(value) => {
               console.log(value);
-              form.setValues((prev) => ({ ...prev, eventType: value }));
+              form.setValues((prev) => ({ ...prev, event_type_id: value }));
             }}
             list={eventDropDownList}
           />

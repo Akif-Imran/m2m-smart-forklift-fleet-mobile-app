@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { View } from "react-native";
 import React from "react";
 import type { ProfileSettingsStackScreenProps } from "@navigation-types";
@@ -10,6 +11,8 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Button, TextInput } from "react-native-paper";
 import { PaperTheme, colors } from "@theme";
 import { useAuthContext } from "@context";
+import { changePassword } from "@services";
+import { ToastService } from "@utility";
 
 import { styles } from "./styles";
 // import { ToastService } from "@utility";
@@ -33,7 +36,10 @@ const schema: yup.ObjectSchema<IForm> = yup.object().shape({
 
 const ChangePassword: React.FC<
   ProfileSettingsStackScreenProps<"ChangePassword">
-> = ({}) => {
+> = ({ navigation }) => {
+  const {
+    state: { token },
+  } = useAuthContext();
   const [isLoading, setIsLoading] = React.useState(false);
   const [secureEntry1, setSecureEntry1] = React.useState<boolean>(true);
   const [secureEntry2, setSecureEntry2] = React.useState<boolean>(true);
@@ -43,21 +49,24 @@ const ChangePassword: React.FC<
   const changePass = (values: IForm, helpers: FormikHelpers<IForm>) => {
     setIsLoading(true);
     console.log(values);
-    helpers.resetForm();
-    // changePassword(token, {
-    //   currentPassword: values.old_password,
-    //   newPassword: values.new_password,
-    // })
-    //   .then((res) => {
-    //     ToastService.show(res?.message);
-    //     navigation.goBack();
-    //   })
-    //   .catch((err) => {
-    //     ToastService.show("Error!");
-    //   })
-    //   .finally(() => {
-    //     setIsLoading(false);
-    //   });
+    changePassword(token, {
+      old_password: values.oldPassword,
+      new_password: values.newPassword,
+    })
+      .then((res) => {
+        ToastService.show(res?.message);
+        if (res.success) {
+          helpers.resetForm();
+          navigation.goBack();
+        }
+      })
+      .catch((_err) => {
+        console.log(_err?.message);
+        ToastService.show("Error");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const form = useFormik<IForm>({
@@ -71,6 +80,7 @@ const ChangePassword: React.FC<
     },
     validationSchema: schema,
   });
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView style={styles.scrollContainer}>

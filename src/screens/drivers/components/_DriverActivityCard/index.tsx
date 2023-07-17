@@ -5,6 +5,7 @@ import { listCardStyles, screenStyles } from "@screen-styles";
 import { colors, gStyles } from "@theme";
 import { faker } from "@faker-js/faker";
 import moment from "moment";
+import { FORMAT_DATE_DD_MM_YYYY } from "@utility";
 
 import { styles } from "./styles";
 
@@ -21,43 +22,33 @@ const _DriverActivityCard: React.FC<OwnProps> = ({ item }) => {
           backgroundColor: colors.white,
         })}
       >
-        <View>
-          {item.image ? (
-            <Image
-              source={{ uri: item.image }}
-              resizeMode="cover"
-              style={listCardStyles.imgStyle}
-            />
-          ) : (
-            <Image
-              source={require("../../../../assets/images/user.png")}
-              resizeMode="contain"
-              style={listCardStyles.imgStyle}
-            />
-          )}
-        </View>
+        {/* <View>
+          <Image
+            source={require("../../../../assets/images/user.png")}
+            resizeMode="contain"
+            style={listCardStyles.imgStyle}
+          />
+        </View> */}
         <View style={listCardStyles.infoWithForward}>
           <View style={listCardStyles.infoContainer}>
-            <Text style={gStyles.cardInfoTitleText}>{item.name}</Text>
+            {/* <Text style={gStyles.cardInfoTitleText}>Name</Text> */}
             {/* <Text style={gStyles.tblHeaderText}>Phone: </Text> */}
-            <Text
+            {/* <Text
               style={gStyles.tblDescText}
               ellipsizeMode="tail"
               numberOfLines={1}
             >
-              {item.email}
+              Email
             </Text>
-            <_Divider marginVertical={0.5} />
+            <_Divider marginVertical={0.5} /> */}
             <View style={styles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Event Type</Text>
-              <Text style={screenStyles.tblDescText}>
-                {faker.helpers.arrayElement(["Type 1", "Type 2", "Type 3"])}
-              </Text>
+              <Text style={screenStyles.tblDescText}>{item.event_type}</Text>
             </View>
             <View style={styles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Date/Time</Text>
               <Text style={screenStyles.tblDescText}>
-                {moment(item.date).format("DD MMM, YYYY hh:mm:ss A")}
+                {FORMAT_DATE_DD_MM_YYYY(item.behavior_date)}
               </Text>
             </View>
             <View style={styles.fieldContainer}>

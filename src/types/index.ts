@@ -250,3 +250,13 @@ interface INotification {
   data: Record<string, number | string | boolean | null>;
   __v: number;
 }
+
+interface IDriverActivity {
+  id: number;
+  behavior_date: string;
+  description: string;
+  event_type: string;
+  EventType: {
+    name: string;
+  };
+}

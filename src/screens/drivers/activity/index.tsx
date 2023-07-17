@@ -13,27 +13,32 @@ import { _ConfirmModal, _ListEmptyComponent } from "@components";
 import { screenStyles } from "@screen-styles";
 import { FAB, Modal, Portal, RadioButton, Searchbar } from "react-native-paper";
 import { ActivityFilters } from "@constants";
-import { faker } from "@faker-js/faker";
 import { ToastService } from "@utility";
 import type { DriverStackScreenProps } from "@navigation-types";
 import { useAuthContext } from "@context";
+import { getDriverBehaviorByDriverId } from "@services";
+import { useIsFocused } from "@react-navigation/native";
 
 import { _DriverActivityCard } from "../components";
 
 const Activity: React.FC<DriverStackScreenProps<"Activity">> = ({
   navigation,
+  route,
 }) => {
+  const { _id, item } = route.params;
   //FIXME - remove isAdmin from here. (only here for test);
   const {
-    state: { isWarehouse, isAdmin },
+    state: { isWarehouse, isAdmin, token },
   } = useAuthContext();
+  const isFocused = useIsFocused();
   const [searchQuery, setSearchQuery] = React.useState<string>("");
-  const [drivers, setDrivers] = React.useState<IDriverActivity[]>([]);
-  const [searchedDrivers, setSearchedDrivers] = React.useState<
+  const [driverActivities, setDriverActivities] = React.useState<
+    IDriverActivity[]
+  >([]);
+  const [searchedDriverActivity, setSearchedDriverActivity] = React.useState<
     IDriverActivity[]
   >([]);
   const [isFetching, setIsFetching] = React.useState(false);
-  const fetchDriversTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
   const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
 
   const [visible, setVisible] = React.useState<boolean>(false);
@@ -44,42 +49,41 @@ const Activity: React.FC<DriverStackScreenProps<"Activity">> = ({
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
-  const addInfo = () => {
-    const record: IDriverActivity = {
-      _id: faker.database.mongodbObjectId(),
-      image: faker.image.urlPicsumPhotos(),
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-      eventType: faker.lorem.sentence(2),
-      date: faker.date.past().toJSON(),
-      description: faker.lorem.sentence(3),
-    };
-    setDrivers((prev) => [...prev, record]);
-  };
+  // const addInfo = () => {
+  //   const record: IDriverActivity = {
+  //     _id: faker.database.mongodbObjectId(),
+  //     image: faker.image.urlPicsumPhotos(),
+  //     name: faker.person.fullName(),
+  //     email: faker.internet.email(),
+  //     eventType: faker.lorem.sentence(2),
+  //     date: faker.date.past().toJSON(),
+  //     description: faker.lorem.sentence(3),
+  //   };
+  //   setDriverActivities((prev) => [...prev, record]);
+  // };
 
   const handleRefresh = () => {
-    setIsFetching(true);
-    fetchDriversTimeoutRef.current = setTimeout(() => {
-      setIsFetching(false);
-    }, 3000);
+    fetchDriverBehavior();
   };
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     if (!query) {
-      setSearchedDrivers(drivers);
+      setSearchedDriverActivity(driverActivities);
       return;
     }
-    const filteredCustomers = drivers.filter((customer) =>
-      customer.name.toLowerCase().includes(query.toLowerCase())
+    const filtered = driverActivities.filter(
+      (activity) =>
+        activity.description.toLowerCase().includes(query.toLowerCase()) ||
+        activity.event_type.toLowerCase().includes(query.toLowerCase())
     );
-    setSearchedDrivers(filteredCustomers);
+    setSearchedDriverActivity(filtered);
   };
 
   const handleFilterData = (newValue: string) => {
     console.log("newValue", newValue);
     if (newValue === "1") {
-      setSearchedDrivers(drivers);
+      setSearchedDriverActivity(driverActivities);
       return;
     }
     let matchingKey: string | ActivityFilters = "1";
@@ -93,12 +97,12 @@ const Activity: React.FC<DriverStackScreenProps<"Activity">> = ({
       return;
     }
     console.log("matchingKey", matchingKey);
-    const filtered = drivers.filter(
+    const filtered = driverActivities.filter(
       (value) =>
-        value.name.split(" ")[1].toLowerCase() ===
+        value.description.split(" ")[1].toLowerCase() ===
         matchingKey.toString().toLowerCase()
     );
-    setSearchedDrivers((_prev) => filtered);
+    setSearchedDriverActivity((_prev) => filtered);
   };
 
   const handleDelete = React.useCallback((activityId: string) => {
@@ -115,21 +119,36 @@ const Activity: React.FC<DriverStackScreenProps<"Activity">> = ({
     setConfirmDeleteVisible(false);
   };
 
+  const fetchDriverBehavior = React.useCallback(
+    (withLoader = true) => {
+      setIsFetching(withLoader);
+      getDriverBehaviorByDriverId(token, _id)
+        .then((res) => {
+          if (res.success) {
+            setDriverActivities(res.data.rows);
+          }
+        })
+        .catch((_err) => {
+          console.log(_err?.message);
+          ToastService.show("Driver Behavior list error");
+        })
+        .finally(() => {
+          setIsFetching(false);
+        });
+    },
+    [token, _id]
+  );
+
   React.useEffect(() => {
-    if (!drivers) {
+    if (!driverActivities) {
       return;
     }
-    setSearchedDrivers(drivers);
-
-    return () => {
-      clearTimeout(fetchDriversTimeoutRef.current);
-    };
-  }, [drivers]);
+    setSearchedDriverActivity(driverActivities);
+  }, [driverActivities]);
 
   React.useEffect(() => {
-    addInfo();
-    addInfo();
-  }, []);
+    fetchDriverBehavior(false);
+  }, [fetchDriverBehavior, isFocused]);
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
@@ -191,16 +210,16 @@ const Activity: React.FC<DriverStackScreenProps<"Activity">> = ({
       </Portal>
 
       <FlatList
-        data={searchedDrivers}
+        data={searchedDriverActivity}
         showsVerticalScrollIndicator={false}
         style={screenStyles.flatListStyle}
         // contentContainerStyle={{ padding: 2 }}
-        keyExtractor={(item) => item._id}
-        ListEmptyComponent={<_ListEmptyComponent label="No Drivers..." />}
-        renderItem={({ item }) => (
+        keyExtractor={(activity) => activity.id.toString()}
+        ListEmptyComponent={<_ListEmptyComponent label="No Activity..." />}
+        renderItem={({ item: activity }) => (
           <_DriverActivityCard
-            key={item._id}
-            item={item}
+            key={activity.id}
+            item={activity}
             handleDelete={handleDelete}
           />
         )}
@@ -219,7 +238,7 @@ const Activity: React.FC<DriverStackScreenProps<"Activity">> = ({
           icon="plus"
           style={gStyles.fab}
           color={colors.white}
-          onLongPress={() => addInfo()}
+          // onLongPress={() => addInfo()}
           onPress={() =>
             navigation.navigate("AddActivity", {
               mode: "add",

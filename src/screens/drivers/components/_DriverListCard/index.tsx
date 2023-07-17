@@ -7,7 +7,11 @@ import type { DriverStackScreenProps } from "@navigation-types";
 import { listCardStyles, screenStyles } from "@screen-styles";
 import { PaperTheme, colors, gStyles } from "@theme";
 import { truncateText } from "@utility";
-import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
+import {
+  MaterialCommunityIcons,
+  FontAwesome5,
+  Feather,
+} from "@expo/vector-icons";
 import { AirbnbRating } from "react-native-ratings";
 import { baseURL } from "@api";
 
@@ -91,25 +95,29 @@ const _DriverListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
         </View>
       </TouchableOpacity>
       <View style={listCardStyles.bottomButtonContainer}>
-        {/* <Button
-          style={list_card_styles.bottomButton}
+        <Button
+          style={listCardStyles.bottomButton}
           compact={true}
           uppercase={false}
           mode={"text"}
           theme={PaperTheme}
           color={colors.titleText}
-          labelStyle={StyleSheet.compose(gStyles.tblDescText, gStyles.buttonLabelTextAddOn)}
-          icon={() => (
-            <MaterialCommunityIcons
-              name="file-multiple-outline"
-              size={16}
-              color={colors.titleText}
-            />
+          labelStyle={StyleSheet.compose(
+            gStyles.tblDescText,
+            gStyles.buttonLabelTextAddOn
           )}
-          onPress={() => navigation.navigate("Reports")}
+          icon={() => (
+            <Feather name="activity" size={16} color={colors.titleText} />
+          )}
+          onPress={() => {
+            navigation.navigate("Activity", {
+              _id: item.id.toString(),
+              item: item,
+            });
+          }}
         >
-          Reports
-        </Button> */}
+          Activity
+        </Button>
         <Button
           style={listCardStyles.bottomButton}
           compact={true}
