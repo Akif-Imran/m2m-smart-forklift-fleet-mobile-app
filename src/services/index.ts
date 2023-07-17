@@ -42,4 +42,9 @@ export {
   addDriverBehavior,
   getDriverBehaviorByDriverId,
   getBehaviorEventTypes as getEventTypes,
+  addTask,
+  endTask,
+  getCheckList,
+  getTaskList,
+  qrScanDeviceDetails,
 } from "./drivers";

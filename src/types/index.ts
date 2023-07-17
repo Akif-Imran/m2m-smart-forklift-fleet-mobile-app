@@ -1,4 +1,4 @@
-type IUserType = "Admin" | "Warehouse" | "Driver" | "Service";
+type IUserType = "Admin" | "Warehouse" | "Driver" | "Services";
 interface ILoginUserData {
   id: number;
   name: string;
@@ -259,4 +259,70 @@ interface IDriverActivity {
   EventType: {
     name: string;
   };
+}
+
+interface IChecklist {
+  id: number;
+  name: string;
+  is_active: boolean;
+  createdAt: string;
+  updatedAt: string | null;
+}
+
+interface QRScanDeviceDetails {
+  id: number;
+  IMEI: string;
+  device_type_id: number;
+  sim_no: string;
+  device_name: string;
+  user_id: number;
+  activation_status: number;
+  assigned_at: string;
+  activated_at: string;
+  expired_at: string;
+  warranty_start_date: string;
+  warranty_end_date: string;
+  group_id: null;
+  createdAt: string;
+  updatedAt: string;
+  device_type: string;
+  latitude: null | string;
+  longitude: null | string;
+  external_power_voltage: null;
+  back_battery_percentage: null;
+  mileage: null;
+  speed: null;
+  touch_id: null;
+  gps_accuracy: null;
+  motion_state: null;
+  gps_time: string;
+  sos_command: number;
+  out_command: number;
+  is_faulty: false;
+  battery_info_time: null;
+  voltage: null;
+  current: null;
+  temperature: null;
+  power_capacity: null;
+  battery_level: null;
+  charging_status: null;
+  vehicle_id: number;
+  vehicle_picture: string;
+  vehicle_icon: string;
+}
+
+interface ITask {
+  id: number;
+  vehicle_id: number;
+  checklist: string;
+  start_time: string;
+  end_time: null | string;
+  user_id: number;
+  is_active: boolean;
+  createdAt: string;
+  updatedAt: string;
+  vehicle_reg_no: string;
+  vehicle_icon: string;
+  IMEI: string;
+  driver_name: string;
 }

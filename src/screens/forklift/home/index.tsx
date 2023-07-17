@@ -21,7 +21,7 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { deleteVehicle, getDashCounts, getVehicleList } from "@services";
-import { useAuthContext } from "@context";
+import { useAuthContext, useTaskContext } from "@context";
 import { useIsFocused } from "@react-navigation/native";
 
 import { _ForkliftListCard } from "../components";
@@ -39,6 +39,9 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
   const {
     state: { token, isAdmin, isDriver },
   } = useAuthContext();
+  const {
+    state: { inProgress },
+  } = useTaskContext();
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [forklifts, setForklifts] = React.useState<IVehicle[]>([]);
   const [searchedForklifts, setSearchedForklifts] = React.useState<IVehicle[]>(
@@ -228,16 +231,29 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
     },
   ];
   if (isDriver) {
-    right.push({
-      icon: (
-        <MaterialCommunityIcons
-          name="barcode-scan"
-          size={24}
-          color={colors.primary}
-        />
-      ),
-      onPress: () => navigation.navigate("BarcodeScanner"),
-    });
+    if (inProgress) {
+      right.push({
+        icon: (
+          <MaterialCommunityIcons
+            name="progress-clock"
+            size={24}
+            color={colors.error}
+          />
+        ),
+        onPress: () => navigation.navigate("DriverTask"),
+      });
+    } else {
+      right.push({
+        icon: (
+          <MaterialCommunityIcons
+            name="barcode-scan"
+            size={24}
+            color={colors.primary}
+          />
+        ),
+        onPress: () => navigation.navigate("BarcodeScanner"),
+      });
+    }
   }
 
   return (

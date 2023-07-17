@@ -64,7 +64,7 @@ export type ForkliftStackParamsList = {
     coords: LatLng[];
   };
   BarcodeScanner: undefined;
-  DriverCheckList: undefined;
+  DriverCheckList: DetailsType<QRScanDeviceDetails>;
   DriverTask: undefined;
   ReportsStack: NavigatorScreenParams<ReportsStackParamsList>;
   Notification: undefined;
@@ -94,7 +94,7 @@ export type DriversStackParamsList = {
   Activity: DetailsType<IDriver>;
   AddActivity: AddUpdateType<IDriverActivity>;
   BarcodeScanner: undefined;
-  DriverCheckList: undefined;
+  DriverCheckList: DetailsType<QRScanDeviceDetails>;
   DriverTask: undefined;
   Notification: undefined;
   NotificationDetails: DetailsType<INotification>;

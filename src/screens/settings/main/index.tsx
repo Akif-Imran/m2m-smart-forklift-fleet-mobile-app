@@ -38,7 +38,7 @@ export const Settings: React.FC<
   } else if (isWarehouse) {
     filterOut.push(1, 6);
   } else if (isService) {
-    filterOut.push(1, 6, 7, 8);
+    filterOut.push(1, 6, 8);
   }
 
   const multiData1: Array<MultiCardItem> = [

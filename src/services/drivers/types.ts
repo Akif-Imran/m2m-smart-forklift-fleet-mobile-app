@@ -90,3 +90,33 @@ type DriverBehaviorEventType = ApiResponse<
     updatedAt: null | string;
   }[]
 >;
+
+type QRScanDeviceDetailsResponse = ApiResponse<QRScanDeviceDetails, "result">;
+type CheckListResponse = ApiResponse<IChecklist[]>;
+type AddNewTaskRequest = {
+  vehicle_id: number;
+  checklist: string; //"Tyre Ok, Body Change, Body Ok, Brake Ok",
+  start_time: string;
+};
+
+type AddNewTaskResponse = ApiResponse<
+  Omit<
+    ITask,
+    | "end_time"
+    | "user_id"
+    | "is_active"
+    | "vehicle_reg_no"
+    | "vehicle_icon"
+    | "IMEI"
+    | "driver_name"
+  >
+>;
+
+type EndTaskRequest = {
+  task_id: number;
+  end_time: string;
+};
+
+type EndTaskResponse = MessageResponse;
+
+type GetTaskListResponse = ApiResponse<ListResponse<ITask[]>>;

@@ -22,6 +22,8 @@ interface AuthState {
 }
 
 type AuthAction =
+  | { type: "LOAD_START" }
+  | { type: "LOAD_STOP" }
   | { type: "LOGOUT" }
   | {
       type: "LOGIN";
@@ -36,6 +38,16 @@ const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
+    case "LOAD_START":
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case "LOAD_STOP":
+      return {
+        ...state,
+        isLoading: false,
+      };
     case "LOGOUT":
       authHelpers.removeAuth().then();
       return {
@@ -69,7 +81,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         isAuthorized: true,
         isAdmin: action.payload.user.user_type === "Admin",
         isDriver: action.payload.user.user_type === "Driver",
-        isService: action.payload.user.user_type === "Service",
+        isService: action.payload.user.user_type === "Services",
         isWarehouse: action.payload.user.user_type === "Warehouse",
       };
     default:
@@ -125,6 +137,7 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 
   const login = React.useCallback(
     (email: string, password: string, save: boolean) => {
+      dispatch({ type: "LOAD_START" });
       apiLogin({ email, password })
         .then((res) => {
           ToastService.show(res?.message || "");
@@ -148,6 +161,9 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
         })
         .catch((_err) => {
           ToastService.show("Error occurred. Try again");
+        })
+        .finally(() => {
+          dispatch({ type: "LOAD_STOP" });
         });
     },
     []

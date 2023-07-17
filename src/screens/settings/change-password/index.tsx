@@ -26,11 +26,11 @@ const schema: yup.ObjectSchema<IForm> = yup.object().shape({
   oldPassword: yup.string().required("Old password is required"),
   newPassword: yup
     .string()
-    .oneOf([yup.ref("confirm_password")], "New Password must match")
+    .oneOf([yup.ref("confirmPassword")], "New Password must match")
     .required("New password is required"),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref("new_password")], "New Password must match")
+    .oneOf([yup.ref("newPassword")], "New Password must match")
     .required("Confirm New Password is required"),
 });
 
@@ -88,8 +88,8 @@ const ChangePassword: React.FC<
           <_TextInput
             label={"Current Password"}
             value={form.values.oldPassword}
-            onChangeText={form.handleChange("old_password")}
-            onBlur={form.handleBlur("old_password")}
+            onChangeText={form.handleChange("oldPassword")}
+            onBlur={form.handleBlur("oldPassword")}
             placeholder="Old Password"
             secureTextEntry={secureEntry1}
             error={form.touched.oldPassword && !!form.errors.oldPassword}
@@ -109,8 +109,8 @@ const ChangePassword: React.FC<
           <_TextInput
             label={"New Password"}
             value={form.values.newPassword}
-            onChangeText={form.handleChange("new_password")}
-            onBlur={form.handleBlur("new_password")}
+            onChangeText={form.handleChange("newPassword")}
+            onBlur={form.handleBlur("newPassword")}
             placeholder="New Password"
             secureTextEntry={secureEntry2}
             error={form.touched.newPassword && !!form.errors.newPassword}
@@ -130,8 +130,8 @@ const ChangePassword: React.FC<
           <_TextInput
             label={"Confirm New Password"}
             value={form.values.confirmPassword}
-            onChangeText={form.handleChange("confirm_password")}
-            onBlur={form.handleBlur("confirm_password")}
+            onChangeText={form.handleChange("confirmPassword")}
+            onBlur={form.handleBlur("confirmPassword")}
             placeholder="Confirm New Password"
             secureTextEntry={secureEntry3}
             error={

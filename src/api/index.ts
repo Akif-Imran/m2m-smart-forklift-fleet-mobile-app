@@ -87,6 +87,7 @@ export const urls = {
     addDriverWorkingTime: `${BASE_DRIVER_URL}/addDriverWorkingTime`,
     qrScan: (imei: string) => `${baseURL}/user_device_details/${imei}`,
     getCheckList: `${baseURL}/get_checklist`,
+    getTaskList: `${baseURL}/get_task_list/1`,
     addNewTask: `${baseURL}/add_new_task`,
     endTask: `${baseURL}/end_task`,
   },

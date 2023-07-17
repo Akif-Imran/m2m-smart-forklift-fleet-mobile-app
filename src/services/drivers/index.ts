@@ -102,3 +102,59 @@ export const getBehaviorEventTypes = async (
   );
   return response.data;
 };
+
+export const qrScanDeviceDetails = async (
+  token: string,
+  imei: string
+): Promise<QRScanDeviceDetailsResponse> => {
+  console.log("api called");
+  const response = await apiGet<QRScanDeviceDetailsResponse>(
+    urls.driver.qrScan(imei),
+    token
+  );
+  return response.data;
+};
+
+export const getCheckList = async (
+  token: string
+): Promise<CheckListResponse> => {
+  const response = await apiGet<CheckListResponse>(
+    urls.driver.getCheckList,
+    token
+  );
+  return response.data;
+};
+
+export const addTask = async (
+  token: string,
+  body: AddNewTaskRequest
+): Promise<AddNewTaskResponse> => {
+  const response = await apiPost<AddNewTaskResponse, AddNewTaskRequest>(
+    urls.driver.addNewTask,
+    token,
+    body
+  );
+  return response.data;
+};
+
+export const endTask = async (
+  token: string,
+  body: EndTaskRequest
+): Promise<EndTaskResponse> => {
+  const response = await apiPost<EndTaskResponse, EndTaskRequest>(
+    urls.driver.endTask,
+    token,
+    body
+  );
+  return response.data;
+};
+
+export const getTaskList = async (
+  token: string
+): Promise<GetTaskListResponse> => {
+  const response = await apiGet<GetTaskListResponse>(
+    urls.driver.getTaskList,
+    token
+  );
+  return response.data;
+};

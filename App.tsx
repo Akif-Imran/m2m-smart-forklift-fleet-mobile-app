@@ -9,7 +9,7 @@ import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { registerRootComponent } from "expo";
 import { colors } from "@theme";
-import { AuthInit, AuthProvider } from "@context";
+import { AuthInit, AuthProvider, TaskProvider } from "@context";
 
 import { App } from "@";
 
@@ -61,7 +61,9 @@ export default function RootApp() {
             <Provider>
               <AuthProvider>
                 <AuthInit setIsAuthLoaded={setIsAuthLoaded}>
-                  <App />
+                  <TaskProvider>
+                    <App />
+                  </TaskProvider>
                 </AuthInit>
               </AuthProvider>
             </Provider>

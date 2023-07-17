@@ -1,36 +1,66 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import React from "react";
-import type { DriverStackScreenProps } from "@navigation-types";
+import { StyleSheet, Text, View } from "react-native";
+import React, { useRef } from "react";
+import type { ForkliftStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { listCardStyles, screenStyles } from "@screen-styles";
+import { screenStyles } from "@screen-styles";
 import { PaperTheme, colors, gStyles } from "@theme";
 import { _DefaultCard, _ScrollFormLayout } from "@components";
-import { FORMAT_DURATION_HH_MM_SS, ToastService } from "@utility";
+import { FORMAT_DURATION_HH_MM_SS } from "@utility";
 import { faker } from "@faker-js/faker";
 import { Button } from "react-native-paper";
 import moment from "moment";
+import { useTaskContext } from "@context";
+import Spinner from "react-native-loading-spinner-overlay";
 
-const DriverTask: React.FC<DriverStackScreenProps<"DriverTask">> = ({}) => {
+const DriverTask: React.FC<ForkliftStackScreenProps<"DriverTask">> = ({
+  navigation,
+}) => {
+  const {
+    state: { inProgress, isLoading, task },
+    endTasks,
+  } = useTaskContext();
   const [durationInSeconds, setDurationInSeconds] = React.useState(0);
-  const [image, _setImage] = React.useState<string>(
-    faker.image.urlPicsumPhotos()
-  );
+  const intervalRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  // const [image, _setImage] = React.useState<string>(
+  //   faker.image.urlPicsumPhotos()
+  // );
   const [date, _setDate] = React.useState<string>(faker.date.past().toString());
 
   React.useEffect(() => {
-    const interval = setInterval(() => {
+    if (!task) {
+      return;
+    }
+    const duration = moment().diff(task.start_time, "seconds");
+    setDurationInSeconds(duration);
+    intervalRef.current = setInterval(() => {
       setDurationInSeconds((prev) => prev + 1);
     }, 1000);
     return () => {
-      clearInterval(interval);
+      clearInterval(intervalRef?.current);
     };
-  }, []);
+  }, [task]);
+
+  const endJob = () => {
+    clearInterval(intervalRef?.current);
+    endTasks();
+    navigation.reset({
+      index: 1,
+      routes: [{ name: "Forklift" }, { name: "DriverTask" }],
+      type: "stack",
+    });
+  };
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
+      <Spinner
+        visible={isLoading}
+        cancelable={false}
+        animation="fade"
+        size="large"
+      />
       <_ScrollFormLayout>
         <View>
-          <_DefaultCard>
+          {/* <_DefaultCard>
             <View
               style={StyleSheet.compose(listCardStyles.contentContainer, {
                 backgroundColor: colors.white,
@@ -70,7 +100,7 @@ const DriverTask: React.FC<DriverStackScreenProps<"DriverTask">> = ({}) => {
                 </View>
               </View>
             </View>
-          </_DefaultCard>
+          </_DefaultCard> */}
           <_DefaultCard>
             <View>
               <Text style={gStyles.headerText}>
@@ -83,9 +113,7 @@ const DriverTask: React.FC<DriverStackScreenProps<"DriverTask">> = ({}) => {
               theme={PaperTheme}
               mode="contained"
               color={colors.error}
-              onPress={() => {
-                ToastService.show("demo");
-              }}
+              onPress={endJob}
               labelStyle={StyleSheet.compose(gStyles.tblHeaderText, {
                 color: colors.white,
               })}
