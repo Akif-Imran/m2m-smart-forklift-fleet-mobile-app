@@ -104,9 +104,9 @@ const AssignForklift: React.FC<DriverStackScreenProps<"AssignForklift">> = ({
       vehicle_ids: selectedForklifts,
     })
       .then((res) => {
-        console.log(res);
+        ToastService.show(res?.message || "");
         if (res.success) {
-          ToastService.show("Forklifts assigned successfully");
+          // ToastService.show("Forklifts assigned successfully");
           navigation.goBack();
         }
       })

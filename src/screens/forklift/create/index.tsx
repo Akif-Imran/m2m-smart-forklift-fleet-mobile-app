@@ -158,38 +158,38 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
       .then((device) => {
         ToastService.show(device?.message || "");
         console.log("device", device);
-        if (device.success) {
-          addVehicle(token, {
-            device_id: device.data.id,
-            reg_no: values.reg_no,
-            color: values.color,
-            make: values.make,
-            model: values.model,
-            purchase_date: values.purchase_date,
-            rent_start_date: values.rent_start_date,
-            rent_end_date: values.rent_end_date,
-            serial_number: values.serial_number,
-            battery_serial_number: values.battery_serial_number,
-            year: values.year,
-            age: values.age,
-            mileage: values.mileage,
-            fuel_type_id: parseInt(values.fuel_type_id, 10),
-            fuel_capacity: values.fuel_capacity,
-            insurance_company: values.insurance_company,
-            insurance_number: values.insurance_number,
-            insurance_type: values.insurance_type,
-            insurance_expiry_date: values.insurance_expiry_date,
-            icon: values.icon,
+        addVehicle(token, {
+          //@ts-expect-error device returned when already in database so success is false.
+          device_id: device.data.id,
+          reg_no: values.reg_no,
+          color: values.color,
+          make: values.make,
+          model: values.model,
+          purchase_date: values.purchase_date,
+          rent_start_date: values.rent_start_date,
+          rent_end_date: values.rent_end_date,
+          serial_number: values.serial_number,
+          battery_serial_number: values.battery_serial_number,
+          year: values.year,
+          age: values.age,
+          mileage: values.mileage,
+          fuel_type_id: parseInt(values.fuel_type_id, 10),
+          fuel_capacity: values.fuel_capacity,
+          insurance_company: values.insurance_company,
+          insurance_number: values.insurance_number,
+          insurance_type: values.insurance_type,
+          insurance_expiry_date: values.insurance_expiry_date,
+          icon: values.icon,
+        })
+          .then((res) => {
+            ToastService.show(res?.message || "");
+            helpers.resetForm();
+            navigation.goBack();
           })
-            .then((res) => {
-              ToastService.show(res?.message || "");
-              helpers.resetForm();
-              navigation.goBack();
-            })
-            .catch((_err) => {
-              ToastService.show("Error occurred!");
-            });
-        }
+          .catch((_err) => {
+            console.log(_err?.message);
+            ToastService.show("Error occurred!");
+          });
       })
       .catch((_err) => {
         ToastService.show("Device error occurred");
@@ -207,41 +207,43 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
       sim_no: values.sim_no,
     })
       .then((device) => {
-        ToastService.show(device?.message || "");
+        console.log("res add Device", device);
         console.log("device", device);
-        if (device.success) {
-          updateVehicle(token, {
-            id: mode === "edit" ? route.params.item.id : 0,
-            device_id: device.data.id,
-            reg_no: values.reg_no,
-            color: values.color,
-            make: values.make,
-            model: values.model,
-            purchase_date: values.purchase_date,
-            rent_start_date: values.rent_start_date,
-            rent_end_date: values.rent_end_date,
-            serial_number: values.serial_number,
-            battery_serial_number: values.battery_serial_number,
-            year: values.year,
-            age: values.age,
-            mileage: values.mileage,
-            fuel_type_id: parseInt(values.fuel_type_id, 10),
-            fuel_capacity: values.fuel_capacity,
-            insurance_company: values.insurance_company,
-            insurance_number: values.insurance_number,
-            insurance_type: values.insurance_type,
-            insurance_expiry_date: values.insurance_expiry_date,
-            icon: values.icon,
+        // if (device.success) {
+        updateVehicle(token, {
+          id: mode === "edit" ? route.params.item.id : 0,
+          //@ts-expect-error device returned when already in database so success is false.
+          device_id: device.data.id,
+          reg_no: values.reg_no,
+          color: values.color,
+          make: values.make,
+          model: values.model,
+          purchase_date: values.purchase_date,
+          rent_start_date: values.rent_start_date,
+          rent_end_date: values.rent_end_date,
+          serial_number: values.serial_number,
+          battery_serial_number: values.battery_serial_number,
+          year: values.year,
+          age: values.age,
+          mileage: values.mileage,
+          fuel_type_id: parseInt(values.fuel_type_id, 10),
+          fuel_capacity: values.fuel_capacity,
+          insurance_company: values.insurance_company,
+          insurance_number: values.insurance_number,
+          insurance_type: values.insurance_type,
+          insurance_expiry_date: values.insurance_expiry_date,
+          icon: values.icon,
+        })
+          .then((res) => {
+            console.log("res update Vehicle", res);
+            ToastService.show(res?.message || "");
+            helpers.resetForm();
+            navigation.goBack();
           })
-            .then((res) => {
-              ToastService.show(res?.message || "");
-              helpers.resetForm();
-              navigation.goBack();
-            })
-            .catch((_err) => {
-              ToastService.show("Error occurred!");
-            });
-        }
+          .catch((_err) => {
+            ToastService.show("Error occurred!");
+          });
+        // }
       })
       .catch((_err) => {
         ToastService.show("Device error occurred");
@@ -362,7 +364,7 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
             serial_number: item.serial_number || "",
             battery_serial_number: item.battery_serial_number || "",
             fuel_capacity: item.fuel_capacity || "",
-            fuel_type_id: item.fuel_type_name || "",
+            fuel_type_id: item.fuel_type_id.toString() || "",
             insurance_company: item.insurance_company || "",
             insurance_expiry_date:
               item.insurance_expiry_date || moment().format("YYYY-MM-DD"),

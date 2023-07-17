@@ -160,6 +160,7 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({
         ToastService.show(res.message);
       })
       .catch((_err) => {
+        console.log(_err.message);
         ToastService.show("Error occurred");
       })
       .finally(() => {

@@ -63,7 +63,7 @@ type POIPostRequestBase = {
   address: string;
   color: string;
   marker_shape: string;
-  zone_id: number;
+  // zone_id: number;
 };
 type AddPOIRequest = Omit<POIPostRequestBase, "id">;
 type UpdatePOIRequest = POIPostRequestBase;

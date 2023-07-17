@@ -13,6 +13,9 @@ import {
   Fences,
   Trips,
   Playback,
+  BarcodeScanner,
+  DriverCheckList,
+  DriverTask,
 } from "@screens";
 
 import { ReportsStack } from "../reports-stack";
@@ -98,6 +101,30 @@ const ForkliftStack: React.FC = () => {
         component={Playback}
         options={{
           title: "Playback",
+        }}
+      />
+      <Stack.Screen
+        name="BarcodeScanner"
+        component={BarcodeScanner}
+        options={{
+          headerShown: true,
+          title: "Barcode Scanner",
+        }}
+      />
+      <Stack.Screen
+        name="DriverCheckList"
+        component={DriverCheckList}
+        options={{
+          headerShown: true,
+          title: "Check List",
+        }}
+      />
+      <Stack.Screen
+        name="DriverTask"
+        component={DriverTask}
+        options={{
+          headerShown: true,
+          title: "Task",
         }}
       />
       <Stack.Screen

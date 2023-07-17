@@ -1,4 +1,4 @@
-import { apiGet, apiPost, urls } from "@api";
+import { apiDelete, apiGet, apiPost, urls } from "@api";
 
 export const getDrivers = async (token: string): Promise<DriversResponse> => {
   const response = await apiGet<DriversResponse>(urls.driver.list, token);
@@ -20,7 +20,7 @@ export const deleteDriver = async (
   token: string,
   driverId: string
 ): Promise<DeleteDriverResponse> => {
-  const response = await apiGet<DeleteDriverResponse>(
+  const response = await apiDelete<DeleteDriverResponse>(
     urls.driver.delete(driverId),
     token
   );

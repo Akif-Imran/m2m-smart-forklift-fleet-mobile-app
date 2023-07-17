@@ -63,6 +63,9 @@ export type ForkliftStackParamsList = {
   Playback: {
     coords: LatLng[];
   };
+  BarcodeScanner: undefined;
+  DriverCheckList: undefined;
+  DriverTask: undefined;
   ReportsStack: NavigatorScreenParams<ReportsStackParamsList>;
   Notification: undefined;
   NotificationDetails: DetailsType<INotification>;

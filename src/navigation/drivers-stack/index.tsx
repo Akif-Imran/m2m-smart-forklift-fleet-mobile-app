@@ -81,6 +81,8 @@ const DriverStack: React.FC = () => {
           title: "Assign Forklift",
         }}
       />
+
+      {/* moved to forklift stack */}
       <Stack.Screen
         name="BarcodeScanner"
         component={BarcodeScanner}
@@ -105,6 +107,7 @@ const DriverStack: React.FC = () => {
           title: "Task",
         }}
       />
+      {/* -- up til here-- */}
       <Stack.Screen
         name="Notification"
         component={ForkliftNotification}

@@ -4,8 +4,11 @@ import type { AxiosResponse } from "axios";
 import axios from "axios";
 
 export const baseURL = "http://www.sealtracking.com:4600";
+export const BASE_USER_URL = `${baseURL}/user`;
 export const BASE_DEVICE_URL = `${baseURL}/device`;
 export const BASE_VEHICLE_URL = `${baseURL}/vehicle`;
+export const BASE_SERVICE_URL = `${baseURL}/service`;
+export const BASE_DRIVER_URL = `${baseURL}/driver`;
 export const BASE_POI_URL = `${baseURL}/poi`;
 export const GOOGLE_MAPS_API = "https://maps.googleapis.com/maps/api";
 export const GOOGLE_PLACES_API = `${GOOGLE_MAPS_API}/place`;
@@ -19,6 +22,10 @@ export const GOOGLE_API_KEY =
 export const urls = {
   auth: {
     login: `${baseURL}/login`,
+  },
+  user: {
+    changePassword: `${BASE_USER_URL}/resetPassword`,
+    deleteAccount: `${BASE_USER_URL}/deleteAccount`,
   },
   dashboard: {
     counts: `${baseURL}/app_dashboard`,
@@ -41,27 +48,35 @@ export const urls = {
     getFuelTypes: `${BASE_VEHICLE_URL}/getFuelTypes`,
   },
   services: {
-    counts: `${baseURL}/services_status_count`,
-    list: `${baseURL}/get_services`,
-    typeList: `${baseURL}/get_service_types`,
-    statusList: `${baseURL}/get_all_status`,
-    updateStatus: `${baseURL}/update_service`,
-    create: `${baseURL}/add_service`,
-    delete: (serviceId: string) => `${baseURL}/delete_service/${serviceId}`,
+    counts: `${BASE_SERVICE_URL}/statusCount`,
+    list: `${BASE_SERVICE_URL}/getAll`,
+    getById: (serviceId: string) =>
+      `${BASE_SERVICE_URL}/getServiceById?id=${serviceId}`,
+    typeList: `${BASE_SERVICE_URL}/getServiceTypes`,
+    statusList: `${BASE_SERVICE_URL}/getAllStatus`,
+    updateStatus: `${BASE_SERVICE_URL}/updateStatus`,
+    create: `${BASE_SERVICE_URL}/create`,
+    delete: (serviceId: string) => `${BASE_SERVICE_URL}/delete?id=${serviceId}`,
   },
   driver: {
-    list: `${baseURL}/get_driver_list`,
-    getById: (driverId: string) => `${baseURL}/get_driver/${driverId}`,
-    create: `${baseURL}/add_new_driver`,
-    update: `${baseURL}/update_driver`,
-    delete: (driverId: string) => `${baseURL}/delete_driver/${driverId}`,
-    assignVehicles: `${baseURL}/assign_driver`, //this assigns multiple vehicles to a driver
+    list: `${BASE_DRIVER_URL}/getAll`,
+    create: `${BASE_DRIVER_URL}/create`,
+    update: `${BASE_DRIVER_URL}/update`,
+    assignVehicles: `${BASE_DRIVER_URL}/assignDriver`, //this assigns multiple vehicles to a driver
+    getById: (driverId: string) =>
+      `${BASE_DRIVER_URL}/getDriverById?id=${driverId}`,
+    delete: (driverId: string) => `${BASE_DRIVER_URL}/delete?id=${driverId}`,
     getAssignedVehicles: (driverId: string) =>
-      `${baseURL}/get_assigned_vehicle/${driverId}`,
-    addBehavior: `${baseURL}/add_driver_behavior`,
-    getBehaviorByDriverId: (driverId: string) =>
-      `${baseURL}/get_driver_behavior/${driverId}`,
+      `${BASE_DRIVER_URL}/getAssignedVehiclesByDriverId?driver_id=${driverId}`,
     getBehaviorEventType: `${baseURL}/get_event_type`,
+    addBehavior: `${BASE_DRIVER_URL}/addDriverBehavior`,
+    getBehaviorByDriverId: (driverId: string) =>
+      `${BASE_DRIVER_URL}/getDriverBehavior?driver_id=${driverId}`,
+    addDriverWorkingTime: `${BASE_DRIVER_URL}/addDriverWorkingTime`,
+    qrScan: (imei: string) => `${baseURL}/user_device_details/${imei}`,
+    getCheckList: `${baseURL}/get_checklist`,
+    addNewTask: `${baseURL}/add_new_task`,
+    endTask: `${baseURL}/end_task`,
   },
   poi: {
     list: `${BASE_POI_URL}/getAll`,

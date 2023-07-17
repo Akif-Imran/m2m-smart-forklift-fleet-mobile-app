@@ -15,7 +15,11 @@ import { FAB, Searchbar } from "react-native-paper";
 import { ToastService } from "@utility";
 import { faker } from "@faker-js/faker";
 import { ForkliftStatusColor } from "@constants";
-import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import {
+  FontAwesome5,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { deleteVehicle, getDashCounts, getVehicleList } from "@services";
 import { useAuthContext } from "@context";
 
@@ -31,7 +35,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
   navigation,
 }) => {
   const {
-    state: { token, isAdmin },
+    state: { token, isAdmin, isDriver },
   } = useAuthContext();
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [forklifts, setForklifts] = React.useState<IVehicle[]>([]);
@@ -212,6 +216,25 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
     fetchVehicles();
   }, [token, fetchCounts, fetchVehicles]);
 
+  const right = [
+    {
+      icon: <Ionicons name="notifications" size={24} color={colors.primary} />,
+      onPress: () => navigation.navigate("Notification"),
+    },
+  ];
+  if (isDriver) {
+    right.push({
+      icon: (
+        <MaterialCommunityIcons
+          name="barcode-scan"
+          size={24}
+          color={colors.primary}
+        />
+      ),
+      onPress: () => navigation.navigate("BarcodeScanner"),
+    });
+  }
+
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
       <NoIconHeader
@@ -253,14 +276,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
               }),
           },
         ]}
-        right={[
-          {
-            icon: (
-              <Ionicons name="notifications" size={24} color={colors.primary} />
-            ),
-            onPress: () => navigation.navigate("Notification"),
-          },
-        ]}
+        right={right}
       />
       <_ConfirmModal
         visible={confirmDeleteVisible}

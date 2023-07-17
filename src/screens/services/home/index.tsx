@@ -125,7 +125,7 @@ const Services: React.FC<ServiceStackScreenProps<"Services">> = ({
         if (res.success) {
           const counts = res.data;
           setServiceCounts({
-            completed: counts.Complited,
+            completed: counts.Completed,
             inprocess: counts["In Process"],
             pending: counts.Pending,
           });

@@ -63,7 +63,7 @@ const Dashboard: React.FC<DashboardStackScreenProps<"Dashboard">> = ({}) => {
         console.log(res);
         if (res.success) {
           const total =
-            res.data.Complited + res.data["In Process"] + res.data.Pending;
+            res.data.Completed + res.data["In Process"] + res.data.Pending;
           const data = Object.entries(res.data)
             .map(([key, value]) => getPercentage(value, total))
             .filter((value) => value.y > 0);
@@ -73,7 +73,7 @@ const Dashboard: React.FC<DashboardStackScreenProps<"Dashboard">> = ({}) => {
               labels: { fill: colors.titleText },
             },
             {
-              name: `Completed (${res.data.Complited || 0})`,
+              name: `Completed (${res.data.Completed || 0})`,
               labels: { fill: colors.titleText },
             },
             {

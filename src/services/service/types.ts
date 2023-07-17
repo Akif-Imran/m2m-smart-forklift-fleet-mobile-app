@@ -1,6 +1,6 @@
 interface ServiceCounts {
   Pending: number;
-  Complited: number;
+  Completed: number;
   "In Process": number;
 }
 

@@ -65,7 +65,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
   route,
 }) => {
   const {
-    state: { token },
+    state: { token, isAdmin },
   } = useAuthContext();
   // const { SCREEN_HEIGHT } = useSafeAreaDimensions();
   const { mode } = route.params;
@@ -107,6 +107,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
 
   const addMarker = (values: IForm, helpers: FormikHelpers<IForm>) => {
     setIsLoading(true);
+    console.log("inside addMarker");
     addPoi(token, {
       address: values.address,
       marker_shape: values.iconName,
@@ -114,10 +115,11 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
       latitude: values.latitude.toString(),
       longitude: values.longitude.toString(),
       poi_name: values.name,
-      poi_type: 1,
-      zone_id: 3,
+      poi_type: parseInt(values.poiType, 10),
+      // zone_id: 3,
     })
       .then((res) => {
+        console.log(res);
         ToastService.show(res?.message || "");
         if (res.success) {
           helpers.resetForm();
@@ -141,11 +143,12 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
       colorName: "primary",
       latitude: 0,
       longitude: 0,
-      poiType: "private",
+      poiType: "1",
       address: "",
     },
     onSubmit: (values, helpers) => {
       console.log(values);
+      console.log("before addMarker");
       addMarker(values, helpers);
     },
     validationSchema: schema,
@@ -204,7 +207,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
     fetchPois();
   }, [fetchPois]);
 
-  console.log(poiMarkers);
+  console.log(form.errors);
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
@@ -241,17 +244,21 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
               }
             : undefined
         }
-        onDoublePress={(e) => {
-          e.preventDefault();
-          console.log("double tapped", e.nativeEvent?.coordinate);
-          const markerCord = e.nativeEvent?.coordinate;
-          form.setValues((prev) => ({
-            ...prev,
-            latitude: markerCord.latitude,
-            longitude: markerCord.longitude,
-          }));
-          showDialog();
-        }}
+        onDoublePress={
+          isAdmin
+            ? (e) => {
+                e.preventDefault();
+                console.log("double tapped", e.nativeEvent?.coordinate);
+                const markerCord = e.nativeEvent?.coordinate;
+                form.setValues((prev) => ({
+                  ...prev,
+                  latitude: markerCord.latitude,
+                  longitude: markerCord.longitude,
+                }));
+                showDialog();
+              }
+            : undefined
+        }
       >
         {markers.map((marker, index) => (
           <Marker
@@ -316,7 +323,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
                       <RadioButton.Item
                         theme={PaperTheme}
                         label="Private"
-                        value="private"
+                        value="1"
                         color={colors.primary}
                         uncheckedColor={colors.iconGray}
                         labelStyle={gStyles.descText}
@@ -326,7 +333,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
                       <RadioButton.Item
                         theme={PaperTheme}
                         label="Business"
-                        value="business"
+                        value="2"
                         color={colors.primary}
                         uncheckedColor={colors.iconGray}
                         labelStyle={gStyles.descText}
