@@ -116,6 +116,12 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
       longitude: values.longitude.toString(),
       poi_name: values.name,
       poi_type: parseInt(values.poiType, 10),
+      company_name: "company_name",
+      company_id: "company_id",
+      person: "person",
+      phone_no: "0123456",
+      mobile_no: "0123456",
+      email: "person@example.com",
       // zone_id: 3,
     })
       .then((res) => {

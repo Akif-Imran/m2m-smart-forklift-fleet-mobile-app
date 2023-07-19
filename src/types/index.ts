@@ -326,3 +326,8 @@ interface ITask {
   IMEI: string;
   driver_name: string;
 }
+
+interface IPoiCount {
+  poi_type: number;
+  total: number;
+}

@@ -16,11 +16,15 @@ import { PaperTheme, colors, gStyles } from "@theme";
 import { Searchbar } from "react-native-paper";
 import { ToastService } from "@utility";
 import { PoiTypesColor } from "@constants";
-import { deletePoi, getPoiList } from "@services";
+import { deletePoi, getPoiCounts, getPoiList } from "@services";
 import { useAuthContext } from "@context";
 
 import { _PoiListCard } from "../components/_PoiListCard";
-
+interface ICount {
+  private: number;
+  business: number;
+  total: number;
+}
 //------------------Component------------------------------------------------
 const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
   const {
@@ -33,6 +37,11 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
   const fetchPoisTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
   const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
   const [toBeDeletedPoiId, setToBeDeletedPoiId] = React.useState<number>(0);
+  const [poiCounts, setPoiCounts] = React.useState<ICount>({
+    business: 0,
+    private: 0,
+    total: 0,
+  });
   // const addInfo = () => {
   //   const records: IPoi = {
   //     _id: faker.database.mongodbObjectId(),
@@ -95,6 +104,32 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
     setSearchedPois(pois);
   }, [pois]);
 
+  const fetchPoiCounts = React.useCallback(() => {
+    getPoiCounts(token)
+      .then((res) => {
+        if (res.success) {
+          const counts: ICount = {
+            business: 0,
+            private: 0,
+            total: 0,
+          };
+          res.data.forEach((item) => {
+            if (item.poi_type === 1) {
+              counts.private = item.total;
+            } else if (item.poi_type === 2) {
+              counts.business = item.total;
+            }
+            counts.total = counts.private + counts.business;
+          });
+          setPoiCounts(counts);
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Count Error");
+        console.log(_err?.message);
+      });
+  }, [token]);
+
   const fetchPois = React.useCallback(() => {
     setIsFetching(true);
     getPoiList(token)
@@ -113,7 +148,8 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
 
   React.useEffect(() => {
     fetchPois();
-  }, [fetchPois]);
+    fetchPoiCounts();
+  }, [fetchPois, fetchPoiCounts]);
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
@@ -121,7 +157,7 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
       <_DefaultCard>
         <View style={screenStyles.countRow}>
           <View style={screenStyles.countRowItem}>
-            <Text style={gStyles.headerText}>10</Text>
+            <Text style={gStyles.headerText}>{poiCounts.private}</Text>
             <Text
               style={StyleSheet.compose(screenStyles.countInfoText, {
                 color: PoiTypesColor.private,
@@ -136,7 +172,7 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
               screenStyles.countRowMiddleItem
             )}
           >
-            <Text style={gStyles.headerText}>12</Text>
+            <Text style={gStyles.headerText}>{poiCounts.business}</Text>
             <Text
               style={StyleSheet.compose(screenStyles.countInfoText, {
                 color: PoiTypesColor.business,
@@ -146,7 +182,7 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
             </Text>
           </View>
           <View style={screenStyles.countRowItem}>
-            <Text style={gStyles.headerText}>10</Text>
+            <Text style={gStyles.headerText}>{poiCounts.total}</Text>
             <Text
               style={StyleSheet.compose(screenStyles.countInfoText, {
                 color: PoiTypesColor.total,

@@ -92,6 +92,7 @@ export const urls = {
     endTask: `${baseURL}/end_task`,
   },
   poi: {
+    counts: `${BASE_POI_URL}/getPOICount`,
     list: `${BASE_POI_URL}/getAll`,
     create: `${BASE_POI_URL}/create`,
     update: `${BASE_POI_URL}/update`,

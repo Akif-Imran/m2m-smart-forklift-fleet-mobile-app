@@ -63,10 +63,20 @@ type POIPostRequestBase = {
   address: string;
   color: string;
   marker_shape: string;
+  company_name: string;
+  company_id: string;
+  person: string;
+  phone_no: string;
+  mobile_no: string;
+  email: string;
   // zone_id: number;
 };
+type POICountResponse = ApiResponse<IPoiCount[]>;
 type AddPOIRequest = Omit<POIPostRequestBase, "id">;
-type UpdatePOIRequest = POIPostRequestBase;
+type UpdatePOIRequest = Omit<
+  POIPostRequestBase,
+  "company_name" | "company_id" | "person" | "phone_no" | "mobile_no" | "email"
+>;
 
 type POIPostResponseBase = {
   id: number;

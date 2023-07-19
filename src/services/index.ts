@@ -9,6 +9,7 @@ export {
   deleteVehicle,
   updateVehicle,
   getVehicleById,
+  getPoiCounts,
   getPoiList,
   deletePoi,
   addPoi,

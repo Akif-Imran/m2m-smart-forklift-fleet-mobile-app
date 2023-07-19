@@ -81,6 +81,13 @@ export const updateVehicle = async (
   return response.data;
 };
 
+export const getPoiCounts = async (
+  token: string
+): Promise<POICountResponse> => {
+  const response = await apiGet<POICountResponse>(urls.poi.counts, token);
+  return response.data;
+};
+
 export const getPoiList = async (token: string): Promise<PoiListResponse> => {
   const response = await apiGet<PoiListResponse>(urls.poi.list, token);
   return response.data;
