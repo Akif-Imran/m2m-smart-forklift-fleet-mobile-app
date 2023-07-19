@@ -5,9 +5,13 @@ import { colors } from "./colors";
 export const theme = {
   img: {
     size: {
-      xs: {
+      xxs: {
         height: 24,
         width: 24,
+      },
+      xs: {
+        height: 32,
+        width: 32,
       },
       sm: {
         height: 48,

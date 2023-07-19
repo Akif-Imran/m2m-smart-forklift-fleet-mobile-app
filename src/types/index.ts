@@ -160,6 +160,7 @@ interface IDriverBase {
   is_active: boolean;
   assign_status: boolean;
   dob: string;
+  rating: number;
   available_status: boolean;
   createdAt: string;
   updatedAt: string;

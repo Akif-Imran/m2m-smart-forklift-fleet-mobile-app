@@ -30,6 +30,7 @@ import { images, iconNames, iconColors } from "@markers";
 import { addPoi, getPoiList, reverseGeocode } from "@services";
 import { useAuthContext } from "@context";
 import Spinner from "react-native-loading-spinner-overlay";
+import { mapMarkers } from "@map-markers";
 
 import { styles } from "./styles";
 interface Marker extends LatLng {
@@ -73,7 +74,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
   const [trackViewChanges, _setTrackViewChanges] =
     React.useState<boolean>(true);
   const [_isMapReady, setIsMapReady] = React.useState<boolean>(false);
-  const [markers, _setMarkers] = React.useState<IMapPoint[]>([]);
+  const [markers, setMarkers] = React.useState<IMapPoint[]>([]);
   const [poiMarkers, setPoiMarkers] = React.useState<Marker[]>([]);
   const [visible, setVisible] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -163,9 +164,9 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
   React.useEffect(() => {
     if (mode === "single") {
       const { point } = route.params;
-      _setMarkers([point]);
+      setMarkers([point]);
     } else if (mode === "multiple") {
-      _setMarkers(route.params.points);
+      setMarkers(route.params.points);
     }
   }, [mode, route.params]);
 
@@ -267,16 +268,42 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
         }
       >
         {markers.map((marker, index) => (
-          <Marker
-            key={index}
-            tracksViewChanges={trackViewChanges}
-            coordinate={{
-              latitude: marker.latitude,
-              longitude: marker.longitude,
-            }}
-            title={marker.name}
-            onPress={() => handleMarkerOnPress(marker)}
-          />
+          <React.Fragment key={index}>
+            {mapMarkers[marker.icon] ? (
+              <Marker
+                key={index}
+                tracksViewChanges={trackViewChanges}
+                coordinate={{
+                  latitude: marker.latitude,
+                  longitude: marker.longitude,
+                }}
+                title={marker.name}
+                onPress={() => handleMarkerOnPress(marker)}
+              >
+                <Image
+                  source={mapMarkers[marker.icon].icon}
+                  // onLoad={() => setViewTrackingA1(false)}
+                  style={{
+                    width: mapMarkers[marker.icon].size.width,
+                    height: mapMarkers[marker.icon].size.height,
+                  }}
+                  resizeMethod="auto"
+                  resizeMode="contain"
+                />
+              </Marker>
+            ) : (
+              <Marker
+                key={index}
+                tracksViewChanges={trackViewChanges}
+                coordinate={{
+                  latitude: marker.latitude,
+                  longitude: marker.longitude,
+                }}
+                title={marker.name}
+                onPress={() => handleMarkerOnPress(marker)}
+              />
+            )}
+          </React.Fragment>
         ))}
         {poiMarkers.map((value, index) => (
           <Marker
@@ -294,7 +321,10 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
             <Image
               source={images[`${value.iconName}-${value.colorName}`]}
               // onLoad={() => setViewTrackingA1(false)}
-              style={{ width: 48, height: 48 }}
+              style={{
+                width: theme.img.size.sm.width,
+                height: theme.img.size.sm.height,
+              }}
               resizeMethod="auto"
               resizeMode="contain"
             />
@@ -319,12 +349,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
                   }
                   value={form.values.poiType}
                 >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      columnGap: theme.spacing.sm,
-                    }}
-                  >
+                  <View style={styles.radioContainer}>
                     <View style={[screenStyles.radioItemStyle, { flex: 1 }]}>
                       <RadioButton.Item
                         theme={PaperTheme}
@@ -404,7 +429,10 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
                             images[`${value[1]}-${form.values.colorName}`]
                           }
                           // onLoad={() => setViewTrackingA1(false)}
-                          style={{ width: 35, height: 35 }}
+                          style={{
+                            width: theme.img.size.xs.width,
+                            height: theme.img.size.xs.height,
+                          }}
                           resizeMethod="auto"
                           resizeMode="contain"
                         />

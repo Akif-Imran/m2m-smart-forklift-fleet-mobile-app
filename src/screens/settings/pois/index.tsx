@@ -12,7 +12,7 @@ import {
   _TextInput,
 } from "@components";
 import type { ProfileSettingsStackScreenProps } from "@navigation-types";
-import { PaperTheme, colors, gStyles } from "@theme";
+import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { Searchbar } from "react-native-paper";
 import { ToastService } from "@utility";
 import { PoiTypesColor } from "@constants";
@@ -153,7 +153,8 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
-      <NoIconHeader title="POI(s)" />
+      {/* <NoIconHeader title="POI(s)" /> */}
+      <View style={{ height: theme.header.height }} />
       <_DefaultCard>
         <View style={screenStyles.countRow}>
           <View style={screenStyles.countRowItem}>

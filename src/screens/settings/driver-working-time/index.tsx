@@ -132,8 +132,7 @@ const DriverWorkingTime: React.FC<
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
-      <NoIconHeader title="Working Time" />
-      <_ScrollFormLayout hasSpacing={false}>
+      <_ScrollFormLayout hasSpacing={true}>
         <View style={{ rowGap: theme.spacing.xs }}>
           <_Divider title="Driver Working Info" />
           <_DropDown

@@ -60,8 +60,8 @@ export const mapMarkers: Record<string, IMapMarker> = {
     name: "blue-truck-top",
     icon: BlueTruck,
     size: {
-      width: 35,
-      height: 35,
+      width: 55,
+      height: 55,
     },
     offset: { x: 0.0, y: 0.0 },
     anchor: { x: 0.2, y: 0.25 },

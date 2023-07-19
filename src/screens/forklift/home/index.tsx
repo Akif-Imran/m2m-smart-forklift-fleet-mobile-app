@@ -48,6 +48,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
     []
   );
   const [isFetching, setIsFetching] = React.useState(false);
+  const [points, setPoints] = React.useState<IMapPoint[]>([]);
   const fetchForkliftsTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
   const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
   const [toBeDeletedVehicleId, setToBeDeletedVehicleId] =
@@ -183,13 +184,37 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
   //     });
   // }, []);
 
+  function generateRandomCoordinate() {
+    const minLatitude = 1.16;
+    const maxLatitude = 7.36;
+    const minLongitude = 99.62;
+    const maxLongitude = 119.27;
+
+    const latitude = Math.random() * (maxLatitude - minLatitude) + minLatitude;
+    const longitude =
+      Math.random() * (maxLongitude - minLongitude) + minLongitude;
+
+    return { latitude, longitude };
+  }
+
   const fetchVehicles = React.useCallback(
     (withLoader = true) => {
       setIsFetching(withLoader);
       getVehicleList(token)
         .then((res) => {
           if (res.success) {
-            setForklifts(res.data.rows);
+            const { rows } = res.data;
+            setForklifts(rows);
+            const pointList: IMapPoint[] = rows.map((vehicle) => {
+              const { latitude, longitude } = generateRandomCoordinate();
+              return {
+                icon: vehicle.icon,
+                name: vehicle.reg_no,
+                latitude,
+                longitude,
+              };
+            });
+            setPoints(pointList);
           }
         })
         .catch((_err) => {
@@ -272,28 +297,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
             onPress: () =>
               navigation.navigate("BirdEyeView", {
                 mode: "multiple",
-                points: [
-                  {
-                    latitude: 3.139003,
-                    longitude: 101.686855,
-                    name: "PT-01",
-                  },
-                  {
-                    latitude: 3.154159,
-                    longitude: 101.713877,
-                    name: "PT-02",
-                  },
-                  {
-                    latitude: 3.151663,
-                    longitude: 101.695417,
-                    name: "PT-03",
-                  },
-                  {
-                    latitude: 3.149408,
-                    longitude: 101.696225,
-                    name: "PT-04",
-                  },
-                ],
+                points: points,
               }),
           },
         ]}

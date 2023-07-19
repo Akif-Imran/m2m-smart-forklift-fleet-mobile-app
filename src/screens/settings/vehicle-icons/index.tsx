@@ -7,74 +7,77 @@ import { PaperTheme, colors, theme } from "@theme";
 import { _ListEmptyComponent } from "@components";
 import { Searchbar } from "react-native-paper";
 import { faker } from "@faker-js/faker";
+import { getVehicleList } from "@services";
+import { useAuthContext } from "@context";
+import { ToastService } from "@utility";
 
 import { _ForkliftListCard } from "../components";
 
 const VehicleIcons: React.FC<
   ProfileSettingsStackScreenProps<"VehicleIcons">
 > = ({}) => {
+  const {
+    state: { token },
+  } = useAuthContext();
   const [searchQuery, setSearchQuery] = React.useState<string>("");
-  const [forklifts, setForklifts] = React.useState<IForklift[]>([]);
-  const [searchedForklifts, setSearchedForklifts] = React.useState<IForklift[]>(
+  const [forklifts, setForklifts] = React.useState<IVehicle[]>([]);
+  const [searchedForklifts, setSearchedForklifts] = React.useState<IVehicle[]>(
     []
   );
-  const [isFetchingForklifts, setIsFetchingForklifts] = React.useState(false);
-  const fetchForkliftsTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
+  const [isFetching, setIsFetching] = React.useState(false);
+  // const fetchForkliftsTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
 
-  const addInfo = () => {
-    const record: IForklift = {
-      _id: faker.database.mongodbObjectId(),
-      imei: faker.string.alphanumeric({
-        casing: "upper",
-        length: { min: 12, max: 15 },
-      }),
-      simNo: faker.string.numeric({ length: 12, allowLeadingZeros: false }),
-      age: faker.helpers.arrayElement([10, 11, 12, 13, 14, 15, 16]).toString(),
-      batterySerialNo: faker.vehicle.vin(),
-      color: faker.vehicle.color(),
-      forkliftSerialNo: faker.vehicle.vrm(),
-      make: faker.date.past().getFullYear().toString(),
-      manufactureYear: faker.date.past().getFullYear().toString(),
+  // const addInfo = () => {
+  //   const record: IForklift = {
+  //     _id: faker.database.mongodbObjectId(),
+  //     imei: faker.string.alphanumeric({
+  //       casing: "upper",
+  //       length: { min: 12, max: 15 },
+  //     }),
+  //     simNo: faker.string.numeric({ length: 12, allowLeadingZeros: false }),
+  //     age: faker.helpers.arrayElement([10, 11, 12, 13, 14, 15, 16]).toString(),
+  //     batterySerialNo: faker.vehicle.vin(),
+  //     color: faker.vehicle.color(),
+  //     forkliftSerialNo: faker.vehicle.vrm(),
+  //     make: faker.date.past().getFullYear().toString(),
+  //     manufactureYear: faker.date.past().getFullYear().toString(),
 
-      purchaseDate: faker.date.past().toDateString(),
-      rentStartDate: faker.date.past().toDateString(),
-      rentEndDate: faker.date.future().toDateString(),
-      milage: faker.helpers
-        .rangeToNumber({ min: 13867, max: 50000 })
-        .toString(),
-      regNo: faker.helpers.rangeToNumber({ min: 1, max: 50000 }).toString(),
-      image: faker.image.urlPicsumPhotos({ height: 75, width: 75 }),
-      name: faker.helpers.arrayElement([
-        "Forklift 1",
-        "Forklift 2",
-        "Forklift 3",
-        "Forklift 4",
-      ]),
-      status: faker.helpers.arrayElement([
-        "moving",
-        "parked",
-        "offline",
-        "faulty",
-      ]),
-      driver: faker.person.fullName(),
-      model: faker.vehicle.vrm(),
-      fuelType: faker.vehicle.fuel(),
-      fuelCapacity: faker.helpers
-        .rangeToNumber({ min: 12, max: 50 })
-        .toString(),
-      insuranceType: "Type 1",
-      insuranceCompany: faker.company.name(),
-      insuranceExpiryDate: faker.date.future().toDateString(),
-      insuranceNo: faker.string.alphanumeric({ length: 8, casing: "upper" }),
-    };
-    setForklifts((prev) => [...prev, record]);
-  };
+  //     purchaseDate: faker.date.past().toDateString(),
+  //     rentStartDate: faker.date.past().toDateString(),
+  //     rentEndDate: faker.date.future().toDateString(),
+  //     milage: faker.helpers
+  //       .rangeToNumber({ min: 13867, max: 50000 })
+  //       .toString(),
+  //     regNo: faker.helpers.rangeToNumber({ min: 1, max: 50000 }).toString(),
+  //     image: faker.image.urlPicsumPhotos({ height: 75, width: 75 }),
+  //     name: faker.helpers.arrayElement([
+  //       "Forklift 1",
+  //       "Forklift 2",
+  //       "Forklift 3",
+  //       "Forklift 4",
+  //     ]),
+  //     status: faker.helpers.arrayElement([
+  //       "moving",
+  //       "parked",
+  //       "offline",
+  //       "faulty",
+  //     ]),
+  //     driver: faker.person.fullName(),
+  //     model: faker.vehicle.vrm(),
+  //     fuelType: faker.vehicle.fuel(),
+  //     fuelCapacity: faker.helpers
+  //       .rangeToNumber({ min: 12, max: 50 })
+  //       .toString(),
+  //     insuranceType: "Type 1",
+  //     insuranceCompany: faker.company.name(),
+  //     insuranceExpiryDate: faker.date.future().toDateString(),
+  //     insuranceNo: faker.string.alphanumeric({ length: 8, casing: "upper" }),
+  //   };
+  //   setForklifts((prev) => [...prev, record]);
+  // };
 
   const handleRefresh = () => {
-    setIsFetchingForklifts(true);
-    fetchForkliftsTimeoutRef.current = setTimeout(() => {
-      setIsFetchingForklifts(false);
-    }, 3000);
+    fetchVehicles(true);
   };
 
   const handleSearch = (query: string) => {
@@ -83,27 +86,41 @@ const VehicleIcons: React.FC<
       setSearchedForklifts(forklifts);
       return;
     }
-    const filteredCustomers = forklifts.filter((customer) =>
-      customer.name.toLowerCase().includes(query.toLowerCase())
+    const filteredCustomers = forklifts.filter((vehicle) =>
+      vehicle.reg_no.toLowerCase().includes(query.toLowerCase())
     );
     setSearchedForklifts(filteredCustomers);
   };
+
+  const fetchVehicles = React.useCallback(
+    (withLoader = true) => {
+      setIsFetching(withLoader);
+      getVehicleList(token)
+        .then((res) => {
+          if (res.success) {
+            setForklifts(res.data.rows);
+          }
+        })
+        .catch((_err) => {
+          ToastService.show("Error occurred");
+        })
+        .finally(() => {
+          setIsFetching(false);
+        });
+    },
+    [token]
+  );
 
   React.useEffect(() => {
     if (!forklifts) {
       return;
     }
     setSearchedForklifts(forklifts);
-
-    return () => {
-      clearTimeout(fetchForkliftsTimeoutRef.current);
-    };
   }, [forklifts]);
 
   React.useEffect(() => {
-    addInfo();
-    addInfo();
-  }, []);
+    fetchVehicles(false);
+  }, [fetchVehicles]);
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
@@ -124,15 +141,15 @@ const VehicleIcons: React.FC<
         showsVerticalScrollIndicator={false}
         style={screenStyles.flatListStyle}
         // contentContainerStyle={{ padding: 2 }}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={<_ListEmptyComponent label="No Forklifts..." />}
         renderItem={({ item }) => (
-          <_ForkliftListCard key={item._id} item={item} />
+          <_ForkliftListCard key={item.id.toString()} item={item} />
         )}
         refreshControl={
           <RefreshControl
             enabled={true}
-            refreshing={isFetchingForklifts}
+            refreshing={isFetching}
             colors={[colors.primary]}
             progressBackgroundColor={colors.white}
             onRefresh={handleRefresh}

@@ -9,6 +9,9 @@ import { Button } from "react-native-paper";
 import { ToastService } from "@utility";
 import Spinner from "react-native-loading-spinner-overlay";
 import { _Divider } from "@components";
+import { mapMarkers } from "@map-markers";
+import { updateVehicle } from "@services";
+import { useAuthContext } from "@context";
 
 import { _ForkliftListCard } from "../components";
 
@@ -57,12 +60,35 @@ const SelectIcons: React.FC<ProfileSettingsStackScreenProps<"SelectIcon">> = ({
   navigation,
   route,
 }) => {
+  const {
+    state: { token },
+  } = useAuthContext();
   const { item } = route.params;
   const [isLoading, setIsLoading] = React.useState(false);
-  const [selectedIcon, setSelectedIcon] =
-    React.useState<string>("marker-pin.png");
-  const [icons, _setIcons] = React.useState(images);
-  console.log(selectedIcon);
+  const [selectedIcon, setSelectedIcon] = React.useState<string>("marker-pin");
+  const [icons, _setIcons] = React.useState(mapMarkers);
+  console.log(selectedIcon, item.icon);
+
+  const handleOnConfirm = () => {
+    setIsLoading(true);
+    updateVehicle(token, {
+      ...item,
+      mileage: item.mileage || "0",
+      icon: selectedIcon,
+    })
+      .then((res) => {
+        if (res?.message) {
+          ToastService.show(res.message);
+        }
+        if (res.success) {
+          navigation.goBack();
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
       <Spinner
@@ -76,12 +102,12 @@ const SelectIcons: React.FC<ProfileSettingsStackScreenProps<"SelectIcon">> = ({
       <_ForkliftListCard item={item} mode="info" />
       <_Divider title="Icons" />
       <View style={styles.iconsContainer}>
-        {icons.map((icon) => {
+        {Object.values(icons).map((icon, index) => {
           const checked = selectedIcon ? icon.name === selectedIcon : false;
           console.log(icon.name, selectedIcon, checked);
           return (
             <TouchableOpacity
-              key={icon.id}
+              key={index}
               style={StyleSheet.compose(styles.iconButton, {
                 borderColor: checked ? colors.primary : colors.white,
               })}
@@ -89,8 +115,11 @@ const SelectIcons: React.FC<ProfileSettingsStackScreenProps<"SelectIcon">> = ({
               onPress={() => setSelectedIcon(icon.name)}
             >
               <Image
-                source={icon.src}
-                style={{ width: icon.size.width, height: icon.size.height }}
+                source={icon.icon}
+                style={{
+                  width: theme.img.size.sm.width,
+                  height: theme.img.size.sm.height,
+                }}
                 resizeMethod="auto"
                 resizeMode="contain"
               />
@@ -102,14 +131,7 @@ const SelectIcons: React.FC<ProfileSettingsStackScreenProps<"SelectIcon">> = ({
         <Button
           theme={PaperTheme}
           mode="contained"
-          onPress={() => {
-            setIsLoading(true);
-            setTimeout(() => {
-              setIsLoading(false);
-              ToastService.show("icon confirmed successfully");
-              navigation.goBack();
-            }, 2000);
-          }}
+          onPress={handleOnConfirm}
           labelStyle={StyleSheet.compose(gStyles.tblHeaderText, {
             color: colors.white,
           })}

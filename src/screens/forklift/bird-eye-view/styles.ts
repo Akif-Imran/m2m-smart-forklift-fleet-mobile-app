@@ -23,4 +23,8 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  radioContainer: {
+    flexDirection: "row",
+    columnGap: theme.spacing.sm,
+  },
 });

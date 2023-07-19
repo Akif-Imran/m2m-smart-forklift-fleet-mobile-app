@@ -89,4 +89,5 @@ interface IMapPoint {
   latitude: number;
   longitude: number;
   name: string;
+  icon: string;
 }

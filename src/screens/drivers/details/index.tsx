@@ -37,7 +37,7 @@ const DriverDetails: React.FC<DriverStackScreenProps<"DriverDetails">> = ({
     }
     getAssignedVehicles(token, _id).then((res) => {
       if (res.success) {
-        console.log(res.data);
+        // console.log(res.data);
         setAssignedVehicles(res.data);
       }
     });
@@ -55,7 +55,7 @@ const DriverDetails: React.FC<DriverStackScreenProps<"DriverDetails">> = ({
     if (!isFocused) {
       return;
     }
-    refreshDriver();
+    // refreshDriver();
   }, [refreshDriver, isFocused]);
 
   return (

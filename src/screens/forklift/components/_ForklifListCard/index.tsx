@@ -37,7 +37,8 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
             point: {
               latitude: 3.139003,
               longitude: 101.686855,
-              name: "PT-01",
+              name: item.reg_no,
+              icon: item.icon,
             },
           })
         }

@@ -129,7 +129,7 @@ export type ProfileSettingsStackParamsList = {
   Settings: undefined;
   ChangePassword: undefined;
   VehicleIcons: undefined;
-  SelectIcon: DetailsType<IForklift>;
+  SelectIcon: DetailsType<IVehicle>;
   Pois: undefined;
   ViewPoiOnMap: DetailsType<IPOI>;
   About: undefined;

@@ -8,9 +8,10 @@ import type { ProfileSettingsStackScreenProps } from "@navigation-types";
 import { truncateText } from "@utility";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { ForkliftStatusColor } from "@constants";
+import { baseURL } from "@api";
 
 interface OwnProps {
-  item: IForklift;
+  item: IVehicle;
   mode?: "info" | "list";
 }
 
@@ -32,14 +33,14 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, mode = "list" }) => {
             : () =>
                 navigation.navigate("SelectIcon", {
                   item: item,
-                  _id: item._id,
+                  _id: item.id.toString(),
                 })
         }
       >
         <View>
-          {item.image ? (
+          {item.picture ? (
             <Image
-              source={{ uri: item.image }}
+              source={{ uri: `${baseURL}${item.picture}` }}
               resizeMode="cover"
               style={listCardStyles.imgStyle}
             />
@@ -53,13 +54,13 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, mode = "list" }) => {
         </View>
         <View style={listCardStyles.infoWithForward}>
           <View style={listCardStyles.infoContainer}>
-            <Text style={gStyles.cardInfoTitleText}>{item.name}</Text>
+            <Text style={gStyles.cardInfoTitleText}>{item.reg_no}</Text>
             <Text
               style={gStyles.tblDescText}
               ellipsizeMode="tail"
               numberOfLines={1}
             >
-              {item.driver}
+              {item.make}-{item.model}-{item.year}
             </Text>
 
             <Text
@@ -67,7 +68,7 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, mode = "list" }) => {
               ellipsizeMode="tail"
               numberOfLines={0.5}
             >
-              {truncateText(item.model, 22)}
+              {item.fuel_type_name}
             </Text>
           </View>
 
@@ -76,13 +77,13 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, mode = "list" }) => {
               flexDirection: "row",
             })}
           >
-            <Text
+            {/* <Text
               style={StyleSheet.compose(screenStyles.badgeText, {
                 backgroundColor: ForkliftStatusColor[item.status],
               })}
             >
               {truncateText(item.status, 35).toUpperCase()}
-            </Text>
+            </Text> */}
             {mode === "info" ? undefined : (
               <FontAwesome5
                 name="caret-right"

@@ -60,7 +60,7 @@ const ProfileSettingsStack: FC = () => {
         name="Pois"
         component={Pois}
         options={{
-          headerTitle: "",
+          headerTitle: "POI(s)",
           headerShown: true,
         }}
       />
@@ -92,7 +92,8 @@ const ProfileSettingsStack: FC = () => {
         name="DriverWorkingTime"
         component={DriverWorkingTime}
         options={{
-          headerTitle: "",
+          headerTitle: "Set Working Time",
+          headerShown: true,
         }}
       />
       <Stack.Screen
