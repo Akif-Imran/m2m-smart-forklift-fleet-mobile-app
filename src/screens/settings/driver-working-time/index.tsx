@@ -2,7 +2,6 @@
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
-  NoIconHeader,
   _DatePicker,
   _Divider,
   _DropDown,

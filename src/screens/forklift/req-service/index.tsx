@@ -46,7 +46,7 @@ const RequestService: React.FC<ForkliftStackScreenProps<"ReqService">> = ({
     state: { token },
   } = useAuthContext();
   const [isLoading, setIsLoading] = React.useState(false);
-  const [date, setDate] = React.useState<Date>(new Date());
+  const [date, _setDate] = React.useState<Date>(new Date());
   const [_hasImages, setHasImages] = React.useState<boolean>(false);
   const [images, setImages] = React.useState<ImagePicker.ImagePickerAsset[]>(
     []

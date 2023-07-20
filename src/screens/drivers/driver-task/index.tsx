@@ -6,7 +6,6 @@ import { screenStyles } from "@screen-styles";
 import { PaperTheme, colors, gStyles } from "@theme";
 import { _DefaultCard, _ScrollFormLayout } from "@components";
 import { FORMAT_DURATION_HH_MM_SS } from "@utility";
-import { faker } from "@faker-js/faker";
 import { Button } from "react-native-paper";
 import moment from "moment";
 import { useTaskContext } from "@context";
@@ -16,15 +15,11 @@ const DriverTask: React.FC<ForkliftStackScreenProps<"DriverTask">> = ({
   navigation,
 }) => {
   const {
-    state: { inProgress, isLoading, task },
+    state: { isLoading, task },
     endTasks,
   } = useTaskContext();
   const [durationInSeconds, setDurationInSeconds] = React.useState(0);
   const intervalRef = useRef<NodeJS.Timeout | undefined>(undefined);
-  // const [image, _setImage] = React.useState<string>(
-  //   faker.image.urlPicsumPhotos()
-  // );
-  const [date, _setDate] = React.useState<string>(faker.date.past().toString());
 
   React.useEffect(() => {
     if (!task) {

@@ -13,12 +13,7 @@ import { FAB, Modal, Portal, RadioButton, Searchbar } from "react-native-paper";
 import { PaperTheme, colors, gStyles } from "@theme";
 import type { DriverStackScreenProps } from "@navigation-types";
 import { ToastService } from "@utility";
-import {
-  Feather,
-  FontAwesome5,
-  Ionicons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { DriversFilters } from "@constants";
 import { deleteDriver, getDrivers } from "@services";
 import { useAuthContext } from "@context";

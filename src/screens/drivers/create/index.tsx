@@ -1,11 +1,5 @@
 /* eslint-disable camelcase */
-import {
-  FlatList,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -230,7 +224,6 @@ const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({
       licenseType: item.license_type || "",
       mobile_number: item.mobile_number || "",
       password: item.password || "",
-      //@ts-expect-error will add rating later to api
       rating: item?.rating || 0,
       license_number: item.license_number || "",
       joining_date: item.joining_date

@@ -25,7 +25,7 @@ const Activity: React.FC<DriverStackScreenProps<"Activity">> = ({
   navigation,
   route,
 }) => {
-  const { _id, item } = route.params;
+  const { _id } = route.params;
   //FIXME - remove isAdmin from here. (only here for test);
   const {
     state: { isWarehouse, isAdmin, token },

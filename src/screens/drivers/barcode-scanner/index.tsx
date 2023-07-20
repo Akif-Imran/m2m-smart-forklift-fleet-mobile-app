@@ -3,10 +3,7 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "@screen-styles";
 import { theme } from "@theme";
-import type {
-  DriverStackScreenProps,
-  ForkliftStackScreenProps,
-} from "@navigation-types";
+import type { ForkliftStackScreenProps } from "@navigation-types";
 import { ToastService } from "@utility";
 import type { BarCodeScannedCallback } from "expo-barcode-scanner";
 import { BarCodeScanner } from "expo-barcode-scanner";
@@ -23,7 +20,7 @@ const BarcodeScanner: React.FC<ForkliftStackScreenProps<"BarcodeScanner">> = ({
   const {
     state: { token },
   } = useAuthContext();
-  const [deviceDetails, setDeviceDetails] = React.useState<
+  const [_deviceDetails, setDeviceDetails] = React.useState<
     QRScanDeviceDetails | undefined
   >(undefined);
   const [code, setCode] = React.useState<string>("");

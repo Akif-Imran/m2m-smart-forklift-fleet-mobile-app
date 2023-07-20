@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import React from "react";
 import type { ProfileSettingsStackScreenProps } from "@navigation-types";
@@ -16,45 +15,6 @@ import { useAuthContext } from "@context";
 import { _ForkliftListCard } from "../components";
 
 import { styles } from "./styles";
-
-const images = [
-  {
-    id: 1,
-    src: require("@assets/images/3d-car-top-view-red.png"),
-    name: "3d-car-top-view-red.png",
-    size: theme.img.size.md,
-  },
-  {
-    id: 2,
-    src: require("@assets/images/3d-car-top-view-white.png"),
-    name: "3d-car-top-view-white.png",
-    size: theme.img.size.md,
-  },
-  {
-    id: 3,
-    src: require("@assets/images/3d-truck-top-view-blue.png"),
-    name: "3d-truck-top-view-blue.png",
-    size: theme.img.size.md,
-  },
-  {
-    id: 4,
-    src: require("@assets/images/forklift.png"),
-    name: "forklift.png",
-    size: theme.img.size.md,
-  },
-  {
-    id: 5,
-    src: require("@assets/images/bike-rider.png"),
-    name: "bike-rider.png",
-    size: theme.img.size.md,
-  },
-  {
-    id: 6,
-    src: require("@assets/images/marker-pin.png"),
-    name: "marker-pin.png",
-    size: theme.img.size.md,
-  },
-];
 
 const SelectIcons: React.FC<ProfileSettingsStackScreenProps<"SelectIcon">> = ({
   navigation,

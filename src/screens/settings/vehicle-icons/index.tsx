@@ -6,7 +6,6 @@ import { screenStyles } from "@screen-styles";
 import { PaperTheme, colors, theme } from "@theme";
 import { _ListEmptyComponent } from "@components";
 import { Searchbar } from "react-native-paper";
-import { faker } from "@faker-js/faker";
 import { getVehicleList } from "@services";
 import { useAuthContext } from "@context";
 import { ToastService } from "@utility";

@@ -13,7 +13,6 @@ import {
 import { PaperTheme, colors, gStyles } from "@theme";
 import { FAB, Searchbar } from "react-native-paper";
 import { ToastService } from "@utility";
-import { faker } from "@faker-js/faker";
 import { ForkliftStatusColor } from "@constants";
 import {
   FontAwesome5,
@@ -49,7 +48,6 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
   );
   const [isFetching, setIsFetching] = React.useState(false);
   const [points, setPoints] = React.useState<IMapPoint[]>([]);
-  const fetchForkliftsTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
   const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
   const [toBeDeletedVehicleId, setToBeDeletedVehicleId] =
     React.useState<number>(0);

@@ -1,10 +1,8 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { _DefaultCard, _Divider } from "@components";
 import { listCardStyles, screenStyles } from "@screen-styles";
-import { colors, gStyles } from "@theme";
-import { faker } from "@faker-js/faker";
-import moment from "moment";
+import { colors } from "@theme";
 import { FORMAT_DATE_DD_MM_YYYY } from "@utility";
 
 import { styles } from "./styles";

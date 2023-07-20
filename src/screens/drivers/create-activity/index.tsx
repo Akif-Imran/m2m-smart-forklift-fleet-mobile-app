@@ -18,7 +18,7 @@ import { useFormik } from "formik";
 import { ToastService } from "@utility";
 import { Button, TextInput } from "react-native-paper";
 import moment from "moment";
-import { addDriverBehavior, getDrivers, getEventTypes } from "@services";
+import { addDriverBehavior, getDrivers } from "@services";
 import { useAuthContext } from "@context";
 import { getBehaviorEventTypes } from "src/services/drivers";
 

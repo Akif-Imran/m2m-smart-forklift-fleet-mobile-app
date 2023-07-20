@@ -44,7 +44,6 @@ import {
   createGeoFence,
   deleteGeoFence,
   getGeoFenceByDeviceId,
-  getGeoFenceList,
   updateGeoFence,
 } from "@services";
 import { useAuthContext } from "@context";

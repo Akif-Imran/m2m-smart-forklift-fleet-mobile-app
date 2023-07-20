@@ -3,7 +3,6 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "@screen-styles";
 import {
-  NoIconHeader,
   _ConfirmModal,
   _DefaultCard,
   _Divider,
@@ -34,7 +33,6 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
   const [pois, setPois] = React.useState<IPOI[]>([]);
   const [searchedPois, setSearchedPois] = React.useState<IPOI[]>([]);
   const [isFetching, setIsFetching] = React.useState(false);
-  const fetchPoisTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
   const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
   const [toBeDeletedPoiId, setToBeDeletedPoiId] = React.useState<number>(0);
   const [poiCounts, setPoiCounts] = React.useState<ICount>({

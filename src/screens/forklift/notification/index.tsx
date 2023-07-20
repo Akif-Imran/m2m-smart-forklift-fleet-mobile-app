@@ -13,7 +13,6 @@ import { Modal, Portal, RadioButton, Searchbar } from "react-native-paper";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
 import type { ForkliftStackScreenProps } from "@navigation-types";
 import { ToastService } from "@utility";
-import { faker } from "@faker-js/faker";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { ForkliftNotificationsFilters } from "@constants";
 import { getNotificationsList } from "@services";
@@ -33,11 +32,7 @@ const ForkliftNotification: React.FC<
     INotification[]
   >([]);
   const [isFetching, setIsFetching] = React.useState(false);
-  const fetchNotificationsTimeoutRef = React.useRef<
-    NodeJS.Timeout | undefined
-  >();
   const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
-
   const [visible, setVisible] = React.useState<boolean>(false);
   const [selectedFilter, setSelectedFilter] = React.useState<string>(
     ForkliftNotificationsFilters.ALL.toString()

@@ -2,12 +2,10 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { _DefaultCard } from "@components";
 import { colors, gStyles } from "@theme";
-import { listCardStyles, screenStyles } from "@screen-styles";
+import { listCardStyles } from "@screen-styles";
 import { useNavigation } from "@react-navigation/native";
 import type { ProfileSettingsStackScreenProps } from "@navigation-types";
-import { truncateText } from "@utility";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { ForkliftStatusColor } from "@constants";
 import { baseURL } from "@api";
 
 interface OwnProps {

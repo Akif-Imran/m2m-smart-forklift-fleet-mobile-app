@@ -65,7 +65,7 @@ const Dashboard: React.FC<DashboardStackScreenProps<"Dashboard">> = ({}) => {
           const total =
             res.data.Completed + res.data["In Process"] + res.data.Pending;
           const data = Object.entries(res.data)
-            .map(([key, value]) => getPercentage(value, total))
+            .map(([_, value]) => getPercentage(value, total))
             .filter((value) => value.y > 0);
           const legends = [
             {
