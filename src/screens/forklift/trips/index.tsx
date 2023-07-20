@@ -28,6 +28,7 @@ import MapView, { Marker, PROVIDER_DEFAULT, Polyline } from "react-native-maps";
 import { useFocusEffect } from "@react-navigation/native";
 import { getDirections } from "@services";
 import { useSafeAreaDimensions } from "@hooks";
+import { mapMarkers } from "@map-markers";
 
 import { styles } from "./styles";
 
@@ -40,7 +41,7 @@ const routeAData = [
     start: true,
     icon: (
       <Image
-        style={{ width: 20, height: 20, tintColor: colors.primary }}
+        style={{ ...theme.img.size.xxs, tintColor: colors.primary }}
         // eslint-disable-next-line import/extensions
         source={require("@assets/images/icons8-engine-96.png")}
       />
@@ -54,7 +55,7 @@ const routeAData = [
     description: "Street 21, District 3 Lahore",
     icon: (
       <Image
-        style={{ width: 20, height: 20, tintColor: colors.error }}
+        style={{ ...theme.img.size.xxs, tintColor: colors.error }}
         // eslint-disable-next-line import/extensions
         source={require("@assets/images/icons8-engine-96.png")}
       />
@@ -233,18 +234,22 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               tracksViewChanges={viewTrackingA1}
               coordinate={coordsA[0]}
               rotation={15}
-              anchor={{ x: 0.2, y: 0.25 }}
+              // anchor={{ x: 0.2, y: 0.25 }}
+              anchor={mapMarkers["marker-pin"].anchor}
               zIndex={selected === "A" ? 100 : -100}
-              style={{ width: 40, height: 40 }}
+              style={mapMarkers["marker-pin"].size}
               onPress={() =>
                 handleMarkerOnPress(BOTTOM_SHEET_MAX_TRANSLATE_Y, coordsA, 0)
               }
             >
               <Image
-                // eslint-disable-next-line import/extensions
-                source={require("@assets/images/3d-car-top-view-white.png")}
+                // source={require("@assets/images/3d-car-top-view-white.png")}
+                source={mapMarkers["marker-pin"].icon}
                 onLoad={() => setViewTrackingA1(false)}
-                style={{ width: 35, height: 35 }}
+                style={{
+                  width: theme.img.size.xs.width,
+                  height: theme.img.size.xs.height,
+                }}
                 resizeMethod="auto"
                 resizeMode="contain"
               />
@@ -257,7 +262,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               // anchor={{ x: 0.25, y: 0.6 }}
               centerOffset={{ x: 16, y: -16 }}
               zIndex={selected === "A" ? 100 : -100}
-              style={{ width: 40, height: 40 }}
+              style={theme.map.marker.size.md}
               onPress={() =>
                 handleMarkerOnPress(
                   BOTTOM_SHEET_MAX_TRANSLATE_Y,
@@ -270,7 +275,10 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
                 // eslint-disable-next-line import/extensions
                 source={require("@assets/images/racing-flag.png")}
                 onLoad={() => setViewTrackingA2(false)}
-                style={{ width: 35, height: 35 }}
+                style={{
+                  width: theme.img.size.xs.width,
+                  height: theme.img.size.xs.height,
+                }}
                 resizeMethod="auto"
                 resizeMode="contain"
               />
@@ -342,7 +350,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               rotation={-5}
               anchor={{ x: 0.2, y: 0.3 }}
               zIndex={selected === "C" ? 100 : -100}
-              style={{ width: 40, height: 40 }}
+              style={theme.map.marker.size.md}
               onPress={() =>
                 handleMarkerOnPress(BOTTOM_SHEET_MAX_TRANSLATE_Y, coordsC, 0)
               }
@@ -351,7 +359,10 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
                 // eslint-disable-next-line import/extensions
                 source={require("@assets/images/3d-car-top-view-red.png")}
                 onLoad={() => setViewTrackingC1(false)}
-                style={{ width: 35, height: 35 }}
+                style={{
+                  width: theme.img.size.xs.width,
+                  height: theme.img.size.xs.height,
+                }}
                 resizeMethod="auto"
                 resizeMode="contain"
               />
@@ -364,7 +375,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               // anchor={{ x: 0.25, y: 0.6 }}
               centerOffset={{ x: 18, y: -18 }}
               zIndex={selected === "C" ? 100 : -100}
-              style={{ width: 40, height: 40 }}
+              style={theme.map.marker.size.md}
               onPress={() =>
                 handleMarkerOnPress(
                   BOTTOM_SHEET_MAX_TRANSLATE_Y,
@@ -377,7 +388,10 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
                 // eslint-disable-next-line import/extensions
                 source={require("@assets/images/racing-flag.png")}
                 onLoad={() => setViewTrackingC2(false)}
-                style={{ width: 35, height: 35 }}
+                style={{
+                  width: theme.img.size.xs.width,
+                  height: theme.img.size.xs.height,
+                }}
                 resizeMethod="auto"
                 resizeMode="contain"
               />
@@ -416,7 +430,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               </TouchableOpacity>
               {/* render item */}
               <_DefaultCard onPress={() => setSelectedRouteValues("A")}>
-                <View style={{ marginTop: 15, paddingHorizontal: 8 }}>
+                <View style={styles.TimelineComponentContainer}>
                   <TimelineComponent
                     isUsingFlatlist={false}
                     showTime={false}
@@ -426,23 +440,9 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
                     innerCircle={"icon"}
                     circleSize={35}
                     columnFormat="single-column-left"
-                    circleStyle={{
-                      overflow: "hidden",
-                      borderRadius: 100,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderColor: colors.borderColor,
-                      backgroundColor: colors.white,
-                      borderWidth: 2,
-                    }}
-                    iconStyle={{
-                      width: 25,
-                      height: 25,
-                      tintColor: colors.titleText,
-                    }}
-                    listViewStyle={{
-                      paddingHorizontal: 10,
-                    }}
+                    circleStyle={styles.circleStyle}
+                    iconStyle={styles.iconStyle}
+                    listViewStyle={styles.listViewStyle}
                     renderDetail={(rowData) => {
                       return (
                         <TimelineContent
@@ -493,7 +493,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
                 </View>
               </Card> */}
               <_DefaultCard onPress={() => setSelectedRouteValues("C")}>
-                <View style={{ marginTop: 15, paddingHorizontal: 8 }}>
+                <View style={styles.TimelineComponentContainer}>
                   <TimelineComponent
                     isUsingFlatlist={false}
                     showTime={false}
@@ -503,23 +503,9 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
                     innerCircle={"icon"}
                     circleSize={35}
                     columnFormat="single-column-left"
-                    circleStyle={{
-                      overflow: "hidden",
-                      borderRadius: 100,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderColor: colors.borderColor,
-                      backgroundColor: colors.white,
-                      borderWidth: 2,
-                    }}
-                    iconStyle={{
-                      width: 25,
-                      height: 25,
-                      tintColor: colors.titleText,
-                    }}
-                    listViewStyle={{
-                      paddingHorizontal: 10,
-                    }}
+                    circleStyle={styles.circleStyle}
+                    iconStyle={styles.iconStyle}
+                    listViewStyle={styles.listViewStyle}
                     renderDetail={(rowData) => {
                       return (
                         <TimelineContent
@@ -537,17 +523,10 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
       </_RightSheet>
 
       <_BottomSheet ref={sheetRef}>
-        <View style={{ justifyContent: "center" }}>
+        <View style={styles.sheetMainContainer}>
           {/* left right arrows */}
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              borderWidth: 0,
-              width: "100%",
-            }}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <View style={styles.sheetTopLeftRightContainer}>
+            <View style={styles.sheetTopLeftRightIcon}>
               <MaterialIcons
                 name="keyboard-arrow-left"
                 size={20}
@@ -556,7 +535,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               <Text style={styles.descTextGray}>WMY2186</Text>
             </View>
 
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <View style={styles.sheetTopLeftRightIcon}>
               <Text style={styles.descTextGray}>075034760941</Text>
               <MaterialIcons
                 name="keyboard-arrow-right"
@@ -567,17 +546,8 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
           </View>
 
           {/* icons */}
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              paddingVertical: 8,
-              paddingHorizontal: theme.spacing.xl,
-              borderWidth: 0,
-            }}
-          >
-            <View style={{ alignItems: "center", gap: theme.spacing.sm }}>
+          <View style={styles.sheetTopIconRow}>
+            <View style={styles.sheetTopIcon}>
               <MaterialIcons
                 name="offline-bolt"
                 size={20}
@@ -586,7 +556,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               <Text style={styles.descTextGray}>2hr</Text>
             </View>
 
-            <View style={{ alignItems: "center", gap: theme.spacing.sm }}>
+            <View style={styles.sheetTopIcon}>
               <MaterialCommunityIcons
                 name="engine"
                 size={20}
@@ -595,7 +565,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               <Text style={styles.descTextGray}>Off</Text>
             </View>
 
-            <View style={{ alignItems: "center", gap: theme.spacing.sm }}>
+            <View style={styles.sheetTopIcon}>
               <MaterialCommunityIcons
                 name="arrow-up-drop-circle"
                 size={20}
@@ -604,7 +574,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               <Text style={styles.descTextGray}>12.55v</Text>
             </View>
 
-            <View style={{ alignItems: "center", gap: theme.spacing.sm }}>
+            <View style={styles.sheetTopIcon}>
               <MaterialCommunityIcons
                 name="satellite-variant"
                 size={20}
@@ -613,9 +583,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               <Text style={styles.descTextGray}>15</Text>
             </View>
 
-            <TouchableOpacity
-              style={{ alignItems: "center", gap: theme.spacing.sm }}
-            >
+            <TouchableOpacity style={styles.sheetTopIcon}>
               <MaterialIcons
                 name="keyboard-arrow-right"
                 size={35}
@@ -624,33 +592,9 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
             </TouchableOpacity>
           </View>
 
-          <View
-            style={{
-              paddingTop: 6,
-              paddingBottom: 6,
-              borderTopWidth: 1,
-              borderBottomWidth: 1,
-              rowGap: theme.spacing.sm,
-              paddingHorizontal: theme.spacing.lg,
-              borderColor: colors.borderColor,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "100%",
-              }}
-            >
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  columnGap: theme.spacing.sm,
-                  borderWidth: 0,
-                }}
-              >
+          <View style={styles.lastPositioningWithAddressContainer}>
+            <View style={styles.lastUpdateRow}>
+              <View style={styles.lastUpdateContainer}>
                 <View>
                   <MaterialIcons
                     name="location-on"
@@ -664,15 +608,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
                 </View>
               </View>
 
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  borderWidth: 0,
-                  columnGap: theme.spacing.sm,
-                }}
-              >
+              <View style={styles.lastUpdateContainer}>
                 <View>
                   <Fontisto
                     name="heartbeat-alt"
@@ -689,32 +625,18 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
 
             <View>
               <Text
-                style={[
-                  gStyles.tblHeaderText,
-                  {
-                    color: colors.info,
-                    textDecorationLine: "underline",
-                    fontFamily: "Visby-Bold",
-                  },
-                ]}
+                style={StyleSheet.compose(gStyles.tblHeaderText, {
+                  color: colors.info,
+                  textDecorationLine: "underline",
+                })}
               >
                 View address
               </Text>
             </View>
           </View>
 
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-              paddingVertical: theme.spacing.md,
-              borderWidth: 0,
-            }}
-          >
-            <TouchableOpacity
-              style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}
-            >
+          <View style={styles.buttonRow}>
+            <TouchableOpacity style={styles.sheetButton} activeOpacity={0.7}>
               <MaterialIcons
                 name="location-on"
                 size={25}
@@ -724,7 +646,8 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}
+              style={styles.sheetButton}
+              activeOpacity={0.7}
               onPress={() =>
                 navigation.navigate("Playback", {
                   coords: selectedRoute,
@@ -735,9 +658,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               <Text style={styles.descTextGray}>Playback</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}
-            >
+            <TouchableOpacity style={styles.sheetButton} activeOpacity={0.7}>
               <MaterialCommunityIcons
                 name="wall"
                 size={20}
@@ -746,9 +667,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               <Text style={styles.descTextGray}>Geo Fence</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}
-            >
+            <TouchableOpacity style={styles.sheetButton} activeOpacity={0.7}>
               <MaterialCommunityIcons
                 name="information"
                 size={24}
@@ -758,25 +677,13 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
             </TouchableOpacity>
           </View>
 
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-              paddingVertical: theme.spacing.md,
-              borderWidth: 0,
-            }}
-          >
-            <TouchableOpacity
-              style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}
-            >
+          <View style={styles.buttonRow}>
+            <TouchableOpacity style={styles.sheetButton} activeOpacity={0.7}>
               <Ionicons name="terminal" size={20} color={colors.titleText} />
               <Text style={styles.descTextGray}>Command</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}
-            >
+            <TouchableOpacity style={styles.sheetButton} activeOpacity={0.7}>
               <MaterialCommunityIcons
                 name="alert"
                 size={25}
@@ -785,9 +692,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               <Text style={styles.descTextGray}>Alerts</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}
-            >
+            <TouchableOpacity style={styles.sheetButton} activeOpacity={0.7}>
               <MaterialCommunityIcons
                 name="monitor"
                 size={20}
@@ -796,9 +701,7 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               <Text style={styles.descTextGray}>Console</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={{ flex: 1, alignItems: "center", gap: theme.spacing.sm }}
-            >
+            <TouchableOpacity style={styles.sheetButton} activeOpacity={0.7}>
               <MaterialIcons
                 name="more-horiz"
                 size={20}

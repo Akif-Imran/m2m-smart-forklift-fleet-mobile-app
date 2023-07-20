@@ -3,6 +3,16 @@ import { StyleSheet } from "react-native";
 import { colors } from "./colors";
 
 export const theme = {
+  map: {
+    marker: {
+      size: {
+        md: {
+          width: 40,
+          height: 40,
+        },
+      },
+    },
+  },
   img: {
     size: {
       xxs: {
