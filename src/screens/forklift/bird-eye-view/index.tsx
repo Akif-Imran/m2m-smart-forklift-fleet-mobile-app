@@ -31,6 +31,7 @@ import { addPoi, getPoiList, reverseGeocode } from "@services";
 import { useAuthContext } from "@context";
 import Spinner from "react-native-loading-spinner-overlay";
 import { mapMarkers } from "@map-markers";
+import { useSafeAreaDimensions } from "@hooks";
 
 import { styles } from "./styles";
 interface Marker extends LatLng {
@@ -68,6 +69,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
   const {
     state: { token, isAdmin },
   } = useAuthContext();
+  const { LATITUDE_DELTA, LONGITUDE_DELTA } = useSafeAreaDimensions();
   // const { SCREEN_HEIGHT } = useSafeAreaDimensions();
   const { mode } = route.params;
   const mapRef = React.useRef<MapView>(null);
@@ -246,10 +248,15 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
             ? {
                 latitude: markers[0].latitude,
                 longitude: markers[0].longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA,
               }
-            : undefined
+            : {
+                latitude: 3.1357,
+                longitude: 101.688,
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA,
+              }
         }
         onDoublePress={
           isAdmin

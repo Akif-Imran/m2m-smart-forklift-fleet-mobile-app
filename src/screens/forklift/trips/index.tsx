@@ -231,7 +231,6 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
           <>
             <Marker
               tracksViewChanges={viewTrackingA1}
-              // icon={require('../../assets/images/3d-car-top-view-white.png')}
               coordinate={coordsA[0]}
               rotation={15}
               anchor={{ x: 0.2, y: 0.25 }}
