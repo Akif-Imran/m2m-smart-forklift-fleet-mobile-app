@@ -628,7 +628,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({ route }) => {
                 <Slider
                   step={1}
                   value={radius}
-                  style={{ height: 56 }}
+                  style={styles.sliderHeight}
                   minimumValue={1}
                   maximumValue={2000}
                   minimumTrackTintColor={colors.primary}
@@ -705,7 +705,7 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({ route }) => {
               style={[
                 screenStyles.filterButtonStyle,
                 screenStyles.shadow,
-                { alignSelf: "center", minWidth: 48 },
+                styles.countAlignment,
               ]}
             >
               <Text style={gStyles.cardInfoTitleText}>

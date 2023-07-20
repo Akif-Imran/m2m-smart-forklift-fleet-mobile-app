@@ -43,4 +43,11 @@ export const styles = StyleSheet.create({
       },
     }),
   },
+  sliderHeight: {
+    height: 56,
+  },
+  countAlignment: {
+    alignSelf: "center",
+    minWidth: 48,
+  },
 });
