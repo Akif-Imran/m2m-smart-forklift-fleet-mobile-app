@@ -1,4 +1,4 @@
-import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
+import { FlatList, RefreshControl } from "react-native";
 import React from "react";
 import type { ForkliftStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -10,10 +10,9 @@ import {
   _Divider,
   _ListEmptyComponent,
 } from "@components";
-import { PaperTheme, colors, gStyles } from "@theme";
-import { FAB, Searchbar } from "react-native-paper";
+import { colors, gStyles } from "@theme";
+import { FAB } from "react-native-paper";
 import { ToastService } from "@utility";
-import { ForkliftStatusColor } from "@constants";
 import {
   FontAwesome5,
   Ionicons,
@@ -24,12 +23,8 @@ import { useAuthContext, useTaskContext } from "@context";
 import { useIsFocused } from "@react-navigation/native";
 
 import { _ForkliftListCard } from "../components";
-interface ForkliftCounts {
-  moving: number;
-  parked: number;
-  total: number;
-  offline: number;
-}
+
+import { _ListHeader } from "./_ListHeader";
 
 const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
   navigation,
@@ -111,17 +106,20 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
     fetchVehicles();
   };
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    if (!query) {
-      setSearchedForklifts(forklifts);
-      return;
-    }
-    const filtered = forklifts.filter((forklift) =>
-      forklift.reg_no.toLowerCase().includes(query.toLowerCase())
-    );
-    setSearchedForklifts(filtered);
-  };
+  const handleSearch = React.useCallback(
+    (query: string) => {
+      setSearchQuery(query);
+      if (!query) {
+        setSearchedForklifts(forklifts);
+        return;
+      }
+      const filtered = forklifts.filter((forklift) =>
+        forklift.reg_no.toLowerCase().includes(query.toLowerCase())
+      );
+      setSearchedForklifts(filtered);
+    },
+    [forklifts]
+  );
 
   const handleDelete = React.useCallback((vehicleId: number) => {
     setToBeDeletedVehicleId(vehicleId);
@@ -316,78 +314,13 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
         style={screenStyles.flatListStyle}
         // contentContainerStyle={{ padding: 2 }}
         keyExtractor={(item) => item.id.toString()}
+        // eslint-disable-next-line react/no-unstable-nested-components
         ListHeaderComponent={() => (
-          <>
-            {/* counts */}
-            <_DefaultCard>
-              <View style={screenStyles.countRow}>
-                <View style={screenStyles.countRowItem}>
-                  <Text style={gStyles.headerText}>{counts.moving}</Text>
-                  <Text
-                    style={StyleSheet.compose(screenStyles.countInfoText, {
-                      color: ForkliftStatusColor.moving,
-                    })}
-                  >
-                    Moving
-                  </Text>
-                </View>
-                <View
-                  style={StyleSheet.compose(screenStyles.countRowMiddleItem, {
-                    borderRightWidth: 0,
-                  })}
-                />
-                <View style={screenStyles.countRowItem}>
-                  <Text style={gStyles.headerText}>{counts.parked}</Text>
-                  <Text
-                    style={StyleSheet.compose(screenStyles.countInfoText, {
-                      color: ForkliftStatusColor.parked,
-                    })}
-                  >
-                    Parked
-                  </Text>
-                </View>
-              </View>
-              <_Divider />
-              <View style={screenStyles.countRow}>
-                <View style={screenStyles.countRowItem}>
-                  <Text style={gStyles.headerText}>{counts.total}</Text>
-                  <Text
-                    style={StyleSheet.compose(screenStyles.countInfoText, {
-                      color: ForkliftStatusColor.total,
-                    })}
-                  >
-                    Total
-                  </Text>
-                </View>
-                <View
-                  style={StyleSheet.compose(screenStyles.countRowMiddleItem, {
-                    borderRightWidth: 0,
-                  })}
-                />
-                <View style={screenStyles.countRowItem}>
-                  <Text style={gStyles.headerText}>{counts.offline}</Text>
-                  <Text
-                    style={StyleSheet.compose(screenStyles.countInfoText, {
-                      color: ForkliftStatusColor.offline,
-                    })}
-                  >
-                    Offline
-                  </Text>
-                </View>
-              </View>
-            </_DefaultCard>
-
-            <View style={screenStyles.searchContainer}>
-              <Searchbar
-                theme={PaperTheme}
-                autoCapitalize="none"
-                value={searchQuery}
-                placeholder="Search..."
-                onChangeText={(query) => handleSearch(query)}
-                style={screenStyles.searchStyle}
-              />
-            </View>
-          </>
+          <_ListHeader
+            counts={counts}
+            handleSearch={handleSearch}
+            searchQuery={searchQuery}
+          />
         )}
         ListEmptyComponent={<_ListEmptyComponent label="No Forklifts..." />}
         renderItem={({ item }) => (
