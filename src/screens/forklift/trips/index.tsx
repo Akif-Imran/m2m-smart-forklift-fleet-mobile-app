@@ -63,12 +63,16 @@ const routeAData = [
   },
 ];
 
-const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
+const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({
+  navigation,
+  route,
+}) => {
   // const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = useWindowDimensions();
   // const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
   // const LATITUDE_DELTA = 0.0922;
   // const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
   // const { bottom: BOT_INSET, top: TOP_INSET } = useSafeAreaInsets();
+  const { _id, item } = route.params;
   const { SCREEN_HEIGHT, LATITUDE_DELTA, LONGITUDE_DELTA } =
     useSafeAreaDimensions();
 
@@ -134,18 +138,18 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
     sheetRef.current?.scrollTo(value);
   }, []);
 
-  const setSelectedRouteValues = (route: string) => {
-    if (route === "A") {
+  const setSelectedRouteValues = (slctRoute: string) => {
+    if (slctRoute === "A") {
       console.log("A");
       setSelected("A");
       setSelectedRoute(coordsA);
       rightSheetRef?.current?.scrollTo(RIGHT_SHEET_MIN_TRANSLATE_X);
-    } else if (route === "B") {
+    } else if (slctRoute === "B") {
       console.log("B");
       setSelected("B");
       setSelectedRoute(coordsB);
       rightSheetRef?.current?.scrollTo(RIGHT_SHEET_MIN_TRANSLATE_X);
-    } else if (route === "C") {
+    } else if (slctRoute === "C") {
       console.log("C");
       setSelected("C");
       setSelectedRoute(coordsC);
@@ -233,34 +237,31 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
             <Marker
               tracksViewChanges={viewTrackingA1}
               coordinate={coordsA[0]}
-              rotation={15}
+              rotation={mapMarkers[item.icon].rotate}
               // anchor={{ x: 0.2, y: 0.25 }}
-              anchor={mapMarkers["marker-pin"].anchor}
+              centerOffset={mapMarkers[item.icon].offset}
+              anchor={mapMarkers[item.icon].anchor}
               zIndex={selected === "A" ? 100 : -100}
-              style={mapMarkers["marker-pin"].size}
+              style={mapMarkers[item.icon].size}
               onPress={() =>
                 handleMarkerOnPress(BOTTOM_SHEET_MAX_TRANSLATE_Y, coordsA, 0)
               }
             >
               <Image
                 // source={require("@assets/images/3d-car-top-view-white.png")}
-                source={mapMarkers["marker-pin"].icon}
+                source={mapMarkers[item.icon].icon}
                 onLoad={() => setViewTrackingA1(false)}
-                style={{
-                  width: theme.img.size.xs.width,
-                  height: theme.img.size.xs.height,
-                }}
+                style={mapMarkers[item.icon].size}
                 resizeMethod="auto"
                 resizeMode="contain"
               />
             </Marker>
             <Marker
               tracksViewChanges={viewTrackingA2}
-              // icon={require('../../assets/images/3d-car-top-view-white.png')}
               coordinate={coordsA[coordsA.length - 1]}
-              rotation={100}
-              // anchor={{ x: 0.25, y: 0.6 }}
-              centerOffset={{ x: 16, y: -16 }}
+              rotation={mapMarkers["racing-flag"].rotate}
+              anchor={mapMarkers["racing-flag"].anchor}
+              centerOffset={mapMarkers["racing-flag"].offset}
               zIndex={selected === "A" ? 100 : -100}
               style={theme.map.marker.size.md}
               onPress={() =>
@@ -272,13 +273,9 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               }
             >
               <Image
-                // eslint-disable-next-line import/extensions
-                source={require("@assets/images/racing-flag.png")}
+                source={mapMarkers["racing-flag"].icon}
                 onLoad={() => setViewTrackingA2(false)}
-                style={{
-                  width: theme.img.size.xs.width,
-                  height: theme.img.size.xs.height,
-                }}
+                style={mapMarkers["racing-flag"].size}
                 resizeMethod="auto"
                 resizeMode="contain"
               />
@@ -345,7 +342,6 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
           <>
             <Marker
               tracksViewChanges={viewTrackingC1}
-              // icon={require('../../assets/images/3d-car-top-view-red.png')}
               coordinate={coordsC[0]}
               rotation={-5}
               anchor={{ x: 0.2, y: 0.3 }}
@@ -356,24 +352,19 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               }
             >
               <Image
-                // eslint-disable-next-line import/extensions
-                source={require("@assets/images/3d-car-top-view-red.png")}
+                source={mapMarkers[item.icon].icon}
                 onLoad={() => setViewTrackingC1(false)}
-                style={{
-                  width: theme.img.size.xs.width,
-                  height: theme.img.size.xs.height,
-                }}
+                style={mapMarkers[item.icon].size}
                 resizeMethod="auto"
                 resizeMode="contain"
               />
             </Marker>
             <Marker
               tracksViewChanges={viewTrackingC2}
-              // icon={require('../../assets/images/3d-car-top-view-red.png')}
               coordinate={coordsC[coordsC.length - 1]}
-              rotation={-70}
-              // anchor={{ x: 0.25, y: 0.6 }}
-              centerOffset={{ x: 18, y: -18 }}
+              rotation={mapMarkers["racing-flag"].rotate}
+              anchor={mapMarkers["racing-flag"].anchor}
+              centerOffset={mapMarkers["racing-flag"].offset}
               zIndex={selected === "C" ? 100 : -100}
               style={theme.map.marker.size.md}
               onPress={() =>
@@ -385,13 +376,9 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               }
             >
               <Image
-                // eslint-disable-next-line import/extensions
-                source={require("@assets/images/racing-flag.png")}
+                source={mapMarkers["racing-flag"].icon}
                 onLoad={() => setViewTrackingC2(false)}
-                style={{
-                  width: theme.img.size.xs.width,
-                  height: theme.img.size.xs.height,
-                }}
+                style={mapMarkers["racing-flag"].size}
                 resizeMethod="auto"
                 resizeMode="contain"
               />
@@ -651,6 +638,10 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({ navigation }) => {
               onPress={() =>
                 navigation.navigate("Playback", {
                   coords: selectedRoute,
+                  vehicle: {
+                    _id: _id,
+                    item: item,
+                  },
                 })
               }
             >

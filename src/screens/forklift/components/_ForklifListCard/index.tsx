@@ -155,7 +155,12 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
           icon={() => (
             <FontAwesome5 name="road" size={16} color={colors.titleText} />
           )}
-          onPress={() => navigation.navigate("Trips")}
+          onPress={() =>
+            navigation.navigate("Trips", {
+              _id: item.id.toString(),
+              item: item,
+            })
+          }
         >
           Trips
         </Button>

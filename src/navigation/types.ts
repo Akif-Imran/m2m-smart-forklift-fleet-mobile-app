@@ -59,9 +59,10 @@ export type ForkliftStackParamsList = {
       }
     | { mode: "multiple"; points: IMapPoint[] };
   Fences: DetailsType<IVehicle>;
-  Trips: undefined;
+  Trips: DetailsType<IVehicle>;
   Playback: {
     coords: LatLng[];
+    vehicle: DetailsType<IVehicle>;
   };
   BarcodeScanner: undefined;
   DriverCheckList: DetailsType<QRScanDeviceDetails>;

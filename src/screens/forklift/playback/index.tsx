@@ -10,15 +10,19 @@ import React from "react";
 import type { LatLng, MapMarker } from "react-native-maps";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import Slider from "@react-native-community/slider";
-import { colors, theme } from "@theme";
+import { colors, gStyles, theme } from "@theme";
 import type { ForkliftStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "@screen-styles";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { mapMarkers } from "@map-markers";
 
 const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
   route,
 }) => {
+  const {
+    vehicle: { _id, item },
+  } = route.params;
   const polyline: CoordinatesType[] = route.params?.coords;
   const [trackViewChanges, setTrackViewChanges] = React.useState<boolean>(true);
   const [carTackViewChanges, setCarTrackViewChanges] =
@@ -177,25 +181,21 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
         style={StyleSheet.absoluteFill}
         initialRegion={pickupCords}
       >
-        {/* <Marker coordinate={coordinate} ref={markerRef} /> */}
         <Marker
           ref={markerRef}
           tracksViewChanges={carTackViewChanges}
-          // icon={require('../../assets/images/3d-car-top-view-red.png')}
           coordinate={coordinate}
-          // rotation={205}
-          anchor={{ x: 0.44, y: 0.5 }}
-          style={{
-            width: 40,
-            height: 40,
+          rotation={mapMarkers[item.icon].rotate}
+          anchor={mapMarkers[item.icon].anchor}
+          centerOffset={mapMarkers[item.icon].offset}
+          style={StyleSheet.compose(theme.img.size.sm, {
             transform: [{ rotate: `${heading}deg` }],
-          }}
+          })}
         >
           <Image
-            // eslint-disable-next-line import/extensions
-            source={require("@assets/images/3d-car-top-view-white.png")}
+            source={mapMarkers[item.icon].icon}
             onLoad={() => setCarTrackViewChanges(false)}
-            style={{ width: 35, height: 35 }}
+            style={mapMarkers[item.icon].size}
             resizeMethod="auto"
             resizeMode="contain"
           />
@@ -204,18 +204,16 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
         <Marker
           tracksViewChanges={trackViewChanges}
           coordinate={dropLocationCords}
-          rotation={15}
-          anchor={{ x: 0.15, y: 0.85 }}
-          centerOffset={{ x: 16, y: -16 }}
-          // zIndex={selected === 'A' ? 100 : -100}
-          style={{ width: 40, height: 40 }}
+          rotation={mapMarkers["racing-flag"].rotate}
+          anchor={mapMarkers["racing-flag"].anchor}
+          centerOffset={mapMarkers["racing-flag"].offset}
+          style={theme.map.marker.size.md}
           // onPress={() => handleMarkerOnPress(MAX_TRANSLATE_Y, coordsA[0])}
         >
           <Image
-            // eslint-disable-next-line import/extensions
-            source={require("@assets/images/racing-flag.png")}
+            source={mapMarkers["racing-flag"].icon}
             onLoad={() => setTrackViewChanges(false)}
-            style={{ width: 35, height: 35, tintColor: colors.titleText }}
+            style={mapMarkers["racing-flag"].size}
             resizeMethod="auto"
             resizeMode="contain"
           />
@@ -227,41 +225,12 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
           // zIndex={selected === 'C' ? 100 : 10}
         />
       </MapView>
-      <View
-        style={{
-          position: "absolute",
-          paddingHorizontal: theme.spacing.sm,
-          paddingVertical: theme.spacing.sm,
-          width: Dimensions.get("window").width,
-          height: Dimensions.get("window").height / 4.2,
-          backgroundColor: colors.white,
-          bottom: 0,
-        }}
-      >
+      <View style={styles.playerWithDetailsContainer}>
         {/* player */}
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            borderWidth: 0,
-            paddingBottom: 8,
-          }}
-        >
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
-              borderWidth: 0,
-            }}
-          >
+        <View style={styles.playerContainer}>
+          <View style={styles.playButtonContainer}>
             <TouchableOpacity
-              style={{
-                padding: 2,
-                borderColor: colors.primary,
-                borderWidth: 2,
-                borderRadius: 50,
-              }}
+              style={styles.playButton}
               onPress={() => {
                 setIsPlaying((prev) => {
                   if (prev) {
@@ -288,7 +257,7 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
               )}
             </TouchableOpacity>
           </View>
-          <View style={{ flex: 6, justifyContent: "center" }}>
+          <View style={styles.sliderContainer}>
             <Slider
               value={playbackValue[0]}
               onValueChange={handleSliderValueChange}
@@ -307,7 +276,7 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
             style={{
               flex: 1,
               justifyContent: "center",
-              alignItems: "center",
+              alignItems: "center",s
               borderWidth: 0,
               alignSelf: "flex-end",
             }}
@@ -324,50 +293,25 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
                 size={25}
                 color={colors.primary}
               />
-              <Text style={styles.descTextGray}>Slow</Text>
+              <Text style={gStyles.tblHeaderText}>Slow</Text>
             </TouchableOpacity>
           </View> */}
         </View>
         <View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              alignSelf: "center",
-              paddingBottom: theme.spacing.md,
-              borderWidth: 0,
-              marginTop: -10,
-            }}
-          >
-            <Text style={styles.descTextGray}>
+          <View style={styles.detailsContainer}>
+            <Text style={gStyles.tblHeaderText}>
               2023-01-31 00:00 - 2023-01-31 22:53
             </Text>
-            <TouchableOpacity style={{ borderWidth: 0, paddingHorizontal: 8 }}>
+            <TouchableOpacity>
               <MaterialIcons name="loop" size={20} color={colors.titleText} />
             </TouchableOpacity>
           </View>
         </View>
         {/* info */}
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            borderColor: colors.borderColor,
-            paddingTop: 8,
-            paddingHorizontal: 8,
-            paddingBottom: 8,
-            borderTopWidth: 1,
-          }}
-        >
+        <View style={styles.rowContainer}>
           {/* time */}
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <View style={{ marginRight: 6 }}>
+          <View style={styles.detailsWithIcons}>
+            <View>
               <MaterialCommunityIcons
                 name="clock-time-three-outline"
                 size={20}
@@ -375,19 +319,13 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
               />
             </View>
             <View>
-              <Text style={styles.descTextBlack}>06:57:16</Text>
-              <Text style={styles.descTextGray}>2023-01-31</Text>
+              <Text style={gStyles.tblHeaderText}>06:57:16</Text>
+              <Text style={gStyles.tblHeaderText}>2023-01-31</Text>
             </View>
           </View>
           {/* speed */}
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <View style={{ marginRight: 6 }}>
+          <View style={styles.detailsWithIcons}>
+            <View>
               <MaterialCommunityIcons
                 name="speedometer-slow"
                 size={20}
@@ -395,18 +333,12 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
               />
             </View>
             <View>
-              <Text style={styles.descTextBlack}>49.0 km/ h</Text>
+              <Text style={gStyles.tblHeaderText}>49.0 km/ h</Text>
             </View>
           </View>
           {/* distance */}
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <View style={{ marginRight: 6 }}>
+          <View style={styles.detailsWithIcons}>
+            <View>
               <MaterialCommunityIcons
                 name="map-marker-distance"
                 size={20}
@@ -414,74 +346,52 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
               />
             </View>
             <View>
-              <Text style={styles.descTextBlack}>15.46 km</Text>
+              <Text style={gStyles.tblHeaderText}>15.46 km</Text>
             </View>
           </View>
         </View>
         {/* details */}
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            borderColor: colors.borderColor,
-            paddingTop: 8,
-            paddingHorizontal: 8,
-            borderTopWidth: 1,
-          }}
-        >
+        <View style={styles.rowContainer}>
           <View>
-            <Text style={styles.descTextBlack}>WMY2186</Text>
+            <Text style={gStyles.tblHeaderText}>{item.reg_no}</Text>
           </View>
 
-          <View style={{ flexDirection: "row" }}>
+          <View style={styles.buttonsContainer}>
             {/* replay */}
-            <TouchableOpacity
-              style={{
-                paddingHorizontal: 6,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onPress={() => replay()}
-            >
+            <TouchableOpacity style={styles.buttons} onPress={() => replay()}>
               <MaterialCommunityIcons
                 name="replay"
                 size={20}
                 color={colors.titleText}
               />
-              <Text style={styles.descTextGray}>Replay</Text>
+              <Text style={gStyles.tblHeaderText}>Replay</Text>
             </TouchableOpacity>
             {/* show */}
-            <TouchableOpacity
-              style={{
-                paddingHorizontal: 6,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              {/* <MaterialCommunityIcons name="play" size={20} color={colors.secondary} /> */}
-              <Image
+            <TouchableOpacity style={styles.buttons}>
+              <MaterialCommunityIcons
+                name="map-marker-distance"
+                size={20}
+                color={colors.titleText}
+              />
+              {/* <Image
                 // eslint-disable-next-line import/extensions
                 source={require("@assets/images/icons8-journey-50.png")}
                 style={{
                   tintColor: colors.titleText,
-                  width: 20,
-                  height: 20,
+                  height: theme.img.size.xxs.height - 4,
+                  width: theme.img.size.xxs.width - 4,
                 }}
                 resizeMode="contain"
-              />
-              <Text style={styles.descTextGray}>Show</Text>
+              /> */}
+              <Text style={gStyles.tblHeaderText}>Show</Text>
             </TouchableOpacity>
             {/* gps */}
             <TouchableOpacity
-              style={{
+              style={StyleSheet.compose(styles.buttons, {
                 flexDirection: "row",
-                paddingHorizontal: 6,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+              })}
             >
-              <Text style={[styles.descTextBlack, { color: colors.primary }]}>
+              <Text style={[gStyles.tblHeaderText, { color: colors.primary }]}>
                 GPS
               </Text>
               <MaterialIcons
@@ -505,18 +415,65 @@ const styles = StyleSheet.create({
   //     justifyContent: "center",
   //     alignItems: "center",
   //   },
-  descTextGray: {
-    // flex: 3,
-    fontFamily: "Visby-Medium",
-    fontSize: 12,
-    color: colors.titleText,
-    // borderWidth: 1,
+  playerWithDetailsContainer: {
+    position: "absolute",
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: theme.spacing.sm,
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height / 4.2,
+    backgroundColor: colors.white,
+    bottom: 0,
   },
-  descTextBlack: {
-    // flex: 3,
-    fontFamily: "Visby-Medium",
-    fontSize: 14,
-    color: colors.titleText,
-    // borderWidth: 1,
+  playerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingBottom: theme.spacing.md,
+    borderWidth: 0,
+  },
+  playButtonContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 0,
+  },
+  playButton: {
+    padding: theme.spacing.xs,
+    borderColor: colors.primary,
+    borderRadius: theme.radius.full,
+    borderWidth: 2,
+  },
+  sliderContainer: { flex: 6, justifyContent: "center" },
+  detailsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "center",
+    columnGap: theme.spacing.sm,
+    paddingBottom: theme.spacing.md,
+    marginTop: -theme.spacing.md,
+  },
+  detailsWithIcons: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    columnGap: theme.spacing.sm,
+  },
+  rowContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderColor: colors.borderColor,
+    paddingTop: theme.spacing.md,
+    paddingBottom: theme.spacing.md,
+    paddingHorizontal: theme.spacing.md,
+    borderTopWidth: 1,
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+    gap: theme.spacing.lg,
+  },
+  buttons: {
+    rowGap: theme.spacing.sm,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
