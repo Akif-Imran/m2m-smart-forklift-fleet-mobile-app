@@ -196,6 +196,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
       .finally(() => {
         setFetchAddress(false);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchAddress]);
 
   const fetchPois = React.useCallback(() => {
@@ -225,6 +226,31 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
   }, [fetchPois]);
 
   console.log(form.errors);
+
+  const renderedMarkers = poiMarkers.map((value, index) => (
+    <Marker
+      key={index}
+      pinColor={colors.info}
+      tracksViewChanges={false}
+      coordinate={{
+        latitude: value.latitude,
+        longitude: value.longitude,
+      }}
+      title={value.name}
+      centerOffset={{ x: 0, y: -18 }}
+      onPress={() => handleMarkerOnPress(value)}
+    >
+      <Image
+        source={images[`${value.iconName}-${value.colorName}`]}
+        style={{
+          width: theme.img.size.sm.width,
+          height: theme.img.size.sm.height,
+        }}
+        resizeMethod="auto"
+        resizeMode="contain"
+      />
+    </Marker>
+  ));
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
@@ -321,31 +347,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
             )}
           </React.Fragment>
         ))}
-        {poiMarkers.map((value, index) => (
-          <Marker
-            key={index}
-            pinColor={colors.info}
-            tracksViewChanges={false}
-            coordinate={{
-              latitude: value.latitude,
-              longitude: value.longitude,
-            }}
-            title={value.name}
-            centerOffset={{ x: 0, y: -18 }}
-            onPress={() => handleMarkerOnPress(value)}
-          >
-            <Image
-              source={images[`${value.iconName}-${value.colorName}`]}
-              // onLoad={() => setViewTrackingA1(false)}
-              style={{
-                width: theme.img.size.sm.width,
-                height: theme.img.size.sm.height,
-              }}
-              resizeMethod="auto"
-              resizeMode="contain"
-            />
-          </Marker>
-        ))}
+        {renderedMarkers}
       </MapView>
       <Portal theme={PaperTheme}>
         <Modal
@@ -498,7 +500,11 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
                 </View>
                 <View style={screenStyles.formSubmitButtonContainer}>
                   <Button
-                    onPress={hideDialog}
+                    onPress={() => {
+                      hideDialog();
+                      form.resetForm();
+                      setFetchAddress(false);
+                    }}
                     theme={PaperTheme}
                     mode="outlined"
                   >
