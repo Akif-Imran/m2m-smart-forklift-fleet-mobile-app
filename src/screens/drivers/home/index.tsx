@@ -33,7 +33,6 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({
   const [drivers, setDrivers] = React.useState<IDriver[]>([]);
   const [searchedDrivers, setSearchedDrivers] = React.useState<IDriver[]>([]);
   const [isFetching, setIsFetching] = React.useState(false);
-  const fetchDriversTimeoutRef = React.useRef<NodeJS.Timeout | undefined>();
   const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
 
   const [visible, setVisible] = React.useState<boolean>(false);

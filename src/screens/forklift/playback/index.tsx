@@ -21,7 +21,7 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
   route,
 }) => {
   const {
-    vehicle: { _id, item },
+    vehicle: { item },
   } = route.params;
   const polyline: CoordinatesType[] = route.params?.coords;
   const [trackViewChanges, setTrackViewChanges] = React.useState<boolean>(true);

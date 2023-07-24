@@ -80,6 +80,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
   const [poiMarkers, setPoiMarkers] = React.useState<Marker[]>([]);
   const [visible, setVisible] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [fetchAddress, setFetchAddress] = React.useState(false);
 
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
@@ -173,22 +174,29 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
   }, [mode, route.params]);
 
   React.useEffect(() => {
-    if (form.values.latitude === 0 && form.values.longitude === 0) {
+    if (!fetchAddress) {
       return;
     }
     reverseGeocode({ lat: form.values.latitude, lng: form.values.longitude })
       .then((res) => {
         console.log("returned response =>", res);
+        setFetchAddress(false);
         if (res.length > 0) {
-          form.setValues((prev) => ({ ...prev, address: res[0].address }));
+          form.setValues((prev) => ({
+            ...prev,
+            address: res[0].address,
+          }));
         } else {
           ToastService.show("No address found");
         }
       })
       .catch((_err) => {
         ToastService.show("Error fetching Addresses");
+      })
+      .finally(() => {
+        setFetchAddress(false);
       });
-  }, [form.values.latitude, form.values.longitude]);
+  }, [fetchAddress]);
 
   const fetchPois = React.useCallback(() => {
     getPoiList(token)
@@ -270,6 +278,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
                   longitude: markerCord.longitude,
                 }));
                 showDialog();
+                setFetchAddress(true);
               }
             : undefined
         }
@@ -357,7 +366,11 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
                   value={form.values.poiType}
                 >
                   <View style={styles.radioContainer}>
-                    <View style={[screenStyles.radioItemStyle, { flex: 1 }]}>
+                    <View
+                      style={StyleSheet.compose(screenStyles.radioItemStyle, {
+                        flex: 1,
+                      })}
+                    >
                       <RadioButton.Item
                         theme={PaperTheme}
                         label="Private"
@@ -367,7 +380,11 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
                         labelStyle={gStyles.descText}
                       />
                     </View>
-                    <View style={[screenStyles.radioItemStyle, { flex: 1 }]}>
+                    <View
+                      style={StyleSheet.compose(screenStyles.radioItemStyle, {
+                        flex: 1,
+                      })}
+                    >
                       <RadioButton.Item
                         theme={PaperTheme}
                         label="Business"
@@ -472,7 +489,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
                             name="check"
                             size={20}
                             color={colors.white}
-                            style={{ opacity: 0.7 }}
+                            // style={{ opacity: 0.7 }}
                           />
                         )}
                       </TouchableOpacity>
