@@ -83,12 +83,12 @@ const initialTaskState: TaskState = {
 
 const TaskProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const {
-    state: { token, user },
+    state: { token, user, isDriver },
   } = useAuthContext();
   const [state, dispatch] = React.useReducer(reducer, initialTaskState);
 
   React.useEffect(() => {
-    if (!token) {
+    if (!token || !isDriver) {
       return;
     }
     dispatch({ type: "START_LOADING" });
@@ -111,7 +111,7 @@ const TaskProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
         }
       })
       .catch((_err) => {
-        ToastService.show("Error occurred. Try again");
+        ToastService.show("Task Error occurred. Try again");
       })
       .finally(() => {
         dispatch({ type: "STOP_LOADING" });

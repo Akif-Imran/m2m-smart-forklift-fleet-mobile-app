@@ -160,7 +160,7 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
           }
         })
         .catch((_err) => {
-          ToastService.show("Error occurred. Try again");
+          ToastService.show("Login Error occurred. Try again");
         })
         .finally(() => {
           dispatch({ type: "LOAD_STOP" });

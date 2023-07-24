@@ -96,6 +96,7 @@ const Dashboard: React.FC<DashboardStackScreenProps<"Dashboard">> = ({}) => {
           const {
             moving,
             parked,
+            offline,
             total_vehicles,
             driver_available,
             driver_unavailable,
@@ -104,7 +105,7 @@ const Dashboard: React.FC<DashboardStackScreenProps<"Dashboard">> = ({}) => {
           const totalVehicles = total_vehicles;
           const vehicleData = Object.entries(res.data)
             .map(([key, value]) => {
-              if (["moving", "parked"].includes(key)) {
+              if (["moving", "parked", "offline"].includes(key)) {
                 console.log(key, value);
                 return getPercentage(value, totalVehicles);
               }
@@ -120,10 +121,10 @@ const Dashboard: React.FC<DashboardStackScreenProps<"Dashboard">> = ({}) => {
               name: `Parked (${parked || 0})`,
               labels: { fill: colors.titleText },
             },
-            // {
-            //   name: `Offline (${offline || 0})`,
-            //   labels: { fill: colors.titleText },
-            // },
+            {
+              name: `Offline (${offline || 0})`,
+              labels: { fill: colors.titleText },
+            },
           ];
           setVehicleCounts((prev) => ({
             ...prev,
