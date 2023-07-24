@@ -34,11 +34,11 @@ export const Settings: React.FC<
 
   const filterOut: number[] = [];
   if (isDriver) {
-    filterOut.push(1, 6, 8);
+    filterOut.push(1, 6, 8, 9);
   } else if (isWarehouse) {
     filterOut.push(1, 6);
   } else if (isService) {
-    filterOut.push(1, 6, 8);
+    filterOut.push(1, 6, 8, 9);
   }
 
   const multiData1: Array<MultiCardItem> = [

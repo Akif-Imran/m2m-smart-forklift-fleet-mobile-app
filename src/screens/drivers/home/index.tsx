@@ -70,10 +70,7 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({
   // };
 
   const handleRefresh = () => {
-    setIsFetching(true);
-    fetchDriversTimeoutRef.current = setTimeout(() => {
-      setIsFetching(false);
-    }, 3000);
+    fetchDrivers(true);
   };
 
   const handleSearch = (query: string) => {
@@ -133,21 +130,24 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({
     setConfirmDeleteVisible(false);
   };
 
-  const fetchDrivers = React.useCallback(() => {
-    setIsFetching(true);
-    getDrivers(token)
-      .then((res) => {
-        if (res.success) {
-          setDrivers(res.data.rows);
-        }
-      })
-      .catch((_err) => {
-        ToastService.show("Error occurred");
-      })
-      .finally(() => {
-        setIsFetching(false);
-      });
-  }, [token]);
+  const fetchDrivers = React.useCallback(
+    (withLoader = true) => {
+      setIsFetching(withLoader);
+      getDrivers(token)
+        .then((res) => {
+          if (res.success) {
+            setDrivers(res.data.rows);
+          }
+        })
+        .catch((_err) => {
+          ToastService.show("Error occurred");
+        })
+        .finally(() => {
+          setIsFetching(false);
+        });
+    },
+    [token]
+  );
 
   const removeDriver = () => {
     deleteDriver(token, toDeleteDriverId.toString())
@@ -169,16 +169,13 @@ const Drivers: React.FC<DriverStackScreenProps<"Drivers">> = ({
       return;
     }
     setSearchedDrivers(drivers);
-    return () => {
-      clearTimeout(fetchDriversTimeoutRef.current);
-    };
   }, [drivers]);
 
   React.useEffect(() => {
     if (!isFocused) {
       return;
     }
-    fetchDrivers();
+    fetchDrivers(false);
   }, [fetchDrivers, isFocused]);
 
   return (

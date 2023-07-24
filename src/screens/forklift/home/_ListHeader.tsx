@@ -71,7 +71,7 @@ const ListHeaderComponent: React.FC<OwnProps> = ({
                 color: ForkliftStatusColor.offline,
               })}
             >
-              Offline
+              GPS Offline
             </Text>
           </View>
         </View>
