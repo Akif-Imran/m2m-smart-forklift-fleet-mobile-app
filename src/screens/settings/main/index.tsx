@@ -15,6 +15,8 @@ import { ToastService } from "@utility";
 import { screenStyles } from "@screen-styles";
 import appConfig from "@app-config";
 import { colors } from "@theme";
+import { deleteAccount } from "@services";
+import Spinner from "react-native-loading-spinner-overlay";
 
 import { styles } from "./styles";
 
@@ -29,8 +31,10 @@ export const Settings: React.FC<
 > = ({ navigation }) => {
   const appVersion = appConfig.expo.version;
   const {
-    state: { user, isDriver, isWarehouse, isService },
+    state: { token, isDriver, isWarehouse, isService },
+    logout,
   } = useAuthContext();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const filterOut: number[] = [];
   if (isDriver) {
@@ -183,26 +187,27 @@ export const Settings: React.FC<
   ];
 
   const onDeactivateAlertOk = () => {
-    ToastService.show("Demo Delete!");
-    // deactivateAccount(token, {
-    //   _id: user?._id || "",
-    // })
-    //   .then((res) => {
-    //     Toast.show(res?.message, { duration: 3000, animation: true });
-    //     if (res.success) {
-    //       logout();
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     Toast.show("Error!", { duration: 3000, animation: true });
-    //   })
-    //   .finally(() => {});
+    setIsLoading(true);
+    deleteAccount(token)
+      .then((res) => {
+        ToastService.show(res?.message);
+        if (res.success) {
+          logout();
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Error!");
+        console.log(_err?.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const deactivateAlert = () => {
     Alert.alert(
-      "Confirm Deactivate Account?",
-      `Deactivate '${user?.name}' ?`,
+      "Confirm Delete Account?",
+      "This will permanently delete all related data and cannot be undone. Are you sure?",
       [
         {
           text: "Cancel",
@@ -220,17 +225,19 @@ export const Settings: React.FC<
       ],
       {
         cancelable: true,
-        onDismiss: () =>
-          Toast.show("Operation cancelled!", {
-            animation: true,
-            duration: 3000,
-          }),
+        onDismiss: () => ToastService.show("Operation cancelled!"),
       }
     );
   };
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
+      <Spinner
+        visible={isLoading}
+        cancelable={false}
+        animation="fade"
+        size="large"
+      />
       <ScrollView
         // style={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
