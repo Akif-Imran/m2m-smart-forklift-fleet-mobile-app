@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "pc-api-5968939556317985840-7",
+  "private_key_id": "483d160ccde122665d5e3df5ba2609a28cbe6032",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDljLt+kOlDiUFQ\nF3Fylhy2ADaYv21//6PS9O5A1I3cHTd3rMEaqPiyYCY3ouqg5p11fWy3uwC93OtL\n3/8ZPz1tu+1LN5PqpmG1MxVjaMvoBcmFrHqTYyycy6HPmb3z+EjhX284b9wXsNlK\naX119esKVYSMP18NB0QqI370uWj8MxuPm/PTbQT/SfMTCBeR9VqIYkNE4IiT5wyc\ntEgCS7yIH4/5a9LbhBzhVibyeiRMN3PsT4gjS0bY+G0KI5uUjh75MFGzwXheiHI8\nPnw2Um6GhET1rfdcYUNDcCm7YSuLVEeW3QGggritUO195rKdS+P/uedhl3SRqIYO\ns2pkeK1zAgMBAAECgf9NqxN8XgWbQgZpmSOAcRleMjpfQ7tbVs6dkkIXM4rkmdmM\nNttoyFWmr70aCeEQRt8AEqDa92sL3uSyEKqVEQ2rpa1zuZdSzdRySh+pXoLcnTEM\nXvo+/LDq1nV7vH0PJ8JEHclfc7avKNH7KsJ5S7vl58ycCQXjPgwPQiQgYINJxSxN\nL9b+fgBwOErj+Oq2aSgZh8eJgAN9GXuJp5sapbPsLHgBK5QYcasxEzIeDKeZ7EL+\nCplbUzOYvRFpQDPj+G33gC3f6qS7vezqv7WbX2GkzsBAAqiv8ZowxG2yRb0owby/\nM0XnSMtx2PgOEgBNvz7mNVrBpWkWRIhfqTwzBskCgYEA9hlEz5YcvtZInqO33scF\nKmpLXP2kHdV+wvZIOm+Xqc+hGAklpHSWHgMwQuymhjiJMRLlTwpAf/8GJR2Bcutw\nGK8jJeRpOVmhBwHJIKz9caSlhOWt787aHVJGtV3fboL0AScqjmpU5H18liNPm/ad\n/LlvPJyG1n1bi/J9yMhcdEcCgYEA7skD1HhJP+Q708G0ttbG6qIKTxF+M7/DAdIR\nIo1PmEjVIbP62kz3sxon133an9Ab4LmOnWRrgG7h0huKq9TwCvp1uqyUx5VJZQ8W\nwsVTMVQnDE/lavZIylkPIw5zySCGcG91l8ct4GMhOjpi2ZeFJ6bC81pidIGediyG\ncb/tr3UCgYEA67CFmz2LqCT3BZ+MH/qA8v870AJGpB/st/FAeV6YZJQqFyfjeh4C\nCxpIpT+ZuB/7HBmZrVoHLc5i5zbb2+Cpyaopwkd/kuJI+rn2Eqo6TBVARAfnzixP\n7hb3CwmtS1x1LYmCE0S4qt+Xav7EZn0JD5nUc7sA0/jYrS3+00U4bk8CgYEAqRaf\nJ62l8SBlXSYmGfMtGKl2M1dnzq1UIc3nZFg8rNGmWx9f24X1QVacL/RnBBQSKag8\nXSfnGCNstaPbJqK6+IszIuVi1ZHZTz7IF1Qz/RJiNE2/X2bXVLKMDX8Gbr4hdSz4\nUGozClooBVui9AJfwBxOoJS4c1f2JiiRa6tFXKECgYBjlI6gV7bfRVWgsXFaDlpo\nLcknrBxYb65Mx/h5ZK76DeSOzkJZU3oPI/sHkNYPIldIRT8MKY0TEb0ZmDLA4+xx\nrml6MtMtGmkKepKy0hgRsZ/3ZwKiWLiknzZPeB6UsEZqS0zBsuquwvG4U2hqM88K\nfh0ALpOPoMR6l5hsXvhW1g==\n-----END PRIVATE KEY-----\n",
+  "client_email": "m2m-smart-forklift@pc-api-5968939556317985840-7.iam.gserviceaccount.com",
+  "client_id": "116929658729130377418",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/m2m-smart-forklift%40pc-api-5968939556317985840-7.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
