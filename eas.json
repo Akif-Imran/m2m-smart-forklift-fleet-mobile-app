@@ -17,6 +17,9 @@
   },
   "submit": {
     "production": {
+      "android": {
+        "serviceAccountKeyPath": "./pc-api-5968939556317985840-7-483d160ccde1.json"
+      },
       "ios": {
         "appleId": "support@m2m-network.com",
         "ascAppId": "6452678813",
