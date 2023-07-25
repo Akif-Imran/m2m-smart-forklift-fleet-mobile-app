@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "config": {
         "googleMapsApiKey": "AIzaSyD55YtRwAjiATo3XTwZB1Zmbm1X4pKxS5o"
@@ -30,7 +32,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.m2m-network.smartforklift"
+      "package": "com.m2m_network.smartforklift",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
