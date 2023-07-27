@@ -1,4 +1,4 @@
-import { apiGet, apiPost, urls } from "@api";
+import { apiDelete, apiGet, apiPost, urls } from "@api";
 
 export const getServiceCounts = async (
   token: string
@@ -59,8 +59,16 @@ export const updateServiceStatus = async (
 };
 
 export const deleteService = async (token: string, serviceId: number) => {
-  const response = await apiGet(
+  const response = await apiDelete<MessageResponse>(
     urls.services.delete(serviceId.toString()),
+    token
+  );
+  return response.data;
+};
+
+export const getServiceById = async (token: string, serviceId: string) => {
+  const response = await apiGet<ServiceByIdResponse>(
+    urls.services.getById(serviceId),
     token
   );
   return response.data;

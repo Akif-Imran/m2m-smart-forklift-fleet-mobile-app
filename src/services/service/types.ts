@@ -28,3 +28,5 @@ type UpdateServiceStatusResponse = {
   success: boolean;
   message: string;
 };
+
+type ServiceByIdResponse = ApiResponse<IService>;
