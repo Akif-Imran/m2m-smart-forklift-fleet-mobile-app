@@ -10,6 +10,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { registerRootComponent } from "expo";
 import { colors } from "@theme";
 import { AuthInit, AuthProvider, TaskProvider } from "@context";
+import * as Notifications from "expo-notifications";
 
 import { App } from "@";
 
@@ -19,6 +20,8 @@ SplashScreen.preventAutoHideAsync();
 export default function RootApp() {
   const [isAppReady, setIsAppReady] = React.useState(false);
   const [isAuthLoaded, setIsAuthLoaded] = React.useState<boolean>(false);
+  const notificationListener = React.useRef<Notifications.Subscription>();
+  const responseListener = React.useRef<Notifications.Subscription>();
 
   React.useLayoutEffect(() => {
     const prepare = async () => {
@@ -38,6 +41,38 @@ export default function RootApp() {
       }
     };
     prepare();
+  }, []);
+
+  React.useEffect(() => {
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        //this listener is used to handle and actions that need to be performed while app in foreground
+        //and you receive a push notification.
+        console.log(
+          "addNotificationReceivedListener",
+          notification.request.content.title
+        );
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        //this listener is used to handle user interaction with the notification
+        console.log(
+          "addNotificationResponseReceivedListener",
+          response.notification.request.content.title
+        );
+      });
+
+    return () => {
+      if (notificationListener?.current) {
+        Notifications.removeNotificationSubscription(
+          notificationListener?.current
+        );
+      }
+      if (responseListener?.current) {
+        Notifications.removeNotificationSubscription(responseListener.current);
+      }
+    };
   }, []);
 
   const onLayoutRootView = React.useCallback(async () => {
