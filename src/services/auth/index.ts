@@ -1,12 +1,14 @@
 import { apiDelete, apiPost, urls } from "@api";
 
 export const apiLogin = async (body: LoginRequest) => {
+  console.log("api login body", body);
   const response = await apiPost<LoginResponse, LoginRequest>(
     urls.auth.login,
     "",
     body
   );
   const resData = response.data;
+  console.log(response.data);
   return resData;
 };
 

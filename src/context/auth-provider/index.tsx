@@ -1,6 +1,8 @@
+/* eslint-disable camelcase */
 import React from "react";
 import { apiLogin } from "@services";
 import { ToastService } from "@utility";
+import * as Notifications from "expo-notifications";
 
 import * as authHelpers from "./AuthHelpers";
 
@@ -14,6 +16,7 @@ interface AuthState {
   isAuthorized: boolean;
   isLoading: boolean;
   token: string;
+  pushNotificationToken: string;
   user: ILoginUserData | null;
   isAdmin: boolean;
   isService: boolean;
@@ -32,7 +35,8 @@ type AuthAction =
   | {
       type: "GIVE_ACCESS";
       payload: { isAuthorized: boolean; token: string; user: ILoginUserData };
-    };
+    }
+  | { type: "EXPO_TOKEN"; payload: { token: string } };
 
 const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 
@@ -84,6 +88,11 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         isService: action.payload.user.user_type === "Services",
         isWarehouse: action.payload.user.user_type === "Warehouse",
       };
+    case "EXPO_TOKEN":
+      return {
+        ...state,
+        pushNotificationToken: action.payload.token,
+      };
     default:
       return state;
   }
@@ -93,6 +102,7 @@ const initAuthState: AuthState = {
   isAuthorized: false,
   isLoading: true, // note that this is now true
   token: "",
+  pushNotificationToken: "",
   user: null,
   isAdmin: false,
   isDriver: false,
@@ -102,6 +112,29 @@ const initAuthState: AuthState = {
 
 const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [state, dispatch] = React.useReducer(authReducer, initAuthState);
+
+  const registerForPushNotificationsAsync = async () => {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+
+    if (finalStatus !== "granted") {
+      return;
+    }
+
+    const token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log("Expo Push Token:", token);
+    dispatch({ type: "EXPO_TOKEN", payload: { token } });
+  };
+
+  React.useEffect(() => {
+    registerForPushNotificationsAsync();
+  }, []);
 
   React.useEffect(() => {
     (async () => {
@@ -138,7 +171,7 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const login = React.useCallback(
     (email: string, password: string, save: boolean) => {
       dispatch({ type: "LOAD_START" });
-      apiLogin({ email, password })
+      apiLogin({ email, password, fcm_token: state.pushNotificationToken })
         .then((res) => {
           ToastService.show(res?.message || "");
           if (res.success) {
@@ -166,7 +199,7 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
           dispatch({ type: "LOAD_STOP" });
         });
     },
-    []
+    [state.pushNotificationToken]
   );
 
   const value = React.useMemo(

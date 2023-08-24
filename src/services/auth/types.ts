@@ -1,6 +1,7 @@
 type LoginRequest = {
   email: string;
   password: string;
+  fcm_token: string;
 };
 type LoginResponse = ApiResponse<ILoginUserData> & { token: string };
 
