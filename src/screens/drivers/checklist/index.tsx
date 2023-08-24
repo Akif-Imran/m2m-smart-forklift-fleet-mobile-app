@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import type { ForkliftStackScreenProps } from "@navigation-types";

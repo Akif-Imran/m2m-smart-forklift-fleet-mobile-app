@@ -19,7 +19,7 @@ import { deletePoi, getPoiCounts, getPoiList } from "@services";
 import { useAuthContext } from "@context";
 
 import { _PoiListCard } from "../components/_PoiListCard";
-interface ICount {
+interface IServiceCount {
   private: number;
   business: number;
   total: number;
@@ -35,7 +35,7 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
   const [isFetching, setIsFetching] = React.useState(false);
   const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
   const [toBeDeletedPoiId, setToBeDeletedPoiId] = React.useState<number>(0);
-  const [poiCounts, setPoiCounts] = React.useState<ICount>({
+  const [poiCounts, setPoiCounts] = React.useState<IServiceCount>({
     business: 0,
     private: 0,
     total: 0,
@@ -106,7 +106,7 @@ const Pois: React.FC<ProfileSettingsStackScreenProps<"Pois">> = ({}) => {
     getPoiCounts(token)
       .then((res) => {
         if (res.success) {
-          const counts: ICount = {
+          const counts: IServiceCount = {
             business: 0,
             private: 0,
             total: 0,

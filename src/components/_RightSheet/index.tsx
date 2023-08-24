@@ -37,6 +37,7 @@ const _RightSheet = React.forwardRef<
     "worklet";
     console.log("called valued", destination);
     translateX.value = withTiming(destination);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useImperativeHandle(ref, () => ({ scrollTo }), [scrollTo]);
@@ -61,6 +62,7 @@ const _RightSheet = React.forwardRef<
         clearTimeout(openBottomSheet);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const gesture = Gesture.Pan()

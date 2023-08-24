@@ -20,7 +20,7 @@ const _ScrollFormLayout: React.FC<React.PropsWithChildren<OwnProps>> = ({
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
+      style={styles.keyboardView}
     >
       <ScrollView
         style={hasSpacing ? styles.scrollStyle : styles.scrollStyleNoSpacing}

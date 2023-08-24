@@ -34,7 +34,7 @@ const BarcodeScanner: React.FC<ForkliftStackScreenProps<"BarcodeScanner">> = ({
   const askForCameraPermission = () => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status == "granted");
+      setHasPermission(status === "granted");
     })();
   };
 
@@ -81,7 +81,8 @@ const BarcodeScanner: React.FC<ForkliftStackScreenProps<"BarcodeScanner">> = ({
       .finally(() => {
         setIsLoading(false);
       });
-  }, [code, scanned]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [code, scanned, token]);
 
   if (hasPermission === null) {
     // navigation.goBack();
@@ -113,6 +114,7 @@ const BarcodeScanner: React.FC<ForkliftStackScreenProps<"BarcodeScanner">> = ({
       <View style={styles.barcodeBox}>
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : handleBarcodeScanned}
+          // eslint-disable-next-line react-native/no-inline-styles
           style={{ height: 700, width: 400 }}
         />
       </View>

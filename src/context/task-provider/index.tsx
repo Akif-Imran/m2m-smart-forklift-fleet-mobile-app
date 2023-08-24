@@ -116,6 +116,7 @@ const TaskProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
       .finally(() => {
         dispatch({ type: "STOP_LOADING" });
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, user?.id]);
 
   // React.useEffect(() => {

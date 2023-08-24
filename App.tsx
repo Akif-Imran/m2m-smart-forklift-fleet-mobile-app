@@ -51,6 +51,7 @@ export default function RootApp() {
   } else {
     return (
       <RootSiblingParent>
+        {/* eslint-disable-next-line react-native/no-inline-styles */}
         <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
           <StatusBar
             backgroundColor={colors.primary}

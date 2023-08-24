@@ -29,12 +29,14 @@ const _BottomSheet = React.forwardRef<
   const scrollTo = useCallback((destination: number) => {
     "worklet";
     translateY.value = withTiming(destination);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useImperativeHandle(ref, () => ({ scrollTo }), [scrollTo]);
 
   useEffect(() => {
     scrollTo(MIN_TRANSLATE_Y);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const gesture = Gesture.Pan()
