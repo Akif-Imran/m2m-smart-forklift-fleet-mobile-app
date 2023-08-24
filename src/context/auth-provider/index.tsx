@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import React from "react";
-import { apiLogin } from "@services";
+import { apiLogin, updateDevicePushToken } from "@services";
 import { ToastService } from "@utility";
 import * as Notifications from "expo-notifications";
 
@@ -131,6 +131,19 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     console.log("Expo Push Token:", token);
     dispatch({ type: "EXPO_TOKEN", payload: { token } });
   };
+
+  //TODO add api call to update push token
+  React.useEffect(() => {
+    if (!state.token) {
+      return;
+    }
+    const subscription = Notifications.addPushTokenListener(
+      (token: Notifications.DevicePushToken) => {
+        updateDevicePushToken(state.token, token.data);
+      }
+    );
+    return () => subscription.remove();
+  }, [state.token]);
 
   React.useEffect(() => {
     registerForPushNotificationsAsync();

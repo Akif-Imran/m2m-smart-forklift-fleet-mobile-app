@@ -1,5 +1,10 @@
 export { reverseGeocode, getDirections } from "./google-services";
-export { apiLogin, changePassword, deleteAccount } from "./auth";
+export {
+  apiLogin,
+  changePassword,
+  deleteAccount,
+  updateDevicePushToken,
+} from "./auth";
 export { getDashCounts } from "./common";
 export {
   getDevicesList,

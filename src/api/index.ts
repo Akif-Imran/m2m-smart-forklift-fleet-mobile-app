@@ -27,6 +27,7 @@ export const urls = {
   user: {
     changePassword: `${BASE_USER_URL}/resetPassword`,
     deleteAccount: `${BASE_USER_URL}/deleteAccount`,
+    updatePushToken: `${BASE_USER_URL}/updatePushToken`,
   },
   dashboard: {
     counts: `${baseURL}/app_dashboard`,

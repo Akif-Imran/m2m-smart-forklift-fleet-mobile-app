@@ -12,6 +12,16 @@ export const apiLogin = async (body: LoginRequest) => {
   return resData;
 };
 
+export const updateDevicePushToken = async (
+  token: string,
+  pushToken: string
+) => {
+  const response = await apiPost(urls.user.updatePushToken, token, {
+    pushToken,
+  });
+  return response.data;
+};
+
 export const changePassword = async (
   token: string,
   body: ChangePasswordRequest
