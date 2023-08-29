@@ -125,6 +125,39 @@ export const getCheckList = async (
   return response.data;
 };
 
+export const addChecklistItem = async (
+  token: string,
+  name: string
+): Promise<CheckListResponse<"Record">> => {
+  const response = await apiPost<
+    CheckListResponse<"Record">,
+    ChecklistAddRequest
+  >(urls.driver.addChecklistItem, token, { name });
+  return response.data;
+};
+
+export const updateChecklistList = async (
+  token: string,
+  body: ChecklistUpdateRequest
+): Promise<CheckListResponse<"Record">> => {
+  const response = await apiPost<
+    CheckListResponse<"Record">,
+    ChecklistUpdateRequest
+  >(urls.driver.updateChecklistItem, token, body);
+  return response.data;
+};
+
+export const deleteChecklistItem = async (
+  token: string,
+  id: number
+): Promise<CheckListResponse> => {
+  const response = await apiDelete<CheckListResponse>(
+    urls.driver.deleteChecklistItem(id),
+    token
+  );
+  return response.data;
+};
+
 export const addTask = async (
   token: string,
   body: AddNewTaskRequest

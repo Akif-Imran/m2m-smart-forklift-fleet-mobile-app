@@ -128,6 +128,7 @@ export type ReportStackScreenProps<T extends keyof ReportsStackParamsList> =
 //--------------------------------------
 export type ProfileSettingsStackParamsList = {
   Settings: undefined;
+  Checklist: undefined;
   ChangePassword: undefined;
   VehicleIcons: undefined;
   SelectIcon: DetailsType<IVehicle>;

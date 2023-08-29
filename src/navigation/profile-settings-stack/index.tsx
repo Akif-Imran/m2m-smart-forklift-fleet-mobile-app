@@ -5,6 +5,7 @@ import type { ProfileSettingsStackParamsList } from "@navigation-types";
 import {
   About,
   ChangePassword,
+  Checklist,
   DriverWorkingTime,
   Help,
   Pois,
@@ -77,6 +78,14 @@ const ProfileSettingsStack: FC = () => {
         component={VehicleIcons}
         options={{
           headerTitle: "Vehicle Icons",
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="Checklist"
+        component={Checklist}
+        options={{
+          headerTitle: "Checklist",
           headerShown: true,
         }}
       />

@@ -6,6 +6,7 @@ import {
   MaterialCommunityIcons,
   FontAwesome5,
   MaterialIcons,
+  Octicons,
 } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-root-toast";
@@ -60,6 +61,16 @@ export const Settings: React.FC<
       color: colors.titleText,
       onPress: () => {
         navigation.navigate("VehicleIcons");
+      },
+    },
+    {
+      id: 11,
+      icon: <Octicons name="checklist" color={colors.heavyGray} size={18} />,
+      bgColor: colors.mediumGray,
+      title: "Checklist",
+      color: colors.titleText,
+      onPress: () => {
+        navigation.navigate("Checklist");
       },
     },
     {

@@ -92,7 +92,17 @@ type DriverBehaviorEventType = ApiResponse<
 >;
 
 type QRScanDeviceDetailsResponse = ApiResponse<QRScanDeviceDetails, "result">;
-type CheckListResponse = ApiResponse<IChecklist[]>;
+type CheckListResponse<T extends "List" | "Record" = "List"> = ApiResponse<
+  T extends "List" ? IChecklist[] : IChecklist
+>;
+
+type ChecklistUpdateRequest = {
+  name: string;
+  id: number;
+};
+
+type ChecklistAddRequest = { name: string };
+
 type AddNewTaskRequest = {
   vehicle_id: number;
   checklist: string; //"Tyre Ok, Body Change, Body Ok, Brake Ok",
