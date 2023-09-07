@@ -117,8 +117,8 @@ export const qrScanDeviceDetails = async (
 
 export const getCheckList = async (
   token: string
-): Promise<CheckListResponse> => {
-  const response = await apiGet<CheckListResponse>(
+): Promise<ChecklistListResponse> => {
+  const response = await apiGet<ChecklistListResponse>(
     urls.driver.getCheckList,
     token
   );
@@ -127,32 +127,32 @@ export const getCheckList = async (
 
 export const addChecklistItem = async (
   token: string,
-  name: string
-): Promise<CheckListResponse<"Record">> => {
+  body: AddChecklistItemRequest
+): Promise<ChecklistRecordResponse> => {
   const response = await apiPost<
-    CheckListResponse<"Record">,
-    ChecklistAddRequest
-  >(urls.driver.addChecklistItem, token, { name });
+    ChecklistRecordResponse,
+    AddChecklistItemRequest
+  >(urls.driver.addChecklistItem, token, body);
   return response.data;
 };
 
-export const updateChecklistList = async (
+export const updateChecklistItem = async (
   token: string,
-  body: ChecklistUpdateRequest
-): Promise<CheckListResponse<"Record">> => {
+  body: UpdateChecklistItemRequest
+): Promise<ChecklistRecordResponse> => {
   const response = await apiPost<
-    CheckListResponse<"Record">,
-    ChecklistUpdateRequest
+    ChecklistRecordResponse,
+    UpdateChecklistItemRequest
   >(urls.driver.updateChecklistItem, token, body);
   return response.data;
 };
 
 export const deleteChecklistItem = async (
   token: string,
-  id: number
-): Promise<CheckListResponse> => {
-  const response = await apiDelete<CheckListResponse>(
-    urls.driver.deleteChecklistItem(id),
+  checklistItemId: number
+): Promise<ChecklistRecordResponse> => {
+  const response = await apiDelete<ChecklistRecordResponse>(
+    urls.driver.deleteChecklistItem(checklistItemId),
     token
   );
   return response.data;
