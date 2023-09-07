@@ -52,7 +52,7 @@ export {
   endTask,
   getCheckList,
   addChecklistItem,
-  updateChecklistList,
+  updateChecklistItem,
   deleteChecklistItem,
   getTaskList,
   qrScanDeviceDetails,

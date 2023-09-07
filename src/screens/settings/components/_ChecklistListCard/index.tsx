@@ -16,15 +16,15 @@ import { PaperTheme, colors, gStyles } from "@theme";
 import { _TextInput } from "@components";
 import { useAuthContext } from "@context";
 import { ToastService } from "@utility";
-import { updateChecklistList } from "@services";
+import { deleteChecklistItem, updateChecklistItem } from "@services";
 
 import { styles } from "./styles";
 
 interface IForm {
-  checklistItem: string;
+  name: string;
 }
 const schema: yup.ObjectSchema<IForm> = yup.object().shape({
-  checklistItem: yup
+  name: yup
     .string()
     .min(3, "Too short!")
     .required("Name of Job Type is required."),
@@ -42,14 +42,29 @@ const _ChecklistListCard: React.FC<OwnProps> = ({
   handleRefresh,
 }) => {
   const {
-    state: { user, token },
+    state: { token },
   } = useAuthContext();
   const [visible, setVisible] = React.useState<boolean>(false);
 
   const hideModal = () => setVisible(false);
 
-  const handleEdit = (values: IForm, helpers: FormikHelpers<IForm>) => {
-    updateChecklistList(token, {});
+  const handleEdit = (values: IForm, _helpers: FormikHelpers<IForm>) => {
+    updateChecklistItem(token, {
+      id: checklistItemId,
+      name: values.name,
+    })
+      .then((res) => {
+        ToastService.show(res?.message || "N/A");
+        if (res.success) {
+          hideModal();
+        }
+      })
+      .catch((_err) => {
+        ToastService.show("Update checklist error");
+      })
+      .finally(() => {
+        handleRefresh();
+      });
   };
 
   const handleDelete = () => {
@@ -76,11 +91,21 @@ const _ChecklistListCard: React.FC<OwnProps> = ({
 
   const handleDeleteServiceType = () => {
     //api call
+    deleteChecklistItem(token, checklistItemId)
+      .then((res) => {
+        ToastService.show(res?.message || "N/A");
+      })
+      .catch((_err) => {
+        ToastService.show("An error occurred");
+      })
+      .finally(() => {
+        handleRefresh();
+      });
   };
 
   const form = useFormik<IForm>({
     initialValues: {
-      checklistItem: label,
+      name: label,
     },
     onSubmit: (values, helpers) => {
       handleEdit(values, helpers);
@@ -101,16 +126,12 @@ const _ChecklistListCard: React.FC<OwnProps> = ({
           <View style={styles.orderInputContainer}>
             <_TextInput
               dense
-              value={form.values.checklistItem}
-              label={"Job Type"}
-              onBlur={form.handleBlur("jobType")}
-              onChangeText={form.handleChange("jobType")}
-              error={
-                form.errors.checklistItem && form.touched.checklistItem
-                  ? true
-                  : false
-              }
-              errorText={form.errors.checklistItem}
+              value={form.values.name}
+              label={"Name"}
+              onBlur={form.handleBlur("name")}
+              onChangeText={form.handleChange("name")}
+              error={form.errors.name && form.touched.name ? true : false}
+              errorText={form.errors.name}
             />
           </View>
           <Button

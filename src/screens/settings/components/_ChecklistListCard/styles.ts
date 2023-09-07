@@ -1,14 +1,14 @@
 import { StyleSheet } from "react-native";
 
-import { colors } from "../../../../theme";
+import { colors, theme } from "../../../../theme";
 
 export const styles = StyleSheet.create({
   card: {
-    borderRadius: 15,
-    marginVertical: 4,
-    paddingHorizontal: 8,
-    paddingTop: 6,
-    paddingBottom: 6,
+    borderRadius: theme.radius.sm,
+    marginVertical: theme.spacing.xs,
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: theme.spacing.sm,
+    paddingBottom: theme.spacing.sm,
     backgroundColor: colors.white,
     // borderWidth: 1,
   },
@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 25,
     margin: 20,
-    borderRadius: 15,
+    borderRadius: theme.radius.md,
     backgroundColor: colors.white,
     // borderWidth: 1,
   },
@@ -27,11 +27,6 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 10,
     paddingHorizontal: 6,
-  },
-  headerText: {
-    fontFamily: "Visby-Bold",
-    fontSize: 24,
-    color: colors.titleText,
   },
   orderInputContainer: {
     marginVertical: 4,
