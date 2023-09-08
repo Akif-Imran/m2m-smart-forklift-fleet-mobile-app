@@ -32,6 +32,8 @@ import { useAuthContext } from "@context";
 import Spinner from "react-native-loading-spinner-overlay";
 import { mapMarkers } from "@map-markers";
 import { useSafeAreaDimensions } from "@hooks";
+import { selectVehiclesWithDevices, useAppSelector } from "@store";
+import { defaultLocation } from "@constants";
 
 import { styles } from "./styles";
 interface Marker extends LatLng {
@@ -72,6 +74,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
   const { LATITUDE_DELTA, LONGITUDE_DELTA } = useSafeAreaDimensions();
   // const { SCREEN_HEIGHT } = useSafeAreaDimensions();
   const { mode } = route.params;
+  const { data: points } = useAppSelector(selectVehiclesWithDevices);
   const mapRef = React.useRef<MapView>(null);
   const [trackViewChanges, _setTrackViewChanges] =
     React.useState<boolean>(true);
@@ -166,12 +169,39 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
 
   React.useEffect(() => {
     if (mode === "single") {
-      const { point } = route.params;
-      setMarkers([point]);
+      const { deviceId } = route.params;
+      const record = points.find((point) => point.device?.id === deviceId);
+      if (!record) {
+        return;
+      }
+      setMarkers([
+        {
+          name: record.reg_no,
+          icon: record.icon,
+          latitude: record.device?.latitude
+            ? parseFloat(record.device?.latitude)
+            : defaultLocation.latitude,
+          longitude: record.device?.longitude
+            ? parseFloat(record.device?.longitude)
+            : defaultLocation.longitude,
+        },
+      ]);
     } else if (mode === "multiple") {
-      setMarkers(route.params.points);
+      const mapPoints: IMapPoint[] = points.map((point) => {
+        return {
+          name: point.reg_no,
+          icon: point.icon,
+          latitude: point.device?.latitude
+            ? parseFloat(point.device?.latitude)
+            : defaultLocation.latitude,
+          longitude: point.device?.longitude
+            ? parseFloat(point.device?.longitude)
+            : defaultLocation.latitude,
+        };
+      });
+      setMarkers(mapPoints);
     }
-  }, [mode, route.params]);
+  }, [mode, route.params, points]);
 
   React.useEffect(() => {
     if (!fetchAddress) {

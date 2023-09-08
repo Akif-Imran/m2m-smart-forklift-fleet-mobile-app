@@ -46,6 +46,7 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, mode = "list" }) => {
             style={StyleSheet.compose(listCardStyles.imgStyle, {
               height: 40,
               width: 40,
+              tintColor: colors.titleText,
             })}
           />
         </View>

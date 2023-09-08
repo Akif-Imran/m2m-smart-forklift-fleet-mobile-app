@@ -55,9 +55,9 @@ export type ForkliftStackParamsList = {
   BirdEyeView:
     | {
         mode: "single";
-        point: IMapPoint;
+        deviceId: number;
       }
-    | { mode: "multiple"; points: IMapPoint[] };
+    | { mode: "multiple" };
   Fences: DetailsType<IVehicle>;
   Trips: DetailsType<IVehicle>;
   Playback: {

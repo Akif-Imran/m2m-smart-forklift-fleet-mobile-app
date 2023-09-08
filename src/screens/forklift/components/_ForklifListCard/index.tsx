@@ -43,16 +43,7 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
         onPress={() =>
           navigation.navigate("BirdEyeView", {
             mode: "single",
-            point: {
-              latitude: item.device?.latitude
-                ? parseFloat(item.device?.latitude)
-                : 3.139003,
-              longitude: item.device?.longitude
-                ? parseFloat(item.device?.longitude)
-                : 101.686855,
-              name: item.reg_no,
-              icon: item.icon,
-            },
+            deviceId: item.device_id,
           })
         }
         onLongPress={() => handleDelete(item.id)}
@@ -65,7 +56,7 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
                 : require("../../../../assets/images/car.png")
             }
             resizeMode="contain"
-            style={listCardStyles.imgStyle}
+            style={[listCardStyles.imgStyle, { tintColor: colors.titleText }]}
           />
         </View>
         <View style={listCardStyles.infoWithForward}>

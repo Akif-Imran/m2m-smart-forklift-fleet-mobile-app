@@ -251,7 +251,6 @@ export const listCardStyles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: theme.radius.sm,
-    tintColor: colors.titleText,
   },
   infoWithForward: {
     flex: 1,
