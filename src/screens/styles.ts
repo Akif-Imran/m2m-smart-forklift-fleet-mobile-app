@@ -242,9 +242,10 @@ export const listCardStyles = StyleSheet.create({
   },
   //--------------------------------------------------
   imgStyle: {
-    width: 80,
-    height: 80,
+    width: 72,
+    height: 72,
     borderRadius: theme.radius.sm,
+    tintColor: colors.titleText,
   },
   infoWithForward: {
     flex: 1,
@@ -253,6 +254,7 @@ export const listCardStyles = StyleSheet.create({
   infoContainer: {
     flex: 9,
     marginLeft: theme.spacing.sm,
+    rowGap: 2,
     // borderWidth: 1,
   },
 

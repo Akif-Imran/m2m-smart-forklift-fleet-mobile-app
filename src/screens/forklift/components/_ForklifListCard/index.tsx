@@ -1,9 +1,9 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import { _DefaultCard } from "@components";
-import { PaperTheme, colors, gStyles } from "@theme";
+import { _Badge, _DefaultCard } from "@components";
+import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { listCardStyles } from "@screen-styles";
-import { Button } from "react-native-paper";
+import { Button, IconButton } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import type { ForkliftStackScreenProps } from "@navigation-types";
 import { truncateText } from "@utility";
@@ -43,20 +43,24 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
         }
         onLongPress={() => handleDelete(item.id)}
       >
-        <View>
-          {item.picture ? (
+        <View style={styles.imgContainer}>
+          {/* {item.picture ? (
             <Image
               source={{ uri: `${baseURL}${item.picture}` }}
               resizeMode="cover"
               style={listCardStyles.imgStyle}
             />
-          ) : (
-            <Image
-              source={require("../../../../assets/images/user.png")}
-              resizeMode="contain"
-              style={listCardStyles.imgStyle}
-            />
-          )}
+          ) : ( */}
+          <Image
+            source={
+              item.picture
+                ? { uri: `${baseURL}${item.picture}` }
+                : require("../../../../assets/images/car.png")
+            }
+            resizeMode="contain"
+            style={listCardStyles.imgStyle}
+          />
+          {/* )} */}
         </View>
         <View style={listCardStyles.infoWithForward}>
           <View style={listCardStyles.infoContainer}>
@@ -67,7 +71,7 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
               <Entypo
                 name="info-with-circle"
                 color={colors.titleText}
-                size={18}
+                size={20}
                 onPress={() =>
                   navigation.navigate("ForkLiftDetails", {
                     _id: item.id.toString(),
@@ -91,20 +95,37 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
             >
               {truncateText(item.fuel_type_name, 22)}
             </Text>
+            <_Badge status="online" />
           </View>
 
           <View
             style={StyleSheet.compose(listCardStyles.forwardContainer, {
-              flexDirection: "row",
+              justifyContent: "space-between",
             })}
           >
-            {/* <Text
-              style={StyleSheet.compose(screenStyles.badgeText, {
-                backgroundColor: ForkliftStatusColor[item.status],
-              })}
-            >
-              {truncateText(item.status, 35).toUpperCase()}
-            </Text> */}
+            <View style={listCardStyles.forwardContainer}>
+              <Text
+                style={gStyles.tblDescText}
+                ellipsizeMode="tail"
+                numberOfLines={0.5}
+              >
+                {"Thu 07 Sep, 2023"}
+              </Text>
+              <Text
+                style={gStyles.tblDescText}
+                ellipsizeMode="tail"
+                numberOfLines={0.5}
+              >
+                {"02:36:29 PM"}
+              </Text>
+            </View>
+            <IconButton
+              icon="bell"
+              color={colors.titleText}
+              size={20}
+              style={{ marginRight: 0 - theme.spacing.md }}
+              onPress={() => console.log("Pressed")}
+            />
             <FontAwesome5
               name="caret-right"
               size={20}

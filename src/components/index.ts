@@ -24,3 +24,4 @@ export {
   MAX_TRANSLATE_Y as BOTTOM_SHEET_MAX_TRANSLATE_Y,
   MIN_TRANSLATE_Y as BOTTOM_SHEET_MIN_TRANSLATE_Y,
 } from "./bottom-sheet";
+export { _Badge } from "./_Badge";
