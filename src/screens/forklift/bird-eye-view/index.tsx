@@ -26,7 +26,7 @@ import {
   _TextInput,
 } from "@components";
 import { MaterialIcons } from "@expo/vector-icons";
-import { images, iconNames, iconColors } from "@markers";
+import { images, oldIconNames, oldIconColors } from "@markers";
 import { addPoi, getPoiList, reverseGeocode } from "@services";
 import { useAuthContext } from "@context";
 import Spinner from "react-native-loading-spinner-overlay";
@@ -148,9 +148,9 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
   const form = useFormik<IForm>({
     initialValues: {
       color: colors.primary,
-      iconName: "warehouse",
+      iconName: "building",
       name: "",
-      colorName: "primary",
+      colorName: "black",
       latitude: 0,
       longitude: 0,
       poiType: "1",
@@ -211,7 +211,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
             iconName: poi.marker_shape,
             type: poi.poi_type === 1 ? "private" : "public",
             address: poi.address,
-            color: iconColors[poi.color],
+            color: oldIconColors[poi.color],
           }));
           setPoiMarkers((_prev) => pois);
         }
@@ -437,7 +437,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
 
                 <_Divider title="Icon" />
                 <View style={styles.arrMappingContainer}>
-                  {Object.entries(iconNames).map((value, index) => {
+                  {Object.entries(oldIconNames).map((value, index) => {
                     console.log(value);
                     return (
                       <TouchableOpacity
@@ -469,7 +469,7 @@ const BirdEyeView: React.FC<ForkliftStackScreenProps<"BirdEyeView">> = ({
 
                 <_Divider title="Color" />
                 <View style={styles.arrMappingContainer}>
-                  {Object.entries(iconColors).map((value, index) => {
+                  {Object.entries(oldIconColors).map((value, index) => {
                     const checked = value[1] === form.values.color;
                     return (
                       <TouchableOpacity

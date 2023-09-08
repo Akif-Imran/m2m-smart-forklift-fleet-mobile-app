@@ -290,10 +290,9 @@ const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({ route }) => {
     updateGeoFence(token, {
       id: selectedFenceId,
       display_name: name,
-      //FIXME - uncomment following when api endpoint is updated.
-      // latitude: region.latitude.toString(),
-      // longitude: region.longitude.toString(),
-      // radius: radius.toString(),
+      latitude: region.latitude.toString(),
+      longitude: region.longitude.toString(),
+      radius: radius.toString(),
     })
       .then((res) => {
         ToastService.show(res?.message || "");
