@@ -241,6 +241,12 @@ export const listCardStyles = StyleSheet.create({
     alignItems: "flex-start",
   },
   //--------------------------------------------------
+  imgContainer: {
+    borderWidth: 2,
+    borderRadius: theme.radius.full,
+    padding: theme.spacing.md,
+    borderColor: colors.titleText,
+  },
   imgStyle: {
     width: 72,
     height: 72,

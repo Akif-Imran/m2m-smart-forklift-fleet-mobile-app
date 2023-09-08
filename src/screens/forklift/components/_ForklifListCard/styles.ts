@@ -1,4 +1,4 @@
-import { colors, theme } from "@theme";
+import { theme } from "@theme";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
@@ -7,11 +7,5 @@ export const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     columnGap: theme.spacing.xs,
-  },
-  imgContainer: {
-    borderWidth: 2,
-    borderRadius: theme.radius.full,
-    padding: theme.spacing.md,
-    borderColor: colors.warning,
   },
 });

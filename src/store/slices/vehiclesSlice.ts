@@ -1,4 +1,4 @@
-import type { SerializedError } from "@reduxjs/toolkit";
+import type { PayloadAction, SerializedError } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchVehicles } from "@thunks";
 
@@ -15,7 +15,14 @@ const initialState: State = {
 const vehiclesSlice = createSlice({
   name: "vehicles",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    updateVehicleIcon: (state, action: PayloadAction<IUpdateIconPayload>) => {
+      const index = state.data.rows.findIndex(
+        (vehicle) => vehicle.id === action.payload.id
+      );
+      state.data.rows[index].icon = action.payload.icon;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchVehicles.pending, (state) => {
       state.isLoading = true;
@@ -33,5 +40,10 @@ const vehiclesSlice = createSlice({
 });
 
 export { vehiclesSlice };
-// export const {} = vehiclesSlice.actions;
+export const { updateVehicleIcon } = vehiclesSlice.actions;
 export const vehiclesReducer = vehiclesSlice.reducer;
+
+interface IUpdateIconPayload {
+  id: number;
+  icon: string;
+}

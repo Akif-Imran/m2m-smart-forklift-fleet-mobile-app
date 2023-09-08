@@ -11,6 +11,8 @@ import { _Divider } from "@components";
 import { mapMarkers } from "@map-markers";
 import { updateVehicle } from "@services";
 import { useAuthContext } from "@context";
+import { useAppDispatch } from "@store";
+import { updateVehicleIcon } from "@slices";
 
 import { _ForkliftListCard } from "../components";
 
@@ -24,8 +26,9 @@ const SelectIcons: React.FC<ProfileSettingsStackScreenProps<"SelectIcon">> = ({
     state: { token },
   } = useAuthContext();
   const { item } = route.params;
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = React.useState(false);
-  const [selectedIcon, setSelectedIcon] = React.useState<string>("marker-pin");
+  const [selectedIcon, setSelectedIcon] = React.useState<string>(item.icon);
   const [icons, _setIcons] = React.useState(mapMarkers);
   console.log(selectedIcon, item.icon);
 
@@ -42,6 +45,7 @@ const SelectIcons: React.FC<ProfileSettingsStackScreenProps<"SelectIcon">> = ({
         }
         if (res.success) {
           navigation.goBack();
+          dispatch(updateVehicleIcon(res.data));
         }
       })
       .finally(() => {

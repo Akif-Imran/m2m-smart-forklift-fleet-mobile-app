@@ -35,20 +35,19 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, mode = "list" }) => {
                 })
         }
       >
-        <View>
-          {item.picture ? (
-            <Image
-              source={{ uri: `${BASE_URL}${item.picture}` }}
-              resizeMode="cover"
-              style={listCardStyles.imgStyle}
-            />
-          ) : (
-            <Image
-              source={require("../../../../assets/images/user.png")}
-              resizeMode="contain"
-              style={listCardStyles.imgStyle}
-            />
-          )}
+        <View style={listCardStyles.imgContainer}>
+          <Image
+            source={
+              item.picture
+                ? { uri: `${BASE_URL}${item.picture}` }
+                : require("../../../../assets/images/car.png")
+            }
+            resizeMode="cover"
+            style={StyleSheet.compose(listCardStyles.imgStyle, {
+              height: 40,
+              width: 40,
+            })}
+          />
         </View>
         <View style={listCardStyles.infoWithForward}>
           <View style={listCardStyles.infoContainer}>
@@ -75,13 +74,6 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, mode = "list" }) => {
               flexDirection: "row",
             })}
           >
-            {/* <Text
-              style={StyleSheet.compose(screenStyles.badgeText, {
-                backgroundColor: ForkliftStatusColor[item.status],
-              })}
-            >
-              {truncateText(item.status, 35).toUpperCase()}
-            </Text> */}
             {mode === "info" ? undefined : (
               <FontAwesome5
                 name="caret-right"

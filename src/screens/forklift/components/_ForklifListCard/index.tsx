@@ -57,7 +57,7 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
         }
         onLongPress={() => handleDelete(item.id)}
       >
-        <View style={styles.imgContainer}>
+        <View style={listCardStyles.imgContainer}>
           <Image
             source={
               item.picture

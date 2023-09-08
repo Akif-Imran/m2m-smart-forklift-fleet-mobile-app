@@ -15,6 +15,23 @@ import MarkerPin from "../marker-pin.png";
 //@ts-expect-error undeclared module
 import RacingFlag from "../racing-flag.png";
 
+//@ts-expect-error undeclared module
+import MBDPalletStack from "./mbd-pallet-stacker.png";
+//@ts-expect-error undeclared module
+import MEPalletStack from "./me-pallet-stacker.png";
+//@ts-expect-error undeclared module
+import MEBPalletTruck from "./meb-pallet-truck.png";
+//@ts-expect-error undeclared module
+import MFMFZReachTruck from "./mf-mfz-reach-truck.png";
+//@ts-expect-error undeclared module
+import MGTOWTractor from "./mg-tow-tractor.png";
+//@ts-expect-error undeclared module
+import MHAOrderPicker from "./mha-order-picker.png";
+//@ts-expect-error undeclared module
+import MKCounterBalanceForklift from "./mk-counter-balance-forklift.png";
+//@ts-expect-error undeclared module
+import TFCMutliDirectionalForklift from "./tfc-multi-directional-forklift.png";
+
 interface IMapMarker {
   name: string;
   size: {
@@ -30,6 +47,110 @@ interface IMapMarker {
 }
 
 export const mapMarkers: Record<string, IMapMarker> = {
+  "mbd-pallet-stack": {
+    name: "mbd-pallet-stack",
+    icon: MBDPalletStack,
+    size: {
+      width: 72,
+      height: 32,
+    },
+    offset: { x: 0.0, y: 0.0 },
+    anchor: { x: 0.2, y: 0.25 },
+    rotate: 15,
+    imageResizeMethod: "auto",
+    imageResizeMode: "contain",
+  },
+  "me-pallet-stack": {
+    name: "me-pallet-stack",
+    icon: MEPalletStack,
+    size: {
+      width: 72,
+      height: 32,
+    },
+    offset: { x: 0.0, y: 0.0 },
+    anchor: { x: 0.2, y: 0.25 },
+    rotate: 15,
+    imageResizeMethod: "auto",
+    imageResizeMode: "contain",
+  },
+  "meb-pallet-truck": {
+    name: "meb-pallet-truck",
+    icon: MEBPalletTruck,
+    size: {
+      width: 72,
+      height: 32,
+    },
+    offset: { x: 0.0, y: 0.0 },
+    anchor: { x: 0.2, y: 0.25 },
+    rotate: 15,
+    imageResizeMethod: "auto",
+    imageResizeMode: "contain",
+  },
+  "mf-mfz-reach-truck": {
+    name: "mf-mfz-reach-truck",
+    icon: MFMFZReachTruck,
+    size: {
+      width: 72,
+      height: 32,
+    },
+    offset: { x: 0.0, y: 0.0 },
+    anchor: { x: 0.2, y: 0.25 },
+    rotate: 15,
+    imageResizeMethod: "auto",
+    imageResizeMode: "contain",
+  },
+  "mg-tow-tractor": {
+    name: "mg-tow-tractor",
+    icon: MGTOWTractor,
+    size: {
+      width: 72,
+      height: 32,
+    },
+    offset: { x: 0.0, y: 0.0 },
+    anchor: { x: 0.2, y: 0.25 },
+    rotate: 15,
+    imageResizeMethod: "auto",
+    imageResizeMode: "contain",
+  },
+  "mha-order-picker": {
+    name: "mha-order-picker",
+    icon: MHAOrderPicker,
+    size: {
+      width: 72,
+      height: 32,
+    },
+    offset: { x: 0.0, y: 0.0 },
+    anchor: { x: 0.2, y: 0.25 },
+    rotate: 15,
+    imageResizeMethod: "auto",
+    imageResizeMode: "contain",
+  },
+  "mk-counter-balance-forklift": {
+    name: "mk-counter-balance-forklift",
+    icon: MKCounterBalanceForklift,
+    size: {
+      width: 72,
+      height: 32,
+    },
+    offset: { x: 0.0, y: 0.0 },
+    anchor: { x: 0.2, y: 0.25 },
+    rotate: 15,
+    imageResizeMethod: "auto",
+    imageResizeMode: "contain",
+  },
+  "tfc-multi-directional-forklift": {
+    name: "tfc-multi-directional-forklift",
+    icon: TFCMutliDirectionalForklift,
+    size: {
+      width: 72,
+      height: 32,
+    },
+    offset: { x: 0.0, y: 0.0 },
+    anchor: { x: 0.2, y: 0.25 },
+    rotate: 15,
+    imageResizeMethod: "auto",
+    imageResizeMode: "contain",
+  },
   "red-car-top": {
     name: "red-car-top",
     icon: RedCar,
