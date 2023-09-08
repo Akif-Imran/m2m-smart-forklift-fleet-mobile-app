@@ -10,7 +10,7 @@ import { Button, Checkbox } from "react-native-paper";
 import { useFormik } from "formik";
 import { getCheckList } from "@services";
 import { useAuthContext, useTaskContext } from "@context";
-import { baseURL } from "@api";
+import { BASE_URL } from "@api";
 
 import { _AssignForkliftListCard } from "../components";
 
@@ -107,7 +107,7 @@ const DriverCheckList: React.FC<
               <View>
                 {item.vehicle_picture ? (
                   <Image
-                    source={{ uri: `${baseURL}${item.vehicle_picture}` }}
+                    source={{ uri: `${BASE_URL}${item.vehicle_picture}` }}
                     resizeMode="cover"
                     style={listCardStyles.imgStyle}
                   />

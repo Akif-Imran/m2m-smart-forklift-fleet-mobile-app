@@ -13,18 +13,28 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
-import { baseURL } from "@api";
+import { BASE_URL } from "@api";
+import moment from "moment";
 
 import { styles } from "./styles";
 
 interface OwnProps {
-  item: IVehicle;
+  item: IVehicleWithDevice;
   handleDelete: (customerId: number) => void;
 }
 
 const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
   const navigation =
     useNavigation<ForkliftStackScreenProps<"Forklift">["navigation"]>();
+  const [isOnline, setIsOnline] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    const gpsTime = moment(item.device?.gps_time);
+    const minutes = moment().diff(gpsTime, "minutes");
+    console.log(item.device?.gps_time, minutes);
+    setIsOnline(minutes < 10);
+  }, [item?.device]);
+
   return (
     <_DefaultCard>
       <TouchableOpacity
@@ -34,8 +44,12 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
           navigation.navigate("BirdEyeView", {
             mode: "single",
             point: {
-              latitude: 3.139003,
-              longitude: 101.686855,
+              latitude: item.device?.latitude
+                ? parseFloat(item.device?.latitude)
+                : 3.139003,
+              longitude: item.device?.longitude
+                ? parseFloat(item.device?.longitude)
+                : 101.686855,
               name: item.reg_no,
               icon: item.icon,
             },
@@ -44,23 +58,15 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
         onLongPress={() => handleDelete(item.id)}
       >
         <View style={styles.imgContainer}>
-          {/* {item.picture ? (
-            <Image
-              source={{ uri: `${baseURL}${item.picture}` }}
-              resizeMode="cover"
-              style={listCardStyles.imgStyle}
-            />
-          ) : ( */}
           <Image
             source={
               item.picture
-                ? { uri: `${baseURL}${item.picture}` }
+                ? { uri: `${BASE_URL}${item.picture}` }
                 : require("../../../../assets/images/car.png")
             }
             resizeMode="contain"
             style={listCardStyles.imgStyle}
           />
-          {/* )} */}
         </View>
         <View style={listCardStyles.infoWithForward}>
           <View style={listCardStyles.infoContainer}>
@@ -95,7 +101,7 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
             >
               {truncateText(item.fuel_type_name, 22)}
             </Text>
-            <_Badge status="online" />
+            <_Badge status={isOnline ? "online" : "offline"} />
           </View>
 
           <View
@@ -109,14 +115,14 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
                 ellipsizeMode="tail"
                 numberOfLines={0.5}
               >
-                {"Thu 07 Sep, 2023"}
+                {moment(item.device?.gps_time).format("ddd DD MMM, YYYY")}
               </Text>
               <Text
                 style={gStyles.tblDescText}
                 ellipsizeMode="tail"
                 numberOfLines={0.5}
               >
-                {"02:36:29 PM"}
+                {moment(item.device?.gps_time).format("hh:mm:ss A")}
               </Text>
             </View>
             <IconButton

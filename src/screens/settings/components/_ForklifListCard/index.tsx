@@ -6,7 +6,7 @@ import { listCardStyles } from "@screen-styles";
 import { useNavigation } from "@react-navigation/native";
 import type { ProfileSettingsStackScreenProps } from "@navigation-types";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { baseURL } from "@api";
+import { BASE_URL } from "@api";
 
 interface OwnProps {
   item: IVehicle;
@@ -38,7 +38,7 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, mode = "list" }) => {
         <View>
           {item.picture ? (
             <Image
-              source={{ uri: `${baseURL}${item.picture}` }}
+              source={{ uri: `${BASE_URL}${item.picture}` }}
               resizeMode="cover"
               style={listCardStyles.imgStyle}
             />

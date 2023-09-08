@@ -23,7 +23,7 @@ import { Button, TextInput } from "react-native-paper";
 import { AirbnbRating } from "react-native-ratings";
 import { addDriver, updateDriver } from "@services";
 import { useAuthContext } from "@context";
-import { baseURL } from "@api";
+import { BASE_URL } from "@api";
 
 type IForm = Omit<AddDriverRequest, "id"> & {
   rating?: number;
@@ -241,7 +241,7 @@ const AddDriver: React.FC<DriverStackScreenProps<"AddDriver">> = ({
       if (!item.picture) {
         return [];
       }
-      return [{ uri: `${baseURL}${item.picture}`, ...theme.img.size.md }];
+      return [{ uri: `${BASE_URL}${item.picture}`, ...theme.img.size.md }];
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.params]);

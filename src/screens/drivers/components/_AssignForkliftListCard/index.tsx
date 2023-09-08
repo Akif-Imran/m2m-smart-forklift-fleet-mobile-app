@@ -6,7 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { colors, gStyles } from "@theme";
 import { truncateText } from "@utility";
 import { listCardStyles } from "@screen-styles";
-import { baseURL } from "@api";
+import { BASE_URL } from "@api";
 
 import { styles } from "./styles";
 
@@ -39,7 +39,7 @@ const _AssignForkliftListCard: React.FC<OwnProps> = ({
         <View>
           {item.picture ? (
             <Image
-              source={{ uri: `${baseURL}${item.picture}` }}
+              source={{ uri: `${BASE_URL}${item.picture}` }}
               resizeMode="cover"
               style={listCardStyles.imgStyle}
             />

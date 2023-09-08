@@ -18,9 +18,16 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { deleteVehicle, getDashCounts, getVehicleList } from "@services";
+import { deleteVehicle, getDashCounts } from "@services";
 import { useAuthContext, useTaskContext } from "@context";
 import { useIsFocused } from "@react-navigation/native";
+import {
+  selectVehiclesWithDevices,
+  useAppDispatch,
+  useAppSelector,
+} from "@store";
+import { fetchDevices, fetchVehicles } from "@thunks";
+import { defaultLocation } from "@constants";
 
 import { _ForkliftListCard } from "../components";
 
@@ -36,13 +43,15 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
   const {
     state: { inProgress },
   } = useTaskContext();
-  const [searchQuery, setSearchQuery] = React.useState<string>("");
-  const [forklifts, setForklifts] = React.useState<IVehicle[]>([]);
-  const [searchedForklifts, setSearchedForklifts] = React.useState<IVehicle[]>(
-    []
+  const dispatch = useAppDispatch();
+  const { data: forklifts, isLoading } = useAppSelector(
+    selectVehiclesWithDevices
   );
-  const [isFetching, setIsFetching] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [points, setPoints] = React.useState<IMapPoint[]>([]);
+  const [searchedForklifts, setSearchedForklifts] = React.useState<
+    IVehicleWithDevice[]
+  >([]);
   const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
   const [toBeDeletedVehicleId, setToBeDeletedVehicleId] =
     React.useState<number>(0);
@@ -52,58 +61,9 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
     parked: 0,
     total: 0,
   });
-
-  // const addInfo = () => {
-  //   const record: IForklift = {
-  //     _id: faker.database.mongodbObjectId(),
-  //     imei: faker.string.alphanumeric({
-  //       casing: "upper",
-  //       length: { min: 12, max: 15 },
-  //     }),
-  //     simNo: faker.string.numeric({ length: 12, allowLeadingZeros: false }),
-  //     age: faker.helpers.arrayElement([10, 11, 12, 13, 14, 15, 16]).toString(),
-  //     batterySerialNo: faker.vehicle.vin(),
-  //     color: faker.vehicle.color(),
-  //     forkliftSerialNo: faker.vehicle.vrm(),
-  //     make: faker.date.past().getFullYear().toString(),
-  //     manufactureYear: faker.date.past().getFullYear().toString(),
-
-  //     purchaseDate: faker.date.past().toDateString(),
-  //     rentStartDate: faker.date.past().toDateString(),
-  //     rentEndDate: faker.date.future().toDateString(),
-  //     milage: faker.helpers
-  //       .rangeToNumber({ min: 13867, max: 50000 })
-  //       .toString(),
-  //     regNo: faker.helpers.rangeToNumber({ min: 1, max: 50000 }).toString(),
-  //     image: faker.image.urlPicsumPhotos({ height: 75, width: 75 }),
-  //     name: faker.helpers.arrayElement([
-  //       "Forklift 1",
-  //       "Forklift 2",
-  //       "Forklift 3",
-  //       "Forklift 4",
-  //     ]),
-  //     status: faker.helpers.arrayElement([
-  //       "moving",
-  //       "parked",
-  //       "offline",
-  //       "faulty",
-  //     ]),
-  //     driver: faker.person.fullName(),
-  //     model: faker.vehicle.vrm(),
-  //     fuelType: faker.vehicle.fuel(),
-  //     fuelCapacity: faker.helpers
-  //       .rangeToNumber({ min: 12, max: 50 })
-  //       .toString(),
-  //     insuranceType: "Type 1",
-  //     insuranceCompany: faker.company.name(),
-  //     insuranceExpiryDate: faker.date.future().toDateString(),
-  //     insuranceNo: faker.string.alphanumeric({ length: 8, casing: "upper" }),
-  //   };
-  //   setForklifts((prev) => [...prev, record]);
-  // };
-
   const handleRefresh = () => {
-    fetchVehicles();
+    dispatch(fetchVehicles(token));
+    dispatch(fetchDevices(token));
   };
 
   const handleSearch = React.useCallback(
@@ -137,13 +97,13 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
       })
       .finally(() => {
         setConfirmDeleteVisible(false);
-        fetchVehicles();
       });
   };
 
   const handleDeleteCancel = () => {
     setConfirmDeleteVisible(false);
   };
+
   const fetchCounts = React.useCallback(() => {
     getDashCounts(token)
       .then((res) => {
@@ -164,86 +124,31 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
       });
   }, [token]);
 
-  // const fetchDevices = React.useCallback(() => {
-  //   setIsFetching(true);
-  //   getDevicesList(token)
-  //     .then((res) => {
-  //       if (res.success) {
-  //         setForklifts((_prev) => res.result.rows);
-  //       }
-  //     })
-  //     .catch((_err) => {
-  //       ToastService.show("Error occurred!");
-  //     })
-  //     .then(() => {
-  //       setIsFetching(false);
-  //     });
-  // }, []);
-
-  function generateRandomCoordinate() {
-    const minLatitude = 1.16;
-    const maxLatitude = 7.36;
-    const minLongitude = 99.62;
-    const maxLongitude = 119.27;
-
-    const latitude = Math.random() * (maxLatitude - minLatitude) + minLatitude;
-    const longitude =
-      Math.random() * (maxLongitude - minLongitude) + minLongitude;
-
-    return { latitude, longitude };
-  }
-
-  const fetchVehicles = React.useCallback(
-    (withLoader = true) => {
-      setIsFetching(withLoader);
-      getVehicleList(token)
-        .then((res) => {
-          if (res.success) {
-            const { rows } = res.data;
-            setForklifts(rows);
-            const pointList: IMapPoint[] = rows.map((vehicle) => {
-              const { latitude, longitude } = generateRandomCoordinate();
-              return {
-                icon: vehicle.icon,
-                name: vehicle.reg_no,
-                latitude,
-                longitude,
-              };
-            });
-            setPoints(pointList);
-          }
-        })
-        .catch((_err) => {
-          ToastService.show("Error occurred");
-        })
-        .finally(() => {
-          setIsFetching(false);
-        });
-    },
-    [token]
-  );
-
   React.useEffect(() => {
     if (!forklifts) {
       return;
     }
     setSearchedForklifts(forklifts);
+    setPoints((_prev) =>
+      forklifts.map((forklift) => ({
+        icon: forklift.icon,
+        name: forklift.reg_no,
+        latitude: forklift.device?.latitude
+          ? parseFloat(forklift.device?.latitude)
+          : defaultLocation.latitude,
+        longitude: forklift.device?.longitude
+          ? parseFloat(forklift.device?.longitude)
+          : defaultLocation.longitude,
+      }))
+    );
   }, [forklifts]);
-
-  // React.useEffect(() => {
-  //   if (!token) {
-  //     return;
-  //   }
-  //   fetchDevices();
-  // }, [token, fetchDevices]);
 
   React.useEffect(() => {
     if (!token) {
       return;
     }
     fetchCounts();
-    fetchVehicles(false);
-  }, [token, fetchCounts, fetchVehicles, isFocused]);
+  }, [token, fetchCounts, isFocused]);
 
   const right = [
     {
@@ -333,7 +238,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
         refreshControl={
           <RefreshControl
             enabled={true}
-            refreshing={isFetching}
+            refreshing={isLoading}
             colors={[colors.primary]}
             progressBackgroundColor={colors.white}
             onRefresh={handleRefresh}

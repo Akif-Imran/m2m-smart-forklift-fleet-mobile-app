@@ -6,7 +6,7 @@ import type { ForkliftStackScreenProps } from "@navigation-types";
 import { screenStyles } from "@screen-styles";
 import { colors, gStyles } from "@theme";
 import { FAB } from "react-native-paper";
-import { baseURL } from "@api";
+import { BASE_URL } from "@api";
 import { FORMAT_DATE_DD_MM_YYYY } from "@utility";
 import { useAuthContext } from "@context";
 
@@ -25,7 +25,7 @@ const ForkLiftDetails: React.FC<
           <View style={screenStyles.singleImgContainer}>
             {item.picture ? (
               <Image
-                source={{ uri: `${baseURL}${item.picture}` }}
+                source={{ uri: `${BASE_URL}${item.picture}` }}
                 style={screenStyles.imgStyle}
               />
             ) : (

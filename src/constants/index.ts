@@ -1,6 +1,10 @@
 import { colors } from "@theme";
 import { Dimensions } from "react-native";
 
+export const defaultLocation = {
+  latitude: 2.9703305,
+  longitude: 101.6096447,
+};
 export const ForkliftStatusColor: Record<string, string> = {
   faulty: colors.error,
   offline: colors.warning,

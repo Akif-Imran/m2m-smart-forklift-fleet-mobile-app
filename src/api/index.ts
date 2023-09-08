@@ -3,14 +3,16 @@ import appConfig from "@app-config";
 import type { AxiosResponse } from "axios";
 import axios from "axios";
 
-export const baseURL = "http://www.sealtracking.com:4600";
-export const BASE_USER_URL = `${baseURL}/user`;
-export const BASE_DEVICE_URL = `${baseURL}/device`;
-export const BASE_VEHICLE_URL = `${baseURL}/vehicle`;
-export const BASE_GEO_FENCE_URL = `${baseURL}/geofence`;
-export const BASE_SERVICE_URL = `${baseURL}/service`;
-export const BASE_DRIVER_URL = `${baseURL}/driver`;
-export const BASE_POI_URL = `${baseURL}/poi`;
+export const BASE_URL = "http://www.sealtracking.com:4600";
+export const BASE_USER_URL = `${BASE_URL}/user`;
+export const BASE_DEVICE_URL = `${BASE_URL}/device`;
+export const BASE_VEHICLE_URL = `${BASE_URL}/vehicle`;
+export const BASE_GEO_FENCE_URL = `${BASE_URL}/geofence`;
+export const BASE_SERVICE_URL = `${BASE_URL}/service`;
+export const BASE_DRIVER_URL = `${BASE_URL}/driver`;
+export const BASE_POI_URL = `${BASE_URL}/poi`;
+export const BASE_REPORT_URL = `${BASE_URL}/app_reports`;
+export const MALAYSIA_ZONE = "Asia/Kuala_Lumpur";
 export const GOOGLE_MAPS_API = "https://maps.googleapis.com/maps/api";
 export const GOOGLE_PLACES_API = `${GOOGLE_MAPS_API}/place`;
 export const GOOGLE_DIRECTIONS_API = `${GOOGLE_MAPS_API}/directions/json`;
@@ -22,7 +24,7 @@ export const GOOGLE_API_KEY =
 
 export const urls = {
   auth: {
-    login: `${baseURL}/login`,
+    login: `${BASE_URL}/login`,
   },
   user: {
     changePassword: `${BASE_USER_URL}/resetPassword`,
@@ -30,7 +32,7 @@ export const urls = {
     updatePushToken: `${BASE_USER_URL}/updatePushToken`,
   },
   dashboard: {
-    counts: `${baseURL}/app_dashboard`,
+    counts: `${BASE_URL}/app_dashboard`,
   },
   devices: {
     list: `${BASE_DEVICE_URL}/getAll`,
@@ -48,6 +50,25 @@ export const urls = {
     update: `${BASE_VEHICLE_URL}/update`,
     delete: (vehicleId: string) => `${BASE_VEHICLE_URL}/delete?id=${vehicleId}`,
     getFuelTypes: `${BASE_VEHICLE_URL}/getFuelTypes`,
+  },
+  appReports: {
+    historyReport: (
+      IMEI: string,
+      startDate: string,
+      endDate: string,
+      page = 1
+    ) =>
+      `${BASE_REPORT_URL}/vehicle_history/?IMEI=${IMEI}&startDate=${startDate}&endDate=${endDate}&page=${page}`,
+    ignitionReport: (IMEI: string, startDate: string, endDate: string) =>
+      `${BASE_REPORT_URL}/ignition/?IMEI=${IMEI}&startDate=${startDate}&endDate=${endDate}`,
+  },
+  trips: {
+    getTripDates: (deviceId: number) =>
+      `${BASE_URL}/get_trip_dates/${deviceId}`,
+    getDayTrip: (deviceId: number, date: string) =>
+      `${BASE_URL}/get_day_trip?device_id=${deviceId}&date=${date}`,
+    getTripDetails: (deviceId: number, date: string, journeyId: number) =>
+      `${BASE_URL}/get_trip_details?device_id=${deviceId}&date=${date}&journey_id=${journeyId}`,
   },
   geoFence: {
     create: `${BASE_GEO_FENCE_URL}/create`,
@@ -86,15 +107,15 @@ export const urls = {
     getBehaviorByDriverId: (driverId: string) =>
       `${BASE_DRIVER_URL}/getDriverBehavior?driver_id=${driverId}`,
     addDriverWorkingTime: `${BASE_DRIVER_URL}/addDriverWorkingTime`,
-    qrScan: (imei: string) => `${baseURL}/user_device_details/${imei}`,
-    getCheckList: `${baseURL}/get_checklist`,
-    addChecklistItem: `${baseURL}/add_checklist`,
-    updateChecklistItem: `${baseURL}/update_checklist`,
+    qrScan: (imei: string) => `${BASE_URL}/user_device_details/${imei}`,
+    getCheckList: `${BASE_URL}/get_checklist`,
+    addChecklistItem: `${BASE_URL}/add_checklist`,
+    updateChecklistItem: `${BASE_URL}/update_checklist`,
     deleteChecklistItem: (checklistId: number) =>
-      `${baseURL}/delete_checklist?id=${checklistId}`,
-    getTaskList: `${baseURL}/get_task_list/1`,
-    addNewTask: `${baseURL}/add_new_task`,
-    endTask: `${baseURL}/end_task`,
+      `${BASE_URL}/delete_checklist?id=${checklistId}`,
+    getTaskList: `${BASE_URL}/get_task_list/1`,
+    addNewTask: `${BASE_URL}/add_new_task`,
+    endTask: `${BASE_URL}/end_task`,
   },
   poi: {
     counts: `${BASE_POI_URL}/getPOICount`,
@@ -104,7 +125,33 @@ export const urls = {
     delete: (poiId: string) => `${BASE_POI_URL}/delete/${poiId}`,
   },
   notifications: {
-    list: `${baseURL}/notifications`,
+    list: `${BASE_URL}/notifications`,
+  },
+};
+
+export const events = {
+  authenticated: "authenticated",
+  location: "location",
+  crash: "crash",
+  battery: {
+    low: "battery_low",
+    info: "battery_info",
+  },
+  ignition: {
+    on: "ignition_on",
+    off: "ignition_off",
+  },
+  mainPower: {
+    on: "main_power_on",
+    off: "main_power_off",
+  },
+  idling: {
+    on: "idling_on",
+    off: "idling_off",
+  },
+  virtualIgnition: {
+    on: "virtual_ignition_on",
+    off: "virtual_ignition_off",
   },
 };
 

@@ -21,7 +21,7 @@ import type { FormikHelpers } from "formik";
 import { useFormik } from "formik";
 import moment from "moment";
 import { Button, TextInput } from "react-native-paper";
-import { baseURL } from "@api";
+import { BASE_URL } from "@api";
 import {
   addDevice,
   addVehicle,
@@ -371,7 +371,7 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
               return [];
             }
             return [
-              { uri: `${baseURL}${item.picture}`, width: 125, height: 125 },
+              { uri: `${BASE_URL}${item.picture}`, width: 125, height: 125 },
             ];
           });
         } else {

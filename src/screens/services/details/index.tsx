@@ -9,7 +9,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Modal, Portal, RadioButton } from "react-native-paper";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { MaterialIcons } from "@expo/vector-icons";
-import { baseURL } from "@api";
+import { BASE_URL } from "@api";
 import { getServiceStatus, updateServiceStatus } from "@services";
 import { useAuthContext } from "@context";
 import { FORMAT_DATE_STRING_DD_MM_YYYY_HH_MM_12, ToastService } from "@utility";
@@ -130,7 +130,7 @@ const ServiceDetails: React.FC<ServiceStackScreenProps<"ServiceDetails">> = ({
                 {item.pictures.map((picture, index) => (
                   <Image
                     key={index}
-                    source={{ uri: `${baseURL}${picture}` }}
+                    source={{ uri: `${BASE_URL}${picture}` }}
                     style={screenStyles.imgStyle}
                   />
                 ))}

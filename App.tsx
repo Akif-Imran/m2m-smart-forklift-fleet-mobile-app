@@ -11,6 +11,9 @@ import { registerRootComponent } from "expo";
 import { colors } from "@theme";
 import { AuthInit, AuthProvider, TaskProvider } from "@context";
 import * as Notifications from "expo-notifications";
+import { Provider as ReduxProvider } from "react-redux";
+import { store } from "@store";
+import { _DataLoader } from "@components";
 
 import { App } from "@";
 
@@ -97,9 +100,13 @@ export default function RootApp() {
             <Provider>
               <AuthProvider>
                 <AuthInit setIsAuthLoaded={setIsAuthLoaded}>
-                  <TaskProvider>
-                    <App />
-                  </TaskProvider>
+                  <ReduxProvider store={store}>
+                    <_DataLoader>
+                      <TaskProvider>
+                        <App />
+                      </TaskProvider>
+                    </_DataLoader>
+                  </ReduxProvider>
                 </AuthInit>
               </AuthProvider>
             </Provider>

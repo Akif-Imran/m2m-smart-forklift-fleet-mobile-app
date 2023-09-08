@@ -25,3 +25,5 @@ export {
   MIN_TRANSLATE_Y as BOTTOM_SHEET_MIN_TRANSLATE_Y,
 } from "./bottom-sheet";
 export { _Badge } from "./_Badge";
+export { _DataLoader } from "./_DataLoader";
+export { _SocketWrapper } from "./_SocketWrapper";

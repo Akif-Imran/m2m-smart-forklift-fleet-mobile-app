@@ -13,7 +13,7 @@ import {
   Feather,
 } from "@expo/vector-icons";
 import { AirbnbRating } from "react-native-ratings";
-import { baseURL } from "@api";
+import { BASE_URL } from "@api";
 
 interface OwnProps {
   item: IDriver;
@@ -39,7 +39,7 @@ const _DriverListCard: React.FC<OwnProps> = ({ handleDelete, item }) => {
         <View>
           {item.picture ? (
             <Image
-              source={{ uri: `${baseURL}${item.picture}` }}
+              source={{ uri: `${BASE_URL}${item.picture}` }}
               resizeMode="cover"
               style={listCardStyles.imgStyle}
             />

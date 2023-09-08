@@ -13,7 +13,7 @@ import { colors, gStyles } from "@theme";
 import { handleOpenWebsite } from "@utility";
 import moment from "moment";
 import { FAB } from "react-native-paper";
-import { baseURL } from "@api";
+import { BASE_URL } from "@api";
 import { getAssignedVehicles, getDriverById } from "@services";
 import { useAuthContext } from "@context";
 import { useIsFocused } from "@react-navigation/native";
@@ -65,7 +65,7 @@ const DriverDetails: React.FC<DriverStackScreenProps<"DriverDetails">> = ({
           <View style={screenStyles.singleImgContainer}>
             {item.picture ? (
               <Image
-                source={{ uri: `${baseURL}${item.picture}` }}
+                source={{ uri: `${BASE_URL}${item.picture}` }}
                 style={screenStyles.imgStyle}
               />
             ) : (
