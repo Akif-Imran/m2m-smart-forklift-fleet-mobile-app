@@ -16,6 +16,17 @@ const vehiclesSlice = createSlice({
   name: "vehicles",
   initialState: initialState,
   reducers: {
+    addVehicle: (state, action: PayloadAction<IVehicle>) => {
+      state.data.rows.push(action.payload);
+      state.data.count++;
+    },
+    deleteVehicle: (state, action: PayloadAction<number>) => {
+      const index = state.data.rows.findIndex(
+        (vehicle) => vehicle.id === action.payload
+      );
+      state.data.rows.splice(index, 1);
+      state.data.count--;
+    },
     updateVehicleIcon: (state, action: PayloadAction<IUpdateIconPayload>) => {
       const index = state.data.rows.findIndex(
         (vehicle) => vehicle.id === action.payload.id
@@ -40,7 +51,8 @@ const vehiclesSlice = createSlice({
 });
 
 export { vehiclesSlice };
-export const { updateVehicleIcon } = vehiclesSlice.actions;
+export const { updateVehicleIcon, addVehicle, deleteVehicle } =
+  vehiclesSlice.actions;
 export const vehiclesReducer = vehiclesSlice.reducer;
 
 interface IUpdateIconPayload {

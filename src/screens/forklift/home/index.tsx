@@ -26,6 +26,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "@store";
+import { deleteVehicle as deleteVehicleRedux } from "@slices";
 import { fetchDevices, fetchVehicles } from "@thunks";
 import { defaultLocation } from "@constants";
 
@@ -91,6 +92,9 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
     deleteVehicle(token, toBeDeletedVehicleId.toString())
       .then((res) => {
         ToastService.show(res?.message || "");
+        if (res.success) {
+          dispatch(deleteVehicleRedux(toBeDeletedVehicleId));
+        }
       })
       .catch((_err) => {
         ToastService.show("Error occurred");

@@ -31,6 +31,8 @@ import {
 } from "@services";
 import { useAuthContext } from "@context";
 import { mapMarkers } from "@map-markers";
+import { useAppDispatch } from "@store";
+import { fetchDevices, fetchVehicles } from "@thunks";
 
 interface IForm extends Omit<AddVehicleRequest, "device_id" | "fuel_type_id"> {
   sim_no: string;
@@ -72,6 +74,7 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
   const {
     state: { token },
   } = useAuthContext();
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = React.useState(false);
   const [_hasImages, setHasImages] = React.useState<boolean>(false);
   const [images, setImages] = React.useState<ImagePicker.ImagePickerAsset[]>(
@@ -152,6 +155,7 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
       .then((device) => {
         ToastService.show(device?.message || "");
         console.log("device", device);
+        dispatch(fetchDevices(token));
         addVehicle(token, {
           //@ts-expect-error device returned when already in database so success is false.
           device_id: device.data.id,
@@ -179,6 +183,9 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
             ToastService.show(res?.message || "");
             helpers.resetForm();
             navigation.goBack();
+            if (res.success) {
+              dispatch(fetchVehicles(token));
+            }
           })
           .catch((_err) => {
             console.log(_err?.message);
