@@ -28,7 +28,6 @@ import {
 } from "@store";
 import { deleteVehicle as deleteVehicleRedux } from "@slices";
 import { fetchDevices, fetchVehicles } from "@thunks";
-import { defaultLocation } from "@constants";
 
 import { _ForkliftListCard } from "../components";
 
@@ -49,7 +48,6 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
     selectVehiclesWithDevices
   );
   const [searchQuery, setSearchQuery] = React.useState<string>("");
-  const [points, setPoints] = React.useState<IMapPoint[]>([]);
   const [searchedForklifts, setSearchedForklifts] = React.useState<
     IVehicleWithDevice[]
   >([]);
@@ -133,18 +131,6 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
       return;
     }
     setSearchedForklifts(forklifts);
-    setPoints((_prev) =>
-      forklifts.map((forklift) => ({
-        icon: forklift.icon,
-        name: forklift.reg_no,
-        latitude: forklift.device?.latitude
-          ? parseFloat(forklift.device?.latitude)
-          : defaultLocation.latitude,
-        longitude: forklift.device?.longitude
-          ? parseFloat(forklift.device?.longitude)
-          : defaultLocation.longitude,
-      }))
-    );
   }, [forklifts]);
 
   React.useEffect(() => {
@@ -202,7 +188,6 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
             onPress: () =>
               navigation.navigate("BirdEyeView", {
                 mode: "multiple",
-                points: points,
               }),
           },
         ]}
