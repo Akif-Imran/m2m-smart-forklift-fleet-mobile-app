@@ -175,7 +175,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
       <NoIconHeader
-        title="Forklifts"
+        title="Vehicles"
         left={[
           {
             icon: (

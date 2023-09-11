@@ -145,7 +145,7 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
               color={colors.titleText}
               size={20}
               style={{ marginRight: 0 - theme.spacing.md }}
-              onPress={() => console.log("Pressed")}
+              onPress={() => navigation.navigate("Notification")}
             />
             <FontAwesome5
               name="caret-right"

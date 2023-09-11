@@ -56,7 +56,7 @@ const ListHeaderComponent: React.FC<OwnProps> = ({
                 color: ForkliftStatusColor.total,
               })}
             >
-              Total
+              Vehicles
             </Text>
           </View>
           <View
