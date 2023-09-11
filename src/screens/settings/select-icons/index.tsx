@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import React from "react";
 import type { ProfileSettingsStackScreenProps } from "@navigation-types";
@@ -36,6 +37,7 @@ const SelectIcons: React.FC<ProfileSettingsStackScreenProps<"SelectIcon">> = ({
     setIsLoading(true);
     updateVehicle(token, {
       ...item,
+      insurance_company_contact: item?.insurance_company_contact || "na",
       mileage: item.mileage || "0",
       icon: selectedIcon,
     })

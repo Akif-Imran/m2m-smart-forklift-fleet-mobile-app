@@ -58,6 +58,9 @@ const schema: yup.ObjectSchema<IForm> = yup.object().shape({
   fuel_type_id: yup.string().required("Fuel type is required"),
   fuel_capacity: yup.string().required("Fuel capacity is required"),
   insurance_company: yup.string().required("Insurance company is required"),
+  insurance_company_contact: yup
+    .string()
+    .required("Insurance company contact is required"),
   insurance_number: yup.string().required("Insurance no is required"),
   insurance_type: yup.string().required("Insurance type is required"),
   insurance_expiry_date: yup
@@ -129,10 +132,11 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
       fuel_capacity: "",
       fuel_type_id: "0",
       insurance_company: "",
+      insurance_company_contact: "",
       insurance_number: "",
       insurance_type: "",
       insurance_expiry_date: "",
-      icon: mapMarkers["marker-pin"].name,
+      icon: mapMarkers["mbd-pallet-stack"].name,
     },
     onSubmit: (values, helpers) => {
       console.log(values);
@@ -174,6 +178,7 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
           fuel_type_id: parseInt(values.fuel_type_id, 10),
           fuel_capacity: values.fuel_capacity,
           insurance_company: values.insurance_company,
+          insurance_company_contact: values.insurance_company_contact,
           insurance_number: values.insurance_number,
           insurance_type: values.insurance_type,
           insurance_expiry_date: values.insurance_expiry_date,
@@ -230,6 +235,7 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
           fuel_type_id: parseInt(values.fuel_type_id, 10),
           fuel_capacity: values.fuel_capacity,
           insurance_company: values.insurance_company,
+          insurance_company_contact: values.insurance_company_contact,
           insurance_number: values.insurance_number,
           insurance_type: values.insurance_type,
           insurance_expiry_date: values.insurance_expiry_date,
@@ -367,6 +373,7 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
             fuel_capacity: item.fuel_capacity || "",
             fuel_type_id: item.fuel_type_id.toString() || "",
             insurance_company: item.insurance_company || "",
+            insurance_company_contact: item.insurance_company_contact || "",
             insurance_expiry_date:
               item.insurance_expiry_date || moment().format("YYYY-MM-DD"),
             insurance_number: item.insurance_number || "",
@@ -761,6 +768,19 @@ const AddForklift: React.FC<ForkliftStackScreenProps<"AddForklift">> = ({
                 : false
             }
             errorText={form.errors?.insurance_company}
+          />
+          <_TextInput
+            value={form.values.insurance_company_contact}
+            label={"Contact No."}
+            onBlur={form.handleBlur("insurance_company_contact")}
+            onChangeText={form.handleChange("insurance_company_contact")}
+            error={
+              form.errors?.insurance_company_contact &&
+              form.touched?.insurance_company_contact
+                ? true
+                : false
+            }
+            errorText={form.errors?.insurance_company_contact}
           />
           <_TextInput
             value={form.values.insurance_number}

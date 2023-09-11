@@ -41,6 +41,7 @@ interface IAddUpdateVehicleRequestBase {
   insurance_number: string;
   insurance_type: string;
   insurance_expiry_date: string;
+  insurance_company_contact: string;
   icon: string;
 }
 type AddVehicleRequest = Omit<IAddUpdateVehicleRequestBase, "id">;

@@ -146,6 +146,12 @@ const ForkLiftDetails: React.FC<
               </Text>
             </View>
             <View style={screenStyles.fieldContainer}>
+              <Text style={screenStyles.tblHeaderText}>Contact</Text>
+              <Text style={screenStyles.tblDescText}>
+                {item.insurance_company_contact}
+              </Text>
+            </View>
+            <View style={screenStyles.fieldContainer}>
               <Text style={screenStyles.tblHeaderText}>Type</Text>
               <Text style={screenStyles.tblDescText}>
                 {item.insurance_type}
