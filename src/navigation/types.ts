@@ -116,7 +116,10 @@ export type ReportsStackParamsList = {
   ForkliftUtilizationReport: undefined;
   OverSpeedingReport: undefined;
   IdlingReport: undefined;
-  IgnitionReport: undefined;
+  IgnitionReport: {
+    vehicleId: number;
+    deviceId: number;
+  };
   HistoryReport: {
     vehicleId: number;
     deviceId: number;

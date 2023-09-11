@@ -15,31 +15,76 @@ import { listCardStyles, screenStyles } from "@screen-styles";
 import { ToastService } from "@utility";
 import { faker } from "@faker-js/faker";
 import type { ReportStackScreenProps } from "@navigation-types";
+import { useAuthContext } from "@context";
+import { useAppSelector } from "@store";
+import { getIgnitionReport } from "@services";
 
-const IgnitionReport: React.FC<
-  ReportStackScreenProps<"IgnitionReport">
-> = ({}) => {
+const IgnitionReport: React.FC<ReportStackScreenProps<"IgnitionReport">> = ({
+  route,
+  navigation,
+}) => {
+  const { deviceId } = route.params;
+  const {
+    state: { token },
+  } = useAuthContext();
+  const device = useAppSelector((state) =>
+    state.devices.data.rows.find((dev) => dev.id === deviceId)
+  );
+  const [isLoading, setIsLoading] = React.useState(false);
   const [show, setShow] = React.useState(false);
   const [show2, setShow2] = React.useState(false);
   const [startDate, setStartDate] = React.useState(new Date());
   const [endDate, setEndDate] = React.useState(new Date());
+  const [records, setRecords] = React.useState<IIgnitionReport[]>([]);
 
-  const [vehicleDropdownVisible, setVehicleDropdownVisible] =
-    React.useState(false);
-  const [value, setValue] = React.useState("all");
+  // const [vehicleDropdownVisible, setVehicleDropdownVisible] =
+  //   React.useState(false);
+  // const [value, setValue] = React.useState("all");
 
-  const vehicleDropDownList = [
-    { label: "All", value: "all" },
-    { label: "PT-01", value: "pt-01" },
-    { label: "PT-02", value: "pt-02" },
-    { label: "PT-03", value: "pt-03" },
-    { label: "PT-04", value: "pt-04" },
-  ];
+  // const vehicleDropDownList = [
+  //   { label: "All", value: "all" },
+  //   { label: "PT-01", value: "pt-01" },
+  //   { label: "PT-02", value: "pt-02" },
+  //   { label: "PT-03", value: "pt-03" },
+  //   { label: "PT-04", value: "pt-04" },
+  // ];
+
+  const fetchIgnitionReport = (start: Date, end: Date, IMEI: string) => {
+    setIsLoading(true);
+    const startDateString = moment(start).format("YYYY-MM-DD");
+    const endDateString = moment(end).format("YYYY-MM-DD");
+    getIgnitionReport(token, {
+      IMEI,
+      startDate: startDateString,
+      endDate: endDateString,
+    })
+      .then((res) => {
+        if (res.success) {
+          setRecords(res.result);
+        }
+      })
+      .catch((err) => {
+        console.log(err?.message);
+        ToastService.show("An error occurred");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const handleSearch = () => {
+    if (!device) {
+      ToastService.show("Device not found");
+      navigation.goBack();
+      return;
+    }
+    fetchIgnitionReport(startDate, endDate, device?.IMEI);
+  };
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
       <View style={{ height: theme.header.height }} />
-      <View>
+      {/* <View>
         <_DropDown
           theme={PaperTheme}
           dropDownItemTextStyle={{ ...gStyles.descText }}
@@ -56,7 +101,7 @@ const IgnitionReport: React.FC<
           setValue={setValue}
           list={vehicleDropDownList}
         />
-      </View>
+      </View> */}
       <View style={screenStyles.reportDateInputPickerContainer}>
         <_TextInput
           value={moment(startDate).format("DD MMM, YYYY")}
