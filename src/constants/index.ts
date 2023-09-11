@@ -7,9 +7,10 @@ export const defaultLocation = {
 };
 export const ForkliftStatusColor: Record<string, string> = {
   faulty: colors.error,
-  offline: colors.warning,
+  offline: colors.error,
   parked: colors.info,
   moving: colors.primary,
+  idling: colors.warning,
   total: colors.titleText,
 };
 

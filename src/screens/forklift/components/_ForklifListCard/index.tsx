@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { _Badge, _DefaultCard } from "@components";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
-import { listCardStyles } from "@screen-styles";
+import { listCardStyles, screenStyles } from "@screen-styles";
 import { Button, IconButton } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import type { ForkliftStackScreenProps } from "@navigation-types";
@@ -15,6 +15,7 @@ import {
 } from "@expo/vector-icons";
 import { BASE_URL } from "@api";
 import moment from "moment";
+import { ForkliftStatusColor } from "@constants";
 
 import { styles } from "./styles";
 
@@ -27,6 +28,12 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
   const navigation =
     useNavigation<ForkliftStackScreenProps<"Forklift">["navigation"]>();
   const [isOnline, setIsOnline] = React.useState<boolean>(false);
+  let status = item.device?.is_idling ? "idling" : "";
+  if (item.device?.is_ignition && isOnline) {
+    status = "moving";
+  } else {
+    status = "parked";
+  }
 
   React.useEffect(() => {
     const gpsTime = moment(item.device?.gps_time);
@@ -48,16 +55,33 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
         }
         onLongPress={() => handleDelete(item.id)}
       >
-        <View style={listCardStyles.imgContainer}>
-          <Image
-            source={
-              item.picture
-                ? { uri: `${BASE_URL}${item.picture}` }
-                : require("../../../../assets/images/car.png")
-            }
-            resizeMode="contain"
-            style={[listCardStyles.imgStyle, { tintColor: colors.titleText }]}
-          />
+        <View>
+          <View
+            style={StyleSheet.compose(listCardStyles.imgContainer, {
+              borderColor: ForkliftStatusColor[status],
+            })}
+          >
+            <Image
+              source={
+                item.picture
+                  ? { uri: `${BASE_URL}${item.picture}` }
+                  : require("../../../../assets/images/car.png")
+              }
+              resizeMode="contain"
+              style={StyleSheet.compose(listCardStyles.imgStyle, {
+                tintColor: colors.titleText,
+                width: 48,
+                height: 48,
+              })}
+            />
+          </View>
+          <Text
+            style={StyleSheet.compose(screenStyles.badgeText, {
+              backgroundColor: ForkliftStatusColor[status],
+            })}
+          >
+            {status}
+          </Text>
         </View>
         <View style={listCardStyles.infoWithForward}>
           <View style={listCardStyles.infoContainer}>

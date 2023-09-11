@@ -123,6 +123,7 @@ export const screenStyles = StyleSheet.create({
   badgeText: {
     ...gStyles.tblHeaderText,
     overflow: "hidden",
+    textTransform: "capitalize",
     borderRadius: theme.radius.xs,
     color: colors.white,
     paddingHorizontal: theme.spacing.xs,
@@ -245,11 +246,12 @@ export const listCardStyles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: theme.radius.full,
     padding: theme.spacing.md,
+    marginBottom: theme.spacing.xs,
     borderColor: colors.titleText,
   },
   imgStyle: {
-    width: 72,
-    height: 72,
+    width: 64,
+    height: 64,
     borderRadius: theme.radius.sm,
   },
   infoWithForward: {
