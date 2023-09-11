@@ -13,11 +13,11 @@ import { theme, colors, PaperTheme, gStyles } from "@theme";
 import moment from "moment";
 import { listCardStyles, screenStyles } from "@screen-styles";
 import { ToastService } from "@utility";
-import { faker } from "@faker-js/faker";
 import type { ReportStackScreenProps } from "@navigation-types";
 import { useAuthContext } from "@context";
 import { useAppSelector } from "@store";
 import { getIgnitionReport } from "@services";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const IgnitionReport: React.FC<ReportStackScreenProps<"IgnitionReport">> = ({
   route,
@@ -83,6 +83,12 @@ const IgnitionReport: React.FC<ReportStackScreenProps<"IgnitionReport">> = ({
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
+      <Spinner
+        visible={isLoading}
+        cancelable={false}
+        animation="fade"
+        size="large"
+      />
       <View style={{ height: theme.header.height }} />
       {/* <View>
         <_DropDown
@@ -134,7 +140,7 @@ const IgnitionReport: React.FC<ReportStackScreenProps<"IgnitionReport">> = ({
         <Button
           theme={PaperTheme}
           mode="contained"
-          onPress={() => ToastService.show("Demo")}
+          onPress={() => handleSearch()}
           labelStyle={StyleSheet.compose(gStyles.tblHeaderText, {
             color: colors.white,
           })}
@@ -144,11 +150,11 @@ const IgnitionReport: React.FC<ReportStackScreenProps<"IgnitionReport">> = ({
       </View>
       <_DefaultCard style={StyleSheet.compose(gStyles.card, { flex: 1 })}>
         <FlatList
-          data={[1, 2, 3]}
+          data={records}
           showsVerticalScrollIndicator={false}
           style={screenStyles.flatListStyle}
           ListEmptyComponent={<_ListEmptyComponent label="No Data..." />}
-          renderItem={({}) => {
+          renderItem={({ item }) => {
             return (
               <View style={listCardStyles.reportListRecord}>
                 <View style={listCardStyles.reportRecordRow}>
@@ -156,10 +162,17 @@ const IgnitionReport: React.FC<ReportStackScreenProps<"IgnitionReport">> = ({
                     <Text style={gStyles.tblHeaderText}>Forklift</Text>
                     <Text style={gStyles.tblDescText}>PT-01</Text>
                   </View>
+                </View>
+                <View style={listCardStyles.reportRecordRow}>
                   <View style={listCardStyles.reportRecordRowItemRight}>
+                    <Text style={gStyles.tblHeaderText}>Event</Text>
+                    <Text style={gStyles.tblDescText}>{"Ignition ON"}</Text>
+                  </View>
+
+                  <View style={listCardStyles.reportRecordRowItemLeft}>
                     <Text style={gStyles.tblHeaderText}>Date/Time</Text>
                     <Text style={gStyles.tblDescText}>
-                      {moment(faker.date.past()).format(
+                      {moment(item.gps_start_time).format(
                         "DD MMM, YYYY hh:mm:ss A"
                       )}
                     </Text>
@@ -167,13 +180,18 @@ const IgnitionReport: React.FC<ReportStackScreenProps<"IgnitionReport">> = ({
                 </View>
 
                 <View style={listCardStyles.reportRecordRow}>
-                  <View style={listCardStyles.reportRecordRowItemLeft}>
-                    <Text style={gStyles.tblHeaderText}>Event</Text>
-                    <Text style={gStyles.tblDescText}>Ignition ON</Text>
-                  </View>
                   <View style={listCardStyles.reportRecordRowItemRight}>
-                    {/* <Text style={gStyles.tblHeaderText}>Charging Duration</Text>
-                    <Text style={gStyles.tblDescText}>00:11:32</Text> */}
+                    <Text style={gStyles.tblHeaderText}>Event</Text>
+                    <Text style={gStyles.tblDescText}>{"Ignition OFF"}</Text>
+                  </View>
+
+                  <View style={listCardStyles.reportRecordRowItemLeft}>
+                    <Text style={gStyles.tblHeaderText}>Date/Time</Text>
+                    <Text style={gStyles.tblDescText}>
+                      {moment(item.gps_end_time).format(
+                        "DD MMM, YYYY hh:mm:ss A"
+                      )}
+                    </Text>
                   </View>
                 </View>
               </View>

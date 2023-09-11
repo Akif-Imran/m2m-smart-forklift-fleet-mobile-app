@@ -56,7 +56,12 @@ const Reports: React.FC<ReportStackScreenProps<"Reports">> = ({
         />
         <_ReportCard
           title="Ignition Report"
-          onPress={() => navigation.navigate("IgnitionReport")}
+          onPress={() =>
+            navigation.navigate("IgnitionReport", {
+              deviceId,
+              vehicleId,
+            })
+          }
         />
         <_ReportCard
           title="History Report"
