@@ -106,33 +106,6 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({
   const [distanceA, setDistanceA] = React.useState<number>(0);
   const [_distanceB, setDistanceB] = React.useState<number>(0);
   const [distanceC, setDistanceC] = React.useState<number>(0);
-  /*   const [routeData, setRouteData] = React.useState([
-    {
-      time: `11:20 AM`,
-      distance: "2.8 Km",
-      title: "Start",
-      description: "Street 21, District 3 Lahore",
-      icon: (
-        <Image
-          style={{ width: 20, height: 20, tintColor: colors.primary }}
-          source={require("@assets/images/icons8-engine-96.png")}
-        />
-      ),
-    },
-    {
-      time: `3:55 PM`,
-      distance: "2.8 Km",
-      title: "Stop",
-      description: "Street 21, District 3 Lahore",
-      icon: (
-        <Image
-          style={{ width: 20, height: 20, tintColor: colors.error }}
-          source={require("@assets/images/icons8-engine-96.png")}
-        />
-      ),
-    },
-  ]);
-  const [searchQuery, setSearchQuery] = React.useState<string>(""); */
 
   const handleSheet = React.useCallback((value: number) => {
     sheetRef.current?.scrollTo(value);
