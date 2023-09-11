@@ -227,6 +227,10 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
           onPress={() =>
             navigation.navigate("ReportsStack", {
               screen: "Reports",
+              params: {
+                deviceId: item.device_id,
+                vehicleId: item.id,
+              },
             })
           }
         >

@@ -177,24 +177,24 @@ export const Settings: React.FC<
         });
       },
     },
-    {
-      id: 8,
-      icon: (
-        <MaterialCommunityIcons
-          name="file-multiple"
-          color={colors.heavyGray}
-          size={20}
-        />
-      ),
-      bgColor: colors.mediumGray,
-      title: "Reports",
-      color: colors.titleText,
-      onPress: () => {
-        navigation.navigate("ReportsStack", {
-          screen: "Reports",
-        });
-      },
-    },
+    // {
+    //   id: 8,
+    //   icon: (
+    //     <MaterialCommunityIcons
+    //       name="file-multiple"
+    //       color={colors.heavyGray}
+    //       size={20}
+    //     />
+    //   ),
+    //   bgColor: colors.mediumGray,
+    //   title: "Reports",
+    //   color: colors.titleText,
+    //   onPress: () => {
+    //     navigation.navigate("ReportsStack", {
+    //       screen: "Reports",
+    //     });
+    //   },
+    // },
   ];
 
   const onDeactivateAlertOk = () => {

@@ -105,7 +105,10 @@ export type DriverStackScreenProps<T extends keyof DriversStackParamsList> =
   StackScreenProps<DriversStackParamsList, T>;
 //--------------------------------------
 export type ReportsStackParamsList = {
-  Reports: undefined;
+  Reports: {
+    vehicleId: number;
+    deviceId: number;
+  };
   CollisionReport: undefined;
   DriverPerformanceReport: undefined;
   ForkliftBreakdownReport: undefined;
@@ -114,7 +117,10 @@ export type ReportsStackParamsList = {
   OverSpeedingReport: undefined;
   IdlingReport: undefined;
   IgnitionReport: undefined;
-  HistoryReport: undefined;
+  HistoryReport: {
+    vehicleId: number;
+    deviceId: number;
+  };
   ViewOnMap: {
     location: CoordinatesType;
     name: string;

@@ -9,7 +9,9 @@ import type { ReportStackScreenProps } from "@navigation-types";
 
 const Reports: React.FC<ReportStackScreenProps<"Reports">> = ({
   navigation,
+  route,
 }) => {
+  const { deviceId, vehicleId } = route.params;
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
       <NoIconHeader
@@ -58,7 +60,12 @@ const Reports: React.FC<ReportStackScreenProps<"Reports">> = ({
         />
         <_ReportCard
           title="History Report"
-          onPress={() => navigation.navigate("HistoryReport")}
+          onPress={() =>
+            navigation.navigate("HistoryReport", {
+              deviceId,
+              vehicleId,
+            })
+          }
         />
       </ScrollView>
     </SafeAreaView>

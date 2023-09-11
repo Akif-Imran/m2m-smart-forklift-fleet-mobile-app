@@ -58,3 +58,5 @@ export {
   qrScanDeviceDetails,
   addDriverWorkingTime,
 } from "./drivers";
+
+export { getHistoryReport, getIgnitionReport } from "./reports";
