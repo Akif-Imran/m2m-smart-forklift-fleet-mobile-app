@@ -814,7 +814,7 @@ interface ITripDetail {
   gps_accuracy: string;
   gps_time: string;
   direction: string;
-  is_alarm: true;
+  is_alarm: boolean;
   command_type_id: number;
   createdAt: string;
 }

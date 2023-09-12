@@ -1,7 +1,6 @@
 import { Dimensions, StyleSheet } from "react-native";
 import React, {
   useCallback,
-  useEffect,
   useImperativeHandle,
   useLayoutEffect,
 } from "react";
@@ -43,10 +42,14 @@ const _RightSheet = React.forwardRef<
   useImperativeHandle(ref, () => ({ scrollTo }), [scrollTo]);
 
   useLayoutEffect(() => {
-    scrollTo(MIN_TRANSLATE_X);
-  }, [scrollTo]);
+    if (initialPosition === "close") {
+      scrollTo(MIN_TRANSLATE_X);
+      return;
+    }
+    scrollTo(MAX_TRANSLATE_X);
+  }, [scrollTo, initialPosition]);
 
-  useEffect(() => {
+  /*  useEffect(() => {
     // moved to use layoutEffect
     // translateX.value = withTiming(MIN_TRANSLATE_X);
     // scrollTo(MIN_TRANSLATE_X);
@@ -55,7 +58,7 @@ const _RightSheet = React.forwardRef<
       openBottomSheet = setTimeout(() => {
         scrollTo(MAX_TRANSLATE_X);
         // translateX.value = withTiming(MAX_TRANSLATE_X);
-      }, 2000);
+      }, 100);
     }
     return () => {
       if (initialPosition === "open") {
@@ -63,7 +66,7 @@ const _RightSheet = React.forwardRef<
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); */
 
   const gesture = Gesture.Pan()
     .onStart(() => {

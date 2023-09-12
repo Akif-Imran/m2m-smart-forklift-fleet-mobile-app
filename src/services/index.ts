@@ -27,6 +27,9 @@ export {
   getGeoFenceById,
   getGeoFenceByDeviceId,
   getGeoFenceList,
+  getDayTrip,
+  getTripDetails,
+  getTripsDates,
 } from "./devices-vehicles";
 export {
   getServiceCounts,

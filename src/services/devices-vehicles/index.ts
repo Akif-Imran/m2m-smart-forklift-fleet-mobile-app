@@ -81,6 +81,39 @@ export const updateVehicle = async (
   return response.data;
 };
 
+export const getTripsDates = async (
+  token: string,
+  deviceId: number
+): Promise<ITripDates> => {
+  const response = await apiGet<ITripDates>(
+    urls.trips.getTripDates(deviceId),
+    token
+  );
+  return response.data;
+};
+
+export const getDayTrip = async (
+  token: string,
+  params: GetDayTripRequest
+): Promise<GetDayTripResponse> => {
+  const response = await apiGet<GetDayTripResponse>(
+    urls.trips.getDayTrip(params.deviceId, params.date),
+    token
+  );
+  return response.data;
+};
+
+export const getTripDetails = async (
+  token: string,
+  params: GetTripDetailsRequest
+): Promise<GetTripDetailsResponse> => {
+  const response = await apiGet<GetTripDetailsResponse>(
+    urls.trips.getTripDetails(params.deviceId, params.date, params.journeyId),
+    token
+  );
+  return response.data;
+};
+
 export const getPoiCounts = async (
   token: string
 ): Promise<POICountResponse> => {

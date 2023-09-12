@@ -121,3 +121,12 @@ type UpdateGeoFenceResponse = ApiResponse<IGeoFence>;
 type GeoFenceListResponse = ApiResponse<ListResponse<IGeoFence[]>>;
 type GeoFenceByIdResponse = ApiResponse<IGeoFence>;
 type DeleteGeoFenceResponse = MessageResponse;
+
+type GetDayTripRequest = { deviceId: number; date: string };
+type GetDayTripResponse = ApiResponse<IDayTrip[], "result">;
+type GetTripDetailsRequest = {
+  deviceId: number;
+  date: string;
+  journeyId: number;
+};
+type GetTripDetailsResponse = ApiResponse<ITripDetail[], "result">;

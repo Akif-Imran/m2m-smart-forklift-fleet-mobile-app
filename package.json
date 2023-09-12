@@ -30,6 +30,7 @@
     "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
     "formik": "^2.4.1",
+    "immer": "^10.0.2",
     "lottie-react-native": "5.1.4",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",

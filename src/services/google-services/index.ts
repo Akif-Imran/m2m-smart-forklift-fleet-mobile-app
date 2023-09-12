@@ -33,7 +33,7 @@ export const getDirections = async (
     `${GOOGLE_DIRECTIONS_API}?origin=${startLoc}&destination=${destinationLoc}&key=${GOOGLE_API_KEY}`
   );
   const data = await res.data;
-  console.log("response", data);
+  // console.log("response", data);
   const points = poly.decode(data.routes[0].overview_polyline.points);
   const coords = points.map((point, _index) => {
     return {
@@ -41,7 +41,7 @@ export const getDirections = async (
       longitude: point[1],
     };
   });
-  console.log(coords);
+  // console.log(coords);
   return {
     coords: coords,
     distance: data.routes[0].legs[0].distance.value,

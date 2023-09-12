@@ -88,7 +88,7 @@ const TaskProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [state, dispatch] = React.useReducer(reducer, initialTaskState);
 
   React.useEffect(() => {
-    if (!token || !isDriver) {
+    if (!token || !isDriver || !user) {
       return;
     }
     dispatch({ type: "START_LOADING" });
@@ -112,6 +112,7 @@ const TaskProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
       })
       .catch((_err) => {
         ToastService.show("Task Error occurred. Try again");
+        console.log(_err?.message);
       })
       .finally(() => {
         dispatch({ type: "STOP_LOADING" });

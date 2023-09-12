@@ -113,7 +113,7 @@ export const urls = {
     updateChecklistItem: `${BASE_URL}/update_checklist`,
     deleteChecklistItem: (checklistId: number) =>
       `${BASE_URL}/delete_checklist?id=${checklistId}`,
-    getTaskList: `${BASE_URL}/get_task_list/1`,
+    getTaskList: `${BASE_URL}/get_task_list`,
     addNewTask: `${BASE_URL}/add_new_task`,
     endTask: `${BASE_URL}/end_task`,
   },

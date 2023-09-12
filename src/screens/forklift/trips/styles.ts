@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   menuDateHeader: {
     ...gStyles.cardInfoTitleText,
-    marginTop: 15,
+    // marginTop: 15,
     // borderWidth: 1,
   },
   descTextGray: {
@@ -13,28 +13,6 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.titleText,
     // borderWidth: 1,
-  },
-  //timeline component styles
-  TimelineComponentContainer: {
-    marginTop: theme.spacing.xl,
-    paddingHorizontal: theme.spacing.md,
-    // borderWidth: 1,
-  },
-  circleStyle: {
-    overflow: "hidden",
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: colors.borderColor,
-    backgroundColor: colors.white,
-    borderWidth: 2,
-  },
-  iconStyle: {
-    ...theme.img.size.xs,
-    tintColor: colors.titleText,
-  },
-  listViewStyle: {
-    paddingHorizontal: 10,
   },
   // bottom Sheet Styles
   sheetMainContainer: { justifyContent: "center" },
@@ -92,5 +70,10 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     gap: theme.spacing.sm,
+  },
+  tripsDateSearch: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
 });

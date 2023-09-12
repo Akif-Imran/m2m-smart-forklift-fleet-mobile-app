@@ -10,23 +10,18 @@ interface TimelineContentProps {
     distance: string;
     start: boolean;
   };
-  distanceInMeters: number;
 }
-const TimelineContent: React.FC<TimelineContentProps> = ({
-  data,
-  distanceInMeters,
-}) => {
-  //   console.log(data);
+const TimelineContent: React.FC<TimelineContentProps> = ({ data }) => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.infoContainer}>
-        <Text style={gStyles.descText}>{data.time}</Text>
+        <Text style={styles.descText}>{data.time}</Text>
         {data.start ? (
-          <Text style={gStyles.descText}>{distanceInMeters}m</Text>
+          <Text style={styles.descText}> {data.distance} km</Text>
         ) : null}
       </View>
       {/* <Text style={styles.timeText}>{data.time}</Text> */}
-      <Text style={styles.descText}>{data.description}</Text>
+      <Text style={gStyles.tblHeaderText}>{data.description}</Text>
     </View>
   );
 };
