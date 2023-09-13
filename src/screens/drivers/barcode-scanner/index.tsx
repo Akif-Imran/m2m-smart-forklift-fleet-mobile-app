@@ -84,6 +84,8 @@ const BarcodeScanner: React.FC<ForkliftStackScreenProps<"BarcodeScanner">> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code, scanned, token]);
 
+  console.log(scanned);
+
   if (hasPermission === null) {
     // navigation.goBack();
     return (

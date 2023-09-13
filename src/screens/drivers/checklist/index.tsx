@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Image, StyleSheet, Text, View } from "react-native";
+import { BackHandler, Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import type { ForkliftStackScreenProps } from "@navigation-types";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -11,6 +11,7 @@ import { useFormik } from "formik";
 import { getCheckList } from "@services";
 import { useAuthContext, useTaskContext } from "@context";
 import { BASE_URL } from "@api";
+import { ToastService } from "@utility";
 
 import { _AssignForkliftListCard } from "../components";
 
@@ -80,11 +81,15 @@ const DriverCheckList: React.FC<
     if (!token) {
       return;
     }
-    getCheckList(token).then((res) => {
-      if (res.success) {
-        setCheckList(res.data);
-      }
-    });
+    getCheckList(token)
+      .then((res) => {
+        if (res.success) {
+          setCheckList(res.data);
+        }
+      })
+      .catch(() => {
+        ToastService.show("An error occurred");
+      });
   }, [token]);
 
   React.useEffect(() => {
@@ -93,6 +98,19 @@ const DriverCheckList: React.FC<
     }
     navigation.navigate("DriverTask");
   }, [inProgress]);
+
+  React.useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        navigation.popToTop();
+        return true;
+      }
+    );
+    return () => {
+      backHandler.remove();
+    };
+  }, []);
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
@@ -105,9 +123,9 @@ const DriverCheckList: React.FC<
               })}
             >
               <View>
-                {item.vehicle_picture ? (
+                {user?.profile_picture ? (
                   <Image
-                    source={{ uri: `${BASE_URL}${item.vehicle_picture}` }}
+                    source={{ uri: `${BASE_URL}${user.profile_picture}` }}
                     resizeMode="cover"
                     style={listCardStyles.imgStyle}
                   />
@@ -153,6 +171,8 @@ const DriverCheckList: React.FC<
               // })}
               style={StyleSheet.compose(listCardStyles.reportListRecord, {
                 borderBottomWidth: 0,
+                paddingHorizontal: 0,
+                paddingVertical: 0,
               })}
             >
               <View>
@@ -163,9 +183,12 @@ const DriverCheckList: React.FC<
               {checkList.map((listItem) => {
                 console.log(form.values.ids);
                 return (
-                  <View style={screenStyles.radioItemStyle} key={listItem.id}>
+                  <View key={listItem.id}>
                     <Checkbox.Item
                       label={listItem.name}
+                      labelStyle={gStyles.tblDescText}
+                      // eslint-disable-next-line react-native/no-inline-styles
+                      style={{ height: 32 }}
                       status={
                         form.values.ids.includes(listItem.id)
                           ? "checked"
