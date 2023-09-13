@@ -16,6 +16,7 @@ import {
 import { BASE_URL } from "@api";
 import moment from "moment";
 import { ForkliftStatusColor } from "@constants";
+import { useAuthContext } from "@context";
 
 import { styles } from "./styles";
 
@@ -27,6 +28,9 @@ interface OwnProps {
 const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
   const navigation =
     useNavigation<ForkliftStackScreenProps<"Forklift">["navigation"]>();
+  const {
+    state: { isDriver },
+  } = useAuthContext();
   const [isOnline, setIsOnline] = React.useState<boolean>(false);
   let status = item.device?.is_idling ? "idling" : "";
   if (item.device?.is_ignition && isOnline) {
@@ -156,86 +160,90 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
         </View>
       </TouchableOpacity>
       <View style={listCardStyles.bottomButtonContainer}>
-        <Button
-          style={listCardStyles.bottomButton}
-          compact={true}
-          uppercase={false}
-          mode={"text"}
-          theme={PaperTheme}
-          color={colors.titleText}
-          labelStyle={StyleSheet.compose(
-            gStyles.tblDescText,
-            gStyles.buttonLabelTextAddOn
-          )}
-          icon={() => (
-            <MaterialCommunityIcons
-              name="wall"
-              size={18}
+        {!isDriver && (
+          <>
+            <Button
+              style={listCardStyles.bottomButton}
+              compact={true}
+              uppercase={false}
+              mode={"text"}
+              theme={PaperTheme}
               color={colors.titleText}
-            />
-          )}
-          onPress={() =>
-            navigation.navigate("Fences", {
-              _id: item.id.toString(),
-              item: item,
-            })
-          }
-        >
-          Fences
-        </Button>
-        <Button
-          style={listCardStyles.bottomButton}
-          compact={true}
-          uppercase={false}
-          mode={"text"}
-          theme={PaperTheme}
-          color={colors.titleText}
-          labelStyle={StyleSheet.compose(
-            gStyles.tblDescText,
-            gStyles.buttonLabelTextAddOn
-          )}
-          icon={() => (
-            <FontAwesome5 name="road" size={16} color={colors.titleText} />
-          )}
-          onPress={() =>
-            navigation.navigate("Trips", {
-              _id: item.id.toString(),
-              item: item,
-            })
-          }
-        >
-          Trips
-        </Button>
-        <Button
-          style={listCardStyles.bottomButton}
-          compact={true}
-          uppercase={false}
-          mode={"text"}
-          theme={PaperTheme}
-          color={colors.titleText}
-          labelStyle={StyleSheet.compose(
-            gStyles.tblDescText,
-            gStyles.buttonLabelTextAddOn
-          )}
-          icon={() => (
-            <MaterialCommunityIcons
-              name="file-multiple"
-              size={16}
+              labelStyle={StyleSheet.compose(
+                gStyles.tblDescText,
+                gStyles.buttonLabelTextAddOn
+              )}
+              icon={() => (
+                <MaterialCommunityIcons
+                  name="wall"
+                  size={18}
+                  color={colors.titleText}
+                />
+              )}
+              onPress={() =>
+                navigation.navigate("Fences", {
+                  _id: item.id.toString(),
+                  item: item,
+                })
+              }
+            >
+              Fences
+            </Button>
+            <Button
+              style={listCardStyles.bottomButton}
+              compact={true}
+              uppercase={false}
+              mode={"text"}
+              theme={PaperTheme}
               color={colors.titleText}
-            />
-          )}
-          onPress={() =>
-            navigation.navigate("ReportsStack", {
-              screen: "Reports",
-              params: {
-                deviceId: item.device_id,
-                vehicleId: item.id,
-              },
-            })
-          }
-        >
-          Reports
-        </Button>
+              labelStyle={StyleSheet.compose(
+                gStyles.tblDescText,
+                gStyles.buttonLabelTextAddOn
+              )}
+              icon={() => (
+                <FontAwesome5 name="road" size={16} color={colors.titleText} />
+              )}
+              onPress={() =>
+                navigation.navigate("Trips", {
+                  _id: item.id.toString(),
+                  item: item,
+                })
+              }
+            >
+              Trips
+            </Button>
+            <Button
+              style={listCardStyles.bottomButton}
+              compact={true}
+              uppercase={false}
+              mode={"text"}
+              theme={PaperTheme}
+              color={colors.titleText}
+              labelStyle={StyleSheet.compose(
+                gStyles.tblDescText,
+                gStyles.buttonLabelTextAddOn
+              )}
+              icon={() => (
+                <MaterialCommunityIcons
+                  name="file-multiple"
+                  size={16}
+                  color={colors.titleText}
+                />
+              )}
+              onPress={() =>
+                navigation.navigate("ReportsStack", {
+                  screen: "Reports",
+                  params: {
+                    deviceId: item.device_id,
+                    vehicleId: item.id,
+                  },
+                })
+              }
+            >
+              Reports
+            </Button>
+          </>
+        )}
         <Button
           style={StyleSheet.compose(listCardStyles.bottomButton, {
             flex: 1.3,

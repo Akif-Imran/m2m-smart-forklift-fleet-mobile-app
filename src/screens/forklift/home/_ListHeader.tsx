@@ -1,5 +1,6 @@
 import { _DefaultCard, _Divider } from "@components";
 import { ForkliftStatusColor } from "@constants";
+import { useAuthContext } from "@context";
 import { screenStyles } from "@screen-styles";
 import { PaperTheme, gStyles } from "@theme";
 import React from "react";
@@ -17,65 +18,70 @@ const ListHeaderComponent: React.FC<OwnProps> = ({
   searchQuery,
   handleSearch,
 }) => {
+  const {
+    state: { isDriver },
+  } = useAuthContext();
   return (
     <>
-      <_DefaultCard>
-        <View style={screenStyles.countRow}>
-          <View style={screenStyles.countRowItem}>
-            <Text style={gStyles.headerText}>{counts.moving}</Text>
-            <Text
-              style={StyleSheet.compose(screenStyles.countInfoText, {
-                color: ForkliftStatusColor.moving,
+      {!isDriver && (
+        <_DefaultCard>
+          <View style={screenStyles.countRow}>
+            <View style={screenStyles.countRowItem}>
+              <Text style={gStyles.headerText}>{counts.moving}</Text>
+              <Text
+                style={StyleSheet.compose(screenStyles.countInfoText, {
+                  color: ForkliftStatusColor.moving,
+                })}
+              >
+                Moving
+              </Text>
+            </View>
+            <View
+              style={StyleSheet.compose(screenStyles.countRowMiddleItem, {
+                borderRightWidth: 0,
               })}
-            >
-              Moving
-            </Text>
+            />
+            <View style={screenStyles.countRowItem}>
+              <Text style={gStyles.headerText}>{counts.parked}</Text>
+              <Text
+                style={StyleSheet.compose(screenStyles.countInfoText, {
+                  color: ForkliftStatusColor.parked,
+                })}
+              >
+                Parked
+              </Text>
+            </View>
           </View>
-          <View
-            style={StyleSheet.compose(screenStyles.countRowMiddleItem, {
-              borderRightWidth: 0,
-            })}
-          />
-          <View style={screenStyles.countRowItem}>
-            <Text style={gStyles.headerText}>{counts.parked}</Text>
-            <Text
-              style={StyleSheet.compose(screenStyles.countInfoText, {
-                color: ForkliftStatusColor.parked,
+          <_Divider />
+          <View style={screenStyles.countRow}>
+            <View style={screenStyles.countRowItem}>
+              <Text style={gStyles.headerText}>{counts.total}</Text>
+              <Text
+                style={StyleSheet.compose(screenStyles.countInfoText, {
+                  color: ForkliftStatusColor.total,
+                })}
+              >
+                Vehicles
+              </Text>
+            </View>
+            <View
+              style={StyleSheet.compose(screenStyles.countRowMiddleItem, {
+                borderRightWidth: 0,
               })}
-            >
-              Parked
-            </Text>
+            />
+            <View style={screenStyles.countRowItem}>
+              <Text style={gStyles.headerText}>{counts.offline}</Text>
+              <Text
+                style={StyleSheet.compose(screenStyles.countInfoText, {
+                  color: ForkliftStatusColor.offline,
+                })}
+              >
+                GPS Offline
+              </Text>
+            </View>
           </View>
-        </View>
-        <_Divider />
-        <View style={screenStyles.countRow}>
-          <View style={screenStyles.countRowItem}>
-            <Text style={gStyles.headerText}>{counts.total}</Text>
-            <Text
-              style={StyleSheet.compose(screenStyles.countInfoText, {
-                color: ForkliftStatusColor.total,
-              })}
-            >
-              Vehicles
-            </Text>
-          </View>
-          <View
-            style={StyleSheet.compose(screenStyles.countRowMiddleItem, {
-              borderRightWidth: 0,
-            })}
-          />
-          <View style={screenStyles.countRowItem}>
-            <Text style={gStyles.headerText}>{counts.offline}</Text>
-            <Text
-              style={StyleSheet.compose(screenStyles.countInfoText, {
-                color: ForkliftStatusColor.offline,
-              })}
-            >
-              GPS Offline
-            </Text>
-          </View>
-        </View>
-      </_DefaultCard>
+        </_DefaultCard>
+      )}
 
       <View style={screenStyles.searchContainer}>
         <Searchbar

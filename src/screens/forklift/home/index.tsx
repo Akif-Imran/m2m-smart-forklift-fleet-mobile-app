@@ -137,9 +137,11 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
     if (!token) {
       return;
     }
-    fetchCounts();
+    if (!isDriver) {
+      fetchCounts();
+    }
     // dispatch(fetchDevices(token));
-  }, [token, fetchCounts, isFocused]);
+  }, [token, fetchCounts, isFocused, isDriver]);
 
   const right = [
     {
