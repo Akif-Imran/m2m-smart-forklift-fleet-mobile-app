@@ -60,6 +60,7 @@ export {
   getTaskList,
   qrScanDeviceDetails,
   addDriverWorkingTime,
+  availableStatusToggle,
 } from "./drivers";
 
 export { getHistoryReport, getIgnitionReport } from "./reports";

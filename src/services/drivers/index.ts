@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { apiDelete, apiGet, apiPost, urls } from "@api";
 
 export const getDrivers = async (token: string): Promise<DriversResponse> => {
@@ -154,6 +155,15 @@ export const deleteChecklistItem = async (
   const response = await apiDelete<ChecklistRecordResponse>(
     urls.driver.deleteChecklistItem(checklistItemId),
     token
+  );
+  return response.data;
+};
+
+export const availableStatusToggle = async (token: string, value: 0 | 1) => {
+  const response = await apiPost<MessageResponse, { available_status: 0 | 1 }>(
+    urls.driver.availableStatusToggle,
+    token,
+    { available_status: value }
   );
   return response.data;
 };

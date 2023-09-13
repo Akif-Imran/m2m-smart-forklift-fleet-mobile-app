@@ -38,7 +38,7 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
 }) => {
   const isFocused = useIsFocused();
   const {
-    state: { token, isAdmin, isDriver },
+    state: { token, isAdmin, isDriver, user },
   } = useAuthContext();
   const {
     state: { inProgress },
@@ -157,7 +157,9 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
             color={colors.error}
           />
         ),
-        onPress: () => navigation.navigate("DriverTask"),
+        onPress: user?.available_status
+          ? () => navigation.navigate("DriverTask")
+          : () => ToastService.show("You are not available to work"),
       });
     } else {
       right.push({
@@ -168,7 +170,9 @@ const Forklift: React.FC<ForkliftStackScreenProps<"Forklift">> = ({
             color={colors.primary}
           />
         ),
-        onPress: () => navigation.navigate("BarcodeScanner"),
+        onPress: user?.available_status
+          ? () => navigation.navigate("BarcodeScanner")
+          : () => ToastService.show("You are not available to work"),
       });
     }
   }

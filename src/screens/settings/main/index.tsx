@@ -32,18 +32,20 @@ export const Settings: React.FC<
 > = ({ navigation }) => {
   const appVersion = appConfig.expo.version;
   const {
-    state: { token, isDriver, isWarehouse, isService },
+    state: { token, isDriver, isWarehouse, isService, isAdmin },
     logout,
   } = useAuthContext();
   const [isLoading, setIsLoading] = React.useState(false);
 
   const filterOut: number[] = [];
   if (isDriver) {
-    filterOut.push(1, 6, 8, 9);
+    filterOut.push(1, 6, 8, 9, 11);
   } else if (isWarehouse) {
-    filterOut.push(1, 6);
+    filterOut.push(1, 6, 11, 12);
   } else if (isService) {
-    filterOut.push(1, 6, 8, 9);
+    filterOut.push(1, 6, 8, 9, 11, 12);
+  } else if (isAdmin) {
+    filterOut.push(12);
   }
 
   const multiData1: Array<MultiCardItem> = [
@@ -83,6 +85,22 @@ export const Settings: React.FC<
       color: colors.titleText,
       onPress: () => {
         navigation.navigate("ChangePassword");
+      },
+    },
+    {
+      id: 12,
+      icon: (
+        <MaterialCommunityIcons
+          name="account-alert"
+          size={20}
+          color={colors.heavyGray}
+        />
+      ),
+      bgColor: colors.mediumGray,
+      title: "Available",
+      color: colors.titleText,
+      onPress: () => {
+        console.log("toggle available status");
       },
     },
   ];

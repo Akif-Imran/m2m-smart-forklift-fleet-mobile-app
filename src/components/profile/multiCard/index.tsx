@@ -1,9 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
-import { Text, TouchableOpacity, View, Switch } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+import { Switch } from "react-native-paper";
 import type { FC } from "react";
 import React, { useState } from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { colors } from "@theme";
+import { PaperTheme, colors } from "@theme";
+import { availableStatusToggle } from "@services";
+import { ToastService } from "@utility";
+import { useAuthContext } from "@context";
 
 import { styles } from "./styles";
 
@@ -19,8 +23,29 @@ export interface Item {
   onPress: () => void;
 }
 const MultiCard: FC<MultiCardProps> = ({ data }) => {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const {
+    dispatch,
+    state: { token, user },
+  } = useAuthContext();
+  const [isEnabled, setIsEnabled] = useState(user?.available_status || false);
+  const toggleSwitch = (value: boolean) => {
+    //call api here
+    availableStatusToggle(token, value ? 1 : 0)
+      .then((res) => {
+        ToastService.show(res?.message);
+        if (res.success) {
+          setIsEnabled(value);
+          dispatch({
+            type: "TOGGLE_DRIVER_AVAILABLE_STATUS",
+            payload: { value },
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err?.message);
+        ToastService.show("An error occurred");
+      });
+  };
   return (
     <View style={styles.mainContainer}>
       {/* <FlatList
@@ -60,7 +85,7 @@ const MultiCard: FC<MultiCardProps> = ({ data }) => {
           ]}
           activeOpacity={0.7}
           key={index}
-          onPress={item.onPress}
+          onPress={item.title === "Available" ? undefined : item.onPress}
         >
           <View style={styles.iconContainer}>
             <View
@@ -73,22 +98,25 @@ const MultiCard: FC<MultiCardProps> = ({ data }) => {
             <Text style={[styles.headerText, { color: item.color }]}>
               {item.title}
             </Text>
-            {item.title === "Notifications" ? (
+            {item.title === "Available" ? (
               <Switch
+                theme={PaperTheme}
                 trackColor={{ false: colors.heavyGray, true: colors.primary }}
                 thumbColor={"#f4f3f4"}
-                onValueChange={toggleSwitch}
+                onValueChange={(value) => toggleSwitch(value)}
                 value={isEnabled}
               />
             ) : null}
           </View>
-          <View style={styles.forwardContainer}>
-            <MaterialIcons
-              name="keyboard-arrow-right"
-              color={colors.textGray}
-              size={20}
-            />
-          </View>
+          {item.title !== "Available" && (
+            <View style={styles.forwardContainer}>
+              <MaterialIcons
+                name="keyboard-arrow-right"
+                color={colors.textGray}
+                size={20}
+              />
+            </View>
+          )}
         </TouchableOpacity>
       ))}
     </View>

@@ -116,6 +116,7 @@ export const urls = {
     getTaskList: `${BASE_URL}/get_task_list`,
     addNewTask: `${BASE_URL}/add_new_task`,
     endTask: `${BASE_URL}/end_task`,
+    availableStatusToggle: `${BASE_DRIVER_URL}/availableStatusToggle`,
   },
   poi: {
     counts: `${BASE_POI_URL}/getPOICount`,

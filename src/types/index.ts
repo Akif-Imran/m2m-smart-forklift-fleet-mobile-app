@@ -351,7 +351,11 @@ interface ILoginUserData {
   is_active: boolean;
   createdAt: string;
   updatedAt: null;
+  available_status?: boolean;
   user_type: IUserType;
+  driver_data?: {
+    available_status: boolean;
+  };
 }
 
 /* interface IDevice {

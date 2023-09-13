@@ -8,6 +8,7 @@ import * as authHelpers from "./AuthHelpers";
 
 interface AuthContextType {
   state: AuthState;
+  dispatch: React.Dispatch<AuthAction>;
   login: (email: string, password: string, save: boolean) => void;
   logout: () => void;
 }
@@ -27,6 +28,7 @@ interface AuthState {
 type AuthAction =
   | { type: "LOAD_START" }
   | { type: "LOAD_STOP" }
+  | { type: "TOGGLE_DRIVER_AVAILABLE_STATUS"; payload: { value: boolean } }
   | { type: "LOGOUT" }
   | {
       type: "LOGIN";
@@ -42,6 +44,17 @@ const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
+    case "TOGGLE_DRIVER_AVAILABLE_STATUS":
+      if (!state.user) {
+        return state;
+      }
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          available_status: action.payload.value,
+        },
+      };
     case "LOAD_START":
       return {
         ...state,
@@ -188,6 +201,12 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
         .then((res) => {
           ToastService.show(res?.message || "");
           if (res.success) {
+            if (res.data.user_type_id === 2) {
+              res.data.available_status = res.data?.driver_data
+                ?.available_status
+                ? res.data?.driver_data?.available_status
+                : false;
+            }
             if (save) {
               authHelpers
                 .setAuth({ token: res.token, user: res.data })
@@ -216,8 +235,8 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   );
 
   const value = React.useMemo(
-    () => ({ state, login, logout }),
-    [state, login, logout]
+    () => ({ state, login, logout, dispatch }),
+    [state, login, logout, dispatch]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
