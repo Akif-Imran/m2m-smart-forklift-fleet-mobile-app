@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 import {
   StyleSheet,
   Text,
@@ -16,6 +17,144 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "@screen-styles";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { mapMarkers } from "@map-markers";
+import { produce } from "immer";
+import { useSafeAreaDimensions } from "@hooks";
+
+interface IPolyline extends Omit<ITripDetail, "latitude" | "longitude"> {
+  latitude: number;
+  longitude: number;
+}
+
+enum ACTION_TYPES {
+  INITIALIZE = 1,
+  TRACK_VIEW_CHANGES_START,
+  UNTRACK_VIEW_CHANGES_START,
+  TRACK_VIEW_CHANGES_END,
+  UNTRACK_VIEW_CHANGES_END,
+  SLIDER_VALUE_CHANGE,
+  STOP,
+  RESET,
+  MOVE,
+}
+
+type PlaybackActions =
+  | {
+      type: ACTION_TYPES.INITIALIZE;
+      payload: { line: LatLng[] };
+    }
+  | { type: ACTION_TYPES.TRACK_VIEW_CHANGES_START }
+  | { type: ACTION_TYPES.UNTRACK_VIEW_CHANGES_START }
+  | { type: ACTION_TYPES.TRACK_VIEW_CHANGES_END }
+  | { type: ACTION_TYPES.UNTRACK_VIEW_CHANGES_END }
+  | { type: ACTION_TYPES.SLIDER_VALUE_CHANGE; payload: { value: number } }
+  | { type: ACTION_TYPES.STOP }
+  | { type: ACTION_TYPES.RESET }
+  | { type: ACTION_TYPES.MOVE; payload: { currentState: State } };
+
+interface State {
+  isPlaying: boolean;
+  startTrackViewChanges: boolean;
+  endTrackViewChanges: boolean;
+  completeTrip: IPolyline[]; //has complete trip path
+  playbackLine: IPolyline[]; // will only have the point that are displayed using playback
+  playbackIndex: number;
+  currentPoint: IPolyline;
+  previousPoint: IPolyline;
+  startingPoint: LatLng;
+  destinationPoint: IPolyline;
+  heading: number;
+}
+
+const initialState: State = {
+  isPlaying: false,
+  startTrackViewChanges: true,
+  endTrackViewChanges: true,
+  completeTrip: [],
+  playbackLine: [],
+  playbackIndex: 0,
+  currentPoint: {} as IPolyline,
+  previousPoint: {} as IPolyline,
+  startingPoint: {} as IPolyline,
+  destinationPoint: {} as IPolyline,
+  heading: 0,
+};
+
+const curriedInitializer = (initState: State, tripLine: ITripDetail[]) => {
+  initState.isPlaying = false;
+  initState.startTrackViewChanges = true;
+  initState.endTrackViewChanges = true;
+  initState.completeTrip = tripLine.map((point) => ({
+    ...point,
+    latitude: parseFloat(point.latitude),
+    longitude: parseFloat(point.longitude),
+  }));
+  const point = {
+    ...tripLine[0],
+    latitude: parseFloat(tripLine[0].latitude),
+    longitude: parseFloat(tripLine[0].longitude),
+  };
+  initState.playbackLine = [point];
+  initState.playbackIndex = 0;
+  initState.currentPoint = point;
+  initState.previousPoint = point;
+  initState.startingPoint = point;
+  initState.destinationPoint = {
+    ...tripLine[tripLine.length - 1],
+    latitude: parseFloat(tripLine[tripLine.length - 1].latitude),
+    longitude: parseFloat(tripLine[tripLine.length - 1].longitude),
+  };
+  initState.heading = 0;
+  return initState;
+};
+
+const playbackReducer = (state: State, action: PlaybackActions) => {
+  switch (action.type) {
+    case ACTION_TYPES.INITIALIZE:
+      return;
+    case ACTION_TYPES.TRACK_VIEW_CHANGES_START:
+      state.startTrackViewChanges = true;
+      return;
+    case ACTION_TYPES.UNTRACK_VIEW_CHANGES_START:
+      state.startTrackViewChanges = false;
+      return;
+    case ACTION_TYPES.TRACK_VIEW_CHANGES_END:
+      state.endTrackViewChanges = true;
+      return;
+    case ACTION_TYPES.UNTRACK_VIEW_CHANGES_END:
+      state.endTrackViewChanges = false;
+      return;
+    case ACTION_TYPES.SLIDER_VALUE_CHANGE:
+      const index = action.payload.value;
+      state.playbackIndex = action.payload.value;
+      state.playbackLine = state.completeTrip.slice(0, index + 1);
+      state.currentPoint = state.completeTrip[index];
+      state.previousPoint =
+        index <= 0 ? state.completeTrip[index] : state.completeTrip[index - 1];
+      state.heading = parseFloat(state.completeTrip[index].direction);
+      return;
+    case ACTION_TYPES.STOP:
+      state.isPlaying = false;
+      return;
+    case ACTION_TYPES.MOVE:
+      state.isPlaying = true;
+      const newIndex = state.playbackIndex + 1;
+      state.previousPoint = state.currentPoint;
+      state.currentPoint = state.completeTrip[newIndex];
+      state.heading = parseFloat(state.completeTrip[newIndex].direction);
+      state.playbackLine = state.completeTrip.slice(0, newIndex + 1);
+      return;
+    case ACTION_TYPES.RESET:
+      state.isPlaying = false;
+      state.playbackLine = [state.completeTrip[0]];
+      state.playbackIndex = 0;
+      state.currentPoint = state.completeTrip[0];
+      state.previousPoint = state.completeTrip[0];
+      state.heading = parseFloat(state.completeTrip[0].direction);
+      return;
+    default:
+      return state;
+  }
+};
 
 const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
   route,
@@ -23,93 +162,85 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
   const {
     vehicle: { item },
   } = route.params;
-  const polyline: CoordinatesType[] = route.params?.coords;
-  const [trackViewChanges, setTrackViewChanges] = React.useState<boolean>(true);
-  const [carTackViewChanges, setCarTrackViewChanges] =
-    React.useState<boolean>(true);
-  // console.log(polyline);
+  const { LATITUDE_DELTA, LONGITUDE_DELTA } = useSafeAreaDimensions();
+  const tripLine = route.params?.tripDetails;
+
+  const [state, setState] = React.useState<State>(() => {
+    const point = {
+      ...tripLine[0],
+      latitude: parseFloat(tripLine[0].latitude),
+      longitude: parseFloat(tripLine[0].longitude),
+    };
+    return {
+      isPlaying: false,
+      startTrackViewChanges: true,
+      endTrackViewChanges: true,
+      completeTrip: tripLine.map((linePoint) => ({
+        ...linePoint,
+        latitude: parseFloat(linePoint.latitude),
+        longitude: parseFloat(linePoint.longitude),
+      })),
+      playbackLine: [point],
+      playbackIndex: 0,
+      currentPoint: point,
+      previousPoint: point,
+      startingPoint: point,
+      destinationPoint: {
+        ...tripLine[tripLine.length - 1],
+        latitude: parseFloat(tripLine[tripLine.length - 1].latitude),
+        longitude: parseFloat(tripLine[tripLine.length - 1].longitude),
+      },
+      heading: parseFloat(point.direction),
+    };
+  });
   const mapRef = React.useRef<MapView>(null);
-  const [isPlaying, setIsPlaying] = React.useState<boolean>();
-  const [line, setLine] = React.useState<CoordinatesType[]>([polyline[0]]);
   const [playerInterval, setPlayerInterval] =
     React.useState<NodeJS.Timer | null>(null);
   const markerRef = React.useRef<MapMarker>(null);
-  //   const [sliderValue, setSliderValue] = React.useState<number[]>([0]);
-  const [playbackValue, setPlaybackValue] = React.useState<number[]>([0]);
-  const [coordinate, setCoordinate] = React.useState({
-    latitude: polyline[0].latitude,
-    longitude: polyline[0].longitude,
-  });
-  const [prevCoordinate, setPrevCoordinate] = React.useState({
-    latitude: polyline[0].latitude,
-    longitude: polyline[0].longitude,
-  });
-  const calculateHeading = React.useCallback((cord1: LatLng, cord2: LatLng) => {
-    if (cord2) {
-      const { latitude: lat1, longitude: lng1 } = cord1;
-      const { latitude: lat2, longitude: lng2 } = cord2;
-      const y = Math.sin(lng2 - lng1) * Math.cos(lat2);
-      const x =
-        Math.cos(lat1) * Math.sin(lat2) -
-        Math.sin(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1);
-      const θ = Math.atan2(y, x);
-      const brng = ((θ * 180) / Math.PI + 360) % 360;
-      return brng;
-    }
-    return 0;
-  }, []);
-  const [heading, setHeading] = React.useState(
-    calculateHeading(prevCoordinate, polyline[1] ? polyline[1] : coordinate)
-  );
-  const [loc, _setLoc] = React.useState({
-    pickupCords: {
-      latitude: polyline[0].latitude,
-      longitude: polyline[0].longitude,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
-    },
-    dropLocationCords: {
-      latitude: polyline[polyline.length - 1].latitude,
-      longitude: polyline[polyline.length - 1].longitude,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
-    },
-  });
-
-  const { dropLocationCords, pickupCords } = loc;
 
   const handleSliderValueChange = (value: number) => {
-    if (value < playbackValue[0]) {
-    }
-    console.log(value);
-    const coords = getCoordinate(polyline, value);
-    const lineValues = polyline.slice(0, value + 1);
-    const lineValuesLen = lineValues.length;
-    const start =
-      lineValues.length >= 2 ? lineValues[lineValuesLen - 2] : lineValues[0];
-    const newHeading = calculateHeading(start, lineValues[lineValuesLen - 1]);
-    // const newHeading = calculateHeading(coordinate, coords);
-    console.log(newHeading, "heading");
-    //  = [...line];
-    // lineValues.push(coords);
-    // markerRef.current?.animateMarkerToCoordinate({ latitude, longitude }, 3000);
-    setPlaybackValue([value]);
-    setLine(lineValues);
-    setPrevCoordinate(coordinate);
-    setCoordinate(coords);
-    setHeading(newHeading);
-    console.log(coords);
+    setState((prev) => {
+      return {
+        ...prev,
+        playbackIndex: value,
+        playbackLine: prev.completeTrip.slice(0, value + 1),
+        currentPoint: prev.completeTrip[value],
+        previousPoint:
+          value <= 0 ? prev.completeTrip[0] : prev.completeTrip[value - 1],
+        heading: parseFloat(prev.completeTrip[value].direction),
+      };
+    });
   };
 
-  const getCoordinate = (currentLine: CoordinatesType[], index: number) => {
-    // const index = Math.floor(playbackValue * (polyline.length - 1));
-    // console.log(playbackValue);
-    return currentLine[index];
-  };
-
-  const start = () => {
-    setIsPlaying(true);
+  const start = async () => {
+    setState((prev) => ({ ...prev, isPlaying: true }));
     const player = setInterval(() => {
+      setState((prev) => {
+        console.log("prev", prev.isPlaying, prev.playbackIndex);
+        if (prev.playbackIndex === prev.completeTrip.length - 1) {
+          setPlayerInterval((prevInterval) => {
+            if (prevInterval) {
+              clearInterval(prevInterval);
+            }
+            return null;
+          });
+          return { ...prev, isPlaying: false };
+        }
+        const index = prev.playbackIndex + 1;
+        return {
+          ...prev,
+          playbackIndex: index,
+          isPlaying: true,
+          previousPoint: prev.currentPoint,
+          currentPoint: prev.completeTrip[index],
+          playbackLine: prev.completeTrip.slice(0, index + 1),
+          heading: parseFloat(prev.completeTrip[index].direction),
+        };
+      });
+    }, 1000);
+
+    /*     setIsPlaying(true);
+    const player =setInterval(() => {
       setPlaybackValue((prev) => {
         if (prev[0] === polyline.length - 1) {
           if (playerInterval) {
@@ -140,12 +271,12 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
         console.log(coords);
         return [index];
       });
-    }, 1000);
+    }, 1000); */
     setPlayerInterval(player);
   };
 
   const stop = () => {
-    setIsPlaying(false);
+    setState((prev) => ({ ...prev, isPlaying: false }));
     if (playerInterval) {
       clearInterval(playerInterval);
     }
@@ -154,19 +285,28 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
 
   const reset = () => {
     stop();
-    setLine([polyline[0]]);
-    setPlaybackValue([0]);
-    setCoordinate({
-      latitude: polyline[0].latitude,
-      longitude: polyline[0].longitude,
-    });
-    setPrevCoordinate({
-      latitude: polyline[0].latitude,
-      longitude: polyline[0].longitude,
-    });
-    setHeading(
-      calculateHeading(prevCoordinate, polyline[1] ? polyline[1] : coordinate)
-    );
+    setState((prev) => ({
+      ...prev,
+      isPlaying: false,
+      playbackLine: [prev.completeTrip[0]],
+      playbackIndex: 0,
+      currentPoint: prev.completeTrip[0],
+      previousPoint: prev.completeTrip[0],
+      heading: parseFloat(prev.completeTrip[0].direction),
+    }));
+    // setLine([polyline[0]]);
+    // setPlaybackValue([0]);
+    // setCoordinate({
+    //   latitude: polyline[0].latitude,
+    //   longitude: polyline[0].longitude,
+    // });
+    // setPrevCoordinate({
+    //   latitude: polyline[0].latitude,
+    //   longitude: polyline[0].longitude,
+    // });
+    // setHeading(
+    //   calculateHeading(prevCoordinate, polyline[1] ? polyline[1] : coordinate)
+    // );
   };
 
   const replay = () => {
@@ -179,22 +319,32 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
       <MapView
         ref={mapRef}
         style={StyleSheet.absoluteFill}
-        initialRegion={pickupCords}
+        initialRegion={{
+          latitude: state.startingPoint.latitude,
+          longitude: state.startingPoint.longitude,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        }}
       >
         <Marker
           ref={markerRef}
-          tracksViewChanges={carTackViewChanges}
-          coordinate={coordinate}
+          tracksViewChanges={state.startTrackViewChanges}
           rotation={mapMarkers[item.icon].rotate}
           anchor={mapMarkers[item.icon].anchor}
           centerOffset={mapMarkers[item.icon].offset}
+          coordinate={{
+            latitude: state.currentPoint.latitude,
+            longitude: state.currentPoint.longitude,
+          }}
           style={StyleSheet.compose(theme.img.size.sm, {
-            transform: [{ rotate: `${heading}deg` }],
+            transform: [{ rotate: `${state.heading}deg` }],
           })}
         >
           <Image
             source={mapMarkers[item.icon].icon}
-            onLoad={() => setCarTrackViewChanges(false)}
+            onLoad={() =>
+              setState((prev) => ({ ...prev, startTrackViewChanges: false }))
+            }
             style={mapMarkers[item.icon].size}
             resizeMethod="auto"
             resizeMode="contain"
@@ -202,24 +352,29 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
         </Marker>
 
         <Marker
-          tracksViewChanges={trackViewChanges}
-          coordinate={dropLocationCords}
+          tracksViewChanges={state.endTrackViewChanges}
           rotation={mapMarkers["racing-flag"].rotate}
           anchor={mapMarkers["racing-flag"].anchor}
           centerOffset={mapMarkers["racing-flag"].offset}
           style={theme.map.marker.size.md}
+          coordinate={{
+            latitude: state.destinationPoint.latitude,
+            longitude: state.destinationPoint.longitude,
+          }}
           // onPress={() => handleMarkerOnPress(MAX_TRANSLATE_Y, coordsA[0])}
         >
           <Image
             source={mapMarkers["racing-flag"].icon}
-            onLoad={() => setTrackViewChanges(false)}
+            onLoad={() =>
+              setState((prev) => ({ ...prev, endTrackViewChanges: false }))
+            }
             style={mapMarkers["racing-flag"].size}
             resizeMethod="auto"
             resizeMode="contain"
           />
         </Marker>
         <Polyline
-          coordinates={line}
+          coordinates={state.playbackLine}
           strokeColor={colors.warning} // fallback for when `strokeColors` is not supported by the map-provider
           strokeWidth={3}
           // zIndex={selected === 'C' ? 100 : 10}
@@ -232,17 +387,14 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
             <TouchableOpacity
               style={styles.playButton}
               onPress={() => {
-                setIsPlaying((prev) => {
-                  if (prev) {
-                    stop();
-                  } else {
-                    start();
-                  }
-                  return !prev;
-                });
+                if (state.isPlaying) {
+                  stop();
+                } else {
+                  start();
+                }
               }}
             >
-              {isPlaying ? (
+              {state.isPlaying ? (
                 <MaterialCommunityIcons
                   name="pause"
                   size={25}
@@ -259,9 +411,9 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
           </View>
           <View style={styles.sliderContainer}>
             <Slider
-              value={playbackValue[0]}
+              value={state.playbackIndex}
               onValueChange={handleSliderValueChange}
-              maximumValue={polyline.length - 1}
+              maximumValue={state.completeTrip.length - 1}
               minimumValue={0}
               step={1}
               thumbTintColor={colors.primary}
@@ -333,7 +485,9 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
               />
             </View>
             <View>
-              <Text style={gStyles.tblHeaderText}>49.0 km/ h</Text>
+              <Text style={gStyles.tblHeaderText}>
+                {state.currentPoint.speed} km/ h
+              </Text>
             </View>
           </View>
           {/* distance */}
@@ -346,7 +500,9 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
               />
             </View>
             <View>
-              <Text style={gStyles.tblHeaderText}>15.46 km</Text>
+              <Text style={gStyles.tblHeaderText}>
+                {state.currentPoint.mileage} km
+              </Text>
             </View>
           </View>
         </View>

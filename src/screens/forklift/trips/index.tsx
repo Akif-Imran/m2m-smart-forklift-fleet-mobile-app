@@ -143,7 +143,6 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({
   );
 
   const [isLoading, setIsLoading] = React.useState(false);
-
   const [date, setDate] = React.useState<Date>(new Date());
   const [showDatePicker, setShowDatePicker] = React.useState<boolean>(false);
   const [_isMapReady, setIsMapReady] = React.useState<boolean>(false);
@@ -1905,8 +1904,8 @@ const Trips: React.FC<ForkliftStackScreenProps<"Trips">> = ({
               activeOpacity={0.7}
               onPress={() =>
                 navigation.navigate("Playback", {
-                  //TODO - see if need to change to complete trip details
-                  coords: state.selectedTripLine,
+                  tripLine: state.selectedTripLine,
+                  tripDetails: state.selectedTripDetails,
                   vehicle: {
                     _id: _id,
                     item: item,

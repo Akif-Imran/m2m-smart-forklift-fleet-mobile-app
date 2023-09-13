@@ -61,7 +61,8 @@ export type ForkliftStackParamsList = {
   Fences: DetailsType<IVehicle>;
   Trips: DetailsType<IVehicle>;
   Playback: {
-    coords: LatLng[];
+    tripLine: LatLng[];
+    tripDetails: ITripDetail[];
     vehicle: DetailsType<IVehicle>;
   };
   BarcodeScanner: undefined;
