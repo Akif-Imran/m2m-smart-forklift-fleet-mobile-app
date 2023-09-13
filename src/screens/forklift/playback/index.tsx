@@ -1,4 +1,3 @@
-/* eslint-disable prefer-destructuring */
 import {
   StyleSheet,
   Text,
@@ -17,39 +16,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { screenStyles } from "@screen-styles";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { mapMarkers } from "@map-markers";
-import { produce } from "immer";
 import { useSafeAreaDimensions } from "@hooks";
+import moment from "moment";
+import { ToastService } from "@utility";
 
 interface IPolyline extends Omit<ITripDetail, "latitude" | "longitude"> {
   latitude: number;
   longitude: number;
 }
-
-enum ACTION_TYPES {
-  INITIALIZE = 1,
-  TRACK_VIEW_CHANGES_START,
-  UNTRACK_VIEW_CHANGES_START,
-  TRACK_VIEW_CHANGES_END,
-  UNTRACK_VIEW_CHANGES_END,
-  SLIDER_VALUE_CHANGE,
-  STOP,
-  RESET,
-  MOVE,
-}
-
-type PlaybackActions =
-  | {
-      type: ACTION_TYPES.INITIALIZE;
-      payload: { line: LatLng[] };
-    }
-  | { type: ACTION_TYPES.TRACK_VIEW_CHANGES_START }
-  | { type: ACTION_TYPES.UNTRACK_VIEW_CHANGES_START }
-  | { type: ACTION_TYPES.TRACK_VIEW_CHANGES_END }
-  | { type: ACTION_TYPES.UNTRACK_VIEW_CHANGES_END }
-  | { type: ACTION_TYPES.SLIDER_VALUE_CHANGE; payload: { value: number } }
-  | { type: ACTION_TYPES.STOP }
-  | { type: ACTION_TYPES.RESET }
-  | { type: ACTION_TYPES.MOVE; payload: { currentState: State } };
 
 interface State {
   isPlaying: boolean;
@@ -64,97 +38,6 @@ interface State {
   destinationPoint: IPolyline;
   heading: number;
 }
-
-const initialState: State = {
-  isPlaying: false,
-  startTrackViewChanges: true,
-  endTrackViewChanges: true,
-  completeTrip: [],
-  playbackLine: [],
-  playbackIndex: 0,
-  currentPoint: {} as IPolyline,
-  previousPoint: {} as IPolyline,
-  startingPoint: {} as IPolyline,
-  destinationPoint: {} as IPolyline,
-  heading: 0,
-};
-
-const curriedInitializer = (initState: State, tripLine: ITripDetail[]) => {
-  initState.isPlaying = false;
-  initState.startTrackViewChanges = true;
-  initState.endTrackViewChanges = true;
-  initState.completeTrip = tripLine.map((point) => ({
-    ...point,
-    latitude: parseFloat(point.latitude),
-    longitude: parseFloat(point.longitude),
-  }));
-  const point = {
-    ...tripLine[0],
-    latitude: parseFloat(tripLine[0].latitude),
-    longitude: parseFloat(tripLine[0].longitude),
-  };
-  initState.playbackLine = [point];
-  initState.playbackIndex = 0;
-  initState.currentPoint = point;
-  initState.previousPoint = point;
-  initState.startingPoint = point;
-  initState.destinationPoint = {
-    ...tripLine[tripLine.length - 1],
-    latitude: parseFloat(tripLine[tripLine.length - 1].latitude),
-    longitude: parseFloat(tripLine[tripLine.length - 1].longitude),
-  };
-  initState.heading = 0;
-  return initState;
-};
-
-const playbackReducer = (state: State, action: PlaybackActions) => {
-  switch (action.type) {
-    case ACTION_TYPES.INITIALIZE:
-      return;
-    case ACTION_TYPES.TRACK_VIEW_CHANGES_START:
-      state.startTrackViewChanges = true;
-      return;
-    case ACTION_TYPES.UNTRACK_VIEW_CHANGES_START:
-      state.startTrackViewChanges = false;
-      return;
-    case ACTION_TYPES.TRACK_VIEW_CHANGES_END:
-      state.endTrackViewChanges = true;
-      return;
-    case ACTION_TYPES.UNTRACK_VIEW_CHANGES_END:
-      state.endTrackViewChanges = false;
-      return;
-    case ACTION_TYPES.SLIDER_VALUE_CHANGE:
-      const index = action.payload.value;
-      state.playbackIndex = action.payload.value;
-      state.playbackLine = state.completeTrip.slice(0, index + 1);
-      state.currentPoint = state.completeTrip[index];
-      state.previousPoint =
-        index <= 0 ? state.completeTrip[index] : state.completeTrip[index - 1];
-      state.heading = parseFloat(state.completeTrip[index].direction);
-      return;
-    case ACTION_TYPES.STOP:
-      state.isPlaying = false;
-      return;
-    case ACTION_TYPES.MOVE:
-      state.isPlaying = true;
-      const newIndex = state.playbackIndex + 1;
-      state.previousPoint = state.currentPoint;
-      state.currentPoint = state.completeTrip[newIndex];
-      state.heading = parseFloat(state.completeTrip[newIndex].direction);
-      state.playbackLine = state.completeTrip.slice(0, newIndex + 1);
-      return;
-    case ACTION_TYPES.RESET:
-      state.isPlaying = false;
-      state.playbackLine = [state.completeTrip[0]];
-      state.playbackIndex = 0;
-      state.currentPoint = state.completeTrip[0];
-      state.previousPoint = state.completeTrip[0];
-      state.heading = parseFloat(state.completeTrip[0].direction);
-      return;
-    default:
-      return state;
-  }
-};
 
 const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
   route,
@@ -238,40 +121,6 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
         };
       });
     }, 1000);
-
-    /*     setIsPlaying(true);
-    const player =setInterval(() => {
-      setPlaybackValue((prev) => {
-        if (prev[0] === polyline.length - 1) {
-          if (playerInterval) {
-            clearInterval(playerInterval);
-          }
-          setIsPlaying(false);
-          return prev;
-        }
-        console.log(prev[0]);
-        const index = prev[0] + 1;
-        // handleSliderValueChange([index + 1]);
-        console.log(index);
-        const coords = getCoordinate(polyline, index);
-        setLine((prevLine) => {
-          const lineValues = [...prevLine];
-          lineValues.push(coords);
-          // console.log(lineValues, 'lineValues');
-          return lineValues;
-        });
-        // markerRef.current?.animateMarkerToCoordinate({ latitude, longitude }, 3000);
-        setCoordinate((prevCoords) => {
-          setPrevCoordinate(prevCoords);
-          const newHeading = calculateHeading(prevCoords, coords);
-          console.log(newHeading);
-          setHeading(newHeading);
-          return coords;
-        });
-        console.log(coords);
-        return [index];
-      });
-    }, 1000); */
     setPlayerInterval(player);
   };
 
@@ -294,19 +143,6 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
       previousPoint: prev.completeTrip[0],
       heading: parseFloat(prev.completeTrip[0].direction),
     }));
-    // setLine([polyline[0]]);
-    // setPlaybackValue([0]);
-    // setCoordinate({
-    //   latitude: polyline[0].latitude,
-    //   longitude: polyline[0].longitude,
-    // });
-    // setPrevCoordinate({
-    //   latitude: polyline[0].latitude,
-    //   longitude: polyline[0].longitude,
-    // });
-    // setHeading(
-    //   calculateHeading(prevCoordinate, polyline[1] ? polyline[1] : coordinate)
-    // );
   };
 
   const replay = () => {
@@ -424,35 +260,17 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
               }}
             />
           </View>
-          {/* <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",s
-              borderWidth: 0,
-              alignSelf: "flex-end",
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                padding: 4,
-                borderColor: colors.secondary,
-                borderWidth: 0,
-              }}
-            >
-              <MaterialCommunityIcons
-                name="fast-forward"
-                size={25}
-                color={colors.primary}
-              />
-              <Text style={gStyles.tblHeaderText}>Slow</Text>
-            </TouchableOpacity>
-          </View> */}
         </View>
         <View>
           <View style={styles.detailsContainer}>
             <Text style={gStyles.tblHeaderText}>
-              2023-01-31 00:00 - 2023-01-31 22:53
+              {moment(state.completeTrip[0].gps_time).format(
+                "DD MMM, YYYY hh:mm:ss A"
+              )}{" "}
+              -{" "}
+              {moment(
+                state.completeTrip[state.completeTrip.length - 1].gps_time
+              ).format("DD MMM, YYYY hh:mm:ss A")}
             </Text>
             <TouchableOpacity>
               <MaterialIcons name="loop" size={20} color={colors.titleText} />
@@ -471,8 +289,12 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
               />
             </View>
             <View>
-              <Text style={gStyles.tblHeaderText}>06:57:16</Text>
-              <Text style={gStyles.tblHeaderText}>2023-01-31</Text>
+              <Text style={gStyles.tblHeaderText}>
+                {moment(state.currentPoint.gps_time).format("hh:mm:ss A")}
+              </Text>
+              <Text style={gStyles.tblHeaderText}>
+                {moment(state.currentPoint.gps_time).format("DD MMM, YYYY")}
+              </Text>
             </View>
           </View>
           {/* speed */}
@@ -523,29 +345,20 @@ const Playback: React.FC<ForkliftStackScreenProps<"Playback">> = ({
               <Text style={gStyles.tblHeaderText}>Replay</Text>
             </TouchableOpacity>
             {/* show */}
-            <TouchableOpacity style={styles.buttons}>
+            {/* <TouchableOpacity style={styles.buttons}>
               <MaterialCommunityIcons
                 name="map-marker-distance"
                 size={20}
                 color={colors.titleText}
               />
-              {/* <Image
-                // eslint-disable-next-line import/extensions
-                source={require("@assets/images/icons8-journey-50.png")}
-                style={{
-                  tintColor: colors.titleText,
-                  height: theme.img.size.xxs.height - 4,
-                  width: theme.img.size.xxs.width - 4,
-                }}
-                resizeMode="contain"
-              /> */}
               <Text style={gStyles.tblHeaderText}>Show</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             {/* gps */}
             <TouchableOpacity
               style={StyleSheet.compose(styles.buttons, {
                 flexDirection: "row",
               })}
+              onPress={() => ToastService.show("Under development")}
             >
               <Text style={[gStyles.tblHeaderText, { color: colors.primary }]}>
                 GPS

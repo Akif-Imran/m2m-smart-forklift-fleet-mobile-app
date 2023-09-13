@@ -26,7 +26,6 @@ const Activity: React.FC<DriverStackScreenProps<"Activity">> = ({
   route,
 }) => {
   const { _id } = route.params;
-  //FIXME - remove isAdmin from here. (only here for test);
   const {
     state: { isWarehouse, isAdmin, token },
   } = useAuthContext();

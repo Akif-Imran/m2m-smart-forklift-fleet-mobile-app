@@ -63,12 +63,6 @@ interface IPolygon {
 }
 
 const Fences: React.FC<ForkliftStackScreenProps<"Fences">> = ({ route }) => {
-  //TODO - convert this into custome hook and return the values.
-  // const { top: TOP_INSET } = useSafeAreaInsets();
-  // const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = useWindowDimensions();
-  // const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
-  // const LATITUDE_DELTA = 0.0922;
-  // const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
   const { item } = route.params;
   const {
     state: { token },
