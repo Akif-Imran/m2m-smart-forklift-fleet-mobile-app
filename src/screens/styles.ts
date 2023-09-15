@@ -243,11 +243,15 @@ export const listCardStyles = StyleSheet.create({
   },
   //--------------------------------------------------
   imgContainer: {
+    justifyContent: "center",
+    alignItems: "center",
     borderWidth: 2,
     borderRadius: theme.radius.full,
     padding: theme.spacing.md,
     marginBottom: theme.spacing.xs,
     borderColor: colors.titleText,
+    width: 56,
+    height: 56,
   },
   imgStyle: {
     width: 64,

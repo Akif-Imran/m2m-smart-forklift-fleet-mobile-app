@@ -3,7 +3,7 @@ import React from "react";
 import { _Badge, _DefaultCard } from "@components";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
 import { listCardStyles, screenStyles } from "@screen-styles";
-import { Button, IconButton } from "react-native-paper";
+import { Avatar, Button, IconButton } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import type { ForkliftStackScreenProps } from "@navigation-types";
 import { truncateText } from "@utility";
@@ -65,19 +65,24 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
               borderColor: ForkliftStatusColor[status],
             })}
           >
-            <Image
-              source={
-                item.picture
-                  ? { uri: `${BASE_URL}${item.picture}` }
-                  : require("../../../../assets/images/car.png")
-              }
-              resizeMode="contain"
-              style={StyleSheet.compose(listCardStyles.imgStyle, {
-                tintColor: colors.titleText,
-                width: 48,
-                height: 48,
-              })}
-            />
+            {item.picture ? (
+              <Avatar.Image
+                theme={PaperTheme}
+                source={{ uri: `${BASE_URL}${item.picture}` }}
+                // because size of container is 56X56
+                size={52}
+              />
+            ) : (
+              <Image
+                source={require("../../../../assets/images/car.png")}
+                resizeMode={"contain"}
+                style={StyleSheet.compose(listCardStyles.imgStyle, {
+                  tintColor: colors.titleText,
+                  width: 48,
+                  height: 48,
+                })}
+              />
+            )}
           </View>
           <Text
             style={StyleSheet.compose(screenStyles.badgeText, {
