@@ -32,11 +32,15 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
     state: { isDriver },
   } = useAuthContext();
   const [isOnline, setIsOnline] = React.useState<boolean>(false);
-  let status = item.device?.is_idling ? "idling" : "";
-  if (item.device?.is_ignition && isOnline) {
+  let status = "";
+  if (item.device?.is_idling && isOnline) {
+    status = "idling";
+  } else if (item.device?.is_ignition && isOnline) {
     status = "moving";
-  } else {
+  } else if (isOnline) {
     status = "parked";
+  } else {
+    status = "offline";
   }
 
   React.useEffect(() => {
