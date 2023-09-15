@@ -56,7 +56,7 @@ const Login: React.FC<AuthStackScreenProps<"Login">> = ({ navigation }) => {
               resizeMode="contain"
             />
             <Text style={[gStyles.headerText, { marginTop: -60 }]}>
-              Smart Forklift
+              Smart Fleet
             </Text>
           </View>
           {/* <Text style={gStyles.headerText}>Login</Text> */}
