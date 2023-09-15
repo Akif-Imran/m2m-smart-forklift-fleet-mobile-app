@@ -16,6 +16,7 @@ import {
   BarcodeScanner,
   DriverCheckList,
   DriverTask,
+  ForkliftAlarms,
 } from "@screens";
 
 import { ReportsStack } from "../reports-stack";
@@ -133,6 +134,14 @@ const ForkliftStack: React.FC = () => {
         options={{
           headerShown: false,
           headerTitle: "Reports",
+        }}
+      />
+      <Stack.Screen
+        name="Alarms"
+        component={ForkliftAlarms}
+        options={{
+          headerShown: true,
+          title: "Alarms",
         }}
       />
       <Stack.Screen

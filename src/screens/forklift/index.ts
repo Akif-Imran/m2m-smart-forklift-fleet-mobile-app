@@ -8,3 +8,4 @@ export * from "./notification-details";
 export * from "./fences";
 export * from "./trips";
 export * from "./playback";
+export * from "./alarms";

@@ -250,8 +250,8 @@ export const listCardStyles = StyleSheet.create({
     padding: theme.spacing.md,
     marginBottom: theme.spacing.xs,
     borderColor: colors.titleText,
-    width: 56,
-    height: 56,
+    width: 64,
+    height: 64,
   },
   imgStyle: {
     width: 64,
@@ -264,7 +264,6 @@ export const listCardStyles = StyleSheet.create({
   },
   infoContainer: {
     flex: 9,
-    marginLeft: theme.spacing.sm,
     rowGap: 2,
     // borderWidth: 1,
   },

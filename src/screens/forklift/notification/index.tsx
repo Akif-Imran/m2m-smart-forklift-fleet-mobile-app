@@ -18,7 +18,7 @@ import { ForkliftNotificationsFilters } from "@constants";
 import { getNotificationsList } from "@services";
 import { useAuthContext } from "@context";
 
-import { _NotificationListCard } from "../components/_NotificationListCard";
+import { _NotificationListCard } from "../components";
 
 const ForkliftNotification: React.FC<
   ForkliftStackScreenProps<"Notification">

@@ -69,6 +69,7 @@ export type ForkliftStackParamsList = {
   DriverCheckList: DetailsType<QRScanDeviceDetails>;
   DriverTask: undefined;
   ReportsStack: NavigatorScreenParams<ReportsStackParamsList>;
+  Alarms: { IMEI: string };
   Notification: undefined;
   NotificationDetails: DetailsType<INotification>;
 };

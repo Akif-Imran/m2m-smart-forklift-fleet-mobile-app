@@ -61,6 +61,22 @@ export const urls = {
       `${BASE_REPORT_URL}/vehicle_history/?IMEI=${IMEI}&startDate=${startDate}&endDate=${endDate}&page=${page}`,
     ignitionReport: (IMEI: string, startDate: string, endDate: string) =>
       `${BASE_REPORT_URL}/ignition/?IMEI=${IMEI}&startDate=${startDate}&endDate=${endDate}`,
+    utilizationReport: (
+      startDate: string,
+      endDate: string,
+      vehicleId: string
+    ) =>
+      `${BASE_REPORT_URL}/utilization_report?startDate=${startDate}&endDate=${endDate}&vehicle_id=${vehicleId}`,
+    idlingReport: (IMEI: string, startDate: string, endDate: string) =>
+      `${BASE_REPORT_URL}/idling?IMEI=${IMEI}&startDate=${startDate}&endDate=${endDate}`,
+    maintenanceReport: (
+      vehicleId: string,
+      startDate: string,
+      endDate: string
+    ) =>
+      `${BASE_REPORT_URL}/maintenance_report?startDate=${startDate}&vehicle_id=${vehicleId}&endDate=${endDate}`,
+    alarmReport: (IMEI: string, startDate: string, endDate: string) =>
+      `${BASE_URL}/reports/alarm?IMEI=${IMEI}&endDate=${endDate}&startDate=${startDate}`,
   },
   trips: {
     getTripDates: (deviceId: number) =>

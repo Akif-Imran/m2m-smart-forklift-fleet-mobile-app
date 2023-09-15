@@ -63,4 +63,11 @@ export {
   availableStatusToggle,
 } from "./drivers";
 
-export { getHistoryReport, getIgnitionReport } from "./reports";
+export {
+  getHistoryReport,
+  getIgnitionReport,
+  getAlarmReport,
+  getIdlingReport,
+  getMaintenanceReport,
+  getUtilizationReport,
+} from "./reports";

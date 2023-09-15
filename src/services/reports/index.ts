@@ -29,3 +29,55 @@ export const getIgnitionReport = async (
   );
   return response.data;
 };
+
+export const getUtilizationReport = async (
+  token: string,
+  params: GetUtilizationReportRequest
+): Promise<GetUtilizationReportResponse> => {
+  const response = await apiGet<GetUtilizationReportResponse>(
+    urls.appReports.utilizationReport(
+      params.startDate,
+      params.endDate,
+      params.vehicleId
+    ),
+    token
+  );
+  return response.data;
+};
+
+export const getIdlingReport = async (
+  token: string,
+  params: GetIdlingReportRequest
+): Promise<GetIdlingReportResponse> => {
+  const response = await apiGet<GetIdlingReportResponse>(
+    urls.appReports.idlingReport(params.IMEI, params.startDate, params.endDate),
+    token
+  );
+  return response.data;
+};
+
+export const getMaintenanceReport = async (
+  token: string,
+  params: GetMaintenanceReportRequest
+): Promise<GetMaintenanceReportResponse> => {
+  const response = await apiGet<GetMaintenanceReportResponse>(
+    urls.appReports.maintenanceReport(
+      params.vehicleId,
+      params.startDate,
+      params.endDate
+    ),
+    token
+  );
+  return response.data;
+};
+
+export const getAlarmReport = async (
+  token: string,
+  params: GetAlarmReportRequest
+): Promise<GetAlarmReportResponse> => {
+  const response = await apiGet<GetAlarmReportResponse>(
+    urls.appReports.alarmReport(params.IMEI, params.startDate, params.endDate),
+    token
+  );
+  return response.data;
+};

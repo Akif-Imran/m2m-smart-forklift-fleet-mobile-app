@@ -1,9 +1,9 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { _Badge, _DefaultCard } from "@components";
-import { PaperTheme, colors, gStyles, theme } from "@theme";
+import { PaperTheme, colors, gStyles } from "@theme";
 import { listCardStyles, screenStyles } from "@screen-styles";
-import { Avatar, Button, IconButton } from "react-native-paper";
+import { Avatar, Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import type { ForkliftStackScreenProps } from "@navigation-types";
 import { truncateText } from "@utility";
@@ -17,8 +17,10 @@ import { BASE_URL } from "@api";
 import moment from "moment";
 import { ForkliftStatusColor } from "@constants";
 import { useAuthContext } from "@context";
+import { selectAlarms, useAppSelector } from "@store";
 
 import { styles } from "./styles";
+import { _RecentAlarms } from "./_RecentAlarms";
 
 interface OwnProps {
   item: IVehicleWithDevice;
@@ -31,7 +33,11 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
   const {
     state: { isDriver },
   } = useAuthContext();
+  const { alarms } = useAppSelector(selectAlarms);
   const [isOnline, setIsOnline] = React.useState<boolean>(false);
+  const [hasAlarm, setHasAlarm] = React.useState(false);
+  const [top3Alarms, setTop3Alarms] = React.useState<IReduxAlarm[]>([]);
+
   let status = "";
   if (item.device?.is_idling && isOnline) {
     status = "idling";
@@ -49,6 +55,27 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
     console.log(item.device?.gps_time, minutes);
     setIsOnline(minutes < 10);
   }, [item?.device]);
+
+  React.useEffect(() => {
+    if (!item.device || alarms.length <= 0) {
+      return;
+    }
+    if (alarms[0].IMEI === item.device.IMEI) {
+      const duration = moment().diff(moment(alarms[0].gpsTime), "seconds");
+      console.log("duration");
+      if (duration > 1200) {
+        return;
+      }
+      setHasAlarm(true);
+      const newArr = [...top3Alarms];
+      const newLength = newArr.unshift(alarms[0]);
+      if (newLength > 3) {
+        newArr.pop();
+      }
+      setTop3Alarms(newArr);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [alarms]);
 
   return (
     <_DefaultCard>
@@ -73,8 +100,7 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
               <Avatar.Image
                 theme={PaperTheme}
                 source={{ uri: `${BASE_URL}${item.picture}` }}
-                // because size of container is 56X56
-                size={52}
+                size={60}
               />
             ) : (
               <Image
@@ -82,8 +108,6 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
                 resizeMode={"contain"}
                 style={StyleSheet.compose(listCardStyles.imgStyle, {
                   tintColor: colors.titleText,
-                  width: 48,
-                  height: 48,
                 })}
               />
             )}
@@ -96,78 +120,103 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
             {status}
           </Text>
         </View>
-        <View style={listCardStyles.infoWithForward}>
-          <View style={listCardStyles.infoContainer}>
-            <View style={styles.titleContainer}>
-              <Text style={gStyles.cardInfoTitleText}>
-                {truncateText(item.reg_no)}
+
+        <View style={styles.detailsWithAlarms}>
+          <View style={listCardStyles.infoWithForward}>
+            <View style={listCardStyles.infoContainer}>
+              <View style={styles.titleContainer}>
+                <Text style={gStyles.cardInfoTitleText}>
+                  {truncateText(item.reg_no)}
+                </Text>
+                <Entypo
+                  name="info-with-circle"
+                  color={colors.titleText}
+                  size={20}
+                  onPress={() =>
+                    navigation.navigate("ForkLiftDetails", {
+                      _id: item.id.toString(),
+                      item: item,
+                    })
+                  }
+                />
+              </View>
+              <Text
+                style={gStyles.tblDescText}
+                ellipsizeMode="tail"
+                numberOfLines={1}
+              >
+                {item.model}-{item.make}-{item.year}
               </Text>
-              <Entypo
-                name="info-with-circle"
-                color={colors.titleText}
+
+              <Text
+                style={gStyles.tblDescText}
+                ellipsizeMode="tail"
+                numberOfLines={0.5}
+              >
+                {item.device?.IMEI || "N/A"}
+              </Text>
+              <_Badge status={isOnline ? "online" : "offline"} />
+            </View>
+
+            <View
+              style={StyleSheet.compose(listCardStyles.forwardContainer, {
+                justifyContent: "space-between",
+              })}
+            >
+              <View style={listCardStyles.forwardContainer}>
+                <Text
+                  style={gStyles.tblDescText}
+                  ellipsizeMode="tail"
+                  numberOfLines={0.5}
+                >
+                  {moment(item.device?.gps_time).format("ddd DD MMM, YYYY")}
+                </Text>
+                <Text
+                  style={gStyles.tblDescText}
+                  ellipsizeMode="tail"
+                  numberOfLines={0.5}
+                >
+                  {moment(item.device?.gps_time).format("hh:mm:ss A")}
+                </Text>
+              </View>
+
+              <FontAwesome5
+                name="caret-right"
                 size={20}
-                onPress={() =>
-                  navigation.navigate("ForkLiftDetails", {
-                    _id: item.id.toString(),
-                    item: item,
-                  })
-                }
+                color={colors.iconGray}
               />
             </View>
-            <Text
-              style={gStyles.tblDescText}
-              ellipsizeMode="tail"
-              numberOfLines={1}
-            >
-              {item.model}-{item.make}-{item.year}
-            </Text>
-
-            <Text
-              style={gStyles.tblDescText}
-              ellipsizeMode="tail"
-              numberOfLines={0.5}
-            >
-              {truncateText(item.fuel_type_name, 22)}
-            </Text>
-            <_Badge status={isOnline ? "online" : "offline"} />
           </View>
 
-          <View
-            style={StyleSheet.compose(listCardStyles.forwardContainer, {
-              justifyContent: "space-between",
-            })}
-          >
-            <View style={listCardStyles.forwardContainer}>
-              <Text
-                style={gStyles.tblDescText}
-                ellipsizeMode="tail"
-                numberOfLines={0.5}
-              >
-                {moment(item.device?.gps_time).format("ddd DD MMM, YYYY")}
-              </Text>
-              <Text
-                style={gStyles.tblDescText}
-                ellipsizeMode="tail"
-                numberOfLines={0.5}
-              >
-                {moment(item.device?.gps_time).format("hh:mm:ss A")}
-              </Text>
-            </View>
-            <IconButton
+          <View style={styles.recentAlarmsContainer}>
+            <_RecentAlarms
+              alarms={top3Alarms}
+              hasAlarms={hasAlarm}
+              setHasAlarms={setHasAlarm}
+            />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("Alarms", {
+                  IMEI: item.device?.IMEI || "",
+                })
+              }
+            >
+              <MaterialCommunityIcons
+                name="bell"
+                size={20}
+                color={hasAlarm ? colors.error : colors.titleText}
+              />
+            </TouchableOpacity>
+            {/* <IconButton
               icon="bell"
-              color={colors.titleText}
+              color={hasAlarm ? colors.error : colors.titleText}
               size={20}
-              style={{ marginRight: 0 - theme.spacing.md }}
-              onPress={() => navigation.navigate("Notification")}
-            />
-            <FontAwesome5
-              name="caret-right"
-              size={20}
-              color={colors.iconGray}
-            />
+              // style={{ marginRight: 0 - theme.spacing.md }}
+            /> */}
           </View>
         </View>
       </TouchableOpacity>
+
       <View style={listCardStyles.bottomButtonContainer}>
         {!isDriver && (
           <>
