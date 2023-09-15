@@ -1,6 +1,7 @@
 import type { SerializedError } from "@reduxjs/toolkit";
 import { configureStore, createSelector } from "@reduxjs/toolkit";
 import {
+  alarmsReducer,
   devicesReducer,
   serviceReducer,
   serviceStatusReducer,
@@ -11,6 +12,7 @@ import type { TypedUseSelectorHook } from "react-redux";
 
 const store = configureStore({
   reducer: {
+    alarms: alarmsReducer,
     devices: devicesReducer,
     services: serviceReducer,
     vehicles: vehiclesReducer,
@@ -32,6 +34,7 @@ export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 //selectors
+export const selectAlarms = (state: RootState) => state.alarms;
 export const selectDevices = (state: RootState) => state.devices;
 export const selectServices = (state: RootState) => state.services;
 export const selectVehicles = (state: RootState) => state.vehicles;

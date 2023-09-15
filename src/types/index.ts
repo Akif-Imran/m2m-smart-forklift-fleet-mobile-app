@@ -827,6 +827,8 @@ type ITripDates = string[];
 
 interface ISocketObj {
   command_type_id: number;
+  alarm_name: string;
+  device_name: string;
   IMEI: string;
   speed: string;
   direction: string;
@@ -881,4 +883,12 @@ interface IRepeatedAlarms {
   total_alarm: number;
   command_type_id: number;
   alarm_name: string;
+}
+
+interface IReduxAlarm {
+  IMEI: string;
+  gpsTime: string;
+  commandTypeId: number;
+  alarmName: string;
+  deviceName: string;
 }
