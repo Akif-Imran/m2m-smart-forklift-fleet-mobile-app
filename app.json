@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "M2M Smart Fleet",
-    "slug": "m2m-smart-Fleet-mobile-app",
+    "slug": "m2m-smart-forklift-mobile-app",
     "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
