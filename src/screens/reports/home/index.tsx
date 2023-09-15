@@ -107,6 +107,16 @@ const Reports: React.FC<ReportStackScreenProps<"Reports">> = ({
             })
           }
         />
+
+        <_ReportCard
+          title="Driver Activity Report"
+          onPress={() =>
+            navigation.navigate("DriverActivityReport", {
+              deviceId,
+              vehicleId,
+            })
+          }
+        />
       </ScrollView>
     </SafeAreaView>
   );

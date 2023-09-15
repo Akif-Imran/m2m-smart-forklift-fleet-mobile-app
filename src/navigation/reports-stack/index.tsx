@@ -4,6 +4,7 @@ import { colors, gStyles } from "@theme";
 import type { ReportsStackParamsList } from "@navigation-types";
 import {
   CollisionReport,
+  DriverActivityReport,
   DriverPerformanceReport,
   ForkliftBreakdownReport,
   ForkliftMaintenanceReport,
@@ -112,6 +113,14 @@ const ReportsStack: React.FC = () => {
         options={{
           headerShown: true,
           title: "History Report",
+        }}
+      />
+      <Stack.Screen
+        name="DriverActivityReport"
+        component={DriverActivityReport}
+        options={{
+          headerShown: true,
+          title: "Driver Activity Report",
         }}
       />
       <Stack.Screen

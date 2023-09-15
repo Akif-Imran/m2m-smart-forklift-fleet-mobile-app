@@ -124,6 +124,7 @@ export type ReportsStackParamsList = {
   IdlingReport: ReportsParams;
   IgnitionReport: ReportsParams;
   HistoryReport: ReportsParams;
+  DriverActivityReport: ReportsParams;
   ViewOnMap: {
     location: CoordinatesType;
     name: string;
