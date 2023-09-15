@@ -48,7 +48,11 @@ const Reports: React.FC<ReportStackScreenProps<"Reports">> = ({
         />
         <_ReportCard
           title="Forklift Maintenance Report"
-          onPress={() => navigation.navigate("ForkliftMaintenanceReport")}
+          onPress={() =>
+            navigation.navigate("ForkliftMaintenanceReport", {
+              vehicleId,
+            })
+          }
         />
         <_ReportCard
           title="Idling Report"
