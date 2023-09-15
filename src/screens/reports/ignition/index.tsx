@@ -30,6 +30,9 @@ const IgnitionReport: React.FC<ReportStackScreenProps<"IgnitionReport">> = ({
   const device = useAppSelector((state) =>
     state.devices.data.rows.find((dev) => dev.id === deviceId)
   );
+  const vehicle = useAppSelector((state) =>
+    state.vehicles.data.rows.find((veh) => veh.device_id === deviceId)
+  );
   const [isLoading, setIsLoading] = React.useState(false);
   const [show, setShow] = React.useState(false);
   const [show2, setShow2] = React.useState(false);
@@ -83,13 +86,14 @@ const IgnitionReport: React.FC<ReportStackScreenProps<"IgnitionReport">> = ({
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
+      <View style={{ height: theme.header.height }} />
+
       <Spinner
         visible={isLoading}
         cancelable={false}
         animation="fade"
         size="large"
       />
-      <View style={{ height: theme.header.height }} />
       {/* <View>
         <_DropDown
           theme={PaperTheme}
@@ -160,16 +164,16 @@ const IgnitionReport: React.FC<ReportStackScreenProps<"IgnitionReport">> = ({
                 <View style={listCardStyles.reportRecordRow}>
                   <View style={listCardStyles.reportRecordRowItemLeft}>
                     <Text style={gStyles.tblHeaderText}>Forklift</Text>
-                    <Text style={gStyles.tblDescText}>PT-01</Text>
+                    <Text style={gStyles.tblDescText}>{vehicle?.reg_no}</Text>
                   </View>
                 </View>
                 <View style={listCardStyles.reportRecordRow}>
-                  <View style={listCardStyles.reportRecordRowItemRight}>
+                  <View style={listCardStyles.reportRecordRowItemLeft}>
                     <Text style={gStyles.tblHeaderText}>Event</Text>
                     <Text style={gStyles.tblDescText}>{"Ignition ON"}</Text>
                   </View>
 
-                  <View style={listCardStyles.reportRecordRowItemLeft}>
+                  <View style={listCardStyles.reportRecordRowItemRight}>
                     <Text style={gStyles.tblHeaderText}>Date/Time</Text>
                     <Text style={gStyles.tblDescText}>
                       {moment(item.gps_start_time).format(
@@ -180,12 +184,12 @@ const IgnitionReport: React.FC<ReportStackScreenProps<"IgnitionReport">> = ({
                 </View>
 
                 <View style={listCardStyles.reportRecordRow}>
-                  <View style={listCardStyles.reportRecordRowItemRight}>
+                  <View style={listCardStyles.reportRecordRowItemLeft}>
                     <Text style={gStyles.tblHeaderText}>Event</Text>
                     <Text style={gStyles.tblDescText}>{"Ignition OFF"}</Text>
                   </View>
 
-                  <View style={listCardStyles.reportRecordRowItemLeft}>
+                  <View style={listCardStyles.reportRecordRowItemRight}>
                     <Text style={gStyles.tblHeaderText}>Date/Time</Text>
                     <Text style={gStyles.tblDescText}>
                       {moment(item.gps_end_time).format(

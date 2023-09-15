@@ -1,8 +1,28 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
-import { Button, TextInput } from "react-native-paper";
+import moment from "moment";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { useAuthContext } from "@context";
+import { getIdlingReport } from "@services";
+import { defaultLocation } from "@constants";
+import { Button, TextInput } from "react-native-paper";
+import { listCardStyles, screenStyles } from "@screen-styles";
 import { PaperTheme, colors, gStyles, theme } from "@theme";
+import { selectVehiclesWithDevices, useAppSelector } from "@store";
+import type { ReportStackScreenProps } from "@navigation-types";
+import Spinner from "react-native-loading-spinner-overlay";
+import {
+  CALC_FORMAT_DURATION_HH_MM_SS,
+  FORMAT_DATE_STRING_DD_MM_YYYY_HH_MM_SS_12,
+  ToastService,
+} from "@utility";
 import {
   _TextInput,
   _DatePicker,
@@ -10,55 +30,73 @@ import {
   _ListEmptyComponent,
   _DropDown,
 } from "@components";
-import moment from "moment";
-import { listCardStyles, screenStyles } from "@screen-styles";
-import { ToastService } from "@utility";
-import { faker } from "@faker-js/faker";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { FontAwesome5 } from "@expo/vector-icons";
-import type { ReportStackScreenProps } from "@navigation-types";
 
 const IdlingReport: React.FC<ReportStackScreenProps<"IdlingReport">> = ({
   navigation,
+  route,
 }) => {
+  const { deviceId } = route.params;
+  const {
+    state: { token },
+  } = useAuthContext();
+  const { data: vehicles } = useAppSelector(selectVehiclesWithDevices);
+  const vehicle = vehicles.find((veh) => veh.device?.id === deviceId);
   const [show, setShow] = React.useState(false);
   const [show2, setShow2] = React.useState(false);
   const [startDate, setStartDate] = React.useState(new Date());
   const [endDate, setEndDate] = React.useState(new Date());
+  const [records, setRecords] = React.useState<IIdlingReport[]>([]);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  const [vehicleDropdownVisible, setVehicleDropdownVisible] =
-    React.useState(false);
-  const [value, setValue] = React.useState("all");
+  const handleSearch = () => {
+    if (!vehicle?.device?.IMEI) {
+      ToastService.show("No such device found");
+      return;
+    }
+    fetchIdlingReport(startDate, endDate, vehicle?.device?.IMEI);
+  };
 
-  const vehicleDropDownList = [
-    { label: "All", value: "all" },
-    { label: "PT-01", value: "pt-01" },
-    { label: "PT-02", value: "pt-02" },
-    { label: "PT-03", value: "pt-03" },
-    { label: "PT-04", value: "pt-04" },
-  ];
+  const fetchIdlingReport = React.useCallback(
+    (start: Date, end: Date, IMEI: string) => {
+      setIsLoading(true);
+      getIdlingReport(token, {
+        IMEI,
+        startDate: moment(start).format("YYYY-MM-DD"),
+        endDate: moment(end).format("YYYY-MM-DD"),
+      })
+        .then((res) => {
+          if (res?.success) {
+            setRecords(res.result);
+          }
+        })
+        .catch((_err) => {
+          ToastService.show("Something went wrong");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+    [token]
+  );
+
+  React.useEffect(() => {
+    if (!vehicle?.device?.IMEI) {
+      return;
+    }
+    fetchIdlingReport(startDate, endDate, vehicle?.device?.IMEI);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchIdlingReport, vehicle]);
 
   return (
     <SafeAreaView style={screenStyles.mainContainer}>
       <View style={{ height: theme.header.height }} />
-      <View>
-        <_DropDown
-          theme={PaperTheme}
-          dropDownItemTextStyle={{ ...gStyles.descText }}
-          dropDownItemSelectedTextStyle={{
-            ...gStyles.descTextPrimary,
-          }}
-          mode="outlined"
-          label="Vehicle"
-          placeholder="Select Vehicle"
-          value={value}
-          visible={vehicleDropdownVisible}
-          showDropDown={() => setVehicleDropdownVisible(true)}
-          onDismiss={() => setVehicleDropdownVisible(false)}
-          setValue={setValue}
-          list={vehicleDropDownList}
-        />
-      </View>
+      <Spinner
+        animation="fade"
+        cancelable={false}
+        visible={isLoading}
+        size={"large"}
+      />
+
       <View style={screenStyles.reportDateInputPickerContainer}>
         <_TextInput
           value={moment(startDate).format("DD MMM, YYYY")}
@@ -92,7 +130,7 @@ const IdlingReport: React.FC<ReportStackScreenProps<"IdlingReport">> = ({
         <Button
           theme={PaperTheme}
           mode="contained"
-          onPress={() => ToastService.show("Demo")}
+          onPress={() => handleSearch()}
           labelStyle={StyleSheet.compose(gStyles.tblHeaderText, {
             color: colors.white,
           })}
@@ -102,28 +140,68 @@ const IdlingReport: React.FC<ReportStackScreenProps<"IdlingReport">> = ({
       </View>
       <_DefaultCard style={StyleSheet.compose(gStyles.card, { flex: 1 })}>
         <FlatList
-          data={[1, 2, 3]}
+          data={records}
           showsVerticalScrollIndicator={false}
           style={screenStyles.flatListStyle}
           ListEmptyComponent={<_ListEmptyComponent label="No Data..." />}
-          renderItem={({}) => {
+          renderItem={({ item }) => {
             return (
               <View style={listCardStyles.reportListRecord}>
                 <View style={listCardStyles.reportRecordRow}>
                   <View style={listCardStyles.reportRecordRowItemLeft}>
                     <Text style={gStyles.tblHeaderText}>Forklift</Text>
-                    <Text style={gStyles.tblDescText}>PT-01</Text>
+                    <Text style={gStyles.tblDescText}>{vehicle?.reg_no}</Text>
                   </View>
+
+                  <View style={listCardStyles.reportRecordRowItemRight}>
+                    <Text style={gStyles.tblHeaderText}>Idling Duration</Text>
+                    <Text style={gStyles.tblDescText}>
+                      {CALC_FORMAT_DURATION_HH_MM_SS(
+                        item.gps_start_time,
+                        item.gps_end_time
+                      )}
+                    </Text>
+                  </View>
+                </View>
+
+                <View style={listCardStyles.reportRecordRow}>
                   <View style={listCardStyles.reportRecordRowItemLeft}>
+                    <Text style={gStyles.tblHeaderText}>Start Date/Time</Text>
+                    <Text style={gStyles.tblDescText}>
+                      {FORMAT_DATE_STRING_DD_MM_YYYY_HH_MM_SS_12(
+                        item.gps_start_time
+                      )}
+                    </Text>
+                  </View>
+                  <View style={listCardStyles.reportRecordRowItemRight}>
+                    <Text style={gStyles.tblHeaderText}>End Date/Time</Text>
+                    <Text style={gStyles.tblDescText}>
+                      {FORMAT_DATE_STRING_DD_MM_YYYY_HH_MM_SS_12(
+                        item.gps_end_time
+                      )}
+                    </Text>
+                  </View>
+                </View>
+
+                <View style={listCardStyles.reportRecordRow}>
+                  <View style={listCardStyles.reportRecordRowItemLeft}>
+                    <Text style={gStyles.tblHeaderText}>
+                      {" "}
+                      Ignition On Location
+                    </Text>
                     <TouchableOpacity
                       activeOpacity={0.7}
                       onPress={() =>
                         navigation.navigate("ViewOnMap", {
                           location: {
-                            latitude: 3.139003,
-                            longitude: 101.686855,
+                            latitude: item.start_latitude
+                              ? parseFloat(item.start_latitude)
+                              : defaultLocation.latitude,
+                            longitude: item.start_longitude
+                              ? parseFloat(item.start_longitude)
+                              : defaultLocation.longitude,
                           },
-                          name: "PT-01",
+                          name: vehicle?.reg_no || "N/A",
                         })
                       }
                     >
@@ -134,24 +212,32 @@ const IdlingReport: React.FC<ReportStackScreenProps<"IdlingReport">> = ({
                       />
                     </TouchableOpacity>
                   </View>
-                </View>
-
-                <View style={listCardStyles.reportRecordRow}>
-                  <View style={listCardStyles.reportRecordRowItemLeft}>
-                    <Text style={gStyles.tblHeaderText}>Start Date/Time</Text>
-                    <Text style={gStyles.tblDescText}>
-                      {moment(faker.date.past()).format(
-                        "DD MMM, YYYY hh:mm:ss A"
-                      )}
-                    </Text>
-                  </View>
                   <View style={listCardStyles.reportRecordRowItemRight}>
-                    <Text style={gStyles.tblHeaderText}>End Date/Time</Text>
-                    <Text style={gStyles.tblDescText}>
-                      {moment(faker.date.past()).format(
-                        "DD MMM, YYYY hh:mm:ss A"
-                      )}
+                    <Text style={gStyles.tblHeaderText}>
+                      Ignition Off Location
                     </Text>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      onPress={() =>
+                        navigation.navigate("ViewOnMap", {
+                          location: {
+                            latitude: item.end_latitude
+                              ? parseFloat(item.end_latitude)
+                              : defaultLocation.latitude,
+                            longitude: item.end_longitude
+                              ? parseFloat(item.end_longitude)
+                              : defaultLocation.longitude,
+                          },
+                          name: vehicle?.reg_no || "N/A",
+                        })
+                      }
+                    >
+                      <FontAwesome5
+                        name="map-marked-alt"
+                        size={24}
+                        color={colors.iconGray}
+                      />
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>

@@ -29,6 +29,23 @@ export const FORMAT_DATE_STRING_DD_MM_YYYY_HH_MM_12 = (
   return moment(date).format("DD MMM, YYYY hh:mm A");
 };
 
+export const FORMAT_DATE_STRING_DD_MM_YYYY_HH_MM_SS_12 = (
+  date: string
+): string => {
+  return moment(date).format("DD MMM, YYYY hh:mm:ss A");
+};
+
 export const FORMAT_DATE_DD_MM_YYYY = (date: string): string => {
   return moment(date).format("DD MMM, YYYY");
+};
+
+export const CALC_FORMAT_DURATION_HH_MM_SS = (
+  start: string,
+  end: string
+): string => {
+  if (start === null || !end) {
+    return "N/A";
+  }
+  const duration = moment(end).diff(moment(start), "seconds");
+  return FORMAT_DURATION_HH_MM_SS(duration);
 };

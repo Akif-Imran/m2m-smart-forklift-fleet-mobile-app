@@ -11,7 +11,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { theme, colors, PaperTheme, gStyles } from "@theme";
 import moment from "moment";
 import { listCardStyles, screenStyles } from "@screen-styles";
-import { ToastService } from "@utility";
+import {
+  FORMAT_DATE_STRING_DD_MM_YYYY_HH_MM_SS_12,
+  ToastService,
+} from "@utility";
 import type { ReportStackScreenProps } from "@navigation-types";
 import { getMaintenanceReport } from "@services";
 import { useAuthContext } from "@context";
@@ -153,7 +156,9 @@ const ForkliftMaintenanceReport: React.FC<
                   <View style={listCardStyles.reportRecordRowItemRight}>
                     <Text style={gStyles.tblHeaderText}>Service Date</Text>
                     <Text style={gStyles.tblDescText}>
-                      {moment(item.service_date).format("DD MMM, YYYY")}
+                      {FORMAT_DATE_STRING_DD_MM_YYYY_HH_MM_SS_12(
+                        item.service_date
+                      )}
                     </Text>
                   </View>
                 </View>

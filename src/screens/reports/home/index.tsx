@@ -28,35 +28,66 @@ const Reports: React.FC<ReportStackScreenProps<"Reports">> = ({
       <ScrollView showsVerticalScrollIndicator={false}>
         <_ReportCard
           title="Collision Report"
-          onPress={() => navigation.navigate("CollisionReport")}
+          onPress={() =>
+            navigation.navigate("CollisionReport", {
+              deviceId,
+              vehicleId,
+            })
+          }
         />
         <_ReportCard
           title="Forklift Utilization Report"
-          onPress={() => navigation.navigate("ForkliftUtilizationReport")}
+          onPress={() =>
+            navigation.navigate("ForkliftUtilizationReport", {
+              deviceId,
+              vehicleId,
+            })
+          }
         />
         <_ReportCard
           title="Forklift Breakdown Report"
-          onPress={() => navigation.navigate("ForkliftBreakdownReport")}
+          onPress={() =>
+            navigation.navigate("ForkliftBreakdownReport", {
+              deviceId,
+              vehicleId,
+            })
+          }
         />
         <_ReportCard
           title="Over Speeding Report"
-          onPress={() => navigation.navigate("OverSpeedingReport")}
+          onPress={() =>
+            navigation.navigate("OverSpeedingReport", {
+              deviceId,
+              vehicleId,
+            })
+          }
         />
         <_ReportCard
           title="Driver Performance Report"
-          onPress={() => navigation.navigate("DriverPerformanceReport")}
+          onPress={() =>
+            navigation.navigate("DriverPerformanceReport", {
+              deviceId,
+              vehicleId,
+            })
+          }
         />
         <_ReportCard
           title="Forklift Maintenance Report"
           onPress={() =>
             navigation.navigate("ForkliftMaintenanceReport", {
+              deviceId,
               vehicleId,
             })
           }
         />
         <_ReportCard
           title="Idling Report"
-          onPress={() => navigation.navigate("IdlingReport")}
+          onPress={() =>
+            navigation.navigate("IdlingReport", {
+              deviceId,
+              vehicleId,
+            })
+          }
         />
         <_ReportCard
           title="Ignition Report"
