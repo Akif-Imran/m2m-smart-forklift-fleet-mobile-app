@@ -155,7 +155,7 @@ const _ForkliftListCard: React.FC<OwnProps> = ({ item, handleDelete }) => {
               >
                 {item.device?.IMEI || "N/A"}
               </Text>
-              <_Badge status={isOnline ? "online" : "offline"} />
+              {/* <_Badge status={isOnline ? "online" : "offline"} /> */}
             </View>
 
             <View
