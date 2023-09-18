@@ -108,6 +108,8 @@ const DriverTask: React.FC<ForkliftStackScreenProps<"DriverTask">> = ({
               theme={PaperTheme}
               mode="contained"
               color={colors.error}
+              // eslint-disable-next-line react-native/no-inline-styles
+              style={{ flex: 1 }}
               onPress={endJob}
               labelStyle={StyleSheet.compose(gStyles.tblHeaderText, {
                 color: colors.white,

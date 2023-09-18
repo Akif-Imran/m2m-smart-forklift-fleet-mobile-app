@@ -256,6 +256,8 @@ const DriverCheckList: React.FC<
           <View style={screenStyles.formSubmitButtonContainer}>
             <Button
               theme={PaperTheme}
+              // eslint-disable-next-line react-native/no-inline-styles
+              style={{ flex: 1 }}
               mode="contained"
               onPress={() => form.handleSubmit()}
               labelStyle={StyleSheet.compose(gStyles.tblHeaderText, {
